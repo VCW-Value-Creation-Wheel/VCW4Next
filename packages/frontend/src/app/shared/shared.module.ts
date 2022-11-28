@@ -1,11 +1,15 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ButtonComponent } from './components';
+import {
+  ButtonComponent,
+  DatePickerComponent
+} from './components';
 
 
 @NgModule({
   declarations: [
-    ButtonComponent
+    ButtonComponent,
+    DatePickerComponent
   ],
   imports: [
     CommonModule
