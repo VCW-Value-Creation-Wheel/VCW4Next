@@ -1,0 +1,44 @@
+<div [formGroup]="form" class="mt-4">
+	<label [attr.for]="input.key"
+	>{{ input.label
+		}}<span *ngIf="!isValid" class="text-danger-100">* </span></label
+	>
+
+	<div [ngSwitch]="input.controlType">
+		<input
+				*ngSwitchCase="'textbox'"
+				[formControlName]="input.key"
+				[id]="input.key"
+				[type]="input.type"
+				class="
+        focus:outline-none
+        block
+        w-full
+        rounded-md
+        bg-gray-100
+        border border-transparent
+        focus:ring-primary-500 focus:bg-white focus:ring-1
+        py-2
+        px-3
+      "
+		/>
+		<ng-select
+				*ngSwitchCase="'dropdown'"
+				[formControlName]="input.key"
+				[id]="input.key"
+		>
+			<ng-option *ngFor="let opt of input.options" [value]="opt.key">{{
+				opt.value
+				}}</ng-option>
+		</ng-select>
+		<app-date-picker
+				(selectedDate)="onSelectDate($event)"
+				*ngSwitchCase="'date'"
+				[formControlName]="input.key"
+				[id]="input.key"
+				[isDateRange]="false"
+				[label]="''"
+		>
+		</app-date-picker>
+	</div>
+</div>

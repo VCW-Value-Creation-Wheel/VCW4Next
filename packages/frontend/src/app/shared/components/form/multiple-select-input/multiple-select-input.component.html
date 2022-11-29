@@ -1,0 +1,96 @@
+<!--<select #select>-->
+<!--  <option *ngFor="let option of dataObservable$ | async"-->
+<!--          [value]="option.value">-->
+<!--    {{ option.label }}-->
+<!--  </option>-->
+<!--</select>-->
+
+<!--<div class="block">-->
+<!--  <label class="text-gray-700">{{ label }}<span *ngIf="required"-->
+<!--                                                class="text-red-500">*</span></label>-->
+<!--  <div class="block w-full flex flex-col gap-2-->
+<!--     ">-->
+<!--    <div-->
+<!--      class="flex focus:bg-white py-2.5 px-3 rounded-md mt-2 {{isOpen?'bg-white border border-primary-500':'bg-gray-100'}}">-->
+<!--      <div class="flex flex-wrap gap-2 w-full">-->
+<!--        <div *ngIf="selected.length === 0 else NotEmpty">-->
+<!--          <span-->
+<!--            class="text-gray-500">{{placeholder}}</span>-->
+<!--        </div>-->
+<!--        <ng-template #NotEmpty>-->
+
+<!--          <div *ngFor="let option of selected">-->
+<!--            <option-->
+<!--              (click)="remove($event)"-->
+<!--              [selected]="true"-->
+<!--              [value]="option"-->
+<!--              class="bg-primary-50 text-primary-400 hover:bg-primary-100 hover:cursor-pointer p-1 rounded-md">{{option}}</option>-->
+<!--          </div>-->
+<!--        </ng-template>-->
+<!--      </div>-->
+<!--      <div (click)="this.setOpen(true)"-->
+<!--           *ngIf="!isOpen"-->
+<!--           class="flex border-l border-gray-200 px-3 hover:cursor-pointer justify-center items-center text-gray-500">-->
+<!--        <fa-icon [icon]="iconUp"></fa-icon>-->
+<!--      </div>-->
+<!--      <div (click)="isOpen =-->
+<!--			 false" *ngIf="isOpen" class="flex border-l border-primary-500 px-3  hover:cursor-pointer justify-center items-center text-gray-500">-->
+<!--        <fa-icon-->
+<!--          [icon]="iconDown"></fa-icon>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--    <div class="relative">-->
+<!--      <div *ngIf="isOpen"-->
+<!--           class="absolute flex flex-col gap-1.5 p-1.5 bg-white shadow rounded-md z-50 w-full h-32 overflow-y-scroll">-->
+<!--        <div *ngFor="let option of options; index as id"-->
+<!--        >-->
+<!--          <option (click)="selectItem(id,$event)"-->
+<!--                  class="hover:bg-gray-200 hover:cursor-pointer rounded-md p-4 {{option.selected?'bg-secondary-500 text-white hover:text-gray-700':'text-gray-700'}}">{{option.text}}</option>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
+<div class="block" (outsideClick)="isOpen = false">
+  <label class="text-gray-700">{{ label }}
+    <span *ngIf="required" class="text-red-500">*</span>
+  </label>
+  <div class="block w-full flex flex-col gap-2">
+    <ng-container *ngIf="!isDisabled else disabled">
+      <div class="flex focus:bg-white py-2 px-3 rounded-md mt-2 border hover:cursor-pointer {{isOpen?'bg-white  border-primary-500':'  border-transparent bg-gray-100'}}"
+           (click)="handleClick()"
+      >
+        <div class="flex flex-wrap gap-2 w-full {{selectedOption?'text-gray-700':'text-gray-400'}}">
+          {{selectedOption || placeholder}}
+        </div>
+        <div  *ngIf="!isOpen"
+              class="flex border-l border-gray-300 px-3 justify-center items-center text-gray-500">
+          <fa-icon [icon]="iconUp"></fa-icon>
+        </div>
+        <div *ngIf="isOpen"
+             class="flex border-l border-primary-500 px-3 justify-center items-center text-gray-500">
+          <fa-icon
+                  [icon]="iconDown"></fa-icon>
+        </div>
+      </div>
+    </ng-container>
+    <ng-template #disabled>
+      <div class="flex focus:bg-white py-2 px-3 rounded-md mt-2 border hover:cursor-no-drop border-transparent bg-gray-100"
+      >
+        <span class="text-gray-500"> {{defaultValue || placeholder}}</span>
+      </div>
+    </ng-template>
+    <div class="relative">
+      <div *ngIf="isOpen"
+           class="absolute flex flex-col gap-1.5 p-1.5 bg-white shadow rounded-md z-50 w-full h-32 overflow-y-scroll">
+        <div *ngFor="let option of options; index as id">
+          <option (click)="selectItem(id,$event)"
+                  class="hover:bg-gray-200 hover:cursor-pointer rounded-md p-4 {{option.checked?'bg-secondary-500 text-white hover:text-gray-700':'text-gray-700'}}"
+          >
+            {{option.label}}
+          </option>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
