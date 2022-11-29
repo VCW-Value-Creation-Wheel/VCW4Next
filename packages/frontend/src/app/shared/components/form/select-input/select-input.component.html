@@ -17,7 +17,7 @@
         selected
         *ngIf="options?.length === 0; else notEmpty"
       >
-        {{ placeholder ?? "not-found.select-no-data" | translate }}
+        {{ placeholder ?? "No Data" }}
       </option>
       <ng-template #notEmpty>
         <option *ngIf="placeholder" [ngValue]="null" disabled selected>

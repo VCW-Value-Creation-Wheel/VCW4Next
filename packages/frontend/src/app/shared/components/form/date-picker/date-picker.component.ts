@@ -12,9 +12,9 @@ import {
   styleUrls: ['./date-picker.component.scss'],
 })
 export class DatePickerComponent implements OnInit {
-  @Input() id: string = 'datePickerID';
-  @Input() label: string = 'datePickerID';
-  @Input() name: string = 'datePickerName';
+  @Input() id = 'datePickerID';
+  @Input() label = 'datePickerID';
+  @Input() name = 'datePickerName';
   @Input() minDate?: Date;
   @Input() maxDate?: Date;
   @Input() isDateRange?: boolean;
