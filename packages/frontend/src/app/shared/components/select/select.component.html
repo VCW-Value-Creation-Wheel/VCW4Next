@@ -1,0 +1,33 @@
+<div class="mb-4">
+  <label [for]="id" class="block text-gray-700 mb-2">{{ label }}</label>
+  <div
+    class="relative inline-block w-full text-gray-700 rounded {{
+      isFocused && 'outline-none ring ring-primary ring-opacity-20'
+    }}"
+  >
+    <ng-select
+      class="wrapper"
+      [disabled]="isDisabled"
+      [id]="id"
+      [items]="options"
+      [multiple]="multiple"
+      [placeholder]="placeholder ?? label"
+      [typeahead]="typeahead"
+      [(ngModel)]="value"
+      [bindLabel]="bindLabel"
+      [bindValue]="bindValue"
+      [virtualScroll]="virtualScroll"
+      [minTermLength]="minTermLength"
+      [clearable]="clearable"
+      [groupBy]="groupBy"
+      (change)="propagateSelected()"
+      [clearAllText]="'actions.clear' | translate"
+      [notFoundText]="'not-found.select-no-data' | translate"
+      [typeToSearchText]="'placeholders.type-to-search' | translate"
+      (focus)="isFocused = true"
+      (blur)="isFocused = false"
+    >
+    </ng-select>
+  </div>
+  <app-helper-text [error]="error" [text]="helperText"></app-helper-text>
+</div>
