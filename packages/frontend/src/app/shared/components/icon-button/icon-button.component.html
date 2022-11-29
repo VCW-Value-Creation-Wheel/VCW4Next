@@ -1,0 +1,9 @@
+<button
+		(click)="onClick()"
+		class="
+		py-2 px-4 duration-300 motion-safe:hover:scale-95 motion-safe:active:scale-90 active:shadow-inner ease-in-out {{textColor}} {{hover}} {{background}}">
+	<fa-icon [icon]="icon"></fa-icon>
+	<span class="{{ label && ' ml-2' }}">
+    {{ label }}
+  </span>
+</button>
