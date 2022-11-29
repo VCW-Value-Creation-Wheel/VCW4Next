@@ -1,0 +1,65 @@
+<div class="block" (outsideClick)="isOpen = false">
+    <label class="{{isDisabled?'text-gray-400':'text-gray-700'}}">{{ label }}
+        <span *ngIf="required" class="text-red-500">*</span>
+    </label>
+    <div class="block w-full flex flex-col gap-2">
+        <ng-container *ngIf="!isDisabled else disabled">
+            <div class="flex focus:bg-white py-2 px-3 rounded-md mt-2 border hover:cursor-pointer {{isOpen?'bg-white  border-primary-500':'  border-transparent bg-gray-100'}}"
+
+            >
+                <div class="w-full flex flex-row flex-wrap {{selectedOption?'text-gray-700':'text-gray-400'}}">
+                    <ng-container *ngIf="value; else holder">
+                        <div *ngFor="let option of options, index as id">
+                            <ng-container *ngIf="multiple else single">
+                                <ng-container *ngIf="option.checked">
+                                    <div [id]="id" (click)="onOptionClick($event)"
+                                         class="flex-1 ml-2 bg-primary-50 text-primary-400 hover:bg-primary-100 hover:cursor-pointer p-1 rounded-md">
+                                        {{option.label}}
+                                    </div>
+                                </ng-container>
+                            </ng-container>
+                            <ng-template #single>
+                                <ng-container *ngIf="option.checked">
+                                    <span class="text-gray-500">{{option.label}}</span>
+                                </ng-container>
+                            </ng-template>
+                        </div>
+                    </ng-container>
+                    <ng-template #holder>
+                        {{placeholder}}
+                    </ng-template>
+                </div>
+                <div *ngIf="!isOpen"
+                     (click)="handleClick()"
+                     class="flex border-l border-gray-300 px-3 justify-center items-center text-gray-500">
+                    <fa-icon [icon]="iconUp"></fa-icon>
+                </div>
+                <div *ngIf="isOpen"
+                     (click)="handleClick()"
+                     class="flex border-l border-primary-500 px-3 justify-center items-center text-gray-500">
+                    <fa-icon
+                            [icon]="iconDown"></fa-icon>
+                </div>
+            </div>
+        </ng-container>
+        <ng-template #disabled>
+            <div class="flex focus:bg-white py-2 px-3 rounded-md mt-2 border hover:cursor-no-drop border-transparent bg-gray-100"
+            >
+                <span class="text-gray-400"> {{defaultValue || placeholder}}</span>
+            </div>
+        </ng-template>
+        <div class="relative">
+            <div *ngIf="isOpen"
+                 class="absolute flex flex-col gap-1.5 p-1.5 bg-white shadow rounded-md z-50 w-full h-32 overflow-y-scroll">
+                <div *ngFor="let option of options; index as id">
+
+                    <option [id]="id" (click)="onOptionClick($event)"
+                            class="hover:bg-gray-200 hover:cursor-pointer rounded-md p-4 {{option.checked?'bg-secondary-500 text-white hover:text-gray-700':'text-gray-700'}}"
+                    >
+                        {{option.label}}
+                    </option>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
