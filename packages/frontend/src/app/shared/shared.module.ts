@@ -14,11 +14,13 @@ import {
   TextAreaComponent,
   MultipleSelectInputComponent,
   IconButtonComponent,
-  HelperTextComponent
+  HelperTextComponent,
+  NavbarComponent
 } from './components';
 import { RegexInputDirective } from './directives';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { AngularMyDatePickerModule } from 'angular-mydatepicker';
+import { AngularSvgIconModule } from 'angular-svg-icon';
 import { NgSelectModule } from '@ng-select/ng-select';
 
 
@@ -37,7 +39,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
     MultipleSelectInputComponent,
     IconButtonComponent,
     HelperTextComponent,
-    RegexInputDirective
+    RegexInputDirective,
+    NavbarComponent
   ],
   imports: [
     CommonModule,
@@ -45,10 +48,12 @@ import { NgSelectModule } from '@ng-select/ng-select';
     FormsModule,
     ReactiveFormsModule,
     AngularMyDatePickerModule,
-    NgSelectModule
+    NgSelectModule,
+    AngularSvgIconModule
   ],
   exports: [
-    FontAwesomeModule
+    FontAwesomeModule,
+    NavbarComponent
   ]
 })
 export class SharedModule { }

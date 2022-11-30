@@ -1,0 +1,113 @@
+<nav
+  class="
+    flex
+    justify-between
+    font-sans
+    text-center
+    py-4
+    px-6
+    bg-gray-50
+  "
+>
+  <a href="/">
+    <svg-icon src="assets/img/logo.svg" svgClass="h-9"></svg-icon>
+  </a>
+  <div class="flex gap-4 justify-end">
+      <div *ngIf="this.isAuthenticated; else signInButton">
+          <button
+            class="
+              bg-gradient-to-r
+              from-primary
+              to-primary-600
+              rounded-full
+              h-9
+              w-9
+              transform
+              duration-300
+              ease-in-out
+              motion-safe:hover:scale-105 motion-safe:active:scale-100
+            "
+            *ngIf="getUserData() as user"
+            (click)="isShowingProfileCard = !isShowingProfileCard"
+          >
+            <h5 class="m-0 text-gray-50 font-bold text-1xl">
+              {{ getInitials(user.displayName) }}
+            </h5>
+          </button>
+      </div>
+      <ng-template #signInButton>
+          <app-button
+            (click)="onLogin()"
+            [label]="'Sign In'"
+            [leftIcon]="signIn"
+          ></app-button>
+        </ng-template>
+  </div>
+</nav>
+
+<div
+  [@slideInOut]
+  *ngIf="isShowingProfileCard"
+  (outsideClick)="isShowingProfileCard = !isShowingProfileCard"
+>
+  <div
+    *ngIf="getUserData() as user"
+    class="
+      z-50
+      flex flex-shrink-0
+      absolute
+      m-4
+      right-0
+      bg-white
+      rounded
+      shadow-md
+      w-auto
+    "
+  >
+    <div
+      class="
+        flex
+        justify-center
+        bg-gradient-to-r
+        from-primary
+        to-primary-600
+        mr-4
+        px-4
+        w-20
+        rounded-l
+        items-center
+      "
+    >
+      <h1 class="m-0 text-gray-50 text-3xl font-bold">
+        {{ getInitials(user.displayName) }}
+      </h1>
+    </div>
+    <div class="flex flex-1 justify-between items-start">
+      <div class="m-2">
+        <div class="text-container">
+          <h5>{{ user.displayName }}</h5>
+          <span>{{ user.email }}</span>
+        </div>
+      </div>
+      <div class="flex flex-col px-2 py-2 h-full items-end gap-6">
+        <fa-icon
+          class="
+            cursor-pointer
+            hover:text-red-500 hover:bg-gray-100
+            rounded-full
+            py-1
+            px-2
+          "
+          [icon]="close"
+          (click)="isShowingProfileCard = !isShowingProfileCard"
+        ></fa-icon>
+        <app-button
+          [isTransparent]="true"
+          (click)="onLogout()"
+          [leftIcon]="signOutIcon"
+          [label]="'Sign Out'"
+        ></app-button>
+      </div>
+    </div>
+  </div>
+</div>
