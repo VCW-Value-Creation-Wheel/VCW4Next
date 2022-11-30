@@ -9,3 +9,7 @@ export interface Option {
     id?: number;
     checked?: boolean;
 }
+
+export interface InputEvent {
+    target: HTMLInputElement;
+}

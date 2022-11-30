@@ -16,6 +16,7 @@ import {
   IconButtonComponent,
   HelperTextComponent
 } from './components';
+import { RegexInputDirective } from './directives';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { AngularMyDatePickerModule } from 'angular-mydatepicker';
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -35,7 +36,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
     TextAreaComponent,
     MultipleSelectInputComponent,
     IconButtonComponent,
-    HelperTextComponent
+    HelperTextComponent,
+    RegexInputDirective
   ],
   imports: [
     CommonModule,
