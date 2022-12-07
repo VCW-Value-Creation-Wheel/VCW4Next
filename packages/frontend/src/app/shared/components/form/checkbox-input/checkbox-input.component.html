@@ -1,0 +1,55 @@
+<div class="flex flex-row gap-2 items-center">
+<label id="label-left"  [for]="identifier" class="text-xs text-gray-700">{{
+  leftLabel
+}}</label>
+<div
+  class="
+    relative
+    inline-block
+    w-10
+    mx-2
+    align-middle
+    select-none
+    transition
+    duration-200
+    ease-in
+  "
+>
+  <input
+    type="checkbox"
+    [name]="identifier"
+    [id]="identifier"
+    class="
+      toggle-checkbox
+      absolute
+      block
+      w-6
+      h-6
+      rounded-full
+      bg-white
+      border-4
+      appearance-none
+      cursor-pointer
+    "
+    [(ngModel)]="value"
+    (ngModelChange)="onValueChange($event)"
+  />
+  <label
+    [for]="identifier"
+    class="
+      toggle-label
+      block
+      overflow-hidden
+      h-6
+      rounded-full
+      bg-gray-200
+      cursor-pointer
+    "
+  ></label>
+</div>
+<label id="label-right" [for]="identifier" class="text-xs text-gray-700 uppercase">{{
+  rightLabel
+}}</label>
+
+<span *ngIf="required" class="text-red-500">*</span>
+</div>

@@ -1,0 +1,32 @@
+<div
+		*ngIf="isSnackbarActive"
+		class="
+    snackbar
+    {{ snackbarService.snackbarConfig.snackbar.bgColor }}
+    {{ snackbarService.snackbarConfig.snackbar.textColor }}
+    rounded-lg
+    px-4
+    py-3
+    shadow-md
+  "
+		role="alert"
+>
+	<div class="flex">
+		<div class="py-1 w-12">
+			<fa-icon
+					[icon]="snackbarService.snackbarConfig.snackbar.icon"
+					class="fill-current mr-4 animate-ping absolute opacity-75"
+					size="2x"
+			></fa-icon>
+			<fa-icon
+					[icon]="snackbarService.snackbarConfig.snackbar.icon"
+					class="fill-current mr-4 absolute"
+					size="2x"
+			></fa-icon>
+		</div>
+		<div>
+			<p class="font-bold">{{ snackbarService.title }}</p>
+			<p class="text-sm">{{ snackbarService.message }}</p>
+		</div>
+	</div>
+</div>
