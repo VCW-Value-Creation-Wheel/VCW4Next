@@ -7,10 +7,14 @@ import { AngularSvgIconModule } from 'angular-svg-icon';
 import { AppComponent } from './app.component';
 import { SharedModule } from 'shared';
 import { CoreModule } from '@core';
+import { MainLayoutComponent } from './features/main-layout/main-layout.component';
+import { HomeComponent } from './features/home/home.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    MainLayoutComponent,
+    HomeComponent
   ],
   imports: [
     CoreModule,
