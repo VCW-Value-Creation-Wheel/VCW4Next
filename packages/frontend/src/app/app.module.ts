@@ -9,12 +9,14 @@ import { SharedModule } from 'shared';
 import { CoreModule } from '@core';
 import { MainLayoutComponent } from './features/main-layout/main-layout.component';
 import { HomeComponent } from './features/home/home.component';
+import { ProjectListComponent } from './features/project/project-list/project-list.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MainLayoutComponent,
-    HomeComponent
+    HomeComponent,
+    ProjectListComponent
   ],
   imports: [
     CoreModule,

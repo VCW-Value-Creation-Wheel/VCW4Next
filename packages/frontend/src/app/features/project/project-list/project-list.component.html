@@ -1,0 +1,17 @@
+<div class="justify-between gap-4 pl-4 py-4 w-full flex flex-wrap">
+    <app-search-bar>
+
+    </app-search-bar>
+    <app-button
+        [leftIcon]="faPlus"
+        [label]="'New Project'"
+        [isDisabled]="false"
+        class="py-8 px-4">
+        
+    </app-button>
+</div>
+<div class="grid grid-cols-12 gap-4 w-full px-4 py-4">
+    <div *ngFor="let card of cards" class="col-span-4 text-center h-80 gap-4 border border-solid">
+        <span>Sample Text</span>
+    </div>
+</div>

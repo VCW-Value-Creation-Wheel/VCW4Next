@@ -60,7 +60,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
     NavbarComponent,
     FooterComponent,
     SearchBarComponent,
-    IconButtonComponent
+    IconButtonComponent,
+    ButtonComponent
   ]
 })
 export class SharedModule { }
