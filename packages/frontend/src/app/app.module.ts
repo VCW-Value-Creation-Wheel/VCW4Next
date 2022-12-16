@@ -7,10 +7,13 @@ import { AngularSvgIconModule } from 'angular-svg-icon';
 import { AppComponent } from './app.component';
 import { SharedModule } from 'shared';
 import { CoreModule } from '@core';
+import { NewProjectComponent } from './features/project/new-project/new-project.component';
+import { AppRoutingModule } from 'app-routing.module';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    NewProjectComponent,
   ],
   imports: [
     CoreModule,
@@ -18,7 +21,8 @@ import { CoreModule } from '@core';
     FontAwesomeModule,
     SharedModule,
     HttpClientModule,
-    AngularSvgIconModule.forRoot()
+    AngularSvgIconModule.forRoot(),
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]

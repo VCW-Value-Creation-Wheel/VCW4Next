@@ -1,0 +1,32 @@
+<app-navbar></app-navbar>
+<div>
+    <div class="grid grid-cols-4 gap-2 p-4 m-4 bg-gray-200 rounded-lg">
+        <div class="col-span-4 text-3xl">Create New Project</div>
+        <div class="col-span-2 m-2 p-2">
+            <app-input
+                [label]="labelProjectName"
+                [placeholder]="placeholder"
+            >
+            </app-input>
+        </div>
+        <div class="col-span-4 m-2 p-2">
+            <app-text-area
+                [label]="labelProjectDescription"
+                [placeholder]="placeholder"
+            >
+            </app-text-area>
+        </div>
+        <div class="col-span-1 m-2 p-2">
+            <app-input-file
+                [label]="labelThumbnail"
+            >
+            </app-input-file>
+        </div>
+        <div class="col-span-1 m-2 p-2">
+            <app-select-input
+                [label] = "labelLang"
+            >
+            </app-select-input>
+        </div>
+    </div>
+</div>
