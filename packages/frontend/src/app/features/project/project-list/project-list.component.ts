@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Project } from '@core';
-import { MockProjectService } from '@core/services/mocks/project/mock-project.service';
+import { Project, MockProjectService } from '@core';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 
