@@ -1,0 +1,22 @@
+[
+    {
+        "title": "Sample Project",
+        "description": "Sample Description"
+    },
+    {
+        "title": "Holiday Destination",
+        "description": "Pick the best holiday destination."
+    },
+    {
+        "title": "University",
+        "description": "Find the best university to study abroad."
+    },
+    {
+        "title": "Car",
+        "description": "Choose your next car"
+    },
+    {
+        "title": "Hotel",
+        "description": "Trivago"
+    }
+]
