@@ -1,9 +1,10 @@
 <app-navbar></app-navbar>
-<div [formGroup]="form">
+<div [formGroup]="form" (ngSubmit)="onSubmit()">
     <div class="grid grid-cols-4 gap-2 p-4 m-4 bg-gray-200 rounded-lg">
         <div class="col-span-4 text-3xl">Create New Project</div>
         <div class="col-span-2 m-2 p-2">
             <app-input
+                id="project-name"
                 [label]="labelProjectName"
                 [placeholder]="placeholder"
                 formControlName="project-name"
@@ -12,6 +13,7 @@
         </div>
         <div class="col-span-4 m-2 p-2">
             <app-text-area
+                id="project-description"   
                 [label]="labelProjectDescription"
                 [placeholder]="placeholder"
                 formControlName="project-description"
@@ -22,6 +24,7 @@
             <app-input-file
                 [label]="labelThumbnail"
                 formControlName="project-thumbnail"
+                id="project-thumbnail"
             >
             </app-input-file>
         </div>
@@ -30,6 +33,7 @@
                 [label] = "labelLang"
                 [options]="langOptions"
                 formControlName="project-language"
+                id="project-language"
             >
             </app-select-input>
         </div>
