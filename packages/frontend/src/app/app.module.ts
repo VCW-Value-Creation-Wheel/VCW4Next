@@ -9,6 +9,7 @@ import { SharedModule } from 'shared';
 import { CoreModule } from '@core';
 import { NewProjectComponent } from './features/project/new-project/new-project.component';
 import { AppRoutingModule } from 'app-routing.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,9 @@ import { AppRoutingModule } from 'app-routing.module';
     SharedModule,
     HttpClientModule,
     AngularSvgIconModule.forRoot(),
-    AppRoutingModule
+    AppRoutingModule,
+    ReactiveFormsModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

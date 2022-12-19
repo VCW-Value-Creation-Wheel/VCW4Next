@@ -1,11 +1,12 @@
 <app-navbar></app-navbar>
-<div>
+<div [formGroup]="form">
     <div class="grid grid-cols-4 gap-2 p-4 m-4 bg-gray-200 rounded-lg">
         <div class="col-span-4 text-3xl">Create New Project</div>
         <div class="col-span-2 m-2 p-2">
             <app-input
                 [label]="labelProjectName"
                 [placeholder]="placeholder"
+                formControlName="project-name"
             >
             </app-input>
         </div>
@@ -13,20 +14,31 @@
             <app-text-area
                 [label]="labelProjectDescription"
                 [placeholder]="placeholder"
+                formControlName="project-description"
             >
             </app-text-area>
         </div>
         <div class="col-span-1 m-2 p-2">
             <app-input-file
                 [label]="labelThumbnail"
+                formControlName="project-thumbnail"
             >
             </app-input-file>
         </div>
         <div class="col-span-1 m-2 p-2">
             <app-select-input
                 [label] = "labelLang"
+                [options]="langOptions"
+                formControlName="project-language"
             >
             </app-select-input>
+        </div>
+        <div class="m-10 p-2">
+            <app-button
+            [label]="buttonLabel"
+            (click)="onSubmit()"
+            >
+            </app-button>
         </div>
     </div>
 </div>
