@@ -7,20 +7,20 @@ import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
   styleUrls: ['./button.component.scss']
 })
 export class ButtonComponent implements OnInit {
-  @Input() iconClass: string = "";
+  @Input() iconClass = '';
 
-  @Input() label: string = 'Button label';
+  @Input() label = 'Button label';
   @Input() leftIcon?: IconDefinition;
   @Input() rightIcon?: IconDefinition;
-  @Input() isSecondary?: boolean = false;
-  @Input() isTransparent?: boolean = false;
-  @Input() isSuccess?: boolean = false;
-  @Input() isDangerous?: boolean = false;
-  @Input() isDisabled: boolean = false;
-  @Input() isWhite: boolean = false;
-  @Input() isFull: boolean = false;
-  @Input() type: string = 'button';
-  @Input() noLabel: boolean = false;
+  @Input() isSecondary = false;
+  @Input() isTransparent = false;
+  @Input() isSuccess = false;
+  @Input() isDangerous = false;
+  @Input() isDisabled = false;
+  @Input() isWhite = false;
+  @Input() isFull = false;
+  @Input() type = 'button';
+  @Input() noLabel = false;
   constructor() {}
 
   ngOnInit(): void {}
