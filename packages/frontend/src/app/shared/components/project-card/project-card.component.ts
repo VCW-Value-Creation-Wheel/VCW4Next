@@ -10,12 +10,13 @@ export class ProjectCardComponent implements OnInit {
   @Input() project: Project;
   @Output() clickEvent = new EventEmitter();
 
-  photo = 'https://res.cloudinary.com/deimospt/image/upload/v1659628047/backgrounds/services_pvcsuf.jpg';
+  photo: string;
 
   constructor() {}
 
   ngOnInit(): void {
-
+    this.photo = this.project.thumbnailURL ??
+                'https://res.cloudinary.com/deimospt/image/upload/v1659628047/backgrounds/services_pvcsuf.jpg';
   }
 
   onClickEvent() {

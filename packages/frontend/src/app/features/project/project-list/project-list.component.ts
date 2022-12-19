@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Project } from '@core';
+import { MockProjectService } from '@core/services/mocks/project/mock-project.service';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 
@@ -11,17 +12,13 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 export class ProjectListComponent implements OnInit {
 
   faPlus = faPlus;
-  cards: Project[] = [
-    {title: 'Project 1', description: 'Description 1'},
-    {title: 'Project 2', description: 'Description 2'},
-    {title: 'Project 3', description: 'Description 3'},
-    {title: 'Project 4', description: 'Description 4'},
-    {title: 'Project 5', description: 'Description 5'}
-  ];
+  projects: Project[] = [];
 
-  constructor() { }
+  constructor(private projectMock: MockProjectService) { }
 
   ngOnInit(): void {
+    // this loads a mock for testing. Disable this when loading from the back-end.
+    this.projectMock.projects().subscribe((projects => this.projects = projects));
   }
 
 }
