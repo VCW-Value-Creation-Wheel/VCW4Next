@@ -23,4 +23,8 @@ export class ProjectListComponent implements OnInit {
   onProjectClick(project: Project) {
     console.log(project);
   }
+
+  addNewProject() {
+    console.log('New Project');
+  }
 }

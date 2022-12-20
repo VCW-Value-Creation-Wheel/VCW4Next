@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 
 @Component({
@@ -21,7 +21,12 @@ export class ButtonComponent implements OnInit {
   @Input() isFull = false;
   @Input() type = 'button';
   @Input() noLabel = false;
+  @Output() buttonClick = new EventEmitter();
   constructor() {}
 
   ngOnInit(): void {}
+
+  onClick() {
+    this.buttonClick.emit();
+  }
 }

@@ -22,6 +22,7 @@
     "
   [disabled]="isDisabled"
   [type]="type"
+  (click)="onClick()"
 >
   <fa-icon *ngIf="leftIcon" [icon]="leftIcon" [ngClass]="iconClass"></fa-icon>
   <span *ngIf="!noLabel">{{ label }}</span>
