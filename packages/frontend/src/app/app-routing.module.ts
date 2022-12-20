@@ -3,12 +3,16 @@ import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 import { SharedModule } from 'shared';
 import { NewVcwComponent } from 'features/vcw/new-vcw/new-vcw.component';
+import { HomeComponent } from 'features/home/home.component';
 
 const routes: Routes = [
-{
-  path:'new-vcw',
-  component: NewVcwComponent
-}]
+  {
+    path:'', component: HomeComponent
+  },
+  {
+    path:'new-vcw', component: NewVcwComponent
+  }
+]
 
 @NgModule({
   declarations: [],
