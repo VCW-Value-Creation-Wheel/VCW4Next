@@ -1,0 +1,34 @@
+<app-navbar></app-navbar>
+<div [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="grid grid-cols-10 gap-2 p-4 m-4 bg-gray-200 rounded-lg">
+        <div class="col-span-9 text-3xl">Create New VCW</div>
+        <div class="col-span-2 m-2 p-2">
+            <app-input
+                id="title"
+                [label]="labelTitle"
+                [placeholder]="placeholder"
+                formControlName="title"
+            >
+            </app-input>
+        </div>
+        <div class="col-span-7"></div>
+        <div class="col-span-10 text-xl m-2 p-2">VCW Type</div>
+        <div class="col-span-3 m-2 p-2 {{isSelected==1? selectedBg : noBg }}">
+            <img src="../../../../assets/images/wheel1.jpg" alt="" (click)="SelectedImage(1)">
+        </div>
+        <div class="col-span-3 m-2 p-2 {{isSelected==2? selectedBg : noBg }}">
+            <img src="../../../../assets/images/wheel2.jpg" alt="" (click)="SelectedImage(2)">
+        </div>
+        <div class="col-span-3 m-2 p-2 {{isSelected==3? selectedBg : noBg }}">
+            <img src="../../../../assets/images/wheel3.jpg" alt="" (click)="SelectedImage(3)">
+        </div>
+        
+        <div class="col-span-2 m-10 p-2">
+            <app-button
+            [label]="buttonLabel"
+            (click)="onSubmit()"
+            >
+            </app-button>
+        </div>
+    </div>
+</div>

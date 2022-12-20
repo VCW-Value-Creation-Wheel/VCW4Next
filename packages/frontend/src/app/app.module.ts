@@ -7,10 +7,15 @@ import { AngularSvgIconModule } from 'angular-svg-icon';
 import { AppComponent } from './app.component';
 import { SharedModule } from 'shared';
 import { CoreModule } from '@core';
+import { AppRoutingModule } from 'app-routing.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NewVcwComponent } from './features/vcw/new-vcw/new-vcw.component';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    NewVcwComponent,
   ],
   imports: [
     CoreModule,
@@ -18,7 +23,10 @@ import { CoreModule } from '@core';
     FontAwesomeModule,
     SharedModule,
     HttpClientModule,
-    AngularSvgIconModule.forRoot()
+    AngularSvgIconModule.forRoot(),
+    ReactiveFormsModule,
+    FormsModule,
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]

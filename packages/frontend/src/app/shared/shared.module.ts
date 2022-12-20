@@ -56,7 +56,21 @@ import { NgSelectModule } from '@ng-select/ng-select';
   exports: [
     FontAwesomeModule,
     NavbarComponent,
-    FooterComponent
+    FooterComponent,
+    ButtonComponent,
+    DatePickerComponent,
+    CheckboxInputComponent,
+    CustomSelectInputComponent,
+    DynamicInputComponent,
+    InputComponent,
+    InputFileComponent,
+    SelectComponent,
+    SelectInputComponent,
+    TextAreaComponent,
+    MultipleSelectInputComponent,
+    IconButtonComponent,
+    HelperTextComponent,
+    RegexInputDirective
   ]
 })
 export class SharedModule { }
