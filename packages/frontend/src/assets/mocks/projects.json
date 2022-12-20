@@ -1,0 +1,28 @@
+[
+    {
+        "id": 1,
+        "title": "Sample Project",
+        "description": "Sample Description"
+    },
+    {
+        "id": 2,
+        "title": "Holiday Destination",
+        "description": "Pick the best holiday destination."
+    },
+    {
+        "id": 3,
+        "title": "University",
+        "description": "Find the best university to study abroad."
+    },
+    {
+        "id": 4,
+        "title": "Car",
+        "description": "Choose your next car"
+    },
+    {
+        "id": 5,
+        "title": "Hotel",
+        "description": "Trivago",
+        "thumbnailURL": "https://pix10.agoda.net/hotelImages/124/1246280/1246280_16061017110043391702.jpg"
+    }
+]

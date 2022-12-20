@@ -4,18 +4,18 @@
         <app-input
                 id="search-input"
                 class="flex-1"
-                [placeholder]="'placeholders.type-to-search'|translate"
-                [label]="'input-labels.free-text'| translate"
+                [placeholder]="'Search Projects'"
+                [label]="'Search'"
                 (emitInputChange)="onInputChange($event)"
                 [focusRig]="true"
         ></app-input>
-        <app-button [leftIcon]="faSearch" [label]="'button-labels.search'|translate" type="submit"></app-button>
+        <app-button [leftIcon]="faSearch" [label]="'Search'" type="submit"></app-button>
     </form>
     <div class="flex col-span-1 items-center justify-center md:items-end ">
         <app-icon-button
-                [icon]="faGlobeEurope"
+                [icon]="faSliders"
                 hover="hover:bg-gray-100 rounded"
-                [label]="'button-labels.advanced-search'| translate"
+                [label]="'Advanced Search'"
                 textColor="text-secondary-500 hover:text-primary-500"
                 (btnClick)="handleSearchType()"
         ></app-icon-button>
@@ -23,32 +23,32 @@
 </div>
 <ng-template #advancedSearch>
     <form (ngSubmit)="onSubmit()" [formGroup]="form"
-          class="grid grid-cols-12 gap-4 col-span-10 place-content-end">
-        <app-input
+          class="grid grid-cols-10 gap-4 col-span-10 place-content-end">
+        <!-- <app-input
                 formControlName="aoi"
                 class="col-span-12 md:col-span-8 lg:col-span-4"
-                [placeholder]="'placeholders.insert-wkt'|translate"
-                [label]="'input-labels.wkt' | translate"></app-input>
+                [placeholder]="'placeholders.insert-wkt'"
+                [label]="'input-labels.wkt'"></app-input> -->
         <app-input
                 id="beginDate"
-                class="col-span-6 md:col-span-2"
+                class="col-span-3 md:col-span-2"
                 formControlName="beginDate"
                 inputType="date"
-                [label]="'input-labels.startDate' | translate"
+                [label]="'Start Date'"
         ></app-input>
         <app-input
                 id="endDate"
-                class="col-span-6 md:col-span-2"
+                class="col-span-3 md:col-span-2"
                 formControlName="endDate"
                 inputType="date"
-                [label]="'input-labels.endDate' | translate"
+                [label]="'End Date'"
         ></app-input>
-        <div class="flex justify-center items-end col-span-12 lg:col-span-4 gap-4">
-            <app-button [leftIcon]="faSearch" [label]="'button-labels.search'|translate" type="submit"></app-button>
+        <div class="flex justify-center items-end col-span-4 lg:col-span-4 gap-4">
+            <app-button [leftIcon]="faSearch" [label]="'Search'" type="submit"></app-button>
             <app-icon-button
                     [icon]="faICursor"
                     hover="hover:bg-gray-100 rounded"
-                    [label]="'button-labels.text-search'| translate"
+                    [label]="'Text Search'"
                     textColor="text-secondary-500 hover:text-primary-500"
                     (btnClick)="handleSearchType()"
             ></app-icon-button>

@@ -11,11 +11,17 @@ import { AppRoutingModule } from 'app-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NewVcwComponent } from './features/vcw/new-vcw/new-vcw.component';
 import { RouterModule } from '@angular/router';
+import { MainLayoutComponent } from './features/main-layout/main-layout.component';
+import { HomeComponent } from './features/home/home.component';
+import { ProjectListComponent } from './features/project/project-list/project-list.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NewVcwComponent,
+    MainLayoutComponent,
+    HomeComponent,
+    ProjectListComponent
   ],
   imports: [
     CoreModule,
