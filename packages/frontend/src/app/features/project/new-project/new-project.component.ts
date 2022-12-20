@@ -9,10 +9,10 @@ import { Options } from '@core';
 })
 export class NewProjectComponent implements OnInit {
   form = new FormGroup({
-    'project-name': new FormControl('', Validators.required),
+    'project-title': new FormControl('', Validators.required),
     'project-description': new FormControl(''),
-    'project-thumbnail': new FormControl(''),
-    'project-language': new FormControl() 
+    'project-language': new FormControl(),
+    'project-thumbnail': new FormControl() 
   })
 
   labelProjectTitle:String = "Project Title";
