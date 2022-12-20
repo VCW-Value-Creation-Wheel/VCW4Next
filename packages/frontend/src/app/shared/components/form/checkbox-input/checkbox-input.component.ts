@@ -7,7 +7,7 @@ import {
   Output
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
-import { EventOption } from "@core";
+import { EventOption } from '@core';
 
 @Component({
   selector: 'app-checkbox-input',
@@ -22,14 +22,14 @@ import { EventOption } from "@core";
   ],
 })
 export class CheckboxInputComponent implements OnInit {
-  @Input() required: boolean = false;
+  @Input() required = false;
   @Input() leftLabel?: string;
   @Input() rightLabel?: string;
   @Input() identifier!: string;
-  @Input() disabled: boolean = false;
+  @Input() disabled = false;
   @Input('value') _value?: string | number = '';
   @Input() helperText?: string;
-  @Input() error: boolean = false;
+  @Input() error = false;
   @Output() emitInputChange = new EventEmitter<EventOption>();
 
   onChange: any = () => {};
@@ -50,7 +50,7 @@ export class CheckboxInputComponent implements OnInit {
   }
 
   writeValue(value: string): void {
-    if (value) this._value = value;
+    if (value) { this._value = value; }
   }
 
   registerOnChange(fn: any): void {

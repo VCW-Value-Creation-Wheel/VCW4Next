@@ -2,3 +2,9 @@
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
+
+
+html, body, input, textarea, button {
+    font-size: 14px;
+    font: 400 1rem "Inter", sans-serif;
+  }
