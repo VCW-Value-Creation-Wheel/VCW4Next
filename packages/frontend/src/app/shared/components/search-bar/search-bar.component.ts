@@ -1,7 +1,7 @@
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { advancedSearchForm, EventOption, FilterService, searchForm } from '@core';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
-import { faGlobeEurope, faSearch, faICursor, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faSliders, faSearch, faICursor, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Subject } from 'rxjs';
 @Component({
@@ -15,7 +15,7 @@ export class SearchBarComponent implements OnInit, OnDestroy {
   @Output() loadingEvent = new EventEmitter<boolean>();
 
   faSearch: IconDefinition = faSearch;
-  faGlobeEurope: IconDefinition = faGlobeEurope;
+  faSliders: IconDefinition = faSliders;
   faICursor: IconDefinition = faICursor;
 
 

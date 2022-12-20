@@ -10,11 +10,17 @@ import { CoreModule } from '@core';
 import { NewProjectComponent } from './features/project/new-project/new-project.component';
 import { AppRoutingModule } from 'app-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MainLayoutComponent } from './features/main-layout/main-layout.component';
+import { HomeComponent } from './features/home/home.component';
+import { ProjectListComponent } from './features/project/project-list/project-list.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NewProjectComponent,
+    MainLayoutComponent,
+    HomeComponent,
+    ProjectListComponent
   ],
   imports: [
     CoreModule,

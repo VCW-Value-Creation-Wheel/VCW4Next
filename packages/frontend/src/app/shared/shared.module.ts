@@ -16,7 +16,9 @@ import {
   IconButtonComponent,
   HelperTextComponent,
   NavbarComponent,
-  FooterComponent
+  FooterComponent,
+  SearchBarComponent,
+  ProjectCardComponent
 } from './components';
 import { RegexInputDirective } from './directives';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -42,7 +44,9 @@ import { NgSelectModule } from '@ng-select/ng-select';
     HelperTextComponent,
     RegexInputDirective,
     NavbarComponent,
-    FooterComponent
+    FooterComponent,
+    SearchBarComponent,
+    ProjectCardComponent
   ],
   imports: [
     CommonModule,
@@ -72,7 +76,11 @@ import { NgSelectModule } from '@ng-select/ng-select';
     HelperTextComponent,
     RegexInputDirective,
     NavbarComponent,
-    FooterComponent
+    FooterComponent,
+    SearchBarComponent,
+    IconButtonComponent,
+    ButtonComponent,
+    ProjectCardComponent
   ]
 })
 export class SharedModule { }
