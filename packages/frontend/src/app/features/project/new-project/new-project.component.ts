@@ -15,7 +15,7 @@ export class NewProjectComponent implements OnInit {
     'project-language': new FormControl() 
   })
 
-  labelProjectName:String = "Project Name";
+  labelProjectTitle:String = "Project Title";
   labelProjectDescription:String = "Project Description";
   labelThumbnail:String = "Thumbnail";
   labelLang:String = "Language";
