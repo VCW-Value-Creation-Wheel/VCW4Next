@@ -20,4 +20,7 @@ export class ProjectListComponent implements OnInit {
     this.projectMock.projects().subscribe((projects => this.projects = projects));
   }
 
+  onProjectClick(project: Project) {
+    console.log(project);
+  }
 }
