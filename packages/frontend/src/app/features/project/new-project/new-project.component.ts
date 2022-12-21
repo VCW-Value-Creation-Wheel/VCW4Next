@@ -1,6 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Options } from '@core';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-new-project',
@@ -15,12 +17,8 @@ export class NewProjectComponent implements OnInit {
     'project-thumbnail': new FormControl() 
   })
 
-  labelProjectTitle:String = "Project Title";
-  labelProjectDescription:String = "Project Description";
-  labelThumbnail:String = "Thumbnail";
-  labelLang:String = "Language";
-  placeholder: String = "";
-  buttonLabel: String = "Submit";
+  faArrowLeft = faArrowLeft;
+
   langOptions: Options[] = [
     {
       label:"English",
@@ -35,12 +33,17 @@ export class NewProjectComponent implements OnInit {
       value:"fr"
     }];
 
-  constructor() { }
+  constructor(private router: Router) { }
 
   ngOnInit(): void {
   }
 
-  onSubmit(): void{
+  onSubmit(e: Event): void{
+    console.log(this.form.get('project-title').value+" Created ()()()()")
+  }
+
+  onBack(): void{
+    this.router.navigate([''])
   }
 
 }

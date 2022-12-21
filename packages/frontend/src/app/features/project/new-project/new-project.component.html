@@ -1,11 +1,18 @@
-<div [formGroup]="form" (ngSubmit)="onSubmit()">
-    <div class="grid grid-cols-4 gap-2 p-4 m-4 bg-gray-200 rounded-lg">
-        <div class="col-span-4 text-3xl">Create New Project</div>
+<div class="m-4 p-4">
+    <app-button  
+    [label]="'Back'"
+    [leftIcon]="faArrowLeft"
+    (click)="onBack()"
+    ></app-button>
+</div>
+<div [formGroup]="form" (ngSubmit)="onSubmit($event)">
+    <div class="grid grid-cols-4 gap-4 m-4 p-4 rounded-lg">
+        <div class="col-span-4 text-2xl font-bold text-primary">Create New Project</div>
         <div class="col-span-2 m-2 p-2">
             <app-input
                 id="project-title"
-                [label]="labelProjectTitle"
-                [placeholder]="placeholder"
+                [label]="'Project Title'"
+                [placeholder]="''"
                 formControlName="project-title"
             >
             </app-input>
@@ -13,23 +20,24 @@
         <div class="col-span-4 m-2 p-2">
             <app-text-area
                 id="project-description"   
-                [label]="labelProjectDescription"
-                [placeholder]="placeholder"
+                [label]="'Project Description'"
+                [placeholder]="''"
                 formControlName="project-description"
             >
             </app-text-area>
         </div>
         <div class="col-span-1 m-2 p-2">
             <app-input-file
-                [label]="labelThumbnail"
+                [label]="'Thumbnail'"
                 formControlName="project-thumbnail"
                 id="project-thumbnail"
+                ngDefaultControl
             >
             </app-input-file>
         </div>
         <div class="col-span-1 m-2 p-2">
             <app-select-input
-                [label] = "labelLang"
+                [label] = "'Language'"
                 [options]="langOptions"
                 formControlName="project-language"
                 id="project-language"
@@ -38,8 +46,8 @@
         </div>
         <div class="m-10 p-2">
             <app-button
-            [label]="buttonLabel"
-            (click)="onSubmit()"
+            [label]="'Create'"
+            (click)="onSubmit($event)"
             >
             </app-button>
         </div>
