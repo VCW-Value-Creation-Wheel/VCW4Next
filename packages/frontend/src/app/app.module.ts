@@ -10,13 +10,16 @@ import { CoreModule } from '@core';
 import { MainLayoutComponent } from './features/main-layout/main-layout.component';
 import { HomeComponent } from './features/home/home.component';
 import { ProjectListComponent } from './features/project/project-list/project-list.component';
+import { ProjectPageComponent } from './features/project/project-page/project-page.component';
+import { AppRoutingModule } from 'app-routing.module';
 
 @NgModule({
   declarations: [
     AppComponent,
     MainLayoutComponent,
     HomeComponent,
-    ProjectListComponent
+    ProjectListComponent,
+    ProjectPageComponent
   ],
   imports: [
     CoreModule,
@@ -24,7 +27,8 @@ import { ProjectListComponent } from './features/project/project-list/project-li
     FontAwesomeModule,
     SharedModule,
     HttpClientModule,
-    AngularSvgIconModule.forRoot()
+    AngularSvgIconModule.forRoot(),
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]
