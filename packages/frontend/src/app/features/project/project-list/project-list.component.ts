@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Project, MockProjectService } from '@core';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
@@ -13,7 +14,10 @@ export class ProjectListComponent implements OnInit {
   faPlus = faPlus;
   projects: Project[] = [];
 
-  constructor(private projectMock: MockProjectService) { }
+  constructor(
+      private projectMock: MockProjectService,
+      private router: Router
+    ) { }
 
   ngOnInit(): void {
     // this loads a mock for testing. Disable this when loading from the back-end.
@@ -21,7 +25,7 @@ export class ProjectListComponent implements OnInit {
   }
 
   onProjectClick(project: Project) {
-    console.log(project);
+    this.router.navigate(['project/'+project.id])
   }
 
   addNewProject() {
