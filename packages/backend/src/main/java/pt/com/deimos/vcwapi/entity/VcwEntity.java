@@ -91,4 +91,16 @@ public class VcwEntity {
     @OneToOne
     @JoinColumn(name="vcw_id")
     private BusinessModelCanvasEntity businessModelCanvas;
+
+    // TODO: como se implementa zero or many?
+    @OneToMany(mappedBy = "vcw")
+    private List<VcwHasCriteriaEntity> vcwHasCriteriaEntities;
+
+    // TODO: como se implementa zero or many?
+    @OneToMany(mappedBy = "vcw")
+    private List<VcwHasIdeaEntity> vcwHasIdeaEntities;
+
+    @OneToMany(mappedBy = "vcw")
+    private List<VcwHasPhaseEntity> vcwHasPhaseEntities;
+
 }
