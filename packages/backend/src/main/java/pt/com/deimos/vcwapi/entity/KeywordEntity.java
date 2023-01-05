@@ -9,18 +9,18 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "criteria")
-public class CriteriaEntity {
+@Table(name = "keyword")
+public class KeywordEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable=false)
-    private String name;
+    private String word;
 
-    @Column(name="value_type", nullable=false)
-    private String valueType;
+    @Column(nullable=false)
+    private String lang;
 
     @CreationTimestamp
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
@@ -36,25 +36,19 @@ public class CriteriaEntity {
 
     //TODO: descobrir como se faz o updated_by
 
-    @ManyToOne
-    @JoinColumn(name="entry_type")
-    private EntryTypeEntity entryType;
 
-    @OneToOne
-    @JoinColumn(name="criteria_id")
-    private VcwHasCriteriaEntity vcwHasCriteriaEntity;
 
-    // TODO: como se implementa zero or many?
-    @OneToMany(mappedBy = "criteria")
-    private List<IdeaAndCriteriaEntity> ideasAndCriterias;
+    // TODO: como se implementa  zero or many?
+    @OneToMany(mappedBy = "idea_has_keyword")
+    private List<IdeaHasKeywordEntity> ideaHasKeywordEntities;
 
-    //TODO: como se implementa zero or one
-    @ManyToOne
-    @JoinColumn(name="source_id")
-    private SourceEntity source;
 
-    // TODO: como se implementa zero or many?
-    @OneToMany(mappedBy = "criteria")
+    // TODO: como se implementa  zero or many?
+    @OneToMany(mappedBy = "criteria_has_keyword")
     private List<CriteriaHasKeywordEntity> criteriaHasKeywordEntities;
 
+
+    // TODO: como se implementa  zero or many?
+    @OneToMany(mappedBy = "project_has_keyword")
+    private List<ProjectHasKeywordEntity> projectHasKeywordEntities;
 }

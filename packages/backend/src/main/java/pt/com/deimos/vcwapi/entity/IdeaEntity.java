@@ -9,8 +9,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "criteria")
-public class CriteriaEntity {
+@Table(name = "idea")
+public class IdeaEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,9 +18,6 @@ public class CriteriaEntity {
 
     @Column(nullable=false)
     private String name;
-
-    @Column(name="value_type", nullable=false)
-    private String valueType;
 
     @CreationTimestamp
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
@@ -36,25 +33,36 @@ public class CriteriaEntity {
 
     //TODO: descobrir como se faz o updated_by
 
+
+
+
+    // TODO: como se implementa zero or one to zero or many?
     @ManyToOne
     @JoinColumn(name="entry_type")
     private EntryTypeEntity entryType;
 
-    @OneToOne
-    @JoinColumn(name="criteria_id")
-    private VcwHasCriteriaEntity vcwHasCriteriaEntity;
 
     // TODO: como se implementa zero or many?
-    @OneToMany(mappedBy = "criteria")
+    @OneToMany(mappedBy = "idea")
     private List<IdeaAndCriteriaEntity> ideasAndCriterias;
 
-    //TODO: como se implementa zero or one
+    // TODO: como se implementa zero or one to zero or many?
     @ManyToOne
     @JoinColumn(name="source_id")
     private SourceEntity source;
 
+
     // TODO: como se implementa zero or many?
-    @OneToMany(mappedBy = "criteria")
-    private List<CriteriaHasKeywordEntity> criteriaHasKeywordEntities;
+    @OneToMany(mappedBy = "idea")
+    private List<IdeaHasKeywordEntity> ideaHasKeywordEntities;
+
+    @OneToOne
+    @JoinColumn(name="idea_id")
+    private VcwHasIdeaEntity vcwHasIdeaEntity;
+
+
+
+
+
 
 }
