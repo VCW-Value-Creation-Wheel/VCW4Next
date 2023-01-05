@@ -7,6 +7,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "keyword")
@@ -39,16 +40,16 @@ public class KeywordEntity {
 
 
     // TODO: como se implementa  zero or many?
-    @OneToMany(mappedBy = "idea_has_keyword")
-    private List<IdeaHasKeywordEntity> ideaHasKeywordEntities;
+    @ManyToMany(mappedBy = "ideaHasKeywords")
+    Set<IdeaEntity> ideas;
 
 
     // TODO: como se implementa  zero or many?
-    @OneToMany(mappedBy = "criteria_has_keyword")
-    private List<CriteriaHasKeywordEntity> criteriaHasKeywordEntities;
+    @ManyToMany(mappedBy = "criteriaHasKeywords")
+    Set<CriteriaEntity> criterias;
 
 
     // TODO: como se implementa  zero or many?
-    @OneToMany(mappedBy = "project_has_keyword")
-    private List<ProjectHasKeywordEntity> projectHasKeywordEntities;
+    @ManyToMany(mappedBy = "projectHasKeywords")
+    Set<ProjectEntity> projects;
 }

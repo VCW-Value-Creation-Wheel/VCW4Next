@@ -6,7 +6,9 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "criteria")
@@ -54,7 +56,14 @@ public class CriteriaEntity {
     private SourceEntity source;
 
     // TODO: como se implementa zero or many?
-    @OneToMany(mappedBy = "criteria")
-    private List<CriteriaHasKeywordEntity> criteriaHasKeywordEntities;
+
+    @ManyToMany
+    @JoinTable(
+            name = "criteria_has_keyword",
+            joinColumns = @JoinColumn(name = "criteria_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "keyword_id", referencedColumnName = "id")
+    )
+    //TODO: porque é um set aqui e nao uma lista como nas outras relaçoes?
+    Set<KeywordEntity> criteriaHasKeywords = new HashSet<>();
 
 }
