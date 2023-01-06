@@ -20,7 +20,7 @@ services:
     env_file: .env
     build:
       context: ./packages/identity
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.development
       args:
         KC_VERSION: ${KC_VERSION}
     environment:
