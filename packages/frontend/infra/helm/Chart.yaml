@@ -1,0 +1,13 @@
+apiVersion: v2
+name: vcw-frontend
+description: A Helm chart for vcw-frontend
+type: application
+version: 1.1.0
+appVersion: "1.2.0"
+keywords:
+  - VCW
+  - Angular 15
+  - Frontend
+maintainers:
+    - name: ScrumTroopers Team
+    - name: Deimos Engenharia - Data Systems Team
