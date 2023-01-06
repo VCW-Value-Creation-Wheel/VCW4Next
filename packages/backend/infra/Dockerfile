@@ -5,10 +5,10 @@ FROM ghcr.io/graalvm/native-image:ol9-java17-22 as builder
 
 WORKDIR /home/app/
 
-COPY packages/backend/mvnw .
-COPY packages/backend/.mvn .mvn
-COPY packages/backend/pom.xml .
-COPY packages/backend/src src
+COPY mvnw .
+COPY .mvn .mvn
+COPY pom.xml .
+COPY src src
 
 RUN chmod +x mvnw \
     && ./mvnw clean -Pnative -DskipTests package

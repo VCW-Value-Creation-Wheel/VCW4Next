@@ -1,0 +1,120 @@
+# Default values for request4EO.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# ---------------------------------------
+# Global variables
+# ---------------------------------------
+nameOverride: ""
+fullnameOverride: ""
+restartPolicy: Always
+
+# ---------------------------------------------
+# Variable used in hpa template and deployment
+# ---------------------------------------------
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
+# ---------------------------------------
+# Variable used in Secret template
+# ---------------------------------------
+secret:
+  enabled: false
+  name: vcw-backend-secrets
+  variables:
+    normals: {}
+    secrets: {}
+
+# ---------------------------------------
+# Variable used in ConfigMap template
+# ---------------------------------------
+configmap:
+  enabled: true
+  name: vcw-backend-configmap
+
+# ---------------------------------------
+# Variable used in Deployment template
+# ---------------------------------------
+deployment:
+  replicaCount: 1
+  # Additional Pod annotations
+  podAnnotations: {}
+  # Image pull secrets for the Pod
+  imagePullSecrets:
+    - name: vcw-backend-registrypullsecret
+  # SecurityContext for the entire Pod. Every container running in the Pod will inherit this SecurityContext. This might be relevant when other components of the environment inject additional containers into running Pods (service meshes are the most prominent example for this)
+  podSecurityContext:
+    # fsGroup: 2000
+  # SecurityContext for the nextocean container
+  securityContext:
+    # runAsUser: 1000
+    # runAsNonRoot: true
+  image:
+    repository: harbor.services4eo.com/vcw/vcw-backend
+    pullPolicy: Always
+  ## Overrides the default args for the nextocean container
+  args: []
+  # Additional environment variables for nextocean mapped from Secret or ConfigMap
+  extraEnvFrom: ""
+  # Define which port will be used in the containers
+  containerPort: 8080
+  # Startup probe configuration
+  startupProbe: { }
+  # Liveness probe configuration
+  livenessProbe: {}
+  # Readiness probe configuration
+  readinessProbe: {} #| CHECK LATE
+    #  httpGet:
+    #    path: /req/actuator/health/readiness
+    #    port: 8080
+    #  initialDelaySeconds: 10
+    #  periodSeconds: 5
+    #  timeoutSeconds: 1
+    #  failureThreshold: 3
+  # Pod resource requests and limits
+  resources: {}
+  # Node labels for Pod assignment
+  nodeSelector: {}
+  # Pod affinity
+  affinity: {}
+  # Node taints to tolerate
+  tolerations: []
+
+# ---------------------------------------
+# Variable group used in ingress template
+# ---------------------------------------
+ingress:
+  enabled: true
+  className: ""
+  domain: 127-0-0-1.nip.io
+  annotations:
+    traefik.ingress.kubernetes.io/router.tls: "true"
+    traefik.ingress.kubernetes.io/router.entrypoints: web
+    traefik.ingress.kubernetes.io/router.tls.certresolver: myresolver
+  hosts:
+    - host: api.vcw
+      paths:
+        - path: /
+          pathType: Prefix
+         
+  tls: {}
+
+# ---------------------------------------
+# Variable group used in ingress template
+# ---------------------------------------
+service:
+  type: ClusterIP
+  port: 8080
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: "configmap-reader"
