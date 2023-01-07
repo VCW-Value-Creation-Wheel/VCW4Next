@@ -11,16 +11,17 @@ COPY pom.xml .
 COPY src src
 
 RUN chmod +x mvnw \
-    && ./mvnw clean -Pnative -DskipTests package
+    && ./mvnw -Pnative native:compile -DskipTests
 
 ######################################
 ### stage 2 - package application  ###
 ######################################
-FROM gcr.io/distroless/base
+FROM alpine:3.17
 LABEL maintainer="ScrumTroopers Team"
 
 WORKDIR /home/app
 
+RUN apk add --no-cache gcompat libc6-compat
 COPY --from=builder /home/app/target/vcwApi /home/app/
 
 EXPOSE 8080
