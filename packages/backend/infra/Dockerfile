@@ -17,10 +17,11 @@ RUN chmod +x mvnw \
 ### stage 2 - package application  ###
 ######################################
 FROM alpine:3.17
+LABEL maintainer="ScrumTroopers Team"
 
 WORKDIR /home/app
 
-RUN apk add gcompat
+RUN apk add --no-cache gcompat libc6-compat
 COPY --from=builder /home/app/target/vcwApi /home/app/
 
 EXPOSE 8080
