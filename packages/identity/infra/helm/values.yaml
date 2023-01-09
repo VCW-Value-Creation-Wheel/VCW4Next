@@ -33,6 +33,9 @@ secret:
       KC_DB_URL_DATABASE: null
       KC_DB_SCHEMA: null
       KEYCLOAK_ADMIN: null
+      KC_PROXY: "edge"
+      KC_HOSTNAME_STRICT: "false"
+      KC_HTTP_ENABLED: true
     secrets:
       KC_DB_USERNAME: null
       KC_DB_PASSWORD: null
