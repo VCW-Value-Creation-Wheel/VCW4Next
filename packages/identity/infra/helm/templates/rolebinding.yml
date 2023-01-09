@@ -1,11 +1,11 @@
-{{- if .Values.secret.enabled -}}
+{{- if .Values.roleBinding.enabled -}}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: {{ .Values.roleBinding.name }}
 {{- with .Values.role.rules }}
 subjects:
-  {{- toYaml . | nindent 2 }}
+{{- toYaml . | nindent 4 }}
 {{- end }}
 roleRef:
   kind: Role
