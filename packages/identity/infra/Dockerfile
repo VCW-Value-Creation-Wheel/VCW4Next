@@ -29,4 +29,4 @@ ENV KC_METRICS_ENABLED=true
 # Configure a database vendor
 ENV KC_DB=postgres
 
-ENTRYPOINT ["/opt/keycloak/bin/kc.sh", "start"]
+ENTRYPOINT ["/opt/keycloak/bin/kc.sh", "start", "--optimized"]

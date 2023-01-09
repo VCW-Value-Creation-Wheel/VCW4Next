@@ -27,15 +27,13 @@ secret:
   name: vcw-identity-secrets
   variables:
     normals:
-      KC_HOSTNAME: 0.0.0.0
+      KC_PROXY: edge
+      KC_HOSTNAME_STRICT: false
       KC_DB_URL_HOST: null
       KC_DB_URL_PORT: null
       KC_DB_URL_DATABASE: null
       KC_DB_SCHEMA: null
       KEYCLOAK_ADMIN: null
-      KC_PROXY: "edge"
-      KC_HOSTNAME_STRICT: "false"
-      KC_HTTP_ENABLED: true
     secrets:
       KC_DB_USERNAME: null
       KC_DB_PASSWORD: null
@@ -105,7 +103,7 @@ ingress:
   domain: 127-0-0-1.nip.io
   annotations:
     traefik.ingress.kubernetes.io/router.tls: "true"
-    traefik.ingress.kubernetes.io/router.entrypoints: web
+    traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
     traefik.ingress.kubernetes.io/router.tls.certresolver: myresolver
   hosts:
     - host: vcw-identity
