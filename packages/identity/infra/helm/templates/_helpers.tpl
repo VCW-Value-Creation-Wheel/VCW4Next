@@ -78,7 +78,7 @@ Helper for parse env variables
 - name: {{ $key }}
   valueFrom:
     secretKeyRef:
-      name: {{ $appName }}-env-var-secret
+      name: {{ $appName }}-secrets
       key: {{ $key }}
 {{- end}}
 {{- end }}
