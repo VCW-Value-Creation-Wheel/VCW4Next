@@ -39,7 +39,7 @@ public class PhaseEntity {
     @Column(name="part_of_sprint",nullable=false)
     private Boolean partOfSprint;
 
-    //TODO: isto é suposto ser One and only one to zero or many, pls check
+    //TODO: isto é suposto ser one and only one to zero or many, pls check
     @OneToMany(mappedBy = "phase")
     private List<VcwHasPhaseEntity> vcwHasPhaseEntities;
 

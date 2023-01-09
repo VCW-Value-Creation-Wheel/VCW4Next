@@ -2,6 +2,8 @@ package pt.com.deimos.vcwapi.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -9,6 +11,8 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "file")
 public class FileEntity {
 
@@ -42,7 +46,8 @@ public class FileEntity {
     @Column(name = "updated_by")
     private UUID updatedBy;
 
-    @OneToOne(mappedBy = "file")
+    //TODO: isto é suposto ser one and only one to one and only, pls check
+    @OneToOne(mappedBy = "file", optional = false)
     private AttachmentEntity attachment;
 
     //TODO: como fazer relaçao zero or one?

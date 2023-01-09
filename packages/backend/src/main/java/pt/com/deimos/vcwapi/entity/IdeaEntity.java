@@ -2,6 +2,8 @@ package pt.com.deimos.vcwapi.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -12,6 +14,8 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "idea")
 public class IdeaEntity {
 
@@ -42,11 +46,10 @@ public class IdeaEntity {
     @Column(name = "updated_by")
     private UUID updatedBy;
 
-    // TODO: como se implementa zero or one to zero or many?
-    @ManyToOne
-    @JoinColumn(name="entry_type")
+    //TODO: isto é suposto ser zero or many to one and only one, pls check
+    @ManyToOne(optional = false)
+    @JoinColumn(name="entry_type_id")
     private EntryTypeEntity entryType;
-
 
     // TODO: como se implementa zero or many?
     @OneToMany(mappedBy = "idea")
@@ -57,9 +60,7 @@ public class IdeaEntity {
     @JoinColumn(name="source_id")
     private SourceEntity source;
 
-
     // TODO: como se implementa zero or many?
-
     @ManyToMany
     @JoinTable(
             name = "idea_has_keyword",
@@ -70,9 +71,9 @@ public class IdeaEntity {
     Set<KeywordEntity> ideaHasKeywords = new HashSet<>();
 
 
-
-    @OneToOne
-    @JoinColumn(name="idea_id")
+    //TODO: isto é suposto ser one and only one to one and only one, pls check
+    @OneToOne(optional = false)
+    @JoinColumn(name = "idea_id", referencedColumnName = "id")
     private VcwHasIdeaEntity vcwHasIdeaEntity;
 
 

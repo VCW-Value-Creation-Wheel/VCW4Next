@@ -2,6 +2,8 @@ package pt.com.deimos.vcwapi.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -10,6 +12,8 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "vcw")
 public class VcwEntity {
 
@@ -76,8 +80,7 @@ public class VcwEntity {
     @JoinColumn(name="vcw_id")
     private ProjectHasVcwEntity projectHasVcwEntity;
 
-    // TODO: como se implementa zero or many?
-
+    //TODO: isto é suposto ser one and only one to zero or many, pls check
     @OneToMany(mappedBy = "vcw")
     private List<AttachmentEntity> attatchments;
 
@@ -98,10 +101,12 @@ public class VcwEntity {
     @OneToMany(mappedBy = "vcw")
     private List<VcwHasCriteriaEntity> vcwHasCriteriaEntities;
 
-    // TODO: como se implementa zero or many?
+    //TODO: isto é suposto ser one and only one to zero or many, pls check
     @OneToMany(mappedBy = "vcw")
     private List<VcwHasIdeaEntity> vcwHasIdeaEntities;
 
+    //TODO: isto é suposto ser one and only one to one or many
+    // mas nao da para por optional=false, como dizemos que é mandatory?
     @OneToMany(mappedBy = "vcw")
     private List<VcwHasPhaseEntity> vcwHasPhaseEntities;
 

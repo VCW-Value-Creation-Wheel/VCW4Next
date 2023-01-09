@@ -17,7 +17,7 @@ public class EntryTypeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(nullable=false)
     private String name;
 
     @CreationTimestamp
@@ -40,12 +40,12 @@ public class EntryTypeEntity {
     @Column(name = "updated_by")
     private UUID updatedBy;
 
-    // TODO: como se implementa zero or many?
-    @OneToMany(mappedBy = "entry_type")
+    //TODO: isto é suposto ser one and only one to zero or many, pls check
+    @OneToMany(mappedBy = "entryType")
     private List<CriteriaEntity> criterias;
 
-    // TODO: como se implementa zero or many?
-    @OneToMany(mappedBy = "entry_type")
+    //TODO: isto é suposto ser one and only one to zero or many, pls check
+    @OneToMany(mappedBy = "entryType")
     private List<IdeaEntity> ideas;
 
 }

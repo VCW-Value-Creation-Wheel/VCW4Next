@@ -1,8 +1,12 @@
 package pt.com.deimos.vcwapi.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "vcw_has_phase")
 public class VcwHasPhaseEntity {
 
@@ -21,7 +25,8 @@ public class VcwHasPhaseEntity {
     @JoinColumn(name = "phase_id")
     private PhaseEntity phase;
 
-    @ManyToOne
+    //TODO: isto é suposto ser one or many to one and only one, pls check
+    @ManyToOne(optional = false)
     @JoinColumn(name = "vcw_id")
     private VcwEntity vcw;
 

@@ -45,8 +45,9 @@ public class CriteriaEntity {
     @Column(name = "updated_by")
     private UUID updatedBy;
 
-    @ManyToOne
-    @JoinColumn(name="entry_type")
+    //TODO: isto é suposto ser zero or many to one and only one, pls check
+    @ManyToOne(optional = false)
+    @JoinColumn(name="entry_type_id")
     private EntryTypeEntity entryType;
 
     @OneToOne
