@@ -96,7 +96,7 @@ ingress:
     traefik.ingress.kubernetes.io/router.entrypoints: web
     traefik.ingress.kubernetes.io/router.tls.certresolver: myresolver
   hosts:
-    - host: api.vcw
+    - host: vcw-api
       paths:
         - path: /
           pathType: Prefix
