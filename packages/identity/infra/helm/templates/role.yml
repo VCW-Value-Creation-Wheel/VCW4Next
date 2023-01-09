@@ -1,8 +1,10 @@
+{{- if .Values.role.enabled -}}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: role-configmap-reader
+  name: {{ .Values.role.name }}
+{{- with .Values.role.rules }}
 rules:
-  - apiGroups: [""]
-    verbs: ["get", "list", "watch"]
-    resources: ["configmaps", "pods", "services", "endpoints", "secrets"]
+  {{- toYaml . | nindent 2 }}
+{{- end }}
+{{- end }}

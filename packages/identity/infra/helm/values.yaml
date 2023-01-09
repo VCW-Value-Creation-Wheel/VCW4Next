@@ -127,3 +127,27 @@ serviceAccount:
   # The name of the service account to use.
   # If not set and create is true, a name is generated using the fullname template
   name: "configmap-reader"
+
+# ---------------------------------------
+# Variable group used in role template
+# ---------------------------------------
+role:
+  enabled: false
+  name: role-configmap-reader
+  rules:
+    - apiGroups: [""]
+      verbs: ["get", "list", "watch"]
+      resources: ["configmaps", "pods", "services", "endpoints", "secrets"]
+
+# ---------------------------------------------
+# Variable group used in role binding template
+# ---------------------------------------------
+roleBinding:
+  enabled: false
+  name: rolebinding-configmap-reader
+  subjects:
+    - kind: ServiceAccount
+      name: configmap-reader
+      apiGroup: ""
+  roleRef:
+    apiGroup: rbac.authorization.k8s.io
