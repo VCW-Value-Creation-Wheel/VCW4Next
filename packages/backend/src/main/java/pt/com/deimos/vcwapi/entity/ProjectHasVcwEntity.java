@@ -13,11 +13,11 @@ public class ProjectHasVcwEntity {
     private Long id;
 
 
-    //TODO: como fazer relaçao zero or one?
+    //TODO: isto é suposto ser zero or one to one, pls check
     @OneToOne(mappedBy = "project_has_vcw")
     private VcwEntity vcw;
 
-    //TODO: como fazer relaçao to zero or many?
+    //TODO: isto é suposto ser zero or many to one , pls check
     @ManyToOne
     @JoinColumn(name="project_id")
     private ProjectEntity project;

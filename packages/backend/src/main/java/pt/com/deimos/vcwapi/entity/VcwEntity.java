@@ -7,6 +7,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "vcw")
@@ -22,28 +23,23 @@ public class VcwEntity {
     @Column(nullable=false)
     private String type;
 
-    //TODO: TEXT na bd é string ou outra coisa?
-    @Column
+    @Column(columnDefinition = "TEXT")
     private String challenge;
 
-    //TODO: TEXT na bd é string ou outra coisa?
-    @Column
+    @Column(columnDefinition = "TEXT")
     private String concept;
 
     //TODO: jsonb na bd é string ou outra coisa
     @Column(name="value_proposition")
     private String valueProposition;
 
-    //TODO: TEXT na bd é string ou outra coisa?
-    @Column
+    @Column(columnDefinition = "TEXT")
     private String prototype;
 
-    //TODO: TEXT na bd é string ou outra coisa?
-    @Column(name="three_ms")
+    @Column(columnDefinition = "TEXT", name="three_ms")
     private String threeMs;
 
-    //TODO: TEXT na bd é string ou outra coisa?
-    @Column(name="executive_summary")
+    @Column(columnDefinition = "TEXT", name="executive_summary")
     private String executiveSummary;
 
     @Column
@@ -60,14 +56,20 @@ public class VcwEntity {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    //TODO: descobrir como se faz o created_by
+    //TODO: é assim que se faz o created_by?
+    // De onde vem o uuid, há @GeneratedValue?
+    @Column(name = "created_by", updatable = false)
+    private UUID createdBy;
 
     @UpdateTimestamp
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
-    //TODO: descobrir como se faz o updated_by
+    //TODO: é assim que se faz o updated_by?
+    // De onde vem o uuid, há @GeneratedValue?
+    @Column(name = "updated_by")
+    private UUID updatedBy;
 
     //TODO: como fazer relaçao zero or one?
     @OneToOne

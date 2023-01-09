@@ -16,8 +16,8 @@ public class VcwHasPhaseEntity {
     @Column(nullable=false)
     private Boolean locked;
 
-    // TODO: como se implementa zero or many?
-    @ManyToOne
+    //TODO: isto é suposto ser zero or many to one and only one, pls check
+    @ManyToOne(optional = false)
     @JoinColumn(name = "phase_id")
     private PhaseEntity phase;
 

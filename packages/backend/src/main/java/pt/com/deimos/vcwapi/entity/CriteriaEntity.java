@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Table(name = "criteria")
@@ -29,14 +30,20 @@ public class CriteriaEntity {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    //TODO: descobrir como se faz o created_by
+    //TODO: é assim que se faz o created_by?
+    // De onde vem o uuid, há @GeneratedValue?
+    @Column(name = "created_by", updatable = false)
+    private UUID createdBy;
 
     @UpdateTimestamp
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
-    //TODO: descobrir como se faz o updated_by
+    //TODO: é assim que se faz o updated_by?
+    // De onde vem o uuid, há @GeneratedValue?
+    @Column(name = "updated_by")
+    private UUID updatedBy;
 
     @ManyToOne
     @JoinColumn(name="entry_type")
