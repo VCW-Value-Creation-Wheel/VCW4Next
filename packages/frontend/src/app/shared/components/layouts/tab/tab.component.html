@@ -1,0 +1,15 @@
+<div
+  [ngClass]="activeClass()"
+  class="
+    uppercase
+    flex flex-1
+    justify-center
+    py-4
+    hover:cursor-pointer hover:bg-gray-100 hover:text-secondary-500
+    duration-300
+    text-gray-500
+  "
+  (click)="onClick()"
+>
+  <p>{{ label }}</p>
+</div>
