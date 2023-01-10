@@ -75,29 +75,29 @@ public class VcwEntity {
     @Column(name = "updated_by")
     private UUID updatedBy;
 
-    //TODO: como fazer relaçao zero or one?
+    //TODO: isto é suposto ser one and only one to zero or one
     @OneToOne
-    @JoinColumn(name="vcw_id")
+    @JoinColumn(name="project_id", referencedColumnName = "id")
     private ProjectHasVcwEntity projectHasVcwEntity;
 
     //TODO: isto é suposto ser one and only one to zero or many, pls check
     @OneToMany(mappedBy = "vcw")
     private List<AttachmentEntity> attatchments;
 
-    // TODO: como se implementa zero or many?
+    //TODO: isto é suposto ser one and only one to zero or many, pls check
     @OneToMany(mappedBy = "vcw")
     private List<DiagnosticEntity> diagnostics;
 
-    // TODO: como se implementa zero or many?
+    //TODO: isto é suposto ser one and only one to zero or many, pls check
     @OneToMany(mappedBy = "vcw")
     private List<KpiEntity> kpis;
 
-    //TODO: como fazer relaçao zero or one?
+    //TODO: isto é suposto ser one and only one to zero or one, pls check
     @OneToOne
-    @JoinColumn(name="vcw_id")
+    @JoinColumn(name="business_model_canvas_id", referencedColumnName = "id")
     private BusinessModelCanvasEntity businessModelCanvas;
 
-    // TODO: como se implementa zero or many?
+    //TODO: isto é suposto ser one and only one to zero or many, pls check
     @OneToMany(mappedBy = "vcw")
     private List<VcwHasCriteriaEntity> vcwHasCriteriaEntities;
 

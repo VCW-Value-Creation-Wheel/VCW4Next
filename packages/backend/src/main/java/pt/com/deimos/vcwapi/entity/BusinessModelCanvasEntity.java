@@ -2,6 +2,8 @@ package pt.com.deimos.vcwapi.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -9,6 +11,8 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "business_model_canvas")
 public class BusinessModelCanvasEntity {
 
@@ -16,44 +20,33 @@ public class BusinessModelCanvasEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    //TODO: TEXT na bd é string ou outra coisa?
-    @Column(name="customer_segments")
+    @Column(name="customer_segments", columnDefinition = "TEXT")
     private String CustomerSegments;
 
-    //TODO: TEXT na bd é string ou outra coisa?
-    @Column(name="value_propositions")
+    @Column(name="value_propositions", columnDefinition = "TEXT")
     private String ValuePropositions;
 
-    //TODO: TEXT na bd é string ou outra coisa?
-    @Column
+    @Column(columnDefinition = "TEXT")
     private String channels;
 
-    //TODO: TEXT na bd é string ou outra coisa?
-    @Column(name="customer_relationships")
+    @Column(name="customer_relationships", columnDefinition = "TEXT")
     private String CustomerRelationships;
 
-    //TODO: TEXT na bd é string ou outra coisa?
-    @Column(name="revenue_streams")
+    @Column(name="revenue_streams", columnDefinition = "TEXT")
     private String RevenueStreams;
 
-    //TODO: TEXT na bd é string ou outra coisa?
-    @Column(name="key_resources")
+    @Column(name="key_resources", columnDefinition = "TEXT")
     private String KeyResources;
 
-    //TODO: TEXT na bd é string ou outra coisa?
-    @Column(name="key_activities")
+    @Column(name="key_activities", columnDefinition = "TEXT")
     private String KeyActivities;
 
-    //TODO: TEXT na bd é string ou outra coisa?
-    @Column(name="key_partnerships")
+    @Column(name="key_partnerships", columnDefinition = "TEXT")
     private String KeyPartnerships;
 
-    //TODO: TEXT na bd é string ou outra coisa?
-    @Column(name="code_structure")
-    private String CodeStructure;
+    @Column(name="cost_structure", columnDefinition = "TEXT")
+    private String CostStructure;
 
-    @Column(nullable=false)
-    private String path;
     @CreationTimestamp
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     @Column(name = "created_at", nullable = false, updatable = false)
@@ -74,9 +67,8 @@ public class BusinessModelCanvasEntity {
     @Column(name = "updated_by")
     private UUID updatedBy;
 
-
-    //TODO: como fazer relaçao zero or one?
-    @OneToOne(mappedBy = "business_model_canvas")
+    //TODO: isto é suposto ser zero or one to one and only one , pls check
+    @OneToOne(mappedBy = "businessModelCanvas", optional = false)
     private VcwEntity vcw;
 
 }

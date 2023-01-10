@@ -1,10 +1,14 @@
 package pt.com.deimos.vcwapi.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "role")
 public class RoleEntity {
 
@@ -18,7 +22,7 @@ public class RoleEntity {
     @Column
     private String description;
 
-    // TODO: como se implementa zero or many?
+    //TODO: isto é suposto ser one and only one to zero or many, pls check
     @OneToMany(mappedBy = "role")
     private List<ProjectHasUserRoleEntity> projectHasUserRoleEntities;
 

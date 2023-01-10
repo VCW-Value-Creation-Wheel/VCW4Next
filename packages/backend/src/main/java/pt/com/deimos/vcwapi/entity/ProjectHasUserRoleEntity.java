@@ -17,10 +17,14 @@ public class ProjectHasUserRoleEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    //TODO: user_inum é suposto ser o que e que tipo?
+    //TODO: é assim que se faz o user_inum?
+    // De onde vem o uuid, há @GeneratedValue?
+    @Column(name = "user_inum", nullable=false)
+    private UUID userInum;
 
     @Column(nullable=false)
     private String path;
+
     @CreationTimestamp
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     @Column(name = "created_at", nullable = false, updatable = false)
@@ -41,12 +45,13 @@ public class ProjectHasUserRoleEntity {
     @Column(name = "updated_by")
     private UUID updatedBy;
 
-    @ManyToOne
+    ///TODO: isto é suposto ser many to one and only one, pls check
+    @ManyToOne(optional = false)
     @JoinColumn(name="project_id")
     private ProjectEntity project;
 
-    //TODO: como fazer relaçao to zero or many?
-    @ManyToOne
+    ///TODO: isto é suposto ser zero or many to one and only one, pls check
+    @ManyToOne(optional = false)
     @JoinColumn(name="role_id")
     private RoleEntity role;
 

@@ -2,6 +2,8 @@ package pt.com.deimos.vcwapi.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -9,6 +11,8 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "idea_and_criteria")
 public class IdeaAndCriteriaEntity {
 
@@ -53,18 +57,17 @@ public class IdeaAndCriteriaEntity {
     private UUID updatedBy;
 
 
-    //TODO: como se implementa zero or many
-    @ManyToOne
+    //TODO: isto é suposto ser zero or many to one and only one, pls check
+    @ManyToOne(optional = false)
     @JoinColumn(name="idea_id")
     private IdeaEntity idea;
 
-
-    //TODO: como se implementa zero or many
-    @ManyToOne
+    //TODO: isto é suposto ser zero or many to one and only one, pls check
+    @ManyToOne(optional = false)
     @JoinColumn(name="criteria_id")
     private CriteriaEntity criteria;
 
-    //TODO: como se implementa zero or onr to zero or many
+    //TODO: isto é suposto ser zero or many to zero or one, pls check
     @ManyToOne
     @JoinColumn(name="source_id")
     private SourceEntity source;

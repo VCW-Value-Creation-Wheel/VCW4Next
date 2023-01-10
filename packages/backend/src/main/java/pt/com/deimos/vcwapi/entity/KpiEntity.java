@@ -16,16 +16,13 @@ public class KpiEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="swot_field", nullable=false)
-    private String swotField;
-
     @Column
     private String name;
 
-    @Column
+    @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Column
+    @Column(columnDefinition = "TEXT")
     private String evaluation;
 
     @CreationTimestamp
@@ -48,8 +45,8 @@ public class KpiEntity {
     @Column(name = "updated_by")
     private UUID updatedBy;
 
-    //TODO: como fazer relaçao to zero or many?
-    @ManyToOne
+    //TODO: isto é suposto ser zero or many to one and only one, pls check
+    @ManyToOne(optional = false)
     @JoinColumn(name="vcw_id")
     private VcwEntity vcw;
 }

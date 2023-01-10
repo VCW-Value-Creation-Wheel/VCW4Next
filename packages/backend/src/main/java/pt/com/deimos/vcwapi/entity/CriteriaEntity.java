@@ -2,6 +2,8 @@ package pt.com.deimos.vcwapi.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -12,6 +14,8 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "criteria")
 public class CriteriaEntity {
 
@@ -50,21 +54,24 @@ public class CriteriaEntity {
     @JoinColumn(name="entry_type_id")
     private EntryTypeEntity entryType;
 
-    @OneToOne
+    //TODO: isto é suposto ser one and only one to one and only one, pls check
+    @OneToOne(optional = false)
     @JoinColumn(name="criteria_id")
     private VcwHasCriteriaEntity vcwHasCriteriaEntity;
 
-    // TODO: como se implementa zero or many?
+    //TODO: isto é suposto ser one and only one to zero or many, pls check
     @OneToMany(mappedBy = "criteria")
     private List<IdeaAndCriteriaEntity> ideasAndCriterias;
 
-    //TODO: como se implementa zero or one
+    //TODO: isto é suposto ser zero or many to zero or one, pls check
     @ManyToOne
     @JoinColumn(name="source_id")
     private SourceEntity source;
 
-    // TODO: como se implementa zero or many?
-
+    //TODO: isto é suposto ser Many to many, pls check
+    // (one and only one to zero or many <-> idea_has_keyword <-> zero or many to one and only one)
+    // In the db, idea_has_keyword has an id. Is the join table enough?
+    // or do we need to create a new entity for it
     @ManyToMany
     @JoinTable(
             name = "criteria_has_keyword",

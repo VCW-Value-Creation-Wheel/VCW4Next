@@ -17,7 +17,7 @@ public class SourceEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(nullable = false)
     private String name;
 
     @Column
@@ -46,18 +46,18 @@ public class SourceEntity {
     @Column(name = "updated_by")
     private UUID updatedBy;
 
-    // TODO: como se implementa one or zero to zero or many?
-    @OneToMany(mappedBy = "idea")
+    //TODO: isto é suposto ser zero or one to zero or many, pls check
+    @OneToMany(mappedBy = "source")
     private List<IdeaEntity> ideas;
 
 
-    // TODO: como se implementa one or zero to zero or many?
-    @OneToMany(mappedBy = "criteria")
+    //TODO: isto é suposto ser zero or one to zero or many, pls check
+    @OneToMany(mappedBy = "source")
     private List<CriteriaEntity> criterias;
 
 
-    // TODO: como se implementa one or zero to zero or many?
-    @OneToMany(mappedBy = "idea_and_criteria")
+    //TODO: isto é suposto ser zero or one to zero or many, pls check
+    @OneToMany(mappedBy = "source")
     private List<IdeaAndCriteriaEntity> ideaAndCriteriaEntities;
 
 

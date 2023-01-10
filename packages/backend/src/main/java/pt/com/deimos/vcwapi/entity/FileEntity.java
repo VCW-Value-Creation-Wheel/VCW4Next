@@ -50,7 +50,8 @@ public class FileEntity {
     @OneToOne(mappedBy = "file", optional = false)
     private AttachmentEntity attachment;
 
-    //TODO: como fazer relaçao zero or one?
+    //TODO: isto é suposto ser zero or one to zero or one, pls check
+    @OneToOne(mappedBy = "file")
     private ProjectEntity project;
 
 }

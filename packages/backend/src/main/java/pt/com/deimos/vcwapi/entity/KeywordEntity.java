@@ -48,11 +48,9 @@ public class KeywordEntity {
     @ManyToMany(mappedBy = "ideaHasKeywords")
     Set<IdeaEntity> ideas;
 
-
     // TODO: como se implementa  zero or many?
     @ManyToMany(mappedBy = "criteriaHasKeywords")
     Set<CriteriaEntity> criterias;
-
 
     // TODO: como se implementa  zero or many?
     @ManyToMany(mappedBy = "projectHasKeywords")

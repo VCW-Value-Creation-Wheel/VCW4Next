@@ -31,11 +31,10 @@ public class ProjectEntity {
   @Column(nullable=false)
   private String title;
 
-  // TODO: o que é este columnDefinition e pq so aparece no description?
-  @Column(nullable=false, columnDefinition="TEXT")
+  @Column(nullable=false)
   private String description;
 
-  @Column
+  @Column(nullable=false)
   private String lang;
 
   @CreationTimestamp
@@ -58,20 +57,25 @@ public class ProjectEntity {
   @Column(name = "updated_by")
   private UUID updatedBy;
 
-  //TODO: como fazer relaçao zero or one?
+  //TODO: isto é suposto ser zero or one to zero or one, pls check
+  @OneToOne
   @JoinColumn(name = "thumbnail")
   private FileEntity file;
 
-  //TODO: Na bd está zero or many
-  //TODO: qual a diferença no codigo entre "to many" or "to zero or many"?
+  //TODO: é possivel fazer uma join table aqui? a tabela so tem ids mas este nao é many to many
+  //TODO: isto é suposto ser one and only one to zero or many, pls check
   @OneToMany(mappedBy = "project")
   private List<ProjectHasVcwEntity> projectHasVcwEntities = new java.util.ArrayList<>();
 
+  //TODO: isto é suposto ser one and only one to one or many
+  // mas nao da para por optional=false, como dizemos que é mandatory?
   @OneToMany(mappedBy = "project")
   private List<ProjectHasUserRoleEntity> projectHasUserRoleEntities = new java.util.ArrayList<>();
 
-  //TODO: Na bd está zero or many
-  //TODO: qual a diferença no codigo entre "to many" or "to zero or many"?
+  //TODO: isto é suposto ser Many to many, pls check
+  // (one and only one to zero or many <-> idea_has_keyword <-> zero or many to one and only one)
+  // In the db, idea_has_keyword has an id. Is the join table enough?
+  // or do we need to create a new entity for it
   @ManyToMany
   @JoinTable(
           name = "project_has_keyword",
