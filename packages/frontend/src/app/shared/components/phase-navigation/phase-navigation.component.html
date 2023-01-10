@@ -1,7 +1,17 @@
 <div class="flex flex-row w-full place-content-center gap-4">
-    <app-icon-button background="bg-primary-500 rounded" textColor="text-white" [icon]="faChevronLeft"></app-icon-button>
+    <app-icon-button
+        background="bg-primary-500 rounded"
+        textColor="text-white"
+        [icon]="faChevronLeft"
+        (btnClick)="onLeftButtonClick()"
+    ></app-icon-button>
     <div class="bg-primary-500 rounded w-1/4 text-center">
-        <h1 class="py-2 px-4 text-white">1a - Diagnostic</h1>
+        <h1 class="py-2 px-4 text-white font-bold">{{ title }}</h1>
     </div>
-    <app-icon-button background="bg-primary-500 rounded" textColor="text-white" [icon]="faChevronRight"></app-icon-button>
+    <app-icon-button 
+        background="bg-primary-500 rounded"
+        textColor="text-white"
+        [icon]="faChevronRight"
+        (btnClick)="onRightButtonClick()"
+    ></app-icon-button>
 </div>

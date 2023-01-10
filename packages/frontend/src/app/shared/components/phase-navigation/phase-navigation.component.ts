@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
@@ -8,6 +8,10 @@ import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons
 })
 export class PhaseNavigationComponent implements OnInit {
 
+  @Input() title: string;
+  @Output() leftButtonClick = new EventEmitter();
+  @Output() rightButtonClick = new EventEmitter();
+
   faChevronLeft = faChevronLeft;
   faChevronRight = faChevronRight;
 
@@ -15,6 +19,14 @@ export class PhaseNavigationComponent implements OnInit {
 
   ngOnInit(): void {
 
+  }
+
+  onLeftButtonClick() {
+    this.leftButtonClick.emit();
+  }
+
+  onRightButtonClick() {
+    this.rightButtonClick.emit();
   }
 
 }
