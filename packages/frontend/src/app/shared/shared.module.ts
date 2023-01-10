@@ -18,7 +18,8 @@ import {
   NavbarComponent,
   FooterComponent,
   SearchBarComponent,
-  ProjectCardComponent
+  ProjectCardComponent,
+  PhaseNavigationComponent
 } from './components';
 import { RegexInputDirective } from './directives';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -46,7 +47,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
     NavbarComponent,
     FooterComponent,
     SearchBarComponent,
-    ProjectCardComponent
+    ProjectCardComponent,
+    PhaseNavigationComponent
   ],
   imports: [
     CommonModule,
@@ -80,7 +82,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
     SearchBarComponent,
     IconButtonComponent,
     ButtonComponent,
-    ProjectCardComponent
+    ProjectCardComponent,
+    PhaseNavigationComponent
   ]
 })
 export class SharedModule { }
