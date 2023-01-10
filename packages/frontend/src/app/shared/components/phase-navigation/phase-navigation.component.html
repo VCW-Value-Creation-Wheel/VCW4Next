@@ -1,4 +1,4 @@
-<div class="flex flex-row w-full place-content-center gap-4">
+<div class="flex flex-row w-full place-content-center gap-4 h-full">
     <app-icon-button
         background="bg-primary-500 rounded"
         textColor="text-white"
@@ -6,7 +6,7 @@
         (btnClick)="onLeftButtonClick()"
     ></app-icon-button>
     <div class="bg-primary-500 rounded w-1/4 text-center">
-        <h1 class="py-2 px-4 text-white font-bold">{{ title }}</h1>
+        <p class="text-white font-bold h-full leading-8">{{ title }}</p>
     </div>
     <app-icon-button 
         background="bg-primary-500 rounded"
