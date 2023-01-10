@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
@@ -6,7 +6,7 @@ import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
   templateUrl: './dialog.component.html',
   styleUrls: ['./dialog.component.scss']
 })
-export class DialogComponent {
+export class DialogComponent implements OnInit {
   dialogSize = '';
   convertSize: { [key: string]: string } = {
     sm: 'sm:w-5/12 md:w-4/12 lg:w-3/12',
@@ -19,11 +19,11 @@ export class DialogComponent {
   faTimes = faTimes;
 
   @Input() classes?: string;
-  @Input() noConfirmButton: boolean = false;
+  @Input() noConfirmButton = false;
   @Input() title?: string;
   @Input() titleSize?: string;
   @Input() confirmText?: string;
-  @Input() confirmDisabled: boolean = false;
+  @Input() confirmDisabled = false;
   @Input() cancelText?: string;
   @Input() buttonVariant: 'solid' | 'transparent' | 'solid red' = 'solid';
   @Input() size = 'md';
