@@ -22,8 +22,7 @@ public class VcwHasIdeaEntity {
     private VcwEntity vcw;
 
     //TODO: isto é suposto ser one and only one to one and only one, pls check
-    @OneToOne(mappedBy = "vcwHasIdeaEntity", optional=false)
+    @OneToOne(optional=false)
+    @JoinColumn(name="idea_id", referencedColumnName = "id")
     private IdeaEntity idea;
-
-
 }

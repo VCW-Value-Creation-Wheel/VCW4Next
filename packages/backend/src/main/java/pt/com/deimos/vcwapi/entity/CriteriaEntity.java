@@ -55,7 +55,7 @@ public class CriteriaEntity {
     private EntryTypeEntity entryType;
 
     //TODO: isto é suposto ser one and only one to one and only one, p
-    @OneToOne(mappedBy = "criteria")
+    @OneToOne(mappedBy = "criteria", optional = false)
     private VcwHasCriteriaEntity vcwHasCriteriaEntity;
 
     //TODO: isto é suposto ser one and only one to zero or many, pls check

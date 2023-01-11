@@ -75,8 +75,7 @@ public class IdeaEntity {
 
 
     //TODO: isto é suposto ser one and only one to one and only one, pls check
-    @OneToOne(optional = false)
-    @JoinColumn(name = "idea_id", referencedColumnName = "id")
+    @OneToOne(mappedBy = "idea", optional = false)
     private VcwHasIdeaEntity vcwHasIdeaEntity;
 
 
