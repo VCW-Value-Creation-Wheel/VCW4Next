@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Project, MockProjectService } from '@core';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
@@ -15,8 +15,9 @@ export class ProjectListComponent implements OnInit {
   projects: Project[] = [];
 
   constructor(
-      private projectMock: MockProjectService,
-      private router: Router
+    private projectMock: MockProjectService,
+    private router: Router,
+    private route: ActivatedRoute
     ) { }
 
   ngOnInit(): void {
@@ -29,6 +30,6 @@ export class ProjectListComponent implements OnInit {
   }
 
   addNewProject() {
-    console.log('New Project');
+    this.router.navigate(["/new-project"],{relativeTo: this.route})
   }
 }

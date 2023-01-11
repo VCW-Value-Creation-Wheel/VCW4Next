@@ -1,17 +1,18 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, Routes } from '@angular/router';
+import { NewProjectComponent } from 'features/project/new-project/new-project.component';
+import { Routes, RouterModule } from '@angular/router';
+import { SharedModule } from 'shared';
+import { ProjectListComponent } from 'features/project/project-list/project-list.component';
 import { HomeComponent } from 'features/home/home.component';
-import { ProjectPageComponent } from 'features/project/project-page/project-page.component';
 
 const routes: Routes = [
   {
-    path:'', component: HomeComponent
+    path:'new-project', component: NewProjectComponent
   },
   {
-    path:'project/:project_id', component: ProjectPageComponent
+    path:'', component: HomeComponent
   }
-  
 ]
 
 @NgModule({
