@@ -1,4 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { MockProjectService, Project } from '@core';
 import { VCW } from '@core/models/vcw';
 import { VcwMockService } from '@core/services/mocks/vcw/vcw-mock.service';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
@@ -10,16 +12,23 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 })
 export class ProjectPageComponent implements OnInit {
 
-  @Input() projectId: number=1;
+  project: Project;
 
   faPlus = faPlus;
   vcws: VCW[] = [];
 
-  constructor( private vcwService: VcwMockService) { }
+  constructor( 
+    private vcwService: VcwMockService,
+    private mockProjectService: MockProjectService,
+    private route: ActivatedRoute,
+    ) { }
 
   ngOnInit(): void {
+    this.mockProjectService.getById(Number(this.route.snapshot.paramMap.get('project_id'))).subscribe(project =>{
+      this.project = project;
+      this.vcwService.getVcws(this.project.id).subscribe((vcws => this.vcws = vcws));
+    });
     // this loads a mock for testing. Disable this when loading from the back-end.
-    this.vcwService.getVcws(this.projectId).subscribe((vcws => this.vcws = vcws));
   }
 
   onVcwClick(vcw: VCW) {
@@ -27,7 +36,7 @@ export class ProjectPageComponent implements OnInit {
   }
 
   addNewVcw() {
-    console.log('New Project');
+    console.log('New VCW');
   }
 
 }

@@ -1,7 +1,7 @@
 <div class="pl-4 py-4">
-    <h1 class="text-2xl font-bold text-primary">Project Title</h1>
+    <h1 class="text-2xl font-bold text-primary">{{project?.title}}</h1>
 </div>
-<div class="m-2 p-2">This is the description of the project bla bla bla</div>
+<div class="m-2 p-2">{{project?.description}}</div>
 <div class="justify-between gap-4 pl-4 py-4 w-full flex flex-wrap">
     <app-button
         [leftIcon]="faPlus"
