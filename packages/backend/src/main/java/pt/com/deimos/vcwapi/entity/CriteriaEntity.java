@@ -54,9 +54,8 @@ public class CriteriaEntity {
     @JoinColumn(name="entry_type_id", referencedColumnName = "id")
     private EntryTypeEntity entryType;
 
-    //TODO: isto é suposto ser one and only one to one and only one, pls check
-    @OneToOne(optional = false)
-    @JoinColumn(name="criteria_id", referencedColumnName = "id")
+    //TODO: isto é suposto ser one and only one to one and only one, p
+    @OneToOne(mappedBy = "criteria")
     private VcwHasCriteriaEntity vcwHasCriteriaEntity;
 
     //TODO: isto é suposto ser one and only one to zero or many, pls check

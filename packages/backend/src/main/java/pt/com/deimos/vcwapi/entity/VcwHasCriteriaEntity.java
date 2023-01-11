@@ -38,7 +38,8 @@ public class VcwHasCriteriaEntity {
     private VcwEntity vcw;
 
     //TODO: isto é suposto ser one and only one to one and only one, pls check
-    @OneToOne(mappedBy = "vcwHasCriteriaEntity")
+    @OneToOne(optional = false)
+    @JoinColumn(name="criteria_id", referencedColumnName = "id")
     private CriteriaEntity criteria;
 
 }
