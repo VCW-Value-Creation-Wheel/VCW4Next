@@ -11,12 +11,7 @@ export class NewVcwComponent implements OnInit {
     'title': new FormControl('', Validators.required)
   })
 
-  labelTitle:String = "Title";
-  placeholder: String = "";
-  buttonLabel: String = "Submit";
   isSelected: number = 0;
-  selectedBg: string = "bg-blue-200";
-  noBg: string = "bg-transparent";
   
 
   constructor() { }
