@@ -22,12 +22,12 @@ public class VcwHasPhaseEntity {
 
     //TODO: isto é suposto ser zero or many to one and only one, pls check
     @ManyToOne(optional = false)
-    @JoinColumn(name = "phase_id")
+    @JoinColumn(name = "phase_id", referencedColumnName = "id")
     private PhaseEntity phase;
 
     //TODO: isto é suposto ser one or many to one and only one, pls check
     @ManyToOne(optional = false)
-    @JoinColumn(name = "vcw_id")
+    @JoinColumn(name = "vcw_id", referencedColumnName = "id")
     private VcwEntity vcw;
 
 

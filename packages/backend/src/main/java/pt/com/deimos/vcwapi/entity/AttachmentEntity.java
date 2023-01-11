@@ -17,6 +17,7 @@ public class AttachmentEntity {
     private Long id;
 
     //TODO: isto é suposto ser one and only one to one and only one, pls check
+    //TODO: Há aqui muitas relaçoes com cascade mas nao sei qual tipo por
     @OneToOne(optional = false)
     @JoinColumn(name = "file_id", referencedColumnName = "id")
     private FileEntity file;

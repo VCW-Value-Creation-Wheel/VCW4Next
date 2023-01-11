@@ -22,6 +22,6 @@ public class ProjectHasVcwEntity {
 
     //TODO: isto é suposto ser zero or many to one and only one , pls check
     @ManyToOne(optional = false)
-    @JoinColumn(name="project_id")
+    @JoinColumn(name="project_id", referencedColumnName = "id")
     private ProjectEntity project;
 }

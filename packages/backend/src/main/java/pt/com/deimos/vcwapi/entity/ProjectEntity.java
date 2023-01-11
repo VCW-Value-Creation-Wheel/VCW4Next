@@ -59,7 +59,7 @@ public class ProjectEntity {
 
   //TODO: isto é suposto ser zero or one to zero or one, pls check
   @OneToOne
-  @JoinColumn(name = "thumbnail")
+  @JoinColumn(name = "thumbnail", referencedColumnName = "id")
   private FileEntity file;
 
   //TODO: é possivel fazer uma join table aqui? a tabela so tem ids mas este nao é many to many
