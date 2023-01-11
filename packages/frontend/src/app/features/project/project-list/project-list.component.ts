@@ -29,6 +29,6 @@ export class ProjectListComponent implements OnInit {
   }
 
   addNewProject() {
-    this.router.navigate(["/new-project"],{relativeTo: this.route});
+    this.router.navigate(["/new-project"],{relativeTo: this.route})
   }
 }

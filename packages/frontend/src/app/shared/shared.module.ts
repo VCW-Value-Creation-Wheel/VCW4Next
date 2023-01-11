@@ -75,6 +75,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
     IconButtonComponent,
     HelperTextComponent,
     RegexInputDirective,
+    NavbarComponent,
+    FooterComponent,
     SearchBarComponent,
     IconButtonComponent,
     ButtonComponent,

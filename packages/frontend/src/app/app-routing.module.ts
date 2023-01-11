@@ -1,9 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NewProjectComponent } from 'features/project/new-project/new-project.component';
 import { Routes, RouterModule } from '@angular/router';
 import { SharedModule } from 'shared';
-import { NewVcwComponent } from 'features/vcw/new-vcw/new-vcw.component';
+import { ProjectListComponent } from 'features/project/project-list/project-list.component';
 import { HomeComponent } from 'features/home/home.component';
+import { NewVcwComponent } from 'features/vcw/new-vcw/new-vcw.component';
 
 const routes: Routes = [
   {
@@ -11,6 +13,9 @@ const routes: Routes = [
   },
   {
     path:'new-vcw', component: NewVcwComponent
+  },
+  {
+    path:'new-project', component: NewProjectComponent
   }
 ]
 
@@ -20,6 +25,6 @@ const routes: Routes = [
     CommonModule,
     RouterModule.forRoot(routes)
   ],
-  exports:[RouterModule]
+  exports: [RouterModule]
 })
 export class AppRoutingModule { }
