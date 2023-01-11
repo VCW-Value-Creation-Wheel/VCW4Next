@@ -21,7 +21,7 @@ import java.util.UUID;
 @Setter
 //TODO: para que precisamos do Tostring?
 @ToString
-@Table(name = "projects")
+@Table(name = "project")
 public class ProjectEntity {
 
   @Id
