@@ -77,8 +77,7 @@ public class VcwEntity {
     private UUID updatedBy;
 
     //TODO: isto é suposto ser one and only one to zero or one
-    @OneToOne
-    @JoinColumn(name="project_id", referencedColumnName = "id")
+    @OneToOne(mappedBy = "vcw")
     private ProjectHasVcwEntity projectHasVcwEntity;
 
     //TODO: isto é suposto ser one and only one to zero or many, pls check

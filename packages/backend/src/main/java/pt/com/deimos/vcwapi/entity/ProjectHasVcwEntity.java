@@ -17,7 +17,8 @@ public class ProjectHasVcwEntity {
     private Long id;
 
     //TODO: isto é suposto ser zero or one to one and only one
-    @OneToOne(mappedBy = "projectHasVcwEntity",optional = false)
+    @OneToOne(optional = false)
+    @JoinColumn(name="vcw_id", referencedColumnName = "id")
     private VcwEntity vcw;
 
     //TODO: isto é suposto ser zero or many to one and only one , pls check
