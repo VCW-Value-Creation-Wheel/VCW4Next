@@ -33,6 +33,8 @@ export class NewProjectComponent implements OnInit {
       value:"fr"
     }];
 
+    isAddUserActive: boolean = false;
+
   constructor(private router: Router) { }
 
   ngOnInit(): void {
@@ -40,6 +42,11 @@ export class NewProjectComponent implements OnInit {
 
   onSubmit(e: Event): void{
     console.log(this.form.get('project-title').value+" Created ()()()()")
+  }
+  
+  addUser(): void{
+    this.isAddUserActive = true;
+    console.log("added user")
   }
 
   onBack(): void{
