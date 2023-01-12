@@ -1,9 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
-import { ProjectListComponent } from 'features/project/project-list/project-list.component';
 import { HomeComponent } from 'features/home/home.component';
-import { NewVcwComponent } from 'features/vcw/new-vcw/new-vcw.component';
 
 const routes: Routes = [
   {
