@@ -10,7 +10,6 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
   styleUrls: ['./project-list.component.scss']
 })
 export class ProjectListComponent implements OnInit {
-
   faPlus = faPlus;
   projects: Project[] = [];
 
@@ -18,15 +17,15 @@ export class ProjectListComponent implements OnInit {
     private projectMock: MockProjectService,
     private router: Router,
     private route: ActivatedRoute
-    ) { }
+  ) { }
 
   ngOnInit(): void {
     // this loads a mock for testing. Disable this when loading from the back-end.
     this.projectMock.projects().subscribe((projects => this.projects = projects));
   }
 
-  onProjectClick(project: Project) {
-    console.log(project);
+  onProjectClick(projectId: number) {
+    this.router.navigate(['project/'+projectId])
   }
 
   addNewProject() {

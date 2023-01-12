@@ -8,7 +8,7 @@ import { Project } from '@core';
 })
 export class ProjectCardComponent implements OnInit {
   @Input() project: Project;
-  @Output() clickEvent = new EventEmitter();
+  @Output() clickEvent = new EventEmitter<number>();
 
   photo: string;
 
@@ -20,6 +20,6 @@ export class ProjectCardComponent implements OnInit {
   }
 
   onClickEvent() {
-    this.clickEvent.emit();
+    this.clickEvent.emit(this.project.id);
   }
 }
