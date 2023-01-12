@@ -19,8 +19,8 @@ export class NewVcwComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  SelectedImage(number): void{
-    this.isSelected = number;
+  selectedImage(num: number): void{
+    this.isSelected = num;
   }
 
   onSubmit(): void{

@@ -12,16 +12,16 @@
         </div>
         <div class="col-span-7"></div>
         <div class="col-span-10 text-xl m-2 p-2">VCW Type</div>
-        <div class="col-span-3 m-2 p-2 rounded-lg {{isSelected==1? 'bg-emerald-300' : 'bg-transparent' }} text-center">
-            <img src="../../../../assets/images/wheel1.jpg" alt="" (click)="SelectedImage(1)">
+        <div class="col-span-3 m-2 p-2 rounded-lg {{isSelected===1? 'bg-emerald-300' : 'bg-transparent' }} text-center">
+            <img src="../../../../assets/images/wheel1.jpg" alt="" (click)="selectedImage(1)">
             <div class="text-lg font-bold">VCW</div>
         </div>
-        <div class="col-span-3 m-2 p-2 rounded-lg {{isSelected==2? 'bg-emerald-300' : 'bg-transparent' }} text-center">
-            <img src="../../../../assets/images/wheel2.jpg" alt="" (click)="SelectedImage(2)">
+        <div class="col-span-3 m-2 p-2 rounded-lg {{isSelected===2? 'bg-emerald-300' : 'bg-transparent' }} text-center">
+            <img src="../../../../assets/images/wheel2.jpg" alt="" (click)="selectedImage(2)">
             <div class="text-lg font-bold">VCW Journey</div>
         </div>
-        <div class="col-span-3 m-2 p-2 rounded-lg {{isSelected==3? 'bg-emerald-300' : 'bg-transparent' }} text-center">
-            <img src="../../../../assets/images/wheel3.jpg" alt="" (click)="SelectedImage(3)">
+        <div class="col-span-3 m-2 p-2 rounded-lg {{isSelected===3? 'bg-emerald-300' : 'bg-transparent' }} text-center">
+            <img src="../../../../assets/images/wheel3.jpg" alt="" (click)="selectedImage(3)">
             <div class="text-lg font-bold">VCW Method</div>
         </div>
         
