@@ -13,6 +13,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MainLayoutComponent } from './features/main-layout/main-layout.component';
 import { HomeComponent } from './features/home/home.component';
 import { ProjectListComponent } from './features/project/project-list/project-list.component';
+import { ProjectPageComponent } from './features/project/project-page/project-page.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { ProjectListComponent } from './features/project/project-list/project-li
     NewProjectComponent,
     MainLayoutComponent,
     HomeComponent,
-    ProjectListComponent
+    ProjectListComponent,
+    ProjectPageComponent
   ],
   imports: [
     CoreModule,
