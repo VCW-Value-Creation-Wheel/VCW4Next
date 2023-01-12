@@ -35,6 +35,10 @@ export class NewProjectComponent implements OnInit {
 
     isAddUserActive: boolean = false;
 
+    options: string[] = ['user1', 'user2', 'user3', 'user4'];
+    error: boolean = false;
+    isDisabled: boolean = false;
+
   constructor(private router: Router) { }
 
   ngOnInit(): void {
