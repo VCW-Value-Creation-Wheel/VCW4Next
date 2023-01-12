@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Options } from '@core';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
@@ -33,7 +33,7 @@ export class NewProjectComponent implements OnInit {
       value:"fr"
     }];
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
   }
@@ -43,7 +43,7 @@ export class NewProjectComponent implements OnInit {
   }
 
   onBack(): void{
-    this.router.navigate([''])
+    this.router.navigate(['../'], {relativeTo: this.route});
   }
 
 }

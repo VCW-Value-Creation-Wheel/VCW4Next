@@ -20,11 +20,8 @@ import { ProjectPageComponent } from './features/project/project-page/project-pa
   declarations: [
     AppComponent,
     NewVcwComponent,
-    NewProjectComponent,
     MainLayoutComponent,
-    HomeComponent,
-    ProjectListComponent,
-    ProjectPageComponent
+    HomeComponent
   ],
   imports: [
     CoreModule,
