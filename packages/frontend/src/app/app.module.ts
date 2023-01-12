@@ -19,7 +19,6 @@ import { ProjectPageComponent } from './features/project/project-page/project-pa
 @NgModule({
   declarations: [
     AppComponent,
-    NewVcwComponent,
     MainLayoutComponent,
     HomeComponent
   ],

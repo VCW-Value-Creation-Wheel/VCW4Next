@@ -11,8 +11,8 @@ const routes: Routes = [
     loadChildren: () => import('./features/project/project.module').then(m => m.ProjectModule)
   },
   {
-    path: 'new-vcw',
-    component: NewVcwComponent
+    path: 'vcw',
+    loadChildren: () => import('./features/vcw/vcw.module').then(m => m.VcwModule)
   },
   {
     path: '',
