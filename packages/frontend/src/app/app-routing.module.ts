@@ -22,7 +22,7 @@ const routes: Routes = [
     path:'new-vcw', component: NewVcwComponent
   },
   {
-    path:'new-project', component: NewProjectComponent
+    path:'', component: HomeComponent
   }
 ]
 

@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MockProjectService, Project } from '@core';
 import { VCW } from '@core/models/vcw';
 import { VcwMockService } from '@core/services/mocks/vcw/vcw-mock.service';
@@ -21,6 +21,7 @@ export class ProjectPageComponent implements OnInit {
     private vcwService: VcwMockService,
     private mockProjectService: MockProjectService,
     private route: ActivatedRoute,
+    private router: Router
     ) { }
 
   ngOnInit(): void {
@@ -36,7 +37,7 @@ export class ProjectPageComponent implements OnInit {
   }
 
   addNewVcw() {
-    console.log('New VCW');
+    this.router.navigate(['/new-vcw'])
   }
 
 }
