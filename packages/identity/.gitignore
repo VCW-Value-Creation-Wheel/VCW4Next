@@ -8,3 +8,5 @@ target
 .cache
 
 TODO.txt
+**/node_modules
+**/dist

@@ -1,0 +1,12 @@
+{{- if .Values.configmap.enabled -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.configmap.name }}
+data:
+  application.properties: |-
+    spring.datasource.url=jdbc:postgresql://100.100.3.108:6543/vcw_develop
+    spring.datasource.username=vcw
+    spring.datasource.password=vkn8bmd_mqy4dmj5AJG
+
+{{- end }}

@@ -10,7 +10,7 @@ ENV KC_DB=postgres
 
 WORKDIR /opt/keycloak
 
-# COPY ./themes/. /opt/jboss/keycloak/themes/
+COPY themes/. themes/
 # COPY ./realms/ /tmp/import
 # COPY ./providers/ /opt/keycloak/providers/
 
@@ -29,4 +29,4 @@ ENV KC_METRICS_ENABLED=true
 # Configure a database vendor
 ENV KC_DB=postgres
 
-ENTRYPOINT ["/opt/keycloak/bin/kc.sh"]
+ENTRYPOINT ["/opt/keycloak/bin/kc.sh", "start", "--optimized"]

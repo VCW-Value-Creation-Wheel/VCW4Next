@@ -2,7 +2,7 @@
 ### stage 1 - generate bundle ###
 #################################
 # base image
-FROM node:14.17.6-buster-slim as bundle
+FROM node:18.12.1-buster-slim as bundle
 
 ARG CONFIGURATION=production
 
@@ -16,7 +16,7 @@ ENV PATH /app/node_modules/.bin:$PATH
 COPY package.json /app/package.json
 
 #- ngcc: pre-compile
-RUN yarn global add @angular/cli@14.2.1 && yarn && ngcc
+RUN yarn global add @angular/cli@15.0.4 && yarn && ngcc
 
 # add app
 COPY . /app
