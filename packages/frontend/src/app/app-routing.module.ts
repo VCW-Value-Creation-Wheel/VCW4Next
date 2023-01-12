@@ -6,6 +6,7 @@ import { SharedModule } from 'shared';
 import { ProjectListComponent } from 'features/project/project-list/project-list.component';
 import { HomeComponent } from 'features/home/home.component';
 import { ProjectPageComponent } from 'features/project/project-page/project-page.component';
+import { NewVcwComponent } from 'features/vcw/new-vcw/new-vcw.component';
 
 const routes: Routes = [
   {
@@ -16,6 +17,9 @@ const routes: Routes = [
   },
   {
     path:'new-project', component: NewProjectComponent
+  },
+  {
+    path:'new-vcw', component: NewVcwComponent
   },
   {
     path:'', component: HomeComponent
