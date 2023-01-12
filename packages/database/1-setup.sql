@@ -1,3 +1,0 @@
---
-CREATE SCHEMA IF NOT EXISTS "identity";
-CREATE SCHEMA IF NOT EXISTS "application";

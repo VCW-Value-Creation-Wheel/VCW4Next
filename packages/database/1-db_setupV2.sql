@@ -1,7 +1,7 @@
 -- TODO: Where should i place this file when it is complete?
 -- TODO: anavnet has many SEQUENCES for ids, do we need that here?
-
-CREATE SCHEMA application AUTHORIZATION postgres;
+CREATE SCHEMA IF NOT EXISTS "identity";
+CREATE SCHEMA IF NOT EXISTS "application";
 
 
 CREATE TABLE application.business_model_canvas (
