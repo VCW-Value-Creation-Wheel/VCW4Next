@@ -33,20 +33,10 @@ public class KeywordEntity {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    //TODO: é assim que se faz o created_by?
-    // De onde vem o uuid, há @GeneratedValue?
-    @Column(name = "created_by", updatable = false)
-    private String createdBy;
-
     @UpdateTimestamp
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
-
-    //TODO: é assim que se faz o updated_by?
-    // De onde vem o uuid, há @GeneratedValue?
-    @Column(name = "updated_by")
-    private String updatedBy;
 
     // TODO: como se implementa  zero or many?
     @ManyToMany(mappedBy = "ideaHasKeywords")
@@ -59,4 +49,16 @@ public class KeywordEntity {
     // TODO: como se implementa  zero or many?
     @ManyToMany(mappedBy = "projectHasKeywords")
     Set<ProjectEntity> projects;
+
+    //TODO: isto é suposto ser zero or many to one and only one, pls check
+    //TODO: é assim que se faz o updated_by?
+    @ManyToOne(optional = false)
+    @JoinColumn(name="updated_by", referencedColumnName = "id")
+    private UserEntity updatedBy;
+
+    //TODO: isto é suposto ser zero or many to one and only one, pls check
+    //TODO: é assim que se faz o created_by?
+    @ManyToOne(optional = false)
+    @JoinColumn(name="created_by", referencedColumnName = "id")
+    private UserEntity createdBy;
 }

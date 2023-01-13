@@ -56,6 +56,110 @@ public class UserEntity {
 
     //TODO: isto é suposto ser one and only one to zero or many, pls check
     @OneToMany(mappedBy = "user")
-    private List<ProjectHasUserRoleEntity> projectHasUserRoleEntities;
+    private List<ProjectHasUserRoleEntity> userHasProjectHasUserRoleEntities;
+
+    //TODO: isto é suposto ser one and only one to zero or many, pls check
+    @OneToMany(mappedBy = "updatedBy")
+    private List<ProjectHasUserRoleEntity> userUpdatedProjectHasUserRoleEntities;
+
+    //TODO: isto é suposto ser one and only one to zero or many, pls check
+    @OneToMany(mappedBy = "createdBy")
+    private List<ProjectHasUserRoleEntity> userCreatedProjectHasUserRoleEntities;
+
+    //TODO: isto é suposto ser one and only one to zero or many, pls check
+    @OneToMany(mappedBy = "updatedBy")
+    private List<BusinessModelCanvasEntity> userUpdatedBusinessModelCanvasEntity;
+
+    //TODO: isto é suposto ser one and only one to zero or many, pls check
+    @OneToMany(mappedBy = "createdBy")
+    private List<BusinessModelCanvasEntity> userCreatedBusinessModelCanvasEntity;
+
+    //TODO: isto é suposto ser one and only one to zero or many, pls check
+    @OneToMany(mappedBy = "updatedBy")
+    private List<CriteriaEntity> userUpdatedCriteriaEntity;
+
+    //TODO: isto é suposto ser one and only one to zero or many, pls check
+    @OneToMany(mappedBy = "createdBy")
+    private List<CriteriaEntity> userCreatedCriteriaEntity;
+
+    //TODO: isto é suposto ser one and only one to zero or many, pls check
+    @OneToMany(mappedBy = "updatedBy")
+    private List<DiagnosticEntity> userUpdatedDiagnosticEntity;
+
+    //TODO: isto é suposto ser one and only one to zero or many, pls check
+    @OneToMany(mappedBy = "createdBy")
+    private List<DiagnosticEntity> userCreatedDiagnosticEntity;
+
+    //TODO: isto é suposto ser one and only one to zero or many, pls check
+    @OneToMany(mappedBy = "updatedBy")
+    private List<EntryTypeEntity> userUpdatedEntryTypeEntity;
+
+    //TODO: isto é suposto ser one and only one to zero or many, pls check
+    @OneToMany(mappedBy = "createdBy")
+    private List<EntryTypeEntity> userCreatedEntryTypeEntity;
+
+    //TODO: isto é suposto ser one and only one to zero or many, pls check
+    @OneToMany(mappedBy = "updatedBy")
+    private List<FileEntity> userUpdatedFileEntity;
+
+    //TODO: isto é suposto ser one and only one to zero or many, pls check
+    @OneToMany(mappedBy = "createdBy")
+    private List<FileEntity> userCreatedFileEntity;
+
+    //TODO: isto é suposto ser one and only one to zero or many, pls check
+    @OneToMany(mappedBy = "updatedBy")
+    private List<IdeaAndCriteriaEntity> userUpdatedIdeaAndCriteriaEntity;
+
+    //TODO: isto é suposto ser one and only one to zero or many, pls check
+    @OneToMany(mappedBy = "createdBy")
+    private List<IdeaAndCriteriaEntity> userCreatedIdeaAndCriteriaEntity;
+
+    //TODO: isto é suposto ser one and only one to zero or many, pls check
+    @OneToMany(mappedBy = "updatedBy")
+    private List<IdeaEntity> userUpdatedIdeaEntity;
+
+    //TODO: isto é suposto ser one and only one to zero or many, pls check
+    @OneToMany(mappedBy = "createdBy")
+    private List<IdeaEntity> userCreatedIdeaEntity;
+
+    //TODO: isto é suposto ser one and only one to zero or many, pls check
+    @OneToMany(mappedBy = "updatedBy")
+    private List<KeywordEntity> userUpdatedKeywordEntity;
+
+    //TODO: isto é suposto ser one and only one to zero or many, pls check
+    @OneToMany(mappedBy = "createdBy")
+    private List<KeywordEntity> userCreatedKeywordEntity;
+
+    //TODO: isto é suposto ser one and only one to zero or many, pls check
+    @OneToMany(mappedBy = "updatedBy")
+    private List<KpiEntity> userUpdatedKpiEntity;
+
+    //TODO: isto é suposto ser one and only one to zero or many, pls check
+    @OneToMany(mappedBy = "createdBy")
+    private List<KpiEntity> userCreatedKpiEntity;
+
+    //TODO: isto é suposto ser one and only one to zero or many, pls check
+    @OneToMany(mappedBy = "updatedBy")
+    private List<ProjectEntity> userUpdatedProjectEntity;
+
+    //TODO: isto é suposto ser one and only one to zero or many, pls check
+    @OneToMany(mappedBy = "createdBy")
+    private List<ProjectEntity> userCreatedProjectEntity;
+
+    //TODO: isto é suposto ser one and only one to zero or many, pls check
+    @OneToMany(mappedBy = "updatedBy")
+    private List<SourceEntity> userUpdatedSourceEntity;
+
+    //TODO: isto é suposto ser one and only one to zero or many, pls check
+    @OneToMany(mappedBy = "createdBy")
+    private List<SourceEntity> userCreatedSourceEntity;
+
+    //TODO: isto é suposto ser one and only one to zero or many, pls check
+    @OneToMany(mappedBy = "updatedBy")
+    private List<VcwEntity> userUpdatedVcwEntity;
+
+    //TODO: isto é suposto ser one and only one to zero or many, pls check
+    @OneToMany(mappedBy = "createdBy")
+    private List<VcwEntity> userCreatedVcwEntity;
 
 }
