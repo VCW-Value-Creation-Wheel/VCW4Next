@@ -4,6 +4,11 @@ import { Router } from '@angular/router';
 import { Options } from '@core';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
+interface UserRole {
+  user: string,
+  role: string
+}
+
 @Component({
   selector: 'app-new-project',
   templateUrl: './new-project.component.html',
@@ -14,7 +19,9 @@ export class NewProjectComponent implements OnInit {
     'project-title': new FormControl('', Validators.required),
     'project-description': new FormControl(''),
     'project-language': new FormControl(),
-    'project-thumbnail': new FormControl() 
+    'project-thumbnail': new FormControl(),
+    'user': new FormControl(),
+    'role': new FormControl() 
   })
 
   faArrowLeft = faArrowLeft;
@@ -39,6 +46,19 @@ export class NewProjectComponent implements OnInit {
     error: boolean = false;
     isDisabled: boolean = false;
 
+    roleOptions: Options[] = [
+      {
+        label:"Admin",
+        value:"admin"
+      },
+      {
+        label:"Normal User",
+        value:"user"
+      }
+    ]
+
+    userRole: UserRole[]=[];
+
   constructor(private router: Router) { }
 
   ngOnInit(): void {
@@ -50,7 +70,20 @@ export class NewProjectComponent implements OnInit {
   
   addUser(): void{
     this.isAddUserActive = true;
-    console.log("added user")
+  }
+
+  confirmUser(): void{
+    this.userRole.push({
+      user: this.form.value.user,
+      role: this.form.value.role
+    })
+    
+    this.isAddUserActive = false;
+    console.log(this.userRole)
+  }
+
+  cancelUserSelection(): void{
+    this.isAddUserActive = false;
   }
 
   onBack(): void{

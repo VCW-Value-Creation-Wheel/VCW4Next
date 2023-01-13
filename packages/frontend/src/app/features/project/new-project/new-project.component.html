@@ -52,9 +52,9 @@
             </app-button>
         </div>
         <div class="col-span-4 text-xl font-bold ">Users and Roles</div>
-        <div *ngIf="isAddUserActive">
+        <div *ngIf="isAddUserActive" class="col-span-1">
             <div class="flex flex-col align-top">
-                <label class="{{isDisabled?'text-gray-400':'text-gray-700'}}">
+                <label class="{{isDisabled?'text-gray-400':'text-gray-700'}} py-1">
                   Select User
                 </label>
                 <input
@@ -72,13 +72,39 @@
                     {{error?'bg-red-200':'bg-gray-100'}}
                   "
                   list="userList"
+                  formControlName="user"
                 />
               </div>
             <datalist id="userList">
                 <option *ngFor="let option of options">{{option}}</option>
             </datalist>
+            <div class="">
+                <app-select-input
+                [label]="'Select Role'"
+                [options]="roleOptions"
+                formControlName="role"
+                >
+                </app-select-input>
+            </div>
+            <div class="mx-2 pt-7">
+                <app-button
+                [label]="'Add'"
+                (click)="confirmUser()"
+                >
+                </app-button>
+            </div> 
+            <div class="mr-4 pt-7">
+                <app-button
+                [label]="'Cancel'"
+                (click)="cancelUserSelection()"
+                > 
+                </app-button>
+            </div> 
         </div>
         <div class="m-4 p-2" *ngIf="!isAddUserActive">
+            <div *ngFor="let userEntry of userRole" class="flex flex-col m-2 p-2">
+                <div>{{userEntry.user}} - {{userEntry.role}}</div>
+            </div>
             <app-button
             [label]="'Add User'"
             (click)="addUser()">
