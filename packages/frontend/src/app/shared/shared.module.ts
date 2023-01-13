@@ -28,6 +28,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { AngularMyDatePickerModule } from 'angular-mydatepicker';
 import { AngularSvgIconModule } from 'angular-svg-icon';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { VcwCardComponent } from './components/vcw-card/vcw-card.component';
 
 
 @NgModule({
@@ -52,7 +53,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
     ProjectCardComponent,
     PhaseNavigationComponent,
     TabComponent,
-    DialogComponent
+    DialogComponent,
+    VcwCardComponent
   ],
   imports: [
     CommonModule,
@@ -89,7 +91,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
     ProjectCardComponent,
     PhaseNavigationComponent,
     TabComponent,
-    DialogComponent
+    DialogComponent,
+    VcwCardComponent
   ]
 })
 export class SharedModule { }
