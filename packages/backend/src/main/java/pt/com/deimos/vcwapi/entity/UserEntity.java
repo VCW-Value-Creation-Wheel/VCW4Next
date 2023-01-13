@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigInteger;
+import java.util.List;
 
 @Entity
 @Getter
@@ -53,5 +54,8 @@ public class UserEntity {
     private Integer notBefore;
 
 
+    //TODO: isto é suposto ser one and only one to zero or many, pls check
+    @OneToMany(mappedBy = "user")
+    private List<ProjectHasUserRoleEntity> projectHasUserRoleEntities;
 
 }

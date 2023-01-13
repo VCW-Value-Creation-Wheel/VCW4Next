@@ -32,7 +32,7 @@ public class EntryTypeEntity {
     //TODO: é assim que se faz o created_by?
     // De onde vem o uuid, há @GeneratedValue?
     @Column(name = "created_by", updatable = false)
-    private UUID createdBy;
+    private String createdBy;
 
     @UpdateTimestamp
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
@@ -42,7 +42,7 @@ public class EntryTypeEntity {
     //TODO: é assim que se faz o updated_by?
     // De onde vem o uuid, há @GeneratedValue?
     @Column(name = "updated_by")
-    private UUID updatedBy;
+    private String updatedBy;
 
     //TODO: isto é suposto ser one and only one to zero or many, pls check
     @OneToMany(mappedBy = "entryType")
