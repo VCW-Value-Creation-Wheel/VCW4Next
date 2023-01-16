@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SwotField } from '@core';
-import { faPlus, faMinus, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faMinus, faTimes, faFloppyDisk } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-define-diagonostics',
@@ -12,6 +12,7 @@ export class DefineDiagonosticsComponent implements OnInit {
   faPlus = faPlus;
   faMinus = faMinus;
   faTimes = faTimes;
+  faFloppyDisk = faFloppyDisk;
 
   activeTab = 0;
 
@@ -72,5 +73,9 @@ export class DefineDiagonosticsComponent implements OnInit {
 
   getSwotFieldsByCategory(categoryId: number): SwotField[] {
     return this.swotFields.filter(field => field.categoryId === categoryId);
+  }
+
+  onSave() {
+
   }
 }
