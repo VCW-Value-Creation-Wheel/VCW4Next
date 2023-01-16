@@ -2,36 +2,36 @@ ALTER TABLE application.business_model_canvas
    ALTER COLUMN updated_by TYPE VARCHAR(36),
    ALTER COLUMN created_by TYPE VARCHAR(36);
 
-ALTER TABLE business_model_canvas ADD CONSTRAINT FK_BUSINESS_MODEL_CANVAS_ON_CREATED_BY FOREIGN KEY (created_by) REFERENCES identity.user_entity (id);
+ALTER TABLE application.business_model_canvas ADD CONSTRAINT FK_BUSINESS_MODEL_CANVAS_ON_CREATED_BY FOREIGN KEY (created_by) REFERENCES identity.user_entity (id);
 
-ALTER TABLE business_model_canvas ADD CONSTRAINT FK_BUSINESS_MODEL_CANVAS_ON_UPDATED_BY FOREIGN KEY (updated_by) REFERENCES identity.user_entity (id);
+ALTER TABLE application.business_model_canvas ADD CONSTRAINT FK_BUSINESS_MODEL_CANVAS_ON_UPDATED_BY FOREIGN KEY (updated_by) REFERENCES identity.user_entity (id);
 
 
 ALTER TABLE application.criteria
    ALTER COLUMN updated_by TYPE VARCHAR(36),
    ALTER COLUMN created_by TYPE VARCHAR(36);
 
-ALTER TABLE criteria ADD CONSTRAINT FK_CRITERIA_ON_CREATED_BY FOREIGN KEY (created_by) REFERENCES identity.user_entity (id);
+ALTER TABLE application.criteria ADD CONSTRAINT FK_CRITERIA_ON_CREATED_BY FOREIGN KEY (created_by) REFERENCES identity.user_entity (id);
 
-ALTER TABLE criteria ADD CONSTRAINT FK_CRITERIA_ON_UPDATED_BY FOREIGN KEY (updated_by) REFERENCES identity.user_entity (id);
+ALTER TABLE application.criteria ADD CONSTRAINT FK_CRITERIA_ON_UPDATED_BY FOREIGN KEY (updated_by) REFERENCES identity.user_entity (id);
 
 
 ALTER TABLE application.diagnostic
    ALTER COLUMN updated_by TYPE VARCHAR(36),
    ALTER COLUMN created_by TYPE VARCHAR(36);
 
-ALTER TABLE diagnostic ADD CONSTRAINT FK_DIAGNOSTIC_ON_CREATED_BY FOREIGN KEY (created_by) REFERENCES identity.user_entity (id);
+ALTER TABLE application.diagnostic ADD CONSTRAINT FK_DIAGNOSTIC_ON_CREATED_BY FOREIGN KEY (created_by) REFERENCES identity.user_entity (id);
 
-ALTER TABLE diagnostic ADD CONSTRAINT FK_DIAGNOSTIC_ON_UPDATED_BY FOREIGN KEY (updated_by) REFERENCES identity.user_entity (id);
+ALTER TABLE application.diagnostic ADD CONSTRAINT FK_DIAGNOSTIC_ON_UPDATED_BY FOREIGN KEY (updated_by) REFERENCES identity.user_entity (id);
 
 
 ALTER TABLE application.entry_type
    ALTER COLUMN updated_by TYPE VARCHAR(36),
    ALTER COLUMN created_by TYPE VARCHAR(36);
 
-ALTER TABLE entry_type ADD CONSTRAINT FK_ENTRY_TYPE_ON_CREATED_BY FOREIGN KEY (created_by) REFERENCES identity.user_entity (id);
+ALTER TABLE application.entry_type ADD CONSTRAINT FK_ENTRY_TYPE_ON_CREATED_BY FOREIGN KEY (created_by) REFERENCES identity.user_entity (id);
 
-ALTER TABLE entry_type ADD CONSTRAINT FK_ENTRY_TYPE_ON_UPDATED_BY FOREIGN KEY (updated_by) REFERENCES identity.user_entity (id);
+ALTER TABLE application.entry_type ADD CONSTRAINT FK_ENTRY_TYPE_ON_UPDATED_BY FOREIGN KEY (updated_by) REFERENCES identity.user_entity (id);
 
 
 ALTER TABLE application.file

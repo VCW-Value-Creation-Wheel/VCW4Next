@@ -35,7 +35,7 @@ public class VcwEntity {
     private String concept;
 
     //TODO: jsonb na bd é string ou outra coisa
-    @Column(name="value_proposition")
+    @Column(name="value_proposition", columnDefinition = "jsonb")
     private String valueProposition;
 
     @Column(columnDefinition = "TEXT")
