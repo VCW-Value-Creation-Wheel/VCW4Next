@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import {
   faSignInAlt,
   faSignOutAlt,
@@ -8,19 +8,22 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { environment } from '../../../../../environments/environment';
 import * as pkg from '../../../../../../package.json';
+import { NavigationEnd, Router } from '@angular/router';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss']
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent implements OnInit, OnDestroy {
 
   @Input() isAuthenticated: boolean | null = false;
   @Output() login = new EventEmitter();
   @Output() logout = new EventEmitter();
 
-  constructor() { }
+  constructor(private route: Router) { }
 
   isShowingProfileCard = false;
   faUser = faUser;
@@ -31,8 +34,22 @@ export class NavbarComponent implements OnInit {
   env = environment;
   pkg = pkg;
 
+  currentRoute: string;
+
+  componentDestroyed$ = new Subject<boolean>();
+
 
   ngOnInit(): void {
+    this.route.events.pipe(takeUntil(this.componentDestroyed$)).subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        this.currentRoute = event.urlAfterRedirects;
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.componentDestroyed$.next(true);
+    this.componentDestroyed$.complete();
   }
 
   onLogin(): void {
@@ -61,6 +78,10 @@ export class NavbarComponent implements OnInit {
 
     // implement when an auth service exists
     return undefined;
+  }
+
+  get isVcwPhase() {
+    return this.currentRoute?.includes('/phases/');
   }
 
 }
