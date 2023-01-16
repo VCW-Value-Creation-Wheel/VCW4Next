@@ -6,3 +6,9 @@ export interface VCW {
     description: string;
     thumbnailUrl?: string;
 }
+
+export interface SwotField {
+    categoryId: number;
+    title: string;
+    description: string;
+}

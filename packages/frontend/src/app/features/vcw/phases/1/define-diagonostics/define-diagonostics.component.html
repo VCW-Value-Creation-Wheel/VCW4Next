@@ -1,7 +1,7 @@
 <div class="pl-4 py-4">
     <h1 class="text-2xl font-bold text-primary">SWOT Analysis</h1>
 </div>
-<div class="flex flex-row gap-8 text-center justify-center py-2">
+<div class="flex flex-row gap-28 text-center justify-center py-2">
     <ng-container *ngFor="let tab of swotTabs; let idx = index">
         <app-tab
         [isActive]="idx === activeTab"
@@ -9,5 +9,24 @@
         (clicked)="changeTab(idx)"
         ></app-tab>
     </ng-container>
+    
+</div>
+<div class="grid grid-cols-3 mx-96 text-center">
+    <div class="col-span-1 h-8 py-2">
+        <p class="font-bold">Title</p>
+        <ng-container *ngFor="let field of swotFields">
+            <div class="py-2 px-2" *ngIf="field.categoryId === activeTab">
+                <app-input [value]="field.title"></app-input>
+            </div>
+        </ng-container>
+    </div>
+    <div class="col-span-2 h-8 py-2">
+        <p class="font-bold">Description</p>
+        <ng-container *ngFor="let field of swotFields">
+            <div class="py-2 px-2" *ngIf="field.categoryId === activeTab">
+                <app-input [value]="field.description"></app-input>
+            </div>
+        </ng-container>
+    </div>
 </div>
 

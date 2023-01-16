@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { SwotField } from '@core';
 
 @Component({
   selector: 'app-define-diagonostics',
@@ -16,11 +17,29 @@ export class DefineDiagonosticsComponent implements OnInit {
     'Opportunities'
   ];
 
+  swotFields: SwotField[] = [];
+
   constructor() {}
 
 
   ngOnInit(): void {
-
+    this.swotFields.push(
+      {
+        categoryId: 0,
+        title: 'Strength 1',
+        description: 'St Desc 1'
+      },
+      {
+        categoryId: 2,
+        title: 'Threat 1',
+        description: 'Threat Desc 1'
+      },
+      {
+        categoryId: 0,
+        title: 'Strength 2',
+        description: 'St Desc 2'
+      }
+    );
   }
 
   changeTab(index: number) {
