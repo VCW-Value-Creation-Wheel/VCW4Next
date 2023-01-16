@@ -1,12 +1,13 @@
 <div class="pl-4 py-4">
     <h1 class="text-2xl font-bold text-primary">SWOT Analysis</h1>
 </div>
-<div class="flex flex-row gap-8 text-center justify-between py-2 px-16 mx-80 ">
+<div class="flex flex-row gap-8 text-center justify-between py-2 mx-80 ">
     <ng-container *ngFor="let tab of swotTabs; let idx = index">
         <app-tab
         [isActive]="idx === activeTab"
         [label]="tab"
         (clicked)="changeTab(idx)"
+        class="w-1/2"
         ></app-tab>
     </ng-container>
     
