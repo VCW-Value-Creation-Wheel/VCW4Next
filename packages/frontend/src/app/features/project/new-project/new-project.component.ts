@@ -47,6 +47,7 @@ export class NewProjectComponent implements OnInit {
     options: string[] = ['user1', 'user2', 'user3', 'user4'];
     error: boolean = false;
     isDisabled: boolean = false;
+    isEditing: boolean = false;
 
     roleOptions: Options[] = [
       {
@@ -60,6 +61,8 @@ export class NewProjectComponent implements OnInit {
     ]
 
     userRole: UserRole[]=[];
+
+    editedUser : UserRole;
 
   constructor(private router: Router) { }
 
@@ -75,16 +78,22 @@ export class NewProjectComponent implements OnInit {
   }
 
   confirmUser(): void{
-    this.userRole.push({
-      user: this.form.value.user,
-      role: this.form.value.role
-    })
-    
-    this.isAddUserActive = false;
+      this.userRole.push({
+        user: this.form.value.user,
+        role: this.form.value.role
+      })
+    this.isAddUserActive= false;
+  }
+
+  confirmEditUser(){
+    this.userRole.find(username => username.user===this.editedUser.user).user = this.form.value.user;
+    this.userRole.find(username => username.role===this.editedUser.role).role = this.form.value.role;
+    this.isEditing= false;
   }
 
   cancelUserSelection(): void{
     this.isAddUserActive = false;
+    this.isEditing = false;
   }
 
   onBack(): void{
@@ -92,6 +101,9 @@ export class NewProjectComponent implements OnInit {
   }
 
   editUser(user: string): void{
+    this.editedUser = this.userRole.find(username => username.user===user);
+    this.isEditing = true;
+    this.isAddUserActive=false;
 
   }
 

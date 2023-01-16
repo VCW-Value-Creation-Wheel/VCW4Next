@@ -60,7 +60,7 @@
                         <app-icon-button [icon]="faXmark" (click)="removeUser(userEntry.user)"></app-icon-button>
                     </div>
             </div>
-            <div *ngIf="isAddUserActive" class="grid grid-cols-4 col-span-4 gap-1">
+            <div *ngIf="isAddUserActive || isEditing" class="grid grid-cols-4 col-span-4 gap-1">
                 <div class="flex flex-col align-top col-span-2">
                     <label class="{{isDisabled?'text-gray-400':'text-gray-700'}} py-1">
                     Select User
@@ -95,10 +95,17 @@
                     </app-select-input>
                 </div>
                 <div class="flex col-span-1">
-                    <div class="mx-1 mt-7">
+                    <div *ngIf="isAddUserActive" class="mx-1 mt-7">
                         <app-button
                         [label]="'Add'"
                         (click)="confirmUser()"
+                        >
+                        </app-button>
+                    </div>
+                    <div *ngIf="isEditing" class="mx-1 mt-7">
+                        <app-button
+                        [label]="'Edit'"
+                        (click)="confirmEditUser()"
                         >
                         </app-button>
                     </div> 
@@ -112,7 +119,7 @@
                 </div>
                  
             </div>
-            <div class="col-span-4 my-2 p-2" *ngIf="!isAddUserActive">
+            <div class="col-span-4 my-2 p-2" *ngIf="!isAddUserActive && !isEditing">
                 <app-button
                 [label]="'Add User'"
                 (click)="addUser()">
