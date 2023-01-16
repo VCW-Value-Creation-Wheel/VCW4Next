@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Options } from '@core';
-import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faPenToSquare, faXmark } from '@fortawesome/free-solid-svg-icons';
 
 interface UserRole {
   user: string,
@@ -24,6 +24,8 @@ export class NewProjectComponent implements OnInit {
     'role': new FormControl() 
   })
 
+  faPenToSquare = faPenToSquare;
+  faXmark = faXmark;
   faArrowLeft = faArrowLeft;
 
   langOptions: Options[] = [
@@ -79,7 +81,6 @@ export class NewProjectComponent implements OnInit {
     })
     
     this.isAddUserActive = false;
-    console.log(this.userRole)
   }
 
   cancelUserSelection(): void{
@@ -88,6 +89,14 @@ export class NewProjectComponent implements OnInit {
 
   onBack(): void{
     this.router.navigate([''])
+  }
+
+  editUser(user: string): void{
+
+  }
+
+  removeUser(user: string):void{
+   this.userRole = this.userRole.filter(username => username.user!==user);
   }
 
 }
