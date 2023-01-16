@@ -14,7 +14,9 @@ export class TabComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  onClick() {}
+  onClick() {
+    this.clicked.emit();
+  }
 
   activeClass() {
     return {
