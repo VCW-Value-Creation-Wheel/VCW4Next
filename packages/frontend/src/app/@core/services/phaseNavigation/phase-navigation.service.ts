@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import { VCWPhase, vcwPhasesNavigation } from '@core';
 import { Subject } from 'rxjs';
 
@@ -28,6 +27,10 @@ export class PhaseNavigationService {
     if (previousPhaseID) {
       this.nextPhase$.next(previousPhaseID);
     }
+  }
+
+  getPhaseName(phaseId: string): string {
+    return [this.vcwPhasesNavigation[phaseId].id, this.vcwPhasesNavigation[phaseId].name].join(' - ');
   }
 
 }

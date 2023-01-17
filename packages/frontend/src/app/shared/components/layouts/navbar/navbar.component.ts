@@ -85,16 +85,20 @@ export class NavbarComponent implements OnInit, OnDestroy {
     return this.currentRoute?.includes('/phases/');
   }
 
-  get vcwPhaseName() {
+  get vcwPhaseId() {
     return this.currentRoute?.split('/phases/')[1];
   }
 
+  get vcwPhaseFullName() {
+    return this.phaseNavigationService.getPhaseName(this.vcwPhaseId);
+  }
+
   onNavigateLeft() {
-    this.phaseNavigationService.navigateToPrevious(this.vcwPhaseName);
+    this.phaseNavigationService.navigateToPrevious(this.vcwPhaseId);
   }
 
   onNavigateRight() {
-    this.phaseNavigationService.navigateToNext(this.vcwPhaseName);
+    this.phaseNavigationService.navigateToNext(this.vcwPhaseId);
   }
 
 }
