@@ -13,3 +13,12 @@ export interface SwotField {
     description: string;
     id?: number;
 }
+
+export interface VCWPhase {
+    [key: string]: {
+        id: string;
+        name: string;
+        previousPhaseId?: string;
+        nextPhaseId?: string;
+    };
+}
