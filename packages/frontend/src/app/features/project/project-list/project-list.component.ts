@@ -25,10 +25,11 @@ export class ProjectListComponent implements OnInit {
   }
 
   onProjectClick(projectId: number) {
-    this.router.navigate(['project/'+projectId])
+    this.router.navigate(['project/' + projectId], {relativeTo: this.route});
   }
 
   addNewProject() {
-    this.router.navigate(["/new-project"],{relativeTo: this.route})
+    this.router.navigate(['new-project'],
+                        {relativeTo: this.route});
   }
 }

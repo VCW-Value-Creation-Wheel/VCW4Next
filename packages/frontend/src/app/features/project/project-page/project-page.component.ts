@@ -37,7 +37,7 @@ export class ProjectPageComponent implements OnInit {
   }
 
   addNewVcw() {
-    this.router.navigate(['/new-vcw'])
+    this.router.navigate(['/vcw/new-vcw']);
   }
 
 }
