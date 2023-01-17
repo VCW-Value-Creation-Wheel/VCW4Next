@@ -4,11 +4,12 @@ import { SharedModule } from 'shared';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NewVcwComponent } from './new-vcw/new-vcw.component';
 import { VcwRoutingModule } from './vcw-routing.module';
+import { DefineDiagonosticsComponent } from './phases/1/define-diagonostics/define-diagonostics.component';
 
 
 
 @NgModule({
-  declarations: [NewVcwComponent],
+  declarations: [NewVcwComponent, DefineDiagonosticsComponent],
   imports: [
     CommonModule,
     ReactiveFormsModule,

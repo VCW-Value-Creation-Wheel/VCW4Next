@@ -84,4 +84,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
     return this.currentRoute?.includes('/phases/');
   }
 
+  get vcwPhaseName() {
+    return this.currentRoute?.split('/phases/')[1];
+  }
+
 }
