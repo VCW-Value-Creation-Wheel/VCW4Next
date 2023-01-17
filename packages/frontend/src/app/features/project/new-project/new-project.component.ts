@@ -1,12 +1,12 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Options } from '@core';
 import { faArrowLeft, faPenToSquare, faXmark } from '@fortawesome/free-solid-svg-icons';
 
 interface UserRole {
-  user: string,
-  role: string
+  user: string;
+  role: string;
 }
 
 @Component({
@@ -23,42 +23,43 @@ export class NewProjectComponent implements OnInit {
 
   langOptions: Options[] = [
     {
-      label:"English",
-      value:"en"
+      label: 'English',
+      value: 'en'
     },
     {
-      label:"Português",
-      value:"pt"
+      label: 'Português',
+      value: 'pt'
     },
     {
-      label:"French",
-      value:"fr"
+      label: 'French',
+      value: 'fr'
     }];
 
-    isAddUserActive: boolean = false;
+    isAddUserActive = false;
 
     options: string[] = ['user1', 'user2', 'user3', 'user4'];
-    error: boolean = false;
-    isDisabled: boolean = false;
-    isEditing: boolean = false;
+    error = false;
+    isDisabled = false;
+    isEditing = false;
 
     roleOptions: Options[] = [
       {
-        label:"Admin",
-        value:"Admin"
+        label: 'Admin',
+        value: 'Admin'
       },
       {
-        label:"Normal User",
-        value:"Normal User"
+        label: 'Normal User',
+        value: 'Normal User'
       }
-    ]
+    ];
 
-    userRole: UserRole[]=[];
+    userRole: UserRole[] = [];
 
-    ind :number;
+    ind: number;
 
   constructor(
-      private router: Router, 
+      private router: Router,
+      private route: ActivatedRoute,
       private formBuilder: FormBuilder
     ) { }
 
@@ -68,35 +69,35 @@ export class NewProjectComponent implements OnInit {
       'project-description': new FormControl(''),
       'project-language': new FormControl(),
       'project-thumbnail': new FormControl(),
-      'userArray': this.formBuilder.array([])
-    })
+      userArray: this.formBuilder.array([])
+    });
   }
 
   onSubmit(e: Event): void{
-    console.log(this.form.get('project-title').value+" Created ()()()()")
+    console.log(this.form.get('project-title').value + ' Created ()()()()');
   }
-  
+
   addUser(): void{
     (this.form.get('userArray') as FormArray).push(this.formBuilder.group({
-      'user': new FormControl(),
-      'role': new FormControl() 
-    }))
+      user: new FormControl(),
+      role: new FormControl()
+    }));
     this.isAddUserActive = true;
   }
 
   confirmUser(): void{
     this.userRole = this.form.get('userArray').value;
-    this.isAddUserActive= false;
+    this.isAddUserActive = false;
   }
 
   confirmEditUser(){
     this.userRole = this.form.get('userArray').value;
-    this.isEditing= false;
+    this.isEditing = false;
   }
 
   cancelUserSelection(): void{
     if (this.isAddUserActive){
-      (this.form.get('userArray') as FormArray).controls.pop()
+      (this.form.get('userArray') as FormArray).controls.pop();
     }
     this.isAddUserActive = false;
     this.isEditing = false;
@@ -104,23 +105,23 @@ export class NewProjectComponent implements OnInit {
   }
 
   onBack(): void{
-    this.router.navigate([''])
+    this.router.navigate(['../'], {relativeTo: this.route});
   }
 
   editUser(ind: number): void{
     this.ind = ind;
     this.isEditing = true;
-    this.isAddUserActive=false;
+    this.isAddUserActive = false;
 
   }
 
-  removeUser(ind: number):void{
+  removeUser(ind: number): void{
    (this.form.controls.userArray as FormArray).removeAt(ind);
    this.userRole = this.form.get('userArray').value;
   }
 
-  getUserArrayIndex(isEditing:boolean): number {
-    return isEditing? this.ind : (this.form.get('userArray') as FormArray).length - 1;
+  getUserArrayIndex(isEditing: boolean): number {
+    return isEditing ? this.ind : (this.form.get('userArray') as FormArray).length - 1;
   }
 
 }
