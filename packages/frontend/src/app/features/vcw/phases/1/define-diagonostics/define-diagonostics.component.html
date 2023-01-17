@@ -20,9 +20,10 @@
                 <ng-container *ngIf="field.categoryId === activeTab">
                     <div class="py-2 px-2" [formGroupName]="idx">
                         <app-input
-                        [(ngModel)]="field.title"
-                        placeholder=""
-                        formControlName="title"
+                            [(ngModel)]="field.title"
+                            placeholder=""
+                            formControlName="title"
+                            [required]="getValidator('title', 'swotFields', idx)"
                         ></app-input>
                     </div>
                 </ng-container>
@@ -54,6 +55,7 @@
                             placeholder=""
                             class="w-11/12"
                             formControlName="description"
+                            [required]="getValidator('description', 'swotFields', idx)"
                         ></app-input>
                         <app-icon-button
                             [icon]="faTimes"

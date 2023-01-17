@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, UntypedFormGroup } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PhaseNavigationService, swotAnalysisConfig, SwotField, swotFieldsConfig } from '@core';
 import { faPlus, faMinus, faTimes, faFloppyDisk } from '@fortawesome/free-solid-svg-icons';
@@ -72,6 +72,33 @@ export class DefineDiagonosticsComponent implements OnInit {
   }
 
   onSave() {
-    console.log(this.dataForm);
+    console.log(this.isFormValid('swotFields'));
+  }
+
+  getValidator(control: string, nestingControl?: string, index?: number): boolean {
+    let validator;
+    if (nestingControl) {
+      validator = (this.dataForm.get(nestingControl) as FormArray).controls[index].get(control)?.validator;
+    } else {
+      validator = this.dataForm.get(control)?.validator;
+    }
+    if (validator) {
+      const val = validator({} as AbstractControl);
+      if (val && val.required) {
+          return true;
+      }
+    }
+    return false;
+  }
+
+  isFormValid(control: string) {
+    let isValid = true;
+    (this.dataForm.get(control) as FormArray)?.controls.every((control) => {
+      if (control.invalid) {
+        isValid = false;
+        return;
+      }
+    });
+    return isValid;
   }
 }
