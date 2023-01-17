@@ -21,7 +21,7 @@ import java.util.UUID;
 @Setter
 //TODO: para que precisamos do Tostring?
 @ToString
-@Table(name = "projects")
+@Table(name = "project")
 public class ProjectEntity {
 
   @Id
@@ -42,20 +42,10 @@ public class ProjectEntity {
   @Column(name = "created_at", nullable = false, updatable = false)
   private LocalDateTime createdAt;
 
-  //TODO: é assim que se faz o created_by?
-  // De onde vem o uuid, há @GeneratedValue?
-  @Column(name = "created_by", updatable = false)
-  private UUID createdBy;
-
   @UpdateTimestamp
   @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
   @Column(name = "updated_at", nullable = false)
   private LocalDateTime updatedAt;
-
-  //TODO: é assim que se faz o updated_by?
-  // De onde vem o uuid, há @GeneratedValue?
-  @Column(name = "updated_by")
-  private UUID updatedBy;
 
   //TODO: isto é suposto ser zero or one to zero or one, pls check
   @OneToOne
@@ -85,9 +75,20 @@ public class ProjectEntity {
   //TODO: porque é um set aqui e nao uma lista como nas outras relaçoes?
   Set<KeywordEntity> projectHasKeywords = new HashSet<>();
 
-  public void setProjectHasVcwEntities(List<ProjectHasVcwEntity> projectHasVcwEntities) {
-    this.projectHasVcwEntities = projectHasVcwEntities;
-  }
+  //TODO: isto é suposto ser zero or many to one and only one, pls check
+  //TODO: é assim que se faz o updated_by?
+  @ManyToOne(optional = false)
+  @JoinColumn(name="updated_by", referencedColumnName = "id")
+  private UserEntity updatedBy;
+
+  //TODO: isto é suposto ser zero or many to one and only one, pls check
+  //TODO: é assim que se faz o created_by?
+  @ManyToOne(optional = false)
+  @JoinColumn(name="created_by", referencedColumnName = "id")
+  private UserEntity createdBy;
+
+
+
 
 
 }

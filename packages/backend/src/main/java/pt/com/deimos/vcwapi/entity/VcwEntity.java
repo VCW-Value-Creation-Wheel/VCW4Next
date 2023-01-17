@@ -35,7 +35,7 @@ public class VcwEntity {
     private String concept;
 
     //TODO: jsonb na bd é string ou outra coisa
-    @Column(name="value_proposition")
+    @Column(name="value_proposition", columnDefinition = "jsonb")
     private String valueProposition;
 
     @Column(columnDefinition = "TEXT")
@@ -61,20 +61,10 @@ public class VcwEntity {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    //TODO: é assim que se faz o created_by?
-    // De onde vem o uuid, há @GeneratedValue?
-    @Column(name = "created_by", updatable = false)
-    private UUID createdBy;
-
     @UpdateTimestamp
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
-
-    //TODO: é assim que se faz o updated_by?
-    // De onde vem o uuid, há @GeneratedValue?
-    @Column(name = "updated_by")
-    private UUID updatedBy;
 
     //TODO: isto é suposto ser one and only one to zero or one
     @OneToOne(mappedBy = "vcw")
@@ -109,5 +99,17 @@ public class VcwEntity {
     // mas nao da para por optional=false, como dizemos que é mandatory?
     @OneToMany(mappedBy = "vcw")
     private List<VcwHasPhaseEntity> vcwHasPhaseEntities;
+
+    //TODO: isto é suposto ser zero or many to one and only one, pls check
+    //TODO: é assim que se faz o updated_by?
+    @ManyToOne(optional = false)
+    @JoinColumn(name="updated_by", referencedColumnName = "id")
+    private UserEntity updatedBy;
+
+    //TODO: isto é suposto ser zero or many to one and only one, pls check
+    //TODO: é assim que se faz o created_by?
+    @ManyToOne(optional = false)
+    @JoinColumn(name="created_by", referencedColumnName = "id")
+    private UserEntity createdBy;
 
 }
