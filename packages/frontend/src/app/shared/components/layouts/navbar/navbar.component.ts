@@ -11,6 +11,7 @@ import * as pkg from '../../../../../../package.json';
 import { NavigationEnd, Router } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import { PhaseNavigationService } from '@core';
 
 @Component({
   selector: 'app-navbar',
@@ -23,7 +24,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   @Output() login = new EventEmitter();
   @Output() logout = new EventEmitter();
 
-  constructor(private route: Router) { }
+  constructor(private route: Router, private phaseNavigationService: PhaseNavigationService) { }
 
   isShowingProfileCard = false;
   faUser = faUser;
@@ -86,6 +87,14 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   get vcwPhaseName() {
     return this.currentRoute?.split('/phases/')[1];
+  }
+
+  onNavigateLeft() {
+    this.phaseNavigationService.navigateToPrevious(this.vcwPhaseName);
+  }
+
+  onNavigateRight() {
+    this.phaseNavigationService.navigateToNext(this.vcwPhaseName);
   }
 
 }
