@@ -77,7 +77,6 @@ export class NewProjectComponent implements OnInit {
   }
   
   addUser(): void{
-    //this.form.controls.userRole.reset();
     (this.form.get('userArray') as FormArray).push(this.formBuilder.group({
       'user': new FormControl(),
       'role': new FormControl() 
@@ -101,6 +100,7 @@ export class NewProjectComponent implements OnInit {
     }
     this.isAddUserActive = false;
     this.isEditing = false;
+    (this.form.get('userArray') as FormArray).setValue(this.userRole);
   }
 
   onBack(): void{

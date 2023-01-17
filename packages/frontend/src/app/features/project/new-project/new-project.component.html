@@ -44,13 +44,6 @@
             >
             </app-select-input>
         </div>
-        <div class="m-10 p-2">
-            <app-button
-            [label]="'Create'"
-            (click)="onSubmit($event)"
-            >
-            </app-button>
-        </div>
         <div class="col-span-4 text-xl font-bold ">Users and Roles</div>
         <div class="grid grid-cols-4 col-span-4" formArrayName = "userArray">
             <div *ngFor="let userEntry of userRole; index as ind" class="col-span-3 flex justify-between m-2 p-2 bg-gray-200 rounded-md">
@@ -125,6 +118,13 @@
                 (click)="addUser()">
                 </app-button>
             </div>
+        </div>
+        <div class="m-2 flex">
+            <app-button
+            [label]="'Submit'"
+            (click)="onSubmit($event)"
+            >
+            </app-button>
         </div>
     </div>
 </div>
