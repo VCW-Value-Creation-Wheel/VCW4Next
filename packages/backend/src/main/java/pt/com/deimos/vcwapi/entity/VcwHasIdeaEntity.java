@@ -25,11 +25,11 @@ public class VcwHasIdeaEntity {
 
     //TODO: isto é suposto ser zero or many to one and only one, pls check
     @ManyToOne(optional = false)
-    @JoinColumn(name="vcw_id", referencedColumnName = "id")
+    @JoinColumn(name="vcw_id", referencedColumnName = "id", insertable=false, updatable=false)
     private VcwEntity vcw;
 
     //TODO: isto é suposto ser one and only one to one and only one, pls check
     @OneToOne(optional=false)
-    @JoinColumn(name="idea_id", referencedColumnName = "id")
+    @JoinColumn(name="idea_id", referencedColumnName = "id", insertable=false, updatable=false)
     private IdeaEntity idea;
 }

@@ -93,7 +93,7 @@ public class VcwEntity {
 
     //TODO: isto é suposto ser one and only one to zero or one, pls check
     @OneToOne
-    @JoinColumn(name="business_model_canvas_id", referencedColumnName = "id")
+    @JoinColumn(name="business_model_canvas_id", referencedColumnName = "id", insertable=false, updatable=false)
     private BusinessModelCanvasEntity businessModelCanvas;
 
     //TODO: isto é suposto ser one and only one to zero or many, pls check

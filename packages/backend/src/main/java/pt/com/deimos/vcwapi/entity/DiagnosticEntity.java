@@ -51,6 +51,6 @@ public class DiagnosticEntity {
 
     ///TODO: isto é suposto ser zero or many to one and only one, pls check
     @ManyToOne(optional = false)
-    @JoinColumn(name="vcw_id", referencedColumnName = "id")
+    @JoinColumn(name="vcw_id", referencedColumnName = "id", insertable=false, updatable=false)
     private VcwEntity vcw;
 }

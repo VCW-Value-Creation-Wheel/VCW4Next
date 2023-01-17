@@ -51,7 +51,7 @@ public class IdeaEntity {
 
     //TODO: isto é suposto ser zero or many to one and only one, pls check
     @ManyToOne(optional = false)
-    @JoinColumn(name="entry_type_id", referencedColumnName = "id")
+    @JoinColumn(name="entry_type_id", referencedColumnName = "id", insertable=false, updatable=false)
     private EntryTypeEntity entryType;
 
     //TODO: isto é suposto ser one and only one to zero or many, pls check
@@ -60,7 +60,7 @@ public class IdeaEntity {
 
     //TODO: isto é suposto ser zero or many to zero or one, pls check
     @ManyToOne
-    @JoinColumn(name="source_id", referencedColumnName = "id")
+    @JoinColumn(name="source_id", referencedColumnName = "id", insertable=false, updatable=false)
     private SourceEntity source;
 
     //TODO: isto é suposto ser Many to many, pls check

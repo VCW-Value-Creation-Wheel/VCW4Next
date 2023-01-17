@@ -61,16 +61,16 @@ public class IdeaAndCriteriaEntity {
 
     //TODO: isto é suposto ser zero or many to one and only one, pls check
     @ManyToOne(optional = false)
-    @JoinColumn(name="idea_id", referencedColumnName = "id")
+    @JoinColumn(name="idea_id", referencedColumnName = "id", insertable=false, updatable=false)
     private IdeaEntity idea;
 
     //TODO: isto é suposto ser zero or many to one and only one, pls check
     @ManyToOne(optional = false)
-    @JoinColumn(name="criteria_id", referencedColumnName = "id")
+    @JoinColumn(name="criteria_id", referencedColumnName = "id", insertable=false, updatable=false)
     private CriteriaEntity criteria;
 
     //TODO: isto é suposto ser zero or many to zero or one, pls check
     @ManyToOne
-    @JoinColumn(name="source_id", referencedColumnName = "id")
+    @JoinColumn(name="source_id", referencedColumnName = "id", insertable=false, updatable=false)
     private SourceEntity source;
 }

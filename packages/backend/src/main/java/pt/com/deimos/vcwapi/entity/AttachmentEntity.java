@@ -25,12 +25,12 @@ public class AttachmentEntity {
     //TODO: isto é suposto ser one and only one to one and only one, pls check
     //TODO: Há aqui muitas relaçoes com cascade mas nao sei qual tipo por
     @OneToOne(optional = false)
-    @JoinColumn(name = "file_id", referencedColumnName = "id")
+    @JoinColumn(name = "file_id", referencedColumnName = "id", insertable=false, updatable=false)
     private FileEntity file;
 
     //TODO: isto é suposto ser zero or many to one and only one, pls check
     @ManyToOne(optional = false)
-    @JoinColumn(name="vcw_id")
+    @JoinColumn(name="vcw_id", referencedColumnName = "id", insertable=false, updatable=false)
     private VcwEntity vcw;
 
 }

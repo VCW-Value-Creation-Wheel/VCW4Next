@@ -49,11 +49,11 @@ public class ProjectHasUserRoleEntity {
 
     ///TODO: isto é suposto ser many to one and only one, pls check
     @ManyToOne(optional = false)
-    @JoinColumn(name="project_id", referencedColumnName = "id")
+    @JoinColumn(name="project_id", referencedColumnName = "id", insertable=false, updatable=false)
     private ProjectEntity project;
 
     ///TODO: isto é suposto ser zero or many to one and only one, pls check
     @ManyToOne(optional = false)
-    @JoinColumn(name="role_id", referencedColumnName = "id")
+    @JoinColumn(name="role_id", referencedColumnName = "id", insertable=false, updatable=false)
     private RoleEntity role;
 }
