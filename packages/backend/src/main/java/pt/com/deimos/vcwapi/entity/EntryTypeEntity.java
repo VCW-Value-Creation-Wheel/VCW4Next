@@ -34,6 +34,13 @@ public class EntryTypeEntity {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
+    @Column(name = "updated_by", nullable = false)
+    private UUID updatedBy;
+
+    @Column(name = "created_by", nullable = false)
+    private UUID createdBy;
+
+
     //TODO: isto é suposto ser one and only one to zero or many, pls check
     @OneToMany(mappedBy = "entryType")
     private List<CriteriaEntity> criterias;
@@ -41,17 +48,4 @@ public class EntryTypeEntity {
     //TODO: isto é suposto ser one and only one to zero or many, pls check
     @OneToMany(mappedBy = "entryType")
     private List<IdeaEntity> ideas;
-
-    //TODO: isto é suposto ser zero or many to one and only one, pls check
-    //TODO: é assim que se faz o updated_by?
-    @ManyToOne(optional = false)
-    @JoinColumn(name="updated_by", referencedColumnName = "id")
-    private UserEntity updatedBy;
-
-    //TODO: isto é suposto ser zero or many to one and only one, pls check
-    //TODO: é assim que se faz o created_by?
-    @ManyToOne(optional = false)
-    @JoinColumn(name="created_by", referencedColumnName = "id")
-    private UserEntity createdBy;
-
 }

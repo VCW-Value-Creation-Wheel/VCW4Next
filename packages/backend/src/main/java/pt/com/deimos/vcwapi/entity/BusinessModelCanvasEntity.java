@@ -57,19 +57,14 @@ public class BusinessModelCanvasEntity {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
+    @Column(name = "updated_by", nullable = false)
+    private UUID updatedBy;
 
-    //TODO: isto é suposto ser zero or one to one and only one , pls check
+    @Column(name = "created_by", nullable = false)
+    private UUID createdBy;
+
+
     @OneToOne(mappedBy = "businessModelCanvas", optional = false)
     private VcwEntity vcw;
-
-    @ManyToOne(optional = false)
-    @JoinColumn(name="updated_by", referencedColumnName = "id")
-    private UserEntity updatedBy;
-
-    //TODO: isto é suposto ser zero or many to one and only one, pls check
-    //TODO: é assim que se faz o created_by?
-    @ManyToOne(optional = false)
-    @JoinColumn(name="created_by", referencedColumnName = "id")
-    private UserEntity createdBy;
-
 }
+

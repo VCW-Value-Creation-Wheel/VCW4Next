@@ -21,6 +21,9 @@ public class ProjectHasUserRoleEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name="user_inum", nullable=false)
+    private UUID userInum;
+
     @CreationTimestamp
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     @Column(name = "created_at", nullable = false, updatable = false)
@@ -30,6 +33,12 @@ public class ProjectHasUserRoleEntity {
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
+
+    @Column(name = "updated_by", nullable = false)
+    private UUID updatedBy;
+
+    @Column(name = "created_by", nullable = false)
+    private UUID createdBy;
 
 
     ///TODO: isto é suposto ser many to one and only one, pls check
@@ -41,23 +50,4 @@ public class ProjectHasUserRoleEntity {
     @ManyToOne(optional = false)
     @JoinColumn(name="role_id", referencedColumnName = "id")
     private RoleEntity role;
-
-
-    ///TODO: isto é suposto ser zero or many to one and only one, pls check
-    @ManyToOne(optional = false)
-    @JoinColumn(name="user_inum", referencedColumnName = "id")
-    private UserEntity user;
-
-    //TODO: isto é suposto ser zero or many to one and only one, pls check
-    //TODO: é assim que se faz o updated_by?
-    @ManyToOne(optional = false)
-    @JoinColumn(name="updated_by", referencedColumnName = "id")
-    private UserEntity updatedBy;
-
-    //TODO: isto é suposto ser zero or many to one and only one, pls check
-    //TODO: é assim que se faz o created_by?
-    @ManyToOne(optional = false)
-    @JoinColumn(name="created_by", referencedColumnName = "id")
-    private UserEntity createdBy;
-
 }
