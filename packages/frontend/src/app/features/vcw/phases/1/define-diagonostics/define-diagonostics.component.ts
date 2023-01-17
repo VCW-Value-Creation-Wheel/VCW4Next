@@ -65,8 +65,9 @@ export class DefineDiagonosticsComponent implements OnInit {
     (this.dataForm.controls.swotFields as FormArray).push(
       this.formbuilder.group(swotFieldsConfig)
     );
+    const newId = this.swotFields.length > 0 ? this.swotFields[this.swotFields.length - 1].id + 1 : 1;
     this.swotFields.push({
-      id: this.swotFields.length + 1,
+      id: newId,
       categoryId: tabId,
       title: '',
       description: ''
