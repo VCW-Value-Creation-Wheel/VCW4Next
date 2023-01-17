@@ -17,11 +17,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Table(name = "criteria")
-public class CriteriaEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class CriteriaEntity extends BaseNamedEntity{
 
     @Column(name = "entry_type_id", nullable = false)
     private Long entryTypeId;
@@ -29,27 +25,8 @@ public class CriteriaEntity {
     @Column(name = "source_id")
     private Long sourceId;
 
-    @Column(nullable=false)
-    private String name;
-
     @Column(name="value_type", nullable=false)
     private String valueType;
-
-    @CreationTimestamp
-    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-
-    @UpdateTimestamp
-    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
-    @Column(name = "updated_at", nullable = false)
-    private LocalDateTime updatedAt;
-
-    @Column(name = "updated_by", nullable = false)
-    private UUID updatedBy;
-
-    @Column(name = "created_by", nullable = false)
-    private UUID createdBy;
 
 
     //TODO: isto é suposto ser zero or many to one and only one, pls check

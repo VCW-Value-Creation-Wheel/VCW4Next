@@ -15,11 +15,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Table(name = "project_has_user_role")
-public class ProjectHasUserRoleEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class ProjectHasUserRoleEntity extends BaseEntity{
 
     @Column(name = "project_id", nullable = false)
     private Long projectId;
@@ -29,22 +25,6 @@ public class ProjectHasUserRoleEntity {
 
     @Column(name="user_inum", nullable=false)
     private UUID userInum;
-
-    @CreationTimestamp
-    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-
-    @UpdateTimestamp
-    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
-    @Column(name = "updated_at", nullable = false)
-    private LocalDateTime updatedAt;
-
-    @Column(name = "updated_by", nullable = false)
-    private UUID updatedBy;
-
-    @Column(name = "created_by", nullable = false)
-    private UUID createdBy;
 
 
     ///TODO: isto é suposto ser many to one and only one, pls check

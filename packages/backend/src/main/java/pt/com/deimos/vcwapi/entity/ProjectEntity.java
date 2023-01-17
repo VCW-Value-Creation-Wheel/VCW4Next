@@ -22,17 +22,10 @@ import java.util.UUID;
 //TODO: para que precisamos do Tostring?
 @ToString
 @Table(name = "project")
-public class ProjectEntity {
-
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+public class ProjectEntity extends BaseNamedEntity{
 
   @Column
   private Long thumbnail;
-
-  @Column(nullable=false)
-  private String name;
 
   @Column(nullable=false)
   private String description;
@@ -40,23 +33,7 @@ public class ProjectEntity {
   @Column(nullable=false)
   private String lang;
 
-  @CreationTimestamp
-  @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
-  @Column(name = "created_at", nullable = false, updatable = false)
-  private LocalDateTime createdAt;
-
-  @UpdateTimestamp
-  @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
-  @Column(name = "updated_at", nullable = false)
-  private LocalDateTime updatedAt;
-
-  @Column(name = "updated_by", nullable = false)
-  private UUID updatedBy;
-
-  @Column(name = "created_by", nullable = false)
-  private UUID createdBy;
-
-
+  
   //TODO: isto é suposto ser zero or one to zero or one, pls check
   @OneToOne
   @JoinColumn(name = "thumbnail", referencedColumnName = "id", insertable=false, updatable=false)

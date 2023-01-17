@@ -15,31 +15,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Table(name = "entry_type")
-public class EntryTypeEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(nullable=false)
-    private String name;
-
-    @CreationTimestamp
-    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-
-    @UpdateTimestamp
-    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
-    @Column(name = "updated_at", nullable = false)
-    private LocalDateTime updatedAt;
-
-    @Column(name = "updated_by", nullable = false)
-    private UUID updatedBy;
-
-    @Column(name = "created_by", nullable = false)
-    private UUID createdBy;
-
+public class EntryTypeEntity extends BaseNamedEntity{
 
     //TODO: isto é suposto ser one and only one to zero or many, pls check
     @OneToMany(mappedBy = "entryType")

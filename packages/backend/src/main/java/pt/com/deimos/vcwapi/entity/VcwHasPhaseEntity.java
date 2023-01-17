@@ -35,6 +35,4 @@ public class VcwHasPhaseEntity {
     @ManyToOne(optional = false)
     @JoinColumn(name = "vcw_id", referencedColumnName = "id", insertable=false, updatable=false)
     private VcwEntity vcw;
-
-
 }

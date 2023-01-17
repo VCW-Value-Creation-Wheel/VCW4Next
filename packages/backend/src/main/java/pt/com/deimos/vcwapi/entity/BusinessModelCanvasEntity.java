@@ -14,11 +14,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Table(name = "business_model_canvas")
-public class BusinessModelCanvasEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class BusinessModelCanvasEntity extends BaseEntity {
 
     @Column(name="customer_segments", columnDefinition = "TEXT")
     private String CustomerSegments;
@@ -46,23 +42,6 @@ public class BusinessModelCanvasEntity {
 
     @Column(name="cost_structure", columnDefinition = "TEXT")
     private String CostStructure;
-
-    @CreationTimestamp
-    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-
-    @UpdateTimestamp
-    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
-    @Column(name = "updated_at", nullable = false)
-    private LocalDateTime updatedAt;
-
-    @Column(name = "updated_by", nullable = false)
-    private UUID updatedBy;
-
-    @Column(name = "created_by", nullable = false)
-    private UUID createdBy;
-
 
     @OneToOne(mappedBy = "businessModelCanvas", optional = false)
     private VcwEntity vcw;

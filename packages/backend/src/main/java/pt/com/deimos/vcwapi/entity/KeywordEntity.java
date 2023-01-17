@@ -16,33 +16,13 @@ import java.util.UUID;
 @Getter
 @Setter
 @Table(name = "keyword")
-public class KeywordEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class KeywordEntity extends BaseEntity{
 
     @Column(nullable=false)
     private String word;
 
     @Column(nullable=false)
     private String lang;
-
-    @CreationTimestamp
-    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-
-    @UpdateTimestamp
-    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
-    @Column(name = "updated_at", nullable = false)
-    private LocalDateTime updatedAt;
-
-    @Column(name = "updated_by", nullable = false)
-    private UUID updatedBy;
-
-    @Column(name = "created_by", nullable = false)
-    private UUID createdBy;
 
 
     // TODO: como se implementa  zero or many?

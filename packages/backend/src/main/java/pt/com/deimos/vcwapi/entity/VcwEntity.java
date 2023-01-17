@@ -15,17 +15,10 @@ import java.util.UUID;
 @Getter
 @Setter
 @Table(name = "vcw")
-public class VcwEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class VcwEntity extends BaseNamedEntity{
 
     @Column(name = "business_model_canvas_id")
     private Long businessModelCanvasId;
-
-    @Column(nullable=false)
-    private String name;
 
     @Column(nullable=false)
     private String type;
@@ -57,22 +50,6 @@ public class VcwEntity {
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     @Column(name = "closed_at")
     private LocalDateTime closedAt;
-
-    @CreationTimestamp
-    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-
-    @UpdateTimestamp
-    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
-    @Column(name = "updated_at", nullable = false)
-    private LocalDateTime updatedAt;
-
-    @Column(name = "updated_by", nullable = false)
-    private UUID updatedBy;
-
-    @Column(name = "created_by", nullable = false)
-    private UUID createdBy;
 
 
     //TODO: isto é suposto ser one and only one to zero or one

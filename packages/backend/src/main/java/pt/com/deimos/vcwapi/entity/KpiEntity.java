@@ -14,39 +14,16 @@ import java.util.UUID;
 @Getter
 @Setter
 @Table(name = "kpi")
-public class KpiEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class KpiEntity extends BaseNamedEntity{
 
     @Column(name = "vcw_id", nullable = false)
     private Long vcwId;
-
-    @Column
-    private String name;
 
     @Column(columnDefinition = "TEXT")
     private String description;
 
     @Column(columnDefinition = "TEXT")
     private String evaluation;
-
-    @CreationTimestamp
-    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-
-    @UpdateTimestamp
-    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
-    @Column(name = "updated_at", nullable = false)
-    private LocalDateTime updatedAt;
-
-    @Column(name = "updated_by", nullable = false)
-    private UUID updatedBy;
-
-    @Column(name = "created_by", nullable = false)
-    private UUID createdBy;
 
 
     //TODO: isto é suposto ser zero or many to one and only one, pls check

@@ -7,7 +7,7 @@ import lombok.Data;
 public class ProjectDTO {
 
   @NotBlank
-  private String title;
+  private String name;
 
   @NotBlank
   private String description;
