@@ -93,8 +93,8 @@ export class DefineDiagonosticsComponent implements OnInit {
 
   isFormValid(control: string) {
     let isValid = true;
-    (this.dataForm.get(control) as FormArray)?.controls.every((control) => {
-      if (control.invalid) {
+    (this.dataForm.get(control) as FormArray)?.controls.every((ctrl) => {
+      if (ctrl.invalid) {
         isValid = false;
         return;
       }
