@@ -16,6 +16,12 @@ public class AttachmentEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "vcw_id", nullable = false)
+    private Long vcwId;
+
+    @Column(name = "file_id", nullable = false)
+    private Long fileId;
+
     //TODO: isto é suposto ser one and only one to one and only one, pls check
     //TODO: Há aqui muitas relaçoes com cascade mas nao sei qual tipo por
     @OneToOne(optional = false)

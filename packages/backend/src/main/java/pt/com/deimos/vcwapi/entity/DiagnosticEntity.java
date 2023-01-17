@@ -20,6 +20,9 @@ public class DiagnosticEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "vcw_id", nullable = false)
+    private Long vcwId;
+
     @Column(name="swot_field", nullable=false)
     private String swotField;
 

@@ -42,6 +42,4 @@ public class PhaseEntity {
     //TODO: isto é suposto ser one and only one to zero or many, pls check
     @OneToMany(mappedBy = "phase")
     private List<VcwHasPhaseEntity> vcwHasPhaseEntities;
-
-
 }

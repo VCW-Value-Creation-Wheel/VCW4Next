@@ -21,6 +21,8 @@ public class VcwEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "business_model_canvas_id")
+    private Long businessModelCanvasId;
 
     @Column(nullable=false)
     private String name;

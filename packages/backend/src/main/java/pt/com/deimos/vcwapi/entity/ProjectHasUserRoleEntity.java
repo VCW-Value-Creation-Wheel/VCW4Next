@@ -21,6 +21,12 @@ public class ProjectHasUserRoleEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "project_id", nullable = false)
+    private Long projectId;
+
+    @Column(name = "role_id", nullable = false)
+    private Long roleId;
+
     @Column(name="user_inum", nullable=false)
     private UUID userInum;
 

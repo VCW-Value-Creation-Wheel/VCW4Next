@@ -13,6 +13,13 @@ public class VcwHasIdeaEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "vcw_id", nullable = false)
+    private Long vcwId;
+
+    @Column(name = "idea_id", nullable = false)
+    private Long ideaId;
+
     @Column
     private Boolean selected;
 

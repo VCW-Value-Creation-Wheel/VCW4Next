@@ -20,6 +20,12 @@ public class IdeaAndCriteriaEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "idea_id", nullable = false)
+    private Long ideaId;
+
+    @Column(name = "criteria_id", nullable = false)
+    private Long criteriaId;
+
     @Column
     private Float value;
 

@@ -16,6 +16,12 @@ public class ProjectHasVcwEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "vcw_id", nullable = false)
+    private Long vcwId;
+
+    @Column(name = "project_id", nullable = false)
+    private Long projectId;
+
     //TODO: isto é suposto ser zero or one to one and only one
     @OneToOne(optional = false)
     @JoinColumn(name="vcw_id", referencedColumnName = "id")

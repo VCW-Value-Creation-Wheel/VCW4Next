@@ -14,6 +14,12 @@ public class VcwHasCriteriaEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "vcw_id", nullable = false)
+    private Long vcwId;
+
+    @Column(name = "criteria_id", nullable = false)
+    private Long criteriaId;
+
     @Column
     private Boolean selected;
 

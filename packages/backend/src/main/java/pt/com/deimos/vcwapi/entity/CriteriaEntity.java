@@ -23,6 +23,12 @@ public class CriteriaEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "entry_type_id", nullable = false)
+    private Long entryTypeId;
+
+    @Column(name = "source_id")
+    private Long sourceId;
+
     @Column(nullable=false)
     private String name;
 

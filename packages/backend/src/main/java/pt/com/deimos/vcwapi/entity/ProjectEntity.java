@@ -28,6 +28,9 @@ public class ProjectEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  @Column
+  private Long thumbnail;
+
   @Column(nullable=false)
   private String name;
 
