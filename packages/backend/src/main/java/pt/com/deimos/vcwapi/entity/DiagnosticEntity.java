@@ -24,7 +24,7 @@ public class DiagnosticEntity {
     private String swotField;
 
     @Column(nullable=false)
-    private String title;
+    private String name;
 
     @Column
     private String description;

@@ -29,7 +29,7 @@ public class ProjectEntity {
   private Long id;
 
   @Column(nullable=false)
-  private String title;
+  private String name;
 
   @Column(nullable=false)
   private String description;
