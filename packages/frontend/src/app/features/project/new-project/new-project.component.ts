@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Options } from '@core';
 import { faArrowLeft, faPenToSquare, faXmark } from '@fortawesome/free-solid-svg-icons';
 
@@ -21,8 +21,8 @@ export class NewProjectComponent implements OnInit {
     'project-language': new FormControl(),
     'project-thumbnail': new FormControl(),
     'user': new FormControl(),
-    'role': new FormControl() 
-  })
+    'role': new FormControl()
+  });
 
   faPenToSquare = faPenToSquare;
   faXmark = faXmark;
@@ -30,16 +30,16 @@ export class NewProjectComponent implements OnInit {
 
   langOptions: Options[] = [
     {
-      label:"English",
-      value:"en"
+      label: 'English',
+      value: 'en'
     },
     {
-      label:"Português",
-      value:"pt"
+      label: 'Português',
+      value: 'pt'
     },
     {
-      label:"French",
-      value:"fr"
+      label: 'French',
+      value: 'fr'
     }];
 
     isAddUserActive: boolean = false;
@@ -64,13 +64,13 @@ export class NewProjectComponent implements OnInit {
 
     editedUser : UserRole;
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
   }
 
   onSubmit(e: Event): void{
-    console.log(this.form.get('project-title').value+" Created ()()()()")
+    console.log(this.form.get('project-title').value + ' Created ()()()()');
   }
   
   addUser(): void{
@@ -97,7 +97,7 @@ export class NewProjectComponent implements OnInit {
   }
 
   onBack(): void{
-    this.router.navigate([''])
+    this.router.navigate(['../'], {relativeTo: this.route});
   }
 
   editUser(user: string): void{
