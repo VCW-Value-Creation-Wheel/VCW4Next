@@ -8,11 +8,11 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 })
 export class NewVcwComponent implements OnInit {
   form = new FormGroup({
-    'title': new FormControl('', Validators.required)
-  })
+    title: new FormControl('', Validators.required)
+  });
 
-  isSelected: number = 0;
-  
+  isSelected = 0;
+
 
   constructor() { }
 
