@@ -8,8 +8,8 @@ export interface VCW {
 }
 
 export interface SwotField {
-    id: number;
     categoryId: number;
     title: string;
     description: string;
+    id?: number;
 }

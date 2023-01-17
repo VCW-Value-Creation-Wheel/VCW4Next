@@ -65,9 +65,8 @@ export class DefineDiagonosticsComponent implements OnInit {
     (this.dataForm.controls.swotFields as FormArray).push(
       this.formbuilder.group(swotFieldsConfig)
     );
-    const newId = this.swotFields.length > 0 ? this.swotFields[this.swotFields.length - 1].id + 1 : 1;
+
     this.swotFields.push({
-      id: newId,
       categoryId: tabId,
       title: '',
       description: ''
@@ -77,13 +76,8 @@ export class DefineDiagonosticsComponent implements OnInit {
   }
 
   removeField(fieldId: number) {
-    const fieldToRemove = this.swotFields.find((field) => field.id === fieldId);
-    if (fieldToRemove) {
-      const fieldIndex = this.swotFields.indexOf(fieldToRemove);
-      this.swotFields.splice(this.swotFields.indexOf(fieldToRemove), 1);
-
-      (this.dataForm.controls.swotFields as FormArray).removeAt(fieldIndex);
-    }
+    this.swotFields.splice(fieldId, 1);
+    (this.dataForm.controls.swotFields as FormArray).removeAt(fieldId);
   }
 
   getSwotFieldsByCategory(categoryId: number): SwotField[] {
