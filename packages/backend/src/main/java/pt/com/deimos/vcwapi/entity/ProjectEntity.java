@@ -1,40 +1,44 @@
 package pt.com.deimos.vcwapi.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
-import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
 @Setter
-@ToString
-@Table(name = "projects")
-public class ProjectEntity {
-
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+@Table(name = "project")
+public class ProjectEntity extends BaseNamedEntity{
 
   @Column
-  private String name;
+  private Long thumbnail;
 
-  @Column(columnDefinition="TEXT")
+  @Column(nullable=false)
   private String description;
 
-  @CreationTimestamp
-  @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
-  @Column(name = "created_at", nullable = false, updatable = false)
-  private LocalDateTime createdAt;
+  @Column(nullable=false)
+  private String lang;
 
-  @UpdateTimestamp
-  @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
-  @Column(name = "updated_at", nullable = false)
-  private LocalDateTime updatedAt;
 
+  @OneToOne
+  @JoinColumn(name = "thumbnail", referencedColumnName = "id", insertable=false, updatable=false)
+  private FileEntity file;
+
+  @OneToMany(mappedBy = "project")
+  private List<ProjectHasVcwEntity> projectHasVcwEntities = new java.util.ArrayList<>();
+
+  @OneToMany(mappedBy = "project")
+  private List<ProjectHasUserRoleEntity> projectHasUserRoleEntities = new java.util.ArrayList<>();
+
+  @ManyToMany
+  @JoinTable(
+          name = "project_has_keyword",
+          joinColumns = @JoinColumn(name = "project_id", referencedColumnName = "id"),
+          inverseJoinColumns = @JoinColumn(name = "keyword_id", referencedColumnName = "id")
+  )
+  Set<KeywordEntity> projectHasKeywords = new HashSet<>();
 }
