@@ -38,14 +38,12 @@ public class VcwHasCriteriaEntity {
     @Column(name="interval_max")
     private Float IntervalMax;
 
-    //TODO: isto é suposto ser zero or many to one and only one, pls check
+
     @ManyToOne(optional = false)
     @JoinColumn(name="vcw_id", referencedColumnName = "id", insertable=false, updatable=false)
     private VcwEntity vcw;
 
-    //TODO: isto é suposto ser one and only one to one and only one, pls check
     @OneToOne(optional = false)
     @JoinColumn(name="criteria_id", referencedColumnName = "id", insertable=false, updatable=false)
     private CriteriaEntity criteria;
-
 }

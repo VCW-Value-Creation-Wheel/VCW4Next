@@ -1,17 +1,12 @@
 package pt.com.deimos.vcwapi.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 
 @Entity
 @Getter
@@ -26,35 +21,25 @@ public class IdeaEntity extends BaseNamedEntity{
     private Long sourceId;
 
 
-    //TODO: isto é suposto ser zero or many to one and only one, pls check
     @ManyToOne(optional = false)
     @JoinColumn(name="entry_type_id", referencedColumnName = "id", insertable=false, updatable=false)
     private EntryTypeEntity entryType;
 
-    //TODO: isto é suposto ser one and only one to zero or many, pls check
     @OneToMany(mappedBy = "idea")
     private List<IdeaAndCriteriaEntity> ideasAndCriterias;
 
-    //TODO: isto é suposto ser zero or many to zero or one, pls check
     @ManyToOne
     @JoinColumn(name="source_id", referencedColumnName = "id", insertable=false, updatable=false)
     private SourceEntity source;
 
-    //TODO: isto é suposto ser Many to many, pls check
-    // (one and only one to zero or many <-> idea_has_keyword <-> zero or many to one and only one)
-    // In the db, idea_has_keyword has an id. Is the join table enough?
-    // or do we need to create a new entity for it
     @ManyToMany
     @JoinTable(
             name = "idea_has_keyword",
             joinColumns = @JoinColumn(name = "idea_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "keyword_id", referencedColumnName = "id")
     )
-    //TODO: porque é um set aqui e nao uma lista como nas outras relaçoes?
     Set<KeywordEntity> ideaHasKeywords = new HashSet<>();
 
-
-    //TODO: isto é suposto ser one and only one to one and only one, pls check
     @OneToOne(mappedBy = "idea", optional = false)
     private VcwHasIdeaEntity vcwHasIdeaEntity;
 }

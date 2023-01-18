@@ -2,8 +2,6 @@ package pt.com.deimos.vcwapi.entity;
 
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -28,7 +26,7 @@ public class PhaseEntity extends BaseNamedEntity{
     @Column(name="part_of_sprint",nullable=false)
     private Boolean partOfSprint;
 
-    //TODO: isto é suposto ser one and only one to zero or many, pls check
+
     @OneToMany(mappedBy = "phase")
     private List<VcwHasPhaseEntity> vcwHasPhaseEntities;
 }

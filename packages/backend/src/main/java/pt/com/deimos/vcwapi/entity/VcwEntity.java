@@ -5,11 +5,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
 @Entity
 @Getter
@@ -29,7 +27,6 @@ public class VcwEntity extends BaseNamedEntity{
     @Column(columnDefinition = "TEXT")
     private String concept;
 
-    //TODO: jsonb na bd é string ou outra coisa
     @Column(name="value_proposition", columnDefinition = "jsonb")
     private String valueProposition;
 
@@ -45,44 +42,34 @@ public class VcwEntity extends BaseNamedEntity{
     @Column
     private Boolean closed;
 
-    //TODO: é suposto dar para fazer closed mais que uma vez? para saber se pomos updatable=false
     @CreationTimestamp
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     @Column(name = "closed_at")
     private LocalDateTime closedAt;
 
 
-    //TODO: isto é suposto ser one and only one to zero or one
     @OneToOne(mappedBy = "vcw")
     private ProjectHasVcwEntity projectHasVcwEntity;
 
-    //TODO: isto é suposto ser one and only one to zero or many, pls check
     @OneToMany(mappedBy = "vcw")
     private List<AttachmentEntity> attatchments;
 
-    //TODO: isto é suposto ser one and only one to zero or many, pls check
     @OneToMany(mappedBy = "vcw")
     private List<DiagnosticEntity> diagnostics;
 
-    //TODO: isto é suposto ser one and only one to zero or many, pls check
     @OneToMany(mappedBy = "vcw")
     private List<KpiEntity> kpis;
 
-    //TODO: isto é suposto ser one and only one to zero or one, pls check
     @OneToOne
     @JoinColumn(name="business_model_canvas_id", referencedColumnName = "id", insertable=false, updatable=false)
     private BusinessModelCanvasEntity businessModelCanvas;
 
-    //TODO: isto é suposto ser one and only one to zero or many, pls check
     @OneToMany(mappedBy = "vcw")
     private List<VcwHasCriteriaEntity> vcwHasCriteriaEntities;
 
-    //TODO: isto é suposto ser one and only one to zero or many, pls check
     @OneToMany(mappedBy = "vcw")
     private List<VcwHasIdeaEntity> vcwHasIdeaEntities;
 
-    //TODO: isto é suposto ser one and only one to one or many
-    // mas nao da para por optional=false, como dizemos que é mandatory?
     @OneToMany(mappedBy = "vcw")
     private List<VcwHasPhaseEntity> vcwHasPhaseEntities;
 }

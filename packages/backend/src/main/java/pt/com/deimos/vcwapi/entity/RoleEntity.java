@@ -22,8 +22,7 @@ public class RoleEntity {
     @Column
     private String description;
 
-    //TODO: isto é suposto ser one and only one to zero or many, pls check
+
     @OneToMany(mappedBy = "role")
     private List<ProjectHasUserRoleEntity> projectHasUserRoleEntities;
-
 }

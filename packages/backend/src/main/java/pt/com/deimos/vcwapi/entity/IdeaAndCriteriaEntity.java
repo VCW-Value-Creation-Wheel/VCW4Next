@@ -4,11 +4,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Entity
 @Getter
@@ -39,17 +36,14 @@ public class IdeaAndCriteriaEntity extends BaseEntity{
     private Float mcdaResult;
 
 
-    //TODO: isto é suposto ser zero or many to one and only one, pls check
     @ManyToOne(optional = false)
     @JoinColumn(name="idea_id", referencedColumnName = "id", insertable=false, updatable=false)
     private IdeaEntity idea;
 
-    //TODO: isto é suposto ser zero or many to one and only one, pls check
     @ManyToOne(optional = false)
     @JoinColumn(name="criteria_id", referencedColumnName = "id", insertable=false, updatable=false)
     private CriteriaEntity criteria;
 
-    //TODO: isto é suposto ser zero or many to zero or one, pls check
     @ManyToOne
     @JoinColumn(name="source_id", referencedColumnName = "id", insertable=false, updatable=false)
     private SourceEntity source;
