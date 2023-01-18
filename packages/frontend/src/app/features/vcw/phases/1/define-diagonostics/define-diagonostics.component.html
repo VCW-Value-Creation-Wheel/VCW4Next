@@ -22,7 +22,7 @@
 <div [formGroup]="dataForm">
     <div class="grid grid-cols-3 md:grid-cols-3 md:px-80 text-center" formArrayName="swotFields">
         <div class="col-span-1 h-8 py-2">
-            <p class="font-bold">Title</p>
+            <p class="font-bold text-center">Title</p>
             <ng-container *ngFor="let field of swotFields; index as idx">
                 <ng-container *ngIf="field.categoryId === activeTab">
                     <div class="py-2 px-2" [formGroupName]="idx">
@@ -53,7 +53,7 @@
             
         </div>
         <div class="col-span-2 h-8 py-2">
-            <p class="font-bold">Description</p>
+            <p class="font-bold text-center w-3/4 md:w-11/12">Description</p>
             <ng-container *ngFor="let field of swotFields; index as idx">
                 <ng-container *ngIf="field.categoryId === activeTab">
                     <div class="py-2 px-2 flex flex-row" [formGroupName]="idx">
