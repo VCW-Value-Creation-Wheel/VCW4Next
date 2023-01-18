@@ -1,5 +1,12 @@
 <div class="flex flex-col h-screen">
     <app-navbar></app-navbar>
+    <div class="flex flex-col justify-center w-full py-2" *ngIf="isVcwPhase">
+        <app-phase-navigation
+          [title]="vcwPhaseFullName"
+          (leftButtonClick)="onNavigateLeft()"
+          (rightButtonClick)="onNavigateRight()"
+        ></app-phase-navigation>
+      </div>
     
     <div class="grow max-h-full overflow-y-auto pl-0.5 md:px-8">
         <router-outlet></router-outlet>

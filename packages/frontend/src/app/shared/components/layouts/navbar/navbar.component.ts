@@ -8,10 +8,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { environment } from '../../../../../environments/environment';
 import * as pkg from '../../../../../../package.json';
-import { NavigationEnd, Router } from '@angular/router';
-import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import { PhaseNavigationService } from '@core';
 
 @Component({
   selector: 'app-navbar',
@@ -24,7 +21,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   @Output() login = new EventEmitter();
   @Output() logout = new EventEmitter();
 
-  constructor(private route: Router, private phaseNavigationService: PhaseNavigationService) { }
+  constructor() { }
 
   isShowingProfileCard = false;
   faUser = faUser;
@@ -35,17 +32,11 @@ export class NavbarComponent implements OnInit, OnDestroy {
   env = environment;
   pkg = pkg;
 
-  currentRoute: string;
-
   componentDestroyed$ = new Subject<boolean>();
 
 
   ngOnInit(): void {
-    this.route.events.pipe(takeUntil(this.componentDestroyed$)).subscribe(event => {
-      if (event instanceof NavigationEnd) {
-        this.currentRoute = event.urlAfterRedirects;
-      }
-    });
+    
   }
 
   ngOnDestroy(): void {
@@ -79,26 +70,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
     // implement when an auth service exists
     return undefined;
-  }
-
-  get isVcwPhase() {
-    return this.currentRoute?.includes('/phases/');
-  }
-
-  get vcwPhaseId() {
-    return this.currentRoute?.split('/phases/')[1];
-  }
-
-  get vcwPhaseFullName() {
-    return this.phaseNavigationService.getPhaseName(this.vcwPhaseId);
-  }
-
-  onNavigateLeft() {
-    this.phaseNavigationService.navigateToPrevious(this.vcwPhaseId);
-  }
-
-  onNavigateRight() {
-    this.phaseNavigationService.navigateToNext(this.vcwPhaseId);
   }
 
 }
