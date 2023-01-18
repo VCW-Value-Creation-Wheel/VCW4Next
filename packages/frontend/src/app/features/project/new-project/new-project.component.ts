@@ -63,7 +63,6 @@ export class NewProjectComponent implements OnInit {
       private formBuilder: FormBuilder
     ) { }
 
-
   ngOnInit(): void {
     this.form = this.formBuilder.group({
       'project-title': new FormControl('', Validators.required),
@@ -76,29 +75,6 @@ export class NewProjectComponent implements OnInit {
 
   onSubmit(e: Event): void{
     console.log(this.form.get('project-title').value + ' Created ()()()()');
-  }
-
-  addUser(): void{
-    this.isAddUserActive = true;
-  }
-
-  confirmUser(): void{
-      this.userRole.push({
-        user: this.form.value.user,
-        role: this.form.value.role
-      })
-    this.isAddUserActive= false;
-  }
-
-  confirmEditUser(){
-    this.userRole.find(username => username.user===this.editedUser.user).user = this.form.value.user;
-    this.userRole.find(username => username.role===this.editedUser.role).role = this.form.value.role;
-    this.isEditing= false;
-  }
-
-  cancelUserSelection(): void{
-    this.isAddUserActive = false;
-    this.isEditing = false;
   }
 
   addUser(): void{
