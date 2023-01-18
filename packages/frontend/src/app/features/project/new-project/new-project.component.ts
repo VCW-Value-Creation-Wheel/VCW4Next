@@ -1,12 +1,12 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Options } from '@core';
 import { faArrowLeft, faPenToSquare, faXmark } from '@fortawesome/free-solid-svg-icons';
 
 interface UserRole {
-  user: string,
-  role: string
+  user: string;
+  role: string;
 }
 
 @Component({
@@ -15,14 +15,7 @@ interface UserRole {
   styleUrls: ['./new-project.component.scss']
 })
 export class NewProjectComponent implements OnInit {
-  form = new FormGroup({
-    'project-title': new FormControl('', Validators.required),
-    'project-description': new FormControl(''),
-    'project-language': new FormControl(),
-    'project-thumbnail': new FormControl(),
-    'user': new FormControl(),
-    'role': new FormControl()
-  });
+  form: FormGroup;
 
   faPenToSquare = faPenToSquare;
   faXmark = faXmark;
@@ -42,37 +35,49 @@ export class NewProjectComponent implements OnInit {
       value: 'fr'
     }];
 
-    isAddUserActive: boolean = false;
+    isAddUserActive = false;
 
     options: string[] = ['user1', 'user2', 'user3', 'user4'];
-    error: boolean = false;
-    isDisabled: boolean = false;
-    isEditing: boolean = false;
+    error = false;
+    isDisabled = false;
+    isEditing = false;
 
     roleOptions: Options[] = [
       {
-        label:"Admin",
-        value:"admin"
+        label: 'Admin',
+        value: 'Admin'
       },
       {
-        label:"Normal User",
-        value:"user"
+        label: 'Normal User',
+        value: 'Normal User'
       }
-    ]
+    ];
 
-    userRole: UserRole[]=[];
+    userRole: UserRole[] = [];
 
-    editedUser : UserRole;
+    ind: number;
 
-  constructor(private router: Router, private route: ActivatedRoute) { }
+  constructor(
+      private router: Router,
+      private route: ActivatedRoute,
+      private formBuilder: FormBuilder
+    ) { }
+
 
   ngOnInit(): void {
+    this.form = this.formBuilder.group({
+      'project-title': new FormControl('', Validators.required),
+      'project-description': new FormControl(''),
+      'project-language': new FormControl(),
+      'project-thumbnail': new FormControl(),
+      userArray: this.formBuilder.array([])
+    });
   }
 
   onSubmit(e: Event): void{
     console.log(this.form.get('project-title').value + ' Created ()()()()');
   }
-  
+
   addUser(): void{
     this.isAddUserActive = true;
   }
@@ -96,19 +101,51 @@ export class NewProjectComponent implements OnInit {
     this.isEditing = false;
   }
 
+  addUser(): void{
+    (this.form.get('userArray') as FormArray).push(this.formBuilder.group({
+      user: new FormControl(),
+      role: new FormControl()
+    }));
+    this.isAddUserActive = true;
+  }
+
+  confirmUser(): void{
+    this.userRole = this.form.get('userArray').value;
+    this.isAddUserActive = false;
+  }
+
+  confirmEditUser(){
+    this.userRole = this.form.get('userArray').value;
+    this.isEditing = false;
+  }
+
+  cancelUserSelection(): void{
+    if (this.isAddUserActive){
+      (this.form.get('userArray') as FormArray).controls.pop();
+    }
+    this.isAddUserActive = false;
+    this.isEditing = false;
+    (this.form.get('userArray') as FormArray).setValue(this.userRole);
+  }
+
   onBack(): void{
     this.router.navigate(['../'], {relativeTo: this.route});
   }
 
-  editUser(user: string): void{
-    this.editedUser = this.userRole.find(username => username.user===user);
+  editUser(ind: number): void{
+    this.ind = ind;
     this.isEditing = true;
-    this.isAddUserActive=false;
+    this.isAddUserActive = false;
 
   }
 
-  removeUser(user: string):void{
-   this.userRole = this.userRole.filter(username => username.user!==user);
+  removeUser(ind: number): void{
+   (this.form.controls.userArray as FormArray).removeAt(ind);
+   this.userRole = this.form.get('userArray').value;
+  }
+
+  getUserArrayIndex(isEditing: boolean): number {
+    return isEditing ? this.ind : (this.form.get('userArray') as FormArray).length - 1;
   }
 
 }
