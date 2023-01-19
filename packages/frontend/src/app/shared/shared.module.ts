@@ -18,7 +18,10 @@ import {
   NavbarComponent,
   FooterComponent,
   SearchBarComponent,
-  ProjectCardComponent
+  ProjectCardComponent,
+  PhaseNavigationComponent,
+  TabComponent,
+  DialogComponent
 } from './components';
 import { RegexInputDirective } from './directives';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -48,6 +51,9 @@ import { VcwCardComponent } from './components/vcw-card/vcw-card.component';
     FooterComponent,
     SearchBarComponent,
     ProjectCardComponent,
+    PhaseNavigationComponent,
+    TabComponent,
+    DialogComponent,
     VcwCardComponent
   ],
   imports: [
@@ -83,6 +89,9 @@ import { VcwCardComponent } from './components/vcw-card/vcw-card.component';
     IconButtonComponent,
     ButtonComponent,
     ProjectCardComponent,
+    PhaseNavigationComponent,
+    TabComponent,
+    DialogComponent,
     VcwCardComponent
   ]
 })

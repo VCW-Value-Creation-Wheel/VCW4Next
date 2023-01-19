@@ -6,3 +6,19 @@ export interface VCW {
     description: string;
     thumbnailUrl?: string;
 }
+
+export interface SwotField {
+    categoryId: number;
+    title: string;
+    description: string;
+    id?: number;
+}
+
+export interface VCWPhase {
+    [key: string]: {
+        id: string;
+        name: string;
+        previousPhaseId?: string;
+        nextPhaseId?: string;
+    };
+}
