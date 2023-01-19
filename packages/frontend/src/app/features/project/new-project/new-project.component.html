@@ -8,7 +8,7 @@
 <div [formGroup]="form" (ngSubmit)="onSubmit($event)">
     <div class="grid grid-cols-4 gap-4 m-4 p-4 rounded-lg">
         <div class="col-span-4 text-2xl font-bold text-primary">Create New Project</div>
-        <div class="col-span-2 m-2 p-2">
+        <div class="col-span-3 md:col-span-2 m-2 p-2">
             <app-input
                 id="project-title"
                 [label]="'Project Title'"
@@ -26,7 +26,7 @@
             >
             </app-text-area>
         </div>
-        <div class="col-span-1 m-2 p-2">
+        <div class="col-span-3 md:col-span-1 m-2 p-2">
             <app-input-file
                 [label]="'Thumbnail'"
                 formControlName="project-thumbnail"
@@ -35,7 +35,7 @@
             >
             </app-input-file>
         </div>
-        <div class="col-span-1 m-2 p-2">
+        <div class="col-span-3 md:col-span-1 m-2 p-2">
             <app-select-input
                 [label] = "'Language'"
                 [options]="langOptions"
@@ -45,7 +45,7 @@
             </app-select-input>
         </div>
         <div class="col-span-4 text-xl font-bold ">Users and Roles</div>
-        <div class="grid grid-cols-4 col-span-4" formArrayName = "userArray">
+        <div class="grid grid-cols-4 col-span-4 px-2" formArrayName = "userArray">
             <div *ngFor="let userEntry of userRole; index as ind" class="col-span-3 flex justify-between m-2 p-2 bg-gray-200 rounded-md">
                     <div class="m-2">{{userEntry.user}} - {{userEntry.role}}</div>
                     <div class="">
@@ -79,7 +79,7 @@
                 <datalist id="userList">
                     <option *ngFor="let option of options">{{option}}</option>
                 </datalist>
-                <div class="col-span-1">
+                <div class="col-span-2 md:col-span-1">
                     <app-select-input
                     [label]="'Select Role'"
                     [options]="roleOptions"
@@ -87,7 +87,7 @@
                     >
                     </app-select-input>
                 </div>
-                <div class="flex col-span-1">
+                <div class="flex justify-end md:justify-start col-span-4 md:col-span-1">
                     <div *ngIf="isAddUserActive" class="mx-1 mt-7">
                         <app-button
                         [label]="'Add'"
@@ -112,7 +112,7 @@
                 </div>
                  
             </div>
-            <div class="col-span-4 my-2 p-2" *ngIf="!isAddUserActive && !isEditing">
+            <div class="col-span-4 my-2" *ngIf="!isAddUserActive && !isEditing">
                 <app-button
                 [label]="'Add User'"
                 (click)="addUser()">
