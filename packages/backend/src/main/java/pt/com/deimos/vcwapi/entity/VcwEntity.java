@@ -66,6 +66,6 @@ public class VcwEntity extends BaseNamedEntity{
     @OneToMany(mappedBy = "vcw")
     private List<VcwHasIdeaEntity> vcwHasIdeaEntities;
 
-    //@OneToMany(mappedBy = "vcw")
-    //private List<VcwHasPhaseEntity> vcwHasPhaseEntities;
+    @OneToMany(mappedBy = "vcw")
+    private List<VcwHasPhaseEntity> vcwHasPhaseEntities;
 }

@@ -11,7 +11,14 @@ import java.util.List;
 @Getter
 @Setter
 @Table(name = "phase")
-public class PhaseEntity extends BaseNamedEntity{
+public class PhaseEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable=false)
+    private String name;
 
     @Column(nullable=false)
     private Integer order;
