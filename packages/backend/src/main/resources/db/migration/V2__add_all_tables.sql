@@ -227,7 +227,6 @@ CREATE TABLE application.idea (
 CREATE TABLE application.idea_and_criteria (
 	id serial NOT NULL,
 	"value" float8 NULL,
-	value_source int4 NULL,
 	value_updated_at timestamp NULL,
 	vcf_result bool NULL,
 	mcda_result float8 NULL,
