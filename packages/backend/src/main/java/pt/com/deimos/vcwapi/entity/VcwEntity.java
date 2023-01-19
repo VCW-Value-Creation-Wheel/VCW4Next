@@ -1,13 +1,17 @@
 package pt.com.deimos.vcwapi.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -66,6 +70,8 @@ public class VcwEntity extends BaseNamedEntity{
     @OneToMany(mappedBy = "vcw")
     private List<VcwHasIdeaEntity> vcwHasIdeaEntities;
 
+
+    @JsonBackReference
     @OneToMany(mappedBy = "vcw")
-    private List<VcwHasPhaseEntity> vcwHasPhaseEntities;
+    private Set<VcwHasPhaseEntity> vcwPhases  = new HashSet<>();
 }

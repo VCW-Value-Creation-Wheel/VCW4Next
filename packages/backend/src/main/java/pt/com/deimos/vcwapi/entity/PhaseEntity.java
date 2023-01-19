@@ -1,11 +1,15 @@
 package pt.com.deimos.vcwapi.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -33,7 +37,7 @@ public class PhaseEntity {
     @Column(name="part_of_sprint",nullable=false)
     private Boolean partOfSprint;
 
-
+    @JsonManagedReference
     @OneToMany(mappedBy = "phase")
-    private List<VcwHasPhaseEntity> vcwHasPhaseEntities;
+    private Set<VcwHasPhaseEntity> vcwPhases  = new HashSet<>();
 }
