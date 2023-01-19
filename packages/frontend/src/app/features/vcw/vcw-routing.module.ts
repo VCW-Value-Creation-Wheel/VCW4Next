@@ -7,10 +7,6 @@ import { DefineDiagonosticsComponent } from './phases/1/define-diagonostics/defi
 const routes: Routes = [
 
     {
-        path: 'new-vcw',
-        component: NewVcwComponent
-    },
-    {
         path: ':vcw_id/phases/1a',
         component: DefineDiagonosticsComponent
     }

@@ -25,7 +25,7 @@ export class ProjectListComponent implements OnInit {
   }
 
   onProjectClick(projectId: number) {
-    this.router.navigate(['project/' + projectId], {relativeTo: this.route});
+    this.router.navigate(['projects/' + projectId], {relativeTo: this.route});
   }
 
   addNewProject() {
