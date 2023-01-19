@@ -47,10 +47,6 @@ public class VcwEntity extends BaseNamedEntity{
     @Column(name = "closed_at")
     private LocalDateTime closedAt;
 
-
-    @OneToOne(mappedBy = "vcw")
-    private ProjectHasVcwEntity projectHasVcwEntity;
-
     @OneToMany(mappedBy = "vcw")
     private List<AttachmentEntity> attatchments;
 
@@ -70,6 +66,6 @@ public class VcwEntity extends BaseNamedEntity{
     @OneToMany(mappedBy = "vcw")
     private List<VcwHasIdeaEntity> vcwHasIdeaEntities;
 
-    @OneToMany(mappedBy = "vcw")
-    private List<VcwHasPhaseEntity> vcwHasPhaseEntities;
+    //@OneToMany(mappedBy = "vcw")
+    //private List<VcwHasPhaseEntity> vcwHasPhaseEntities;
 }

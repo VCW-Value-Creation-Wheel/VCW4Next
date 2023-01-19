@@ -28,8 +28,24 @@ public class ProjectEntity extends BaseNamedEntity{
   @JoinColumn(name = "thumbnail", referencedColumnName = "id", insertable=false, updatable=false)
   private FileEntity file;
 
-  @OneToMany(mappedBy = "project")
-  private List<ProjectHasVcwEntity> projectHasVcwEntities = new java.util.ArrayList<>();
+  @ManyToMany
+  @JoinTable(
+          schema = "application",
+          name = "project_has_vcw",
+          joinColumns = @JoinColumn(
+                  name = "project_id",
+                  referencedColumnName = "id",
+                  insertable = false,
+                  updatable = false
+          ),
+          inverseJoinColumns = @JoinColumn(
+                  name = "vcw_id",
+                  referencedColumnName = "id",
+                  insertable = false,
+                  updatable = false
+          )
+  )
+  private Set<VcwEntity> vcws = new HashSet<>();
 
   @OneToMany(mappedBy = "project")
   private List<ProjectHasUserRoleEntity> projectHasUserRoleEntities = new java.util.ArrayList<>();
