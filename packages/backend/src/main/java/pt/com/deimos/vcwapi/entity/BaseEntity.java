@@ -31,8 +31,8 @@ public abstract class BaseEntity implements Serializable {
     private LocalDateTime updatedAt;
 
     @Column(name = "updated_by", nullable = false)
-    private UUID updatedBy;
+    private String updatedBy;
 
     @Column(name = "created_by", nullable = false)
-    private UUID createdBy;
+    private String createdBy;
 }

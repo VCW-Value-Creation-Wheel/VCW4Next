@@ -19,7 +19,7 @@ public class ProjectHasUserRoleEntity extends BaseEntity{
     private Long roleId;
 
     @Column(name="user_inum", nullable=false)
-    private UUID userInum;
+    private String userInum;
 
 
     @ManyToOne(optional = false)
