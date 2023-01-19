@@ -31,19 +31,19 @@
                 [label]="'input-labels.wkt'"></app-input> -->
         <app-input
                 id="beginDate"
-                class="col-span-3 md:col-span-2"
+                class="col-span-5 md:col-span-2"
                 formControlName="beginDate"
                 inputType="date"
                 [label]="'Start Date'"
         ></app-input>
         <app-input
                 id="endDate"
-                class="col-span-3 md:col-span-2"
+                class="col-span-5 md:col-span-2"
                 formControlName="endDate"
                 inputType="date"
                 [label]="'End Date'"
         ></app-input>
-        <div class="flex justify-center items-end col-span-4 lg:col-span-4 gap-4">
+        <div class="flex justify-center items-end col-span-8 md:col-span-4 lg:col-span-4 gap-4">
             <app-button [leftIcon]="faSearch" [label]="'Search'" type="submit"></app-button>
             <app-icon-button
                     [icon]="faICursor"
