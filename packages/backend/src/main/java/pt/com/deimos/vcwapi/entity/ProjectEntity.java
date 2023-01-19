@@ -1,5 +1,7 @@
 package pt.com.deimos.vcwapi.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,6 +27,7 @@ public class ProjectEntity extends BaseNamedEntity{
 
 
   @OneToOne
+  @JsonBackReference
   @JoinColumn(name = "thumbnail", referencedColumnName = "id", insertable=false, updatable=false)
   private FileEntity file;
 

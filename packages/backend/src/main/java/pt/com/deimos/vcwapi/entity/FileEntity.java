@@ -1,5 +1,6 @@
 package pt.com.deimos.vcwapi.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,6 +21,7 @@ public class FileEntity extends BaseNamedEntity{
     @OneToOne(mappedBy = "file", optional = false)
     private AttachmentEntity attachment;
 
+    @JsonManagedReference
     @OneToOne(mappedBy = "file")
     private ProjectEntity project;
 }
