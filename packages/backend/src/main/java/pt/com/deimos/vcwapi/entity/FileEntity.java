@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Set;
+
 @Entity
 @Getter
 @Setter
@@ -17,10 +19,9 @@ public class FileEntity extends BaseNamedEntity{
     @Column(name="file_type")
     private String fileType;
 
-
-    @OneToOne(mappedBy = "file", optional = false)
+    @ManyToMany(mappedBy = "attachments")
     @JsonIgnore
-    private AttachmentEntity attachment;
+    Set<VcwEntity> vcws;
 
     @OneToOne(mappedBy = "file")
     @JsonIgnore
