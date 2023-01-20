@@ -1,5 +1,6 @@
 package pt.com.deimos.vcwapi.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,11 +21,14 @@ public class SourceEntity extends BaseNamedEntity{
 
 
     @OneToMany(mappedBy = "source")
+    @JsonIgnore
     private List<IdeaEntity> ideas;
 
     @OneToMany(mappedBy = "source")
+    @JsonIgnore
     private List<CriteriaEntity> criterias;
 
     @OneToMany(mappedBy = "source")
+    @JsonIgnore
     private List<IdeaAndCriteriaEntity> ideaAndCriteriaEntities;
 }

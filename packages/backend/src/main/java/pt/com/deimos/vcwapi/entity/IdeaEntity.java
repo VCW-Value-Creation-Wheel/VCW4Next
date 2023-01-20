@@ -1,5 +1,6 @@
 package pt.com.deimos.vcwapi.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,6 +27,7 @@ public class IdeaEntity extends BaseNamedEntity{
     private EntryTypeEntity entryType;
 
     @OneToMany(mappedBy = "idea")
+    @JsonIgnore
     private List<IdeaAndCriteriaEntity> ideasAndCriterias;
 
     @ManyToOne
@@ -38,6 +40,7 @@ public class IdeaEntity extends BaseNamedEntity{
             joinColumns = @JoinColumn(name = "idea_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "keyword_id", referencedColumnName = "id")
     )
+    @JsonIgnore
     Set<KeywordEntity> ideaHasKeywords = new HashSet<>();
 
     @OneToOne(mappedBy = "idea", optional = false)

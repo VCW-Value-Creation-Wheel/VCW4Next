@@ -1,6 +1,5 @@
 package pt.com.deimos.vcwapi.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -27,7 +26,6 @@ public class ProjectEntity extends BaseNamedEntity{
 
 
   @OneToOne
-  @JsonBackReference
   @JoinColumn(name = "thumbnail", referencedColumnName = "id", insertable=false, updatable=false)
   private FileEntity file;
 
@@ -48,9 +46,11 @@ public class ProjectEntity extends BaseNamedEntity{
                   updatable = false
           )
   )
+  @JsonIgnore
   private Set<VcwEntity> vcws = new HashSet<>();
 
   @OneToMany(mappedBy = "project")
+  @JsonIgnore
   private List<ProjectHasUserRoleEntity> projectHasUserRoleEntities = new java.util.ArrayList<>();
 
   @ManyToMany
@@ -59,5 +59,6 @@ public class ProjectEntity extends BaseNamedEntity{
           joinColumns = @JoinColumn(name = "project_id", referencedColumnName = "id"),
           inverseJoinColumns = @JoinColumn(name = "keyword_id", referencedColumnName = "id")
   )
+  @JsonIgnore
   Set<KeywordEntity> projectHasKeywords = new HashSet<>();
 }

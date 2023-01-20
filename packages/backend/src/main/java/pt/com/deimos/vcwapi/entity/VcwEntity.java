@@ -1,8 +1,7 @@
 package pt.com.deimos.vcwapi.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -52,12 +51,15 @@ public class VcwEntity extends BaseNamedEntity{
     private LocalDateTime closedAt;
 
     @OneToMany(mappedBy = "vcw")
+    @JsonIgnore
     private List<AttachmentEntity> attatchments;
 
     @OneToMany(mappedBy = "vcw")
+    @JsonIgnore
     private List<DiagnosticEntity> diagnostics;
 
     @OneToMany(mappedBy = "vcw")
+    @JsonIgnore
     private List<KpiEntity> kpis;
 
     @OneToOne
@@ -65,13 +67,14 @@ public class VcwEntity extends BaseNamedEntity{
     private BusinessModelCanvasEntity businessModelCanvas;
 
     @OneToMany(mappedBy = "vcw")
+    @JsonIgnore
     private List<VcwHasCriteriaEntity> vcwHasCriteriaEntities;
 
     @OneToMany(mappedBy = "vcw")
+    @JsonIgnore
     private List<VcwHasIdeaEntity> vcwHasIdeaEntities;
 
-
-    @JsonBackReference
     @OneToMany(mappedBy = "vcw")
+    @JsonIgnore
     private Set<VcwHasPhaseEntity> vcwPhases  = new HashSet<>();
 }
