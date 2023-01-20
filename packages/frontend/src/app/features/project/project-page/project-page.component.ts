@@ -33,7 +33,7 @@ export class ProjectPageComponent implements OnInit {
   }
 
   onVcwClick(vcw: VCW) {
-    this.router.navigate(['vcw/' + vcw.id + '/phases/1a'], { relativeTo: this.route });
+    this.router.navigate(['vcw/' + vcw.id], { relativeTo: this.route });
   }
 
   addNewVcw() {
