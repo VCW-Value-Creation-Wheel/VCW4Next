@@ -7,4 +7,7 @@ import { Component } from '@angular/core';
 })
 export class VcwPageComponent {
 
+  onClick(id: string) {
+    console.log(id)
+  }
 }

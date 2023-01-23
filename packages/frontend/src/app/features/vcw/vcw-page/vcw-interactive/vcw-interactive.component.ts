@@ -1,33 +1,20 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'app-vcw-interactive',
   templateUrl: './vcw-interactive.component.html',
   styleUrls: ['./vcw-interactive.component.scss']
 })
-export class VcwInteractiveComponent implements OnInit, AfterViewInit {
-$event: any;
+export class VcwInteractiveComponent implements OnInit {
 
+  @Output() vcwAreaClicked = new EventEmitter<string>();
 
   ngOnInit(): void {
 
   }
 
-  ngAfterViewInit(): void {
-    // const section = document.getElementsByTagName('g');
-    // console.log(section)
-    // // tslint:disable-next-line: prefer-for-of
-    // for (let i = 0; i < section.length; i++) {
-    //   section[i].addEventListener('click', (event) => {
-    //     console.log(event.target)
-    //   })
-    // }
-  }
-  
-  onSVGClick(event: any) {
-    console.log(event)
-    console.log('hi')
+  onSVGClick(event: PointerEvent) {
+    this.vcwAreaClicked.emit(event.target['id']);
   }
 
-  
 }
