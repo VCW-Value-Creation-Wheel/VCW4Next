@@ -2,5 +2,7 @@
     <h1 class="text-2xl font-bold text-primary text-center">VCW Title</h1>
 </div>
 <div class="flex flex-col w-full items-center">
-    <app-vcw-method (vcwAreaClicked)="onClick($event)"></app-vcw-method>
+    <app-vcw-method *ngIf="vcwType === 'method'" (vcwAreaClicked)="onClick($event)"></app-vcw-method>
+    <app-vcw-sprint *ngIf="vcwType === 'sprint'"></app-vcw-sprint>
+    <app-vcw-journey *ngIf="vcwType === 'journey'"></app-vcw-journey>
 </div>
