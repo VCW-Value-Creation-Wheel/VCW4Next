@@ -5,12 +5,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { VcwRoutingModule } from './vcw-routing.module';
 import { DefineDiagonosticsComponent } from './phases/1/define-diagonostics/define-diagonostics.component';
 import { VcwPageComponent } from './vcw-page/vcw-page.component';
-import { VcwInteractiveComponent } from './vcw-page/vcw-interactive/vcw-interactive.component';
+import { VCWMethodComponent } from './vcw-page/vcw-method/vcw-method.component';
 
 
 
 @NgModule({
-  declarations: [DefineDiagonosticsComponent, VcwPageComponent, VcwInteractiveComponent],
+  declarations: [DefineDiagonosticsComponent, VcwPageComponent, VCWMethodComponent],
   imports: [
     CommonModule,
     ReactiveFormsModule,

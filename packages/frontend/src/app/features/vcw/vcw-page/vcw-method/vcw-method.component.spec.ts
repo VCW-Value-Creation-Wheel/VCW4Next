@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { VcwInteractiveComponent } from './vcw-interactive.component';
+import { VCWMethodComponent } from './vcw-method.component';
 
-describe('VcwInteractiveComponent', () => {
-  let component: VcwInteractiveComponent;
-  let fixture: ComponentFixture<VcwInteractiveComponent>;
+describe('VCWMethodComponent', () => {
+  let component: VCWMethodComponent;
+  let fixture: ComponentFixture<VCWMethodComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ VcwInteractiveComponent ]
+      declarations: [ VCWMethodComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(VcwInteractiveComponent);
+    fixture = TestBed.createComponent(VCWMethodComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

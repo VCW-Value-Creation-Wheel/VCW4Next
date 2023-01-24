@@ -1,11 +1,11 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 
 @Component({
-  selector: 'app-vcw-interactive',
-  templateUrl: './vcw-interactive.component.html',
-  styleUrls: ['./vcw-interactive.component.scss']
+  selector: 'app-vcw-method',
+  templateUrl: './vcw-method.component.html',
+  styleUrls: ['./vcw-method.component.scss']
 })
-export class VcwInteractiveComponent implements OnInit {
+export class VCWMethodComponent implements OnInit {
 
   @Output() vcwAreaClicked = new EventEmitter<string>();
 
