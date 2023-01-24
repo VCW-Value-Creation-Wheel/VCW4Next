@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-vcw-page',
@@ -7,6 +8,8 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./vcw-page.component.scss']
 })
 export class VcwPageComponent implements OnInit {
+
+  faArrowLeft = faArrowLeft;
 
   vcwType: string;
 
@@ -18,5 +21,9 @@ export class VcwPageComponent implements OnInit {
 
   onClick(id: string) {
     this.router.navigate(['phases/' + id], {relativeTo: this.activatedRoute});
+  }
+
+  onBack() {
+    this.router.navigate(['../../'], {relativeTo: this.activatedRoute});
   }
 }
