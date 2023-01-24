@@ -8,11 +8,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
-import pt.com.deimos.vcwapi.dto.ProjectDTO;
+import pt.com.deimos.vcwapi.dto.IdeaDTO;
 import pt.com.deimos.vcwapi.entity.IdeaEntity;
-import pt.com.deimos.vcwapi.entity.ProjectEntity;
 import pt.com.deimos.vcwapi.service.IdeaService;
-import pt.com.deimos.vcwapi.service.ProjectService;
 
 import java.util.Optional;
 
@@ -33,4 +31,5 @@ public class IdeaController {
   ) {
     return ResponseEntity.ok(this.ideaService.findAll());
   }
+
 }

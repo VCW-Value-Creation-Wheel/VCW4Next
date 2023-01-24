@@ -40,6 +40,7 @@ public class BusinessModelCanvasEntity extends BaseEntity {
     private String costStructure;
 
     @OneToOne(mappedBy = "businessModelCanvas", optional = false)
+    @JsonIgnore
     private VcwEntity vcw;
 }
 
