@@ -8,21 +8,21 @@ import java.time.LocalDateTime;
 @Data
 public class BusinessModelCanvasDTO {
 
-    private String customer_segments;
+    private String customerSegments;
 
-    private String value_propositions;
+    private String valuePropositions;
 
     private String channels;
 
-    private String customer_relationships;
+    private String customerRelationships;
 
-    private String revenue_streams;
+    private String revenueStreams;
 
-    private String key_resources;
+    private String keyResources;
 
-    private String key_activities;
+    private String keyActivities;
 
-    private String key_partnerships;
+    private String keyPartnerships;
 
-    private String cost_structure;
+    private String costStructure;
 }

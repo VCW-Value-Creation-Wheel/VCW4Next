@@ -7,7 +7,7 @@
 CREATE TABLE application.business_model_canvas (
 	id serial NOT NULL,
 	customer_segments text NULL,
-	value_propositions jsonb NULL,
+	value_propositions text NULL,
 	channels text NULL,
 	customer_relationships text NULL,
 	revenue_streams text NULL,

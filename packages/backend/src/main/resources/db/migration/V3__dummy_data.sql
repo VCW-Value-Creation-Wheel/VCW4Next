@@ -2,7 +2,7 @@ INSERT INTO application.file (name,"path",file_type,created_at,created_by,update
 	 ('project 1 report','myfiles/p1_report.pdf','pdf','2023-01-19 11:25:30.935302','b68986e1-81d8-4813-ada5-172442d8944d','2023-01-19 11:25:30.935302','b68986e1-81d8-4813-ada5-172442d8944d');
 
 INSERT INTO application.business_model_canvas (customer_segments,value_propositions,channels,customer_relationships,revenue_streams,key_resources,key_activities,key_partnerships,cost_structure,created_at,created_by,updated_at,updated_by) VALUES
-	 ('test','{"test": "test"}','test','test','test','test','test','test','test','2023-01-19 12:18:55.426691','b68986e1-81d8-4813-ada5-172442d8944d','2023-01-19 12:18:55.426691','b68986e1-81d8-4813-ada5-172442d8944d');
+	 ('test','test','test','test','test','test','test','test','test','2023-01-19 12:18:55.426691','b68986e1-81d8-4813-ada5-172442d8944d','2023-01-19 12:18:55.426691','b68986e1-81d8-4813-ada5-172442d8944d');
 
 INSERT INTO application.vcw (name,"type",challenge,concept,value_proposition,prototype,three_ms,executive_summary,closed,closed_at,created_at,created_by,updated_at,updated_by,business_model_canvas_id) VALUES
 	 ('VCW 1','sprint','challenge 1','concept 1','{"description":"value proposition 1"}','prototype 1','something','this is a sprint vcw',false,NULL,'2023-01-19 12:19:18.516103','b68986e1-81d8-4813-ada5-172442d8944d','2023-01-19 12:19:18.516103','b68986e1-81d8-4813-ada5-172442d8944d',1),
