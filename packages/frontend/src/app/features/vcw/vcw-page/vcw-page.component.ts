@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-vcw-page',
@@ -9,11 +10,13 @@ export class VcwPageComponent implements OnInit {
 
   vcwType: string;
 
+  constructor(private router: Router, private activatedRoute: ActivatedRoute) {}
+
   ngOnInit(): void {
-    this.vcwType = 'sprint';
+    this.vcwType = 'method';
   }
 
   onClick(id: string) {
-    console.log(id)
+    this.router.navigate(['phases/' + id], {relativeTo: this.activatedRoute});
   }
 }
