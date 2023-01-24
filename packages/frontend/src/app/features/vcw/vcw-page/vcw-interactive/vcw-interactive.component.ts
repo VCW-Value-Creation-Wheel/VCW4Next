@@ -13,8 +13,11 @@ export class VcwInteractiveComponent implements OnInit {
 
   }
 
-  onSVGClick(event: PointerEvent) {
-    this.vcwAreaClicked.emit(event.target['id']);
+  onSVGClick(event: Event) {
+    const target = (event.target['id'] as string);
+    if (target.includes('phase')) {
+      this.vcwAreaClicked.emit(target.split('-')[1]);
+    }
   }
 
 }
