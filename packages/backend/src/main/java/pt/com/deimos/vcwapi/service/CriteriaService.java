@@ -19,4 +19,8 @@ public class CriteriaService {
     return this.criteriaRepository.findAll();
   }
 
+  public CriteriaEntity save(CriteriaEntity criteriaEntity) {
+    return this.criteriaRepository.save(criteriaEntity);
+  }
+
 }

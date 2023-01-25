@@ -1,12 +1,14 @@
 package pt.com.deimos.vcwapi.controller;
 
+import jakarta.validation.Valid;
+import org.springframework.beans.BeanUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import pt.com.deimos.vcwapi.dto.VcwDTO;
 import pt.com.deimos.vcwapi.entity.VcwEntity;
 import pt.com.deimos.vcwapi.service.VcwService;
 
@@ -27,4 +29,15 @@ public class VcwController {
   ) {
     return ResponseEntity.ok(this.vcwService.findAll());
   }
+  
+  @PostMapping
+  public ResponseEntity<Object> store(
+          @RequestBody @Valid VcwDTO vcwDTO
+  ) {
+    VcwEntity vcwEntity = new VcwEntity();
+    BeanUtils.copyProperties(vcwDTO, vcwEntity);
+
+    return ResponseEntity.status(HttpStatus.CREATED).body(this.vcwService.save(vcwEntity));
+  }
+  
 }

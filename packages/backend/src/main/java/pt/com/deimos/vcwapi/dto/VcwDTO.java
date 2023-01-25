@@ -8,10 +8,12 @@ import java.time.LocalDateTime;
 @Data
 public class VcwDTO {
 
+    private enum VcwType {sprint, method};
+
     @NotBlank
     private String name;
 
-    @NotBlank
+    @ValueOfEnum(enumClass = VcwType.class)
     private String type;
 
     private String challenge;

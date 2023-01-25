@@ -19,4 +19,8 @@ public class VcwService {
     return this.vcwRepository.findAll();
   }
 
+  public VcwEntity save(VcwEntity vcwEntity) {
+    return this.vcwRepository.save(vcwEntity);
+  }
+
 }
