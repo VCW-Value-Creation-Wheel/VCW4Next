@@ -29,6 +29,8 @@ import { AngularMyDatePickerModule } from 'angular-mydatepicker';
 import { AngularSvgIconModule } from 'angular-svg-icon';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { VcwCardComponent } from './components/vcw-card/vcw-card.component';
+import { CkeEditorComponent } from './components/form/cke-editor/cke-editor.component';
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 
 
 @NgModule({
@@ -54,7 +56,8 @@ import { VcwCardComponent } from './components/vcw-card/vcw-card.component';
     PhaseNavigationComponent,
     TabComponent,
     DialogComponent,
-    VcwCardComponent
+    VcwCardComponent,
+    CkeEditorComponent
   ],
   imports: [
     CommonModule,
@@ -63,7 +66,8 @@ import { VcwCardComponent } from './components/vcw-card/vcw-card.component';
     ReactiveFormsModule,
     AngularMyDatePickerModule,
     NgSelectModule,
-    AngularSvgIconModule
+    AngularSvgIconModule,
+    CKEditorModule
   ],
   exports: [
     FontAwesomeModule,
@@ -92,7 +96,8 @@ import { VcwCardComponent } from './components/vcw-card/vcw-card.component';
     PhaseNavigationComponent,
     TabComponent,
     DialogComponent,
-    VcwCardComponent
+    VcwCardComponent,
+    CkeEditorComponent
   ]
 })
 export class SharedModule { }

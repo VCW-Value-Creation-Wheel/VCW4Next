@@ -9,3 +9,7 @@ export const swotFieldsConfig = {
     description: [null, Validators.required],
     categoryId: [null, Validators.required]
 };
+
+export const challengeConfig = {
+    challenge: [null, Validators.required]
+}
