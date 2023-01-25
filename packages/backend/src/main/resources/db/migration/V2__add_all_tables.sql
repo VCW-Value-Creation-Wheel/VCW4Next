@@ -154,13 +154,13 @@ CREATE TABLE application.role (
 CREATE TABLE application.criteria (
 	id serial NOT NULL,
 	name varchar(128) NOT NULL,
+	entry_type_id int8 NOT NULL,
 	value_type varchar(128) NOT NULL,
+	source_id int8 NULL,
 	created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	created_by varchar(36) NULL,
 	updated_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	updated_by varchar(36) NULL,
-	entry_type_id int8 NOT NULL,
-	source_id int8 NULL,
 	CONSTRAINT pk_criteria PRIMARY KEY (id),
 	CONSTRAINT fk_criteria_on_created_by FOREIGN KEY (created_by)
 	    REFERENCES "identity".user_entity(id) ON DELETE SET NULL ON UPDATE CASCADE,
@@ -200,12 +200,12 @@ CREATE TABLE application.criteria_has_keyword (
 CREATE TABLE application.idea (
 	id serial NOT NULL,
 	name varchar(128) NOT NULL,
+	entry_type_id int8 NOT NULL,
+	source_id int8 NULL,
 	created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	created_by varchar(36) NULL,
 	updated_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	updated_by varchar(36) NULL,
-	entry_type_id int8 NOT NULL,
-	source_id int8 NULL,
 	CONSTRAINT pk_idea PRIMARY KEY (id),
 	CONSTRAINT fk_idea_on_created_by FOREIGN KEY (created_by)
 	    REFERENCES "identity".user_entity(id) ON DELETE SET NULL ON UPDATE CASCADE,
@@ -226,7 +226,10 @@ CREATE TABLE application.idea (
 
 CREATE TABLE application.idea_and_criteria (
 	id serial NOT NULL,
+	idea_id int8 NOT NULL,
+	criteria_id int8 NOT NULL,
 	"value" float8 NULL,
+	source_id int8 NULL,
 	value_updated_at timestamp NULL,
 	vcf_result bool NULL,
 	mcda_result float8 NULL,
@@ -234,9 +237,6 @@ CREATE TABLE application.idea_and_criteria (
 	created_by varchar(36) NULL,
 	updated_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	updated_by varchar(36) NULL,
-	idea_id int8 NOT NULL,
-	criteria_id int8 NOT NULL,
-	source_id int8 NULL,
 	CONSTRAINT pk_idea_and_criteria PRIMARY KEY (id),
 	CONSTRAINT fk_idea_and_criteria_on_created_by FOREIGN KEY (created_by)
 	    REFERENCES "identity".user_entity(id) ON DELETE SET NULL ON UPDATE CASCADE,
@@ -283,6 +283,7 @@ CREATE TABLE application.vcw (
 	value_proposition varchar(255) NULL,
 	prototype text NULL,
 	three_ms text NULL,
+	business_model_canvas_id int8 NULL,
 	executive_summary text NULL,
 	closed bool NULL,
 	closed_at timestamp NULL,
@@ -290,7 +291,6 @@ CREATE TABLE application.vcw (
 	created_by varchar(36) NULL,
 	updated_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	updated_by varchar(36) NULL,
-	business_model_canvas_id int8 NULL,
 	CONSTRAINT pk_vcw PRIMARY KEY (id),
 	CONSTRAINT fk_vcw_on_business_model_canvas FOREIGN KEY (business_model_canvas_id)
 	    REFERENCES application.business_model_canvas(id) ON DELETE SET NULL ON UPDATE CASCADE,
@@ -309,6 +309,7 @@ CREATE TABLE application.vcw (
 
 CREATE TABLE application.kpi (
 	id serial NOT NULL,
+	vcw_id int8 NOT NULL,
 	name varchar(255) NOT NULL,
 	description text NULL,
 	evaluation text NULL,
@@ -316,7 +317,6 @@ CREATE TABLE application.kpi (
 	created_by varchar(36) NULL,
 	updated_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	updated_by varchar(36) NULL,
-	vcw_id int8 NOT NULL,
 	CONSTRAINT pk_kpi PRIMARY KEY (id),
 	CONSTRAINT fk_kpi_on_created_by FOREIGN KEY (created_by)
 	    REFERENCES "identity".user_entity(id) ON DELETE SET NULL ON UPDATE CASCADE,
@@ -339,12 +339,12 @@ CREATE TABLE application.project (
 	id serial NOT NULL,
 	name varchar(128) NOT NULL,
 	description varchar(2048) NOT NULL,
+	thumbnail int8 NULL,
 	lang varchar(128) NOT NULL,
 	created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	created_by varchar(36) NULL,
 	updated_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	updated_by varchar(36) NULL,
-	thumbnail int8 NULL,
 	CONSTRAINT pk_project PRIMARY KEY (id),
 	CONSTRAINT fk_project_on_created_by FOREIGN KEY (created_by)
 	    REFERENCES "identity".user_entity(id) ON DELETE SET NULL ON UPDATE CASCADE,
@@ -363,8 +363,8 @@ CREATE TABLE application.project (
 
 CREATE TABLE application.project_has_keyword (
 	id serial NOT NULL,
-	keyword_id int8 NOT NULL,
 	project_id int8 NOT NULL,
+	keyword_id int8 NOT NULL,
 	CONSTRAINT pk_project_has_keyword PRIMARY KEY (id),
 	CONSTRAINT fk_prohaskey_on_keyword_entity FOREIGN KEY (keyword_id)
 	    REFERENCES application.keyword(id) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -381,13 +381,13 @@ CREATE TABLE application.project_has_keyword (
 
 CREATE TABLE application.project_has_user_role (
 	id serial NOT NULL,
+	project_id int8 NOT NULL,
 	user_inum varchar(36) NOT NULL,
+	role_id int8 NOT NULL,
 	created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	created_by varchar(36) NULL,
 	updated_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	updated_by varchar(36) NULL,
-	project_id int8 NOT NULL,
-	role_id int8 NOT NULL,
 	CONSTRAINT pk_project_has_user_role PRIMARY KEY (id),
 	CONSTRAINT fk_project_has_user_role_on_created_by FOREIGN KEY (created_by)
 	    REFERENCES "identity".user_entity(id) ON DELETE SET NULL ON UPDATE CASCADE,
@@ -410,8 +410,8 @@ CREATE TABLE application.project_has_user_role (
 
 CREATE TABLE application.project_has_vcw (
 	id serial NOT NULL,
-	vcw_id int8 NOT NULL,
 	project_id int8 NOT NULL,
+	vcw_id int8 NOT NULL,
 	CONSTRAINT pk_project_has_vcw PRIMARY KEY (id),
 	CONSTRAINT fk_project_has_vcw_on_project FOREIGN KEY (project_id)
 	    REFERENCES application.project(id) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -428,8 +428,8 @@ CREATE TABLE application.project_has_vcw (
 
 CREATE TABLE application.attachment (
     id int8 GENERATED BY DEFAULT AS IDENTITY NOT NULL,
-    file_id int8 NOT NULL,
     vcw_id int8 NOT NULL,
+    file_id int8 NOT NULL,
     CONSTRAINT pk_attachment PRIMARY KEY (id),
     CONSTRAINT FK_ATTACHMENT_ON_FILE FOREIGN KEY (file_id)
         REFERENCES application.file (id) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -446,6 +446,7 @@ CREATE TABLE application.attachment (
 
 CREATE TABLE application.diagnostic (
 	id serial NOT NULL,
+	vcw_id int8 NOT NULL,
 	swot_field varchar(128) NOT NULL,
 	name varchar(128) NOT NULL,
 	description varchar(1024) NULL,
@@ -453,7 +454,6 @@ CREATE TABLE application.diagnostic (
 	created_by varchar(36) NULL,
 	updated_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	updated_by varchar(36) NULL,
-	vcw_id int8 NOT NULL,
 	CONSTRAINT pk_diagnostic PRIMARY KEY (id),
 	CONSTRAINT fk_diagnostic_on_created_by FOREIGN KEY (created_by)
 	    REFERENCES "identity".user_entity(id) ON DELETE SET NULL ON UPDATE CASCADE,
@@ -472,14 +472,14 @@ CREATE TABLE application.diagnostic (
 
 CREATE TABLE application.vcw_has_criteria (
 	id serial NOT NULL,
+	vcw_id int8 NOT NULL,
+	criteria_id int8 NOT NULL,
 	selected bool NULL,
 	type varchar(255) NULL,
 	ranking int4 NULL,
 	weight float8 NULL,
 	interval_min float8 NULL,
 	interval_max float8 NULL,
-	vcw_id int8 NOT NULL,
-	criteria_id int8 NOT NULL,
 	CONSTRAINT pk_vcw_has_criteria PRIMARY KEY (id),
 	CONSTRAINT fk_vcw_has_criteria_on_criteria FOREIGN KEY (criteria_id)
 	    REFERENCES application.criteria(id) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -496,9 +496,9 @@ CREATE TABLE application.vcw_has_criteria (
 
 CREATE TABLE application.vcw_has_idea (
 	id serial NOT NULL,
-	selected bool NULL,
 	vcw_id int8 NOT NULL,
 	idea_id int8 NOT NULL,
+	selected bool NULL,
 	CONSTRAINT pk_vcw_has_idea PRIMARY KEY (id),
 	CONSTRAINT fk_vcw_has_idea_on_idea FOREIGN KEY (idea_id)
 	    REFERENCES application.idea(id) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -515,10 +515,10 @@ CREATE TABLE application.vcw_has_idea (
 
 CREATE TABLE application.vcw_has_phase (
 	id serial NOT NULL,
+	vcw_id int8 NOT NULL,
+	phase_id int8 NOT NULL,
 	started bool NOT NULL,
 	locked bool NOT NULL,
-	phase_id int8 NOT NULL,
-	vcw_id int8 NOT NULL,
 	CONSTRAINT pk_vcw_has_phase PRIMARY KEY (id),
 	CONSTRAINT fk_vcw_has_phase_on_phase FOREIGN KEY (phase_id)
 	    REFERENCES application.phase(id) ON DELETE CASCADE ON UPDATE CASCADE,
