@@ -1,5 +1,6 @@
 package pt.com.deimos.vcwapi.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -45,5 +46,6 @@ public class VcwHasCriteriaEntity {
 
     @OneToOne(optional = false)
     @JoinColumn(name="criteria_id", referencedColumnName = "id", insertable=false, updatable=false)
+    @JsonIgnore
     private CriteriaEntity criteria;
 }

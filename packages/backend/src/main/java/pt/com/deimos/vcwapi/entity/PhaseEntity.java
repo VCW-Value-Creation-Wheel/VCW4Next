@@ -1,22 +1,28 @@
 package pt.com.deimos.vcwapi.entity;
 
-
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
 @Setter
 @Table(name = "phase")
-public class PhaseEntity extends BaseNamedEntity{
+public class PhaseEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable=false)
+    private String name;
 
     @Column(nullable=false)
     private Integer order;
 
-    //TODO: os tamanhos é suposto restringir se aqui tb?
     @Column(nullable=false)
     private String code;
 
@@ -26,7 +32,7 @@ public class PhaseEntity extends BaseNamedEntity{
     @Column(name="part_of_sprint",nullable=false)
     private Boolean partOfSprint;
 
-
+    
     @OneToMany(mappedBy = "phase")
-    private List<VcwHasPhaseEntity> vcwHasPhaseEntities;
+    private Set<VcwHasPhaseEntity> vcwPhases  = new HashSet<>();
 }

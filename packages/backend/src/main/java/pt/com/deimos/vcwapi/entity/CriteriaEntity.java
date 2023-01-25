@@ -1,8 +1,11 @@
 package pt.com.deimos.vcwapi.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Type;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -31,6 +34,7 @@ public class CriteriaEntity extends BaseNamedEntity{
     private VcwHasCriteriaEntity vcwHasCriteriaEntity;
 
     @OneToMany(mappedBy = "criteria")
+    @JsonIgnore
     private List<IdeaAndCriteriaEntity> ideasAndCriterias;
 
     @ManyToOne
@@ -43,5 +47,6 @@ public class CriteriaEntity extends BaseNamedEntity{
             joinColumns = @JoinColumn(name = "criteria_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "keyword_id", referencedColumnName = "id")
     )
+    @JsonIgnore
     Set<KeywordEntity> criteriaHasKeywords = new HashSet<>();
 }

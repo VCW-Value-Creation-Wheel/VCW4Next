@@ -1,13 +1,16 @@
 package pt.com.deimos.vcwapi.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -47,17 +50,12 @@ public class VcwEntity extends BaseNamedEntity{
     @Column(name = "closed_at")
     private LocalDateTime closedAt;
 
-
-    @OneToOne(mappedBy = "vcw")
-    private ProjectHasVcwEntity projectHasVcwEntity;
-
     @OneToMany(mappedBy = "vcw")
-    private List<AttachmentEntity> attatchments;
-
-    @OneToMany(mappedBy = "vcw")
+    @JsonIgnore
     private List<DiagnosticEntity> diagnostics;
 
     @OneToMany(mappedBy = "vcw")
+    @JsonIgnore
     private List<KpiEntity> kpis;
 
     @OneToOne
@@ -65,11 +63,34 @@ public class VcwEntity extends BaseNamedEntity{
     private BusinessModelCanvasEntity businessModelCanvas;
 
     @OneToMany(mappedBy = "vcw")
+    @JsonIgnore
     private List<VcwHasCriteriaEntity> vcwHasCriteriaEntities;
 
     @OneToMany(mappedBy = "vcw")
+    @JsonIgnore
     private List<VcwHasIdeaEntity> vcwHasIdeaEntities;
 
     @OneToMany(mappedBy = "vcw")
-    private List<VcwHasPhaseEntity> vcwHasPhaseEntities;
+    @JsonIgnore
+    private Set<VcwHasPhaseEntity> vcwPhases  = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+            schema = "application",
+            name = "attachment",
+            joinColumns = @JoinColumn(
+                    name = "vcw_id",
+                    referencedColumnName = "id",
+                    insertable = false,
+                    updatable = false
+            ),
+            inverseJoinColumns = @JoinColumn(
+                    name = "file_id",
+                    referencedColumnName = "id",
+                    insertable = false,
+                    updatable = false
+            )
+    )
+    @JsonIgnore
+    private Set<FileEntity> attachments = new HashSet<>();
 }

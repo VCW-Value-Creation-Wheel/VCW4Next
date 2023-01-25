@@ -1,5 +1,6 @@
 package pt.com.deimos.vcwapi.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,6 +16,7 @@ import java.util.Set;
 public class ProjectEntity extends BaseNamedEntity{
 
   @Column
+  @JsonIgnore
   private Long thumbnail;
 
   @Column(nullable=false)
@@ -26,12 +28,30 @@ public class ProjectEntity extends BaseNamedEntity{
 
   @OneToOne
   @JoinColumn(name = "thumbnail", referencedColumnName = "id", insertable=false, updatable=false)
-  private FileEntity file;
+  private FileEntity fileThumbnail;
+
+  @ManyToMany
+  @JoinTable(
+          schema = "application",
+          name = "project_has_vcw",
+          joinColumns = @JoinColumn(
+                  name = "project_id",
+                  referencedColumnName = "id",
+                  insertable = false,
+                  updatable = false
+          ),
+          inverseJoinColumns = @JoinColumn(
+                  name = "vcw_id",
+                  referencedColumnName = "id",
+                  insertable = false,
+                  updatable = false
+          )
+  )
+  @JsonIgnore
+  private Set<VcwEntity> vcws = new HashSet<>();
 
   @OneToMany(mappedBy = "project")
-  private List<ProjectHasVcwEntity> projectHasVcwEntities = new java.util.ArrayList<>();
-
-  @OneToMany(mappedBy = "project")
+  @JsonIgnore
   private List<ProjectHasUserRoleEntity> projectHasUserRoleEntities = new java.util.ArrayList<>();
 
   @ManyToMany
@@ -40,5 +60,6 @@ public class ProjectEntity extends BaseNamedEntity{
           joinColumns = @JoinColumn(name = "project_id", referencedColumnName = "id"),
           inverseJoinColumns = @JoinColumn(name = "keyword_id", referencedColumnName = "id")
   )
+  @JsonIgnore
   Set<KeywordEntity> projectHasKeywords = new HashSet<>();
 }

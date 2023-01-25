@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.UUID;
-
 @Entity
 @Getter
 @Setter
@@ -19,7 +17,7 @@ public class ProjectHasUserRoleEntity extends BaseEntity{
     private Long roleId;
 
     @Column(name="user_inum", nullable=false)
-    private UUID userInum;
+    private String userInum;
 
 
     @ManyToOne(optional = false)

@@ -22,9 +22,6 @@ public class IdeaAndCriteriaEntity extends BaseEntity{
     @Column
     private Float value;
 
-    @Column(name="value_source")
-    private Integer valueSource;
-
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     @Column(name = "value_updated_at")
     private LocalDateTime ValueUpdatedAt;

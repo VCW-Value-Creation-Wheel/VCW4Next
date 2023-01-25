@@ -1,5 +1,6 @@
 package pt.com.deimos.vcwapi.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -30,5 +31,6 @@ public class VcwHasIdeaEntity {
 
     @OneToOne(optional=false)
     @JoinColumn(name="idea_id", referencedColumnName = "id", insertable=false, updatable=false)
+    @JsonIgnore
     private IdeaEntity idea;
 }

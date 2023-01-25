@@ -2,18 +2,20 @@ package pt.com.deimos.vcwapi.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @MappedSuperclass
 @Getter
 @Setter
+@ToString
 public abstract class BaseEntity implements Serializable {
 
     @Id
@@ -31,8 +33,8 @@ public abstract class BaseEntity implements Serializable {
     private LocalDateTime updatedAt;
 
     @Column(name = "updated_by", nullable = false)
-    private UUID updatedBy;
+    private String updatedBy;
 
     @Column(name = "created_by", nullable = false)
-    private UUID createdBy;
+    private String createdBy;
 }
