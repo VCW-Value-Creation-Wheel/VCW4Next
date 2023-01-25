@@ -22,3 +22,8 @@ INSERT INTO application."role" (name,description) VALUES
 	 ('VCW Team Member','VCW team member'),
 	 ('Consulted Stakeholder','Consulted stakeholder'),
 	 ('IT analyst','IT analyst');
+
+INSERT INTO application.entry_type (name,created_at,created_by,updated_at,updated_by) VALUES
+	 ('user','2023-01-19 13:55:59.792777',NULL,'2023-01-19 13:55:59.792777',NULL),
+	 ('vcw_project','2023-01-19 13:55:59.816369',NULL,'2023-01-19 13:55:59.816369',NULL),
+	 ('third_party','2023-01-19 13:55:59.823746',NULL,'2023-01-19 13:55:59.823746',NULL);
