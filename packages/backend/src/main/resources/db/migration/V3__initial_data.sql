@@ -1,3 +1,4 @@
+-- add preset data
 INSERT INTO application.phase ("order",code,name,description,part_of_sprint) VALUES
 	 (1,'1a','Diagnostic','description 1',false),
 	 (2,'1b','Challenge','description 2',true),
@@ -28,7 +29,7 @@ INSERT INTO application.entry_type (name,created_at,created_by,updated_at,update
 	 ('vcw_project','2023-01-19 13:55:59.816369',NULL,'2023-01-19 13:55:59.816369',NULL),
 	 ('third_party','2023-01-19 13:55:59.823746',NULL,'2023-01-19 13:55:59.823746',NULL);
 
-
+-- create enums  for preset fields
 CREATE TYPE SWOT_FIELDS AS ENUM ('strength', 'weakness', 'threat', 'opportunity');
 ALTER TABLE application.diagnostic
     ALTER COLUMN swot_field TYPE SWOT_FIELDS USING swot_field::SWOT_FIELDS;
@@ -40,3 +41,8 @@ ALTER TABLE application.vcw
 CREATE TYPE CRITERIA_TYPES AS ENUM ('number', 'yes_or_no');
 ALTER TABLE application.criteria
 	ALTER COLUMN value_type TYPE CRITERIA_TYPES USING value_type::CRITERIA_TYPES;
+
+-- cast enums to correct type to allow database to receive strings from spring
+CREATE CAST (varchar AS SWOT_FIELDS) WITH INOUT AS IMPLICIT;
+CREATE CAST (varchar AS VCW_TYPES) WITH INOUT AS IMPLICIT;
+CREATE CAST (varchar AS CRITERIA_TYPES) WITH INOUT AS IMPLICIT;
