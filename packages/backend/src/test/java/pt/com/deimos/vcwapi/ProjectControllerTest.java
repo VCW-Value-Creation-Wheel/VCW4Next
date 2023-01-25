@@ -56,7 +56,7 @@ public class ProjectControllerTest {
         f.setName("report");
         f.setPath("myfiles/report.pdf");
         f.setFileType("pdf");
-        p1.setFile(f);
+        p1.setFileThumbnail(f);
 
         ProjectEntity p2 = new ProjectEntity();
         p2.setName("Project 2");

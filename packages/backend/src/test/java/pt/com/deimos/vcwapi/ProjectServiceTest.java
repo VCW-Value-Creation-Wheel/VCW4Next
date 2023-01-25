@@ -59,7 +59,7 @@ public class ProjectServiceTest {
         f.setName("report");
         f.setPath("myfiles/report.pdf");
         f.setFileType("pdf");
-        p1.setFile(f);
+        p1.setFileThumbnail(f);
 
         ProjectEntity p2 = new ProjectEntity();
         p2.setName("Project 2");
@@ -119,7 +119,7 @@ public class ProjectServiceTest {
         ProjectEntity savedProject = projectService.save(dummyRecords.get(0));
         assertEquals(savedProject.getName(),"Project 1");
         assertEquals(savedProject.getLang(),"english");
-        FileEntity newFile = savedProject.getFile();
+        FileEntity newFile = savedProject.getFileThumbnail();
         assertEquals(newFile.getName(),"report");
         assertEquals(newFile.getPath(),"myfiles/report.pdf");
 
