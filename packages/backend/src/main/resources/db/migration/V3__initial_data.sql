@@ -30,7 +30,7 @@ INSERT INTO application.entry_type (name,created_at,created_by,updated_at,update
 	 ('third_party','2023-01-19 13:55:59.823746',NULL,'2023-01-19 13:55:59.823746',NULL);
 
 -- create enums  for preset fields
-CREATE TYPE SWOT_FIELDS AS ENUM ('strength', 'weakness', 'threat', 'opportunity');
+CREATE TYPE SWOT_FIELDS AS ENUM ('strength', 'weakness','opportunity', 'threat');
 ALTER TABLE application.diagnostic
     ALTER COLUMN swot_field TYPE SWOT_FIELDS USING swot_field::SWOT_FIELDS;
 

@@ -16,6 +16,7 @@ import java.util.Set;
 public class ProjectEntity extends BaseNamedEntity{
 
   @Column
+  @JsonIgnore
   private Long thumbnail;
 
   @Column(nullable=false)
@@ -27,7 +28,7 @@ public class ProjectEntity extends BaseNamedEntity{
 
   @OneToOne
   @JoinColumn(name = "thumbnail", referencedColumnName = "id", insertable=false, updatable=false)
-  private FileEntity file;
+  private FileEntity fileThumbnail;
 
   @ManyToMany
   @JoinTable(

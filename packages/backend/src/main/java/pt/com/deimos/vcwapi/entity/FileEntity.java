@@ -23,7 +23,7 @@ public class FileEntity extends BaseNamedEntity{
     @JsonIgnore
     Set<VcwEntity> vcws;
 
-    @OneToOne(mappedBy = "file")
+    @OneToOne(mappedBy = "fileThumbnail")
     @JsonIgnore
     private ProjectEntity project;
 }

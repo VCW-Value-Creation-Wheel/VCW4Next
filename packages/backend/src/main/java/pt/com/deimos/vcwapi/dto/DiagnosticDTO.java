@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class DiagnosticDTO {
 
-    public enum SwotField {strength, weakness, threat, opportunity};
+    public enum SwotField {strength, weakness, opportunity, threat};
 
     @NotNull
     private Long vcwId;
