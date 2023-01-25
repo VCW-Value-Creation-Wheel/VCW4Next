@@ -3,8 +3,6 @@ import { FormBuilder, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { challengeConfig, PhaseNavigationService } from '@core';
 import { faFloppyDisk } from '@fortawesome/free-solid-svg-icons';
-import { isValid } from 'date-fns';
-import { CkeditorConfig } from 'shared/components/form/cke-editor/cke-editor.component';
 
 @Component({
   selector: 'app-challenge',
