@@ -5,7 +5,8 @@ const vcwPhasesNavigation: VCWPhase = {
     '1a': {
         id: '1a',
         name: 'Diagnostic',
-        nextPhaseId: '1b'
+        nextPhaseId: '1b',
+        previousPhaseId: '../'
     },
     '1b': {
         id: '1b',
