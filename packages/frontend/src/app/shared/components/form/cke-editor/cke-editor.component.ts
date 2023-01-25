@@ -22,30 +22,30 @@ export interface CkeditorConfig {
 })
 export class CkeEditorComponent implements OnInit, ControlValueAccessor {
   public Editor = Editor;
-  isFocused: boolean = false;
+  isFocused = false;
 
   @Input() config: CkeditorConfig = { language: 'pt' };
 
-  @Input() required: boolean = false;
-  @Input() isDisabled: boolean = false;
-  @Input() id: string = 'ckeID';
+  @Input() required = false;
+  @Input() isDisabled = false;
+  @Input() id = 'ckeID';
   @Input() label?: string;
   @Input() classes?: string;
-  @Input('value') _value: string = '';
+  @Input('value') _value = '';
   @Input() helperText?: string;
-  @Input() helperSize: string = 'text-sm';
-  @Input() helperColor: string = 'text-gray-400';
+  @Input() helperSize = 'text-sm';
+  @Input() helperColor = 'text-gray-400';
 
   onChange: (args: string) => void = () => {};
   onTouched: () => void = () => {};
 
   public onReady(editor: CKEditor5.Editor) {
-    if (this.isDisabled) editor.enableReadOnlyMode(this.id);
+    if (this.isDisabled) { editor.enableReadOnlyMode(this.id); }
   }
 
   public onChanges(event: ChangeEvent) {
-    if (this.isDisabled) event.editor.enableReadOnlyMode(this.id);
-    else event.editor.disableReadOnlyMode(this.id);
+    if (this.isDisabled) { event.editor.enableReadOnlyMode(this.id); }
+    else { event.editor.disableReadOnlyMode(this.id); }
   }
 
   constructor() {}
@@ -62,7 +62,7 @@ export class CkeEditorComponent implements OnInit, ControlValueAccessor {
   }
 
   writeValue(value: string): void {
-    if (value) this._value = value;
+    if (value) { this._value = value; }
   }
 
   registerOnChange(fn: CkeEditorComponent['onChange']): void {
