@@ -24,18 +24,22 @@ public class ProjectController {
     this.projectService = projectService;
   }
 
-  @GetMapping
+  @GetMapping("/admin")
   @PreAuthorize("hasAuthority('ADMIN')")
-  public ResponseEntity<Iterable<ProjectEntity>> index(
-      @AuthenticationPrincipal Jwt principal
+  public ResponseEntity<Iterable<ProjectEntity>> getAll(
+          @AuthenticationPrincipal Jwt principal
   ) {
     return ResponseEntity.ok(this.projectService.findAll());
   }
 
+  @GetMapping
+  public ResponseEntity<Iterable<ProjectEntity>> getByUser(
+          @AuthenticationPrincipal Jwt principal) {
+    return ResponseEntity.ok(this.projectService.findByUser(principal.getSubject()));
+  }
+
   @GetMapping("/{id}")
-  public ResponseEntity<Object> show(
-      @PathVariable(value = "id") Long id
-  ) {
+  public ResponseEntity<Object> getByProjectId(@PathVariable(value = "id") Long id) {
     Optional<ProjectEntity> projectEntityOptional = this.projectService.findById(id);
 
     if(projectEntityOptional.isEmpty()) {

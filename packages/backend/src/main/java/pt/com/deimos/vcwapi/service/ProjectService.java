@@ -25,6 +25,10 @@ public class ProjectService {
     return this.projectRepository.findById(id);
   }
 
+  public Iterable<ProjectEntity> findByUser(String userId) {
+    return this.projectRepository.findByProjectHasUserRoleEntitiesUserInum(userId);
+  }
+
   public ProjectEntity save(ProjectEntity projectEntity) {
     return this.projectRepository.save(projectEntity);
   }
