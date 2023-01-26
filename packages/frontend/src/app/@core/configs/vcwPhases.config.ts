@@ -18,6 +18,12 @@ const vcwPhasesNavigation: VCWPhase = {
         id: '1c',
         name: 'Expected KPIs',
         previousPhaseId: '1b'
+    },
+    '3a': {
+        id: '3a',
+        name: 'Select Ideas',
+        previousPhaseId: '2c',
+        nextPhaseId: '3b'
     }
 };
 

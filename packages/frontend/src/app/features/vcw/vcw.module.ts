@@ -9,6 +9,7 @@ import { VcwPageComponent } from './vcw-page/vcw-page.component';
 import { VCWMethodComponent } from './vcw-page/vcw-method/vcw-method.component';
 import { VcwJourneyComponent } from './vcw-page/vcw-journey/vcw-journey.component';
 import { VcwSprintComponent } from './vcw-page/vcw-sprint/vcw-sprint.component';
+import { SelectIdeasComponent } from './phases/3/select-ideas/select-ideas.component';
 
 
 
@@ -19,7 +20,8 @@ import { VcwSprintComponent } from './vcw-page/vcw-sprint/vcw-sprint.component';
     VCWMethodComponent, 
     VcwJourneyComponent, 
     VcwSprintComponent,
-    ChallengeComponent],
+    ChallengeComponent,
+    SelectIdeasComponent],
   imports: [
     CommonModule,
     ReactiveFormsModule,

@@ -13,3 +13,8 @@ export const swotFieldsConfig = {
 export const challengeConfig = {
     challenge: [null, Validators.required]
 }
+
+export const selectIdeasConfig = {
+    name: [null, Validators.required],
+    lang: [null]
+}
