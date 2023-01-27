@@ -7,3 +7,4 @@ export * from './date-picker/date-picker.component';
 export * from './dynamics';
 export * from './custom-select-input/custom-select-input.component';
 export * from './multiple-select-input/multiple-select-input.component';
+export * from './cke-editor/cke-editor.component'

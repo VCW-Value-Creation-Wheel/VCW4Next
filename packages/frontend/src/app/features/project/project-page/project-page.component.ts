@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MockProjectService, Project } from '@core';
 import { VCW } from '@core/models/vcw';
@@ -33,11 +33,11 @@ export class ProjectPageComponent implements OnInit {
   }
 
   onVcwClick(vcw: VCW) {
-    console.log(vcw);
+    this.router.navigate(['vcw/' + vcw.id], { relativeTo: this.route });
   }
 
   addNewVcw() {
-    this.router.navigate(['/vcw/new-vcw']);
+    this.router.navigate(['new-vcw'], { relativeTo: this.route });
   }
 
 }

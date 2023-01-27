@@ -12,5 +12,8 @@ public class ProjectDTO {
   @NotBlank
   private String description;
 
+  @NotBlank
+  private String lang;
+
 
 }

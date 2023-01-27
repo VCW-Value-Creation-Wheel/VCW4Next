@@ -18,7 +18,10 @@ import {
   NavbarComponent,
   FooterComponent,
   SearchBarComponent,
-  ProjectCardComponent
+  ProjectCardComponent,
+  PhaseNavigationComponent,
+  TabComponent,
+  DialogComponent
 } from './components';
 import { RegexInputDirective } from './directives';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -26,6 +29,8 @@ import { AngularMyDatePickerModule } from 'angular-mydatepicker';
 import { AngularSvgIconModule } from 'angular-svg-icon';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { VcwCardComponent } from './components/vcw-card/vcw-card.component';
+import { CkeEditorComponent } from './components/form/cke-editor/cke-editor.component';
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 
 
 @NgModule({
@@ -48,7 +53,11 @@ import { VcwCardComponent } from './components/vcw-card/vcw-card.component';
     FooterComponent,
     SearchBarComponent,
     ProjectCardComponent,
-    VcwCardComponent
+    PhaseNavigationComponent,
+    TabComponent,
+    DialogComponent,
+    VcwCardComponent,
+    CkeEditorComponent
   ],
   imports: [
     CommonModule,
@@ -57,7 +66,8 @@ import { VcwCardComponent } from './components/vcw-card/vcw-card.component';
     ReactiveFormsModule,
     AngularMyDatePickerModule,
     NgSelectModule,
-    AngularSvgIconModule
+    AngularSvgIconModule,
+    CKEditorModule
   ],
   exports: [
     FontAwesomeModule,
@@ -83,7 +93,11 @@ import { VcwCardComponent } from './components/vcw-card/vcw-card.component';
     IconButtonComponent,
     ButtonComponent,
     ProjectCardComponent,
-    VcwCardComponent
+    PhaseNavigationComponent,
+    TabComponent,
+    DialogComponent,
+    VcwCardComponent,
+    CkeEditorComponent
   ]
 })
 export class SharedModule { }

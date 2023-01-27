@@ -1,23 +1,22 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { NewProjectComponent } from './new-project/new-project.component';
-import { ProjectListComponent } from './project-list/project-list.component';
+import { NewVcwComponent } from 'features/vcw/new-vcw/new-vcw.component';
 import { ProjectPageComponent } from './project-page/project-page.component';
 
 
 const routes: Routes = [
 
     {
-        path: '',
-        component: ProjectListComponent
+        path: ':project_id/vcw',
+        loadChildren: () => import('./../vcw/vcw.module').then(m => m.VcwModule)
     },
     {
-        path: 'new-project',
-        component: NewProjectComponent
+        path: ':project_id/new-vcw',
+        component: NewVcwComponent
     },
     {
-        path: 'project/:project_id',
+        path: ':project_id',
         component: ProjectPageComponent
     }
 ];

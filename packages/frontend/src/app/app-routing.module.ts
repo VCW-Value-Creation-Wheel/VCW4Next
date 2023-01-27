@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from 'features/home/home.component';
+import { NewProjectComponent } from 'features/project/new-project/new-project.component';
 
 const routes: Routes = [
   {
@@ -9,12 +10,12 @@ const routes: Routes = [
     loadChildren: () => import('./features/project/project.module').then(m => m.ProjectModule)
   },
   {
-    path: 'vcw',
-    loadChildren: () => import('./features/vcw/vcw.module').then(m => m.VcwModule)
-  },
-  {
     path: '',
     component: HomeComponent
+  },
+  {
+    path: 'new-project',
+    component: NewProjectComponent
   }
 ];
 

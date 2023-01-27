@@ -1,0 +1,17 @@
+<div class="flex flex-row w-full place-content-center gap-4 h-full">
+    <app-icon-button
+        background="bg-primary-500 rounded"
+        textColor="text-white"
+        [icon]="faChevronLeft"
+        (btnClick)="onLeftButtonClick()"
+    ></app-icon-button>
+    <div class="bg-primary-500 rounded w-1/2 md:w-1/4 text-center">
+        <p class="text-white font-bold h-full leading-8">{{ title }}</p>
+    </div>
+    <app-icon-button 
+        background="bg-primary-500 rounded"
+        textColor="text-white"
+        [icon]="faChevronRight"
+        (btnClick)="onRightButtonClick()"
+    ></app-icon-button>
+</div>

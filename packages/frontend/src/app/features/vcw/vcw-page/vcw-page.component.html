@@ -1,0 +1,18 @@
+<div class="flex flex-col md:flex-row py-4 justify-start">
+    <div class="py-2">
+        <app-button  
+            [label]="'To Project'"
+            [leftIcon]="faArrowLeft"
+            (click)="onBack()"
+        ></app-button>
+    </div>
+</div>
+<div class="text-center pb-2">
+    <h1 class="text-2xl font-bold text-primary">VCW Title</h1>
+</div>
+
+<div class="flex flex-col items-center py-8">
+    <app-vcw-method *ngIf="vcwType === 'method'" (vcwAreaClicked)="onClick($event)"></app-vcw-method>
+    <app-vcw-sprint *ngIf="vcwType === 'sprint'" (vcwAreaClicked)="onClick($event)"></app-vcw-sprint>
+    <app-vcw-journey *ngIf="vcwType === 'journey'" (vcwAreaClicked)="onClick($event)"></app-vcw-journey>
+</div>

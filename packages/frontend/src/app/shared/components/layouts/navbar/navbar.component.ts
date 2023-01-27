@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import {
   faSignInAlt,
   faSignOutAlt,
@@ -8,13 +8,14 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { environment } from '../../../../../environments/environment';
 import * as pkg from '../../../../../../package.json';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss']
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent implements OnInit, OnDestroy {
 
   @Input() isAuthenticated: boolean | null = false;
   @Output() login = new EventEmitter();
@@ -31,8 +32,16 @@ export class NavbarComponent implements OnInit {
   env = environment;
   pkg = pkg;
 
+  componentDestroyed$ = new Subject<boolean>();
+
 
   ngOnInit(): void {
+    
+  }
+
+  ngOnDestroy(): void {
+    this.componentDestroyed$.next(true);
+    this.componentDestroyed$.complete();
   }
 
   onLogin(): void {

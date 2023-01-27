@@ -1255,6 +1255,25 @@
     "@babel/helper-validator-identifier" "^7.19.1"
     to-fast-properties "^2.0.0"
 
+"@ckeditor/ckeditor5-angular@^4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-angular/-/ckeditor5-angular-4.0.0.tgz#707066ac83cced15e318dd6b92c59501a1b96a05"
+  integrity sha512-1WUnXHFC0e8yG8BzDUYteaukyEvQjeCfkY8ddFvw5YrN7QIEK2STCwv9MF+rx0/g5FcFTAgmdR3PQoKufKDMbA==
+  dependencies:
+    "@ckeditor/ckeditor5-watchdog" "^34.0.0"
+    tslib "^2.0.0"
+
+"@ckeditor/ckeditor5-custom@link:src/app/@core/vendor/ckeditor":
+  version "0.0.0"
+  uid ""
+
+"@ckeditor/ckeditor5-watchdog@^34.0.0":
+  version "34.2.0"
+  resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-watchdog/-/ckeditor5-watchdog-34.2.0.tgz#f156c752ea8fc3107a1b94badc03376a22fdafb8"
+  integrity sha512-Sz4nOdhy8C7n4ffi/OkkRQQFfTZUKZjSzeDis1+ooxxgj/4/+X8pAZszaz+LtG7+lqUyc7YfTtitMUqXivHhfA==
+  dependencies:
+    lodash-es "^4.17.15"
+
 "@colors/colors@1.5.0":
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/@colors/colors/-/colors-1.5.0.tgz#bb504579c1cae923e6576a4f5da43d25f97bdbd9"
@@ -4625,6 +4644,11 @@ locate-path@^5.0.0:
   integrity sha512-t7hw9pI+WvuwNJXwk5zVHpyhIqzg2qTlklJOf0mVxGSbe3Fp2VieZcduNYjaLDoy6p9uGpQEGWG87WpMKlNq8g==
   dependencies:
     p-locate "^4.1.0"
+
+lodash-es@^4.17.15:
+  version "4.17.21"
+  resolved "https://registry.yarnpkg.com/lodash-es/-/lodash-es-4.17.21.tgz#43e626c46e6591b7750beb2b50117390c609e3ee"
+  integrity sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==
 
 lodash.debounce@^4.0.8:
   version "4.0.8"
