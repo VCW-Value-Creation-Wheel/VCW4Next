@@ -19,6 +19,7 @@ import java.util.Set;
 public class VcwEntity extends BaseNamedEntity{
 
     @Column(name = "business_model_canvas_id")
+    @JsonIgnore
     private Long businessModelCanvasId;
 
     @Column(nullable=false)
