@@ -11,8 +11,6 @@ import pt.com.deimos.vcwapi.repository.ProjectRepository;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Transactional
@@ -43,11 +41,16 @@ public class ProjectService {
 
   public ProjectEntity save(ProjectDTO projectInfo, String userId) {
 
+    ProjectEntity newProject = new ProjectEntity(userId, userId,
+            projectInfo.getName(), projectInfo.getDescription(),
+            projectInfo.getLang());
+
     // connect users and roles
-    List<ProjectHasUserRoleEntity> projectUsers = new ArrayList<>();
     for (ProjectHasUserRoleDTO user : projectInfo.getProjectUsers()) {
-      projectUsers.add(new ProjectHasUserRoleEntity(
-              userId, userId, user.getRoleId(), user.getUserId()));
+      ProjectHasUserRoleEntity userRole = new ProjectHasUserRoleEntity(
+              userId, userId, user.getRoleId(), user.getUserId());
+      userRole.setProject(newProject);
+      newProject.addProjectHasUserRole(userRole);
     }
 
     // set image thumbnail
@@ -59,11 +62,9 @@ public class ProjectService {
       String imgExt = imgName.split("\\.", 2)[1];
       newFile = new FileEntity(
               userId, userId, imgName, imgPath, imgExt);
+
+      newProject.setFileThumbnail(newFile);
     }
-      ProjectEntity newProject = new ProjectEntity(userId, userId,
-              projectInfo.getName(), projectInfo.getDescription(),
-              projectInfo.getLang(), newFile, projectUsers
-      );
 
     return this.projectRepository.save(newProject);
 

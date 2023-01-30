@@ -16,8 +16,8 @@ public class ProjectHasUserRoleEntity extends BaseEntity{
         this.userInum = userInum;
     }
 
-    @Column(name = "project_id", nullable = false)
-    private Long projectId;
+    //NOTE: removed project_id id because it was causing conflicts
+    //while saving project objects with hibernate
 
     @Column(name = "role_id", nullable = false)
     private Long roleId;
@@ -27,7 +27,7 @@ public class ProjectHasUserRoleEntity extends BaseEntity{
 
 
     @ManyToOne(optional = false)
-    @JoinColumn(name="project_id", referencedColumnName = "id", insertable=false, updatable=false)
+    @JoinColumn(name="project_id", referencedColumnName = "id")
     private ProjectEntity project;
 
 
