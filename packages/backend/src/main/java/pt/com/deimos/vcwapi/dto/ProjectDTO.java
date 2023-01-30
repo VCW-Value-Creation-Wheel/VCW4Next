@@ -1,6 +1,7 @@
 package pt.com.deimos.vcwapi.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 
 import java.util.List;
@@ -17,9 +18,9 @@ public class ProjectDTO {
   @NotBlank
   private String lang;
 
-  private String attachmentPath;
+  private String thumbnailPath;
 
-  @NotBlank
+  @NotEmpty
   private List<ProjectHasUserRoleDTO> projectUsers;
 
 }

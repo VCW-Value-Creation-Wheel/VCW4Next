@@ -50,15 +50,15 @@ public class ProjectService {
               userId, userId, user.getRoleId(), user.getUserId()));
     }
 
-    // set image attachment
-    String imgPath = projectInfo.getAttachmentPath();
+    // set image thumbnail
+    String imgPath = projectInfo.getThumbnailPath();
     FileEntity newFile = null;
     if (imgPath != "") {
       Path p = Paths.get(imgPath);
       String imgName = p.getFileName().toString();
-      String imgExt = imgName.split(".", 2)[1];
+      String imgExt = imgName.split("\\.", 2)[1];
       newFile = new FileEntity(
-              userId, userId, imgPath, imgName, imgExt);
+              userId, userId, imgName, imgPath, imgExt);
     }
       ProjectEntity newProject = new ProjectEntity(userId, userId,
               projectInfo.getName(), projectInfo.getDescription(),
