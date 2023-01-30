@@ -47,7 +47,6 @@ public class ProjectEntity extends BaseNamedEntity{
                   updatable = false
           )
   )
-  @JsonIgnore
   private Set<VcwEntity> vcws = new HashSet<>();
 
   @OneToMany(mappedBy = "project")
