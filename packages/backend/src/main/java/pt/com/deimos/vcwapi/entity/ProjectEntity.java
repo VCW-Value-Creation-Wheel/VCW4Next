@@ -3,6 +3,7 @@ package pt.com.deimos.vcwapi.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.HashSet;
@@ -12,6 +13,7 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 @Table(name = "project")
 public class ProjectEntity extends BaseNamedEntity{
 
@@ -26,11 +28,11 @@ public class ProjectEntity extends BaseNamedEntity{
   private String lang;
 
 
-  @OneToOne
+  @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "thumbnail", referencedColumnName = "id", insertable=false, updatable=false)
   private FileEntity fileThumbnail;
 
-  @ManyToMany
+  @ManyToMany(cascade = CascadeType.ALL)
   @JoinTable(
           schema = "application",
           name = "project_has_vcw",
@@ -61,4 +63,14 @@ public class ProjectEntity extends BaseNamedEntity{
   )
   @JsonIgnore
   Set<KeywordEntity> projectHasKeywords = new HashSet<>();
+
+  public ProjectEntity(String updatedBy, String createdBy, String name,
+                       String description, String lang, FileEntity fileThumbnail,
+                       List<ProjectHasUserRoleEntity> projectHasUserRoleEntities) {
+    super(updatedBy, createdBy, name);
+    this.description = description;
+    this.lang = lang;
+    this.fileThumbnail = fileThumbnail;
+    this.projectHasUserRoleEntities = projectHasUserRoleEntities;
+  }
 }

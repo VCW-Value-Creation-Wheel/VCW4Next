@@ -10,6 +10,12 @@ import lombok.Setter;
 @Table(name = "project_has_user_role")
 public class ProjectHasUserRoleEntity extends BaseEntity{
 
+    public ProjectHasUserRoleEntity(String updatedBy, String createdBy, Long roleId, String userInum) {
+        super(updatedBy, createdBy);
+        this.roleId = roleId;
+        this.userInum = userInum;
+    }
+
     @Column(name = "project_id", nullable = false)
     private Long projectId;
 
