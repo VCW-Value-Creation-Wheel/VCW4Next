@@ -18,7 +18,7 @@ export class ListItemComponent implements OnInit {
   @Input() icon: IconDefinition = faUser;
   @Input() isEditable = true;
   @Input() isSelectable = false;
-
+  @Input() value: string;
   @Output() editClick = new EventEmitter();
   @Output() deleteClick = new EventEmitter();
   @Output() selectChange = new EventEmitter<boolean>();
