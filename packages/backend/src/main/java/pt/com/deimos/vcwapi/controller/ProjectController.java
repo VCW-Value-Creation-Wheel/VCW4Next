@@ -53,12 +53,11 @@ public class ProjectController {
     return ResponseEntity.ok(projectEntityOptional.get());
   }
 
-  @PostMapping
+  @PostMapping("/new")
   public ResponseEntity<Object> store(
           @RequestBody @Valid ProjectDTO projectDTO,
           @AuthenticationPrincipal Jwt principal
   ) {
-
     return ResponseEntity.status(HttpStatus.CREATED).body(
             this.projectService.save(projectDTO, principal.getSubject())
     );

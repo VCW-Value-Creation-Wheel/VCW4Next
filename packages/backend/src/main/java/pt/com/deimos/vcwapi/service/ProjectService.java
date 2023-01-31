@@ -56,12 +56,11 @@ public class ProjectService {
     // set image thumbnail
     String imgPath = projectInfo.getThumbnailPath();
     FileEntity newFile = null;
-    if (imgPath != "") {
+    if (imgPath != null && imgPath != "") {
       Path p = Paths.get(imgPath);
-      String imgName = p.getFileName().toString();
-      String imgExt = imgName.split("\\.", 2)[1];
+      String[] imgExt = p.getFileName().toString().split("\\.", 2);
       newFile = new FileEntity(
-              userId, userId, imgName, imgPath, imgExt);
+              userId, userId, imgExt[0], imgPath, imgExt[1]);
 
       newProject.setFileThumbnail(newFile);
     }
