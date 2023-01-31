@@ -23,7 +23,7 @@ export class ListItemComponent implements OnInit {
   @Output() deleteClick = new EventEmitter();
   @Output() selectChange = new EventEmitter<boolean>();
 
-  selected = false;
+  isSelected = false;
 
   constructor() {}
 
@@ -41,14 +41,14 @@ export class ListItemComponent implements OnInit {
 
   toggleSelect() {
     if (this.isSelectable) {
-      this.selected = !this.selected;
-      this.selectChange.emit(this.selected);
+      this.isSelected = !this.isSelected;
+      this.selectChange.emit(this.isSelected);
     }
   }
 
   get bgColor() {
     if (this.isSelectable) {
-      if (this.selected) {
+      if (this.isSelected) {
         return this.selectedBgColor;
       } else {
         return this.mainBgColor;
