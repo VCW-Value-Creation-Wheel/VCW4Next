@@ -22,12 +22,18 @@ public class VcwController {
     this.vcwService = vcwService;
   }
 
-  @GetMapping
+  @GetMapping("/admin")
   @PreAuthorize("hasAuthority('ADMIN')")
   public ResponseEntity<Iterable<VcwEntity>> index(
       @AuthenticationPrincipal Jwt principal
   ) {
     return ResponseEntity.ok(this.vcwService.findAll());
+  }
+
+  @GetMapping
+  public ResponseEntity<Iterable<VcwEntity>> getByUser(
+          @AuthenticationPrincipal Jwt principal) {
+    return ResponseEntity.ok(this.vcwService.findByUser(principal.getSubject()));
   }
   
   @PostMapping
