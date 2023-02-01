@@ -23,8 +23,8 @@ export class DefineDiagonosticsComponent implements OnInit {
   swotTabs = [
     'Strengths',
     'Weaknesses',
-    'Threats',
-    'Opportunities'
+    'Opportunities',
+    'Threats'
   ];
 
   swotFields: SwotField[] = [];

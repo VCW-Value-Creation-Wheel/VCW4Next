@@ -31,6 +31,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { VcwCardComponent } from './components/vcw-card/vcw-card.component';
 import { CkeEditorComponent } from './components/form/cke-editor/cke-editor.component';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+import { ListItemComponent } from './components/list-item/list-item.component';
 
 
 @NgModule({
@@ -57,7 +58,8 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
     TabComponent,
     DialogComponent,
     VcwCardComponent,
-    CkeEditorComponent
+    CkeEditorComponent,
+    ListItemComponent
   ],
   imports: [
     CommonModule,
@@ -97,7 +99,8 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
     TabComponent,
     DialogComponent,
     VcwCardComponent,
-    CkeEditorComponent
+    CkeEditorComponent,
+    ListItemComponent
   ]
 })
 export class SharedModule { }
