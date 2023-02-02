@@ -2,9 +2,15 @@ package pt.com.deimos.vcwapi.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pt.com.deimos.vcwapi.dto.ProjectDTO;
+import pt.com.deimos.vcwapi.dto.ProjectHasUserRoleDTO;
+import pt.com.deimos.vcwapi.entity.FileEntity;
 import pt.com.deimos.vcwapi.entity.ProjectEntity;
+import pt.com.deimos.vcwapi.entity.ProjectHasUserRoleEntity;
 import pt.com.deimos.vcwapi.repository.ProjectRepository;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Optional;
 
 @Transactional
@@ -33,12 +39,40 @@ public class ProjectService {
     return this.projectRepository.findByIdAndProjectHasUserRoleEntitiesUserInum(id,userId);
   }
 
-  public ProjectEntity save(ProjectEntity projectEntity) {
-    return this.projectRepository.save(projectEntity);
+  public ProjectEntity save(ProjectDTO projectInfo, String userId) {
+
+    ProjectEntity newProject = new ProjectEntity(userId, userId,
+            projectInfo.getName(), projectInfo.getDescription(),
+            projectInfo.getLang());
+
+    // connect users and roles
+    for (ProjectHasUserRoleDTO user : projectInfo.getProjectUsers()) {
+      ProjectHasUserRoleEntity userRole = new ProjectHasUserRoleEntity(
+              userId, userId, user.getRoleId(), user.getUserId());
+      userRole.setProject(newProject);
+      newProject.addProjectHasUserRole(userRole);
+    }
+
+    // set image thumbnail
+    String imgPath = projectInfo.getThumbnailPath();
+    FileEntity newFile = null;
+    if (imgPath != null && imgPath != "") {
+      Path p = Paths.get(imgPath);
+      String[] imgExt = p.getFileName().toString().split("\\.", 2);
+      newFile = new FileEntity(
+              userId, userId, imgExt[0], imgPath, imgExt[1]);
+
+      newProject.setFileThumbnail(newFile);
+    }
+
+    return this.projectRepository.save(newProject);
+
   }
 
   public void delete(ProjectEntity projectEntity) {
     this.projectRepository.delete(projectEntity);
   }
+
+
 
 }
