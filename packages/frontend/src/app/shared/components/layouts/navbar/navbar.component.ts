@@ -30,13 +30,13 @@ import { KeycloakService } from 'keycloak-angular';
 })
 export class NavbarComponent implements OnInit, OnDestroy {
 
-  // @Input() isAuthenticated: boolean | null = false;
+  @Input() isAuthenticated: boolean | null = false;
+  @Input() userProfile: any;
   @Output() login = new EventEmitter();
   @Output() logout = new EventEmitter();
 
-  constructor(private keycloak: KeycloakService) { }
+  constructor() { }
 
-  isAuthenticated = false;
   isShowingProfileCard = false;
   faUser = faUser;
   signOutIcon = faSignOutAlt;
@@ -48,16 +48,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   componentDestroyed$ = new Subject<boolean>();
 
-  private userProfile: any;
-
-
   ngOnInit(): void {
-    this.keycloak.isLoggedIn().then(value => {
-      this.isAuthenticated = value;
-      if (this.isAuthenticated) {
-        this.keycloak.getKeycloakInstance().loadUserInfo().then(profile => this.userProfile = profile);
-      }
-    });
+
   }
 
   ngOnDestroy(): void {
@@ -71,7 +63,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   onLogout(): void {
     this.isShowingProfileCard = false;
-    this.keycloak.logout();
     this.logout.emit();
   }
 
