@@ -44,7 +44,7 @@ public class VcwEntity extends BaseNamedEntity{
     private String executiveSummary;
 
     @Column
-    private Boolean closed;
+    private Boolean closed  = false;
 
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     @Column(name = "closed_at")
