@@ -48,7 +48,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   componentDestroyed$ = new Subject<boolean>();
 
-  userProfile: any;
+  private userProfile: any;
 
 
   ngOnInit(): void {
