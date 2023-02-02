@@ -1,6 +1,6 @@
 export const environment = {
     production: false,
-    staging: false,
+    staging: true,
     identity: {
       url: 'https://vcw-identity.develop.s4eo.com',
       realm: 'vcw',
