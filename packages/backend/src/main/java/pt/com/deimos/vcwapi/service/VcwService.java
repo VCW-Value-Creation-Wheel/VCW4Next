@@ -5,6 +5,8 @@ import org.springframework.transaction.annotation.Transactional;
 import pt.com.deimos.vcwapi.entity.VcwEntity;
 import pt.com.deimos.vcwapi.repository.VcwRepository;
 
+import java.util.Optional;
+
 @Transactional
 @Service
 public class VcwService {
@@ -21,6 +23,10 @@ public class VcwService {
 
   public Iterable<VcwEntity> findByUser(String userId) {
     return this.vcwRepository.findByProjectsProjectHasUserRoleEntitiesUserInum(userId);
+  }
+
+  public Optional<VcwEntity> findByIdAndUser(Long vcwId, String userId) {
+    return this.vcwRepository.findByIdAndProjectsProjectHasUserRoleEntitiesUserInum(vcwId, userId);
   }
 
   public VcwEntity save(VcwEntity vcwEntity) {

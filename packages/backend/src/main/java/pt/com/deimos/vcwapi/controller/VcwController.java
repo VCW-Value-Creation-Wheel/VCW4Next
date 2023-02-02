@@ -12,6 +12,8 @@ import pt.com.deimos.vcwapi.dto.VcwDTO;
 import pt.com.deimos.vcwapi.entity.VcwEntity;
 import pt.com.deimos.vcwapi.service.VcwService;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/v1/vcws")
 public class VcwController {
@@ -35,7 +37,24 @@ public class VcwController {
           @AuthenticationPrincipal Jwt principal) {
     return ResponseEntity.ok(this.vcwService.findByUser(principal.getSubject()));
   }
-  
+
+  @GetMapping("/{id}")
+  public ResponseEntity<Object> getByIdAndUser(
+          @PathVariable(value = "id") Long id,
+          @AuthenticationPrincipal Jwt principal) {
+
+    Optional<VcwEntity> vcwEntityOptional =
+            this.vcwService.findByIdAndUser(id, principal.getSubject());
+
+    if(vcwEntityOptional.isEmpty()) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Vcw not found");
+    }
+
+    return ResponseEntity.ok(vcwEntityOptional.get());
+  }
+
+
+
   @PostMapping
   public ResponseEntity<Object> store(
           @RequestBody @Valid VcwDTO vcwDTO
