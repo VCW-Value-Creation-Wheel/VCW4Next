@@ -38,12 +38,12 @@ public class VcwController {
   
   @PostMapping
   public ResponseEntity<Object> store(
-          @RequestBody @Valid VcwDTO vcwDTO
+          @RequestBody @Valid VcwDTO vcwDTO,
+          @AuthenticationPrincipal Jwt principal
   ) {
-    VcwEntity vcwEntity = new VcwEntity();
-    BeanUtils.copyProperties(vcwDTO, vcwEntity);
 
-    return ResponseEntity.status(HttpStatus.CREATED).body(this.vcwService.save(vcwEntity));
+    return ResponseEntity.status(HttpStatus.CREATED).body(
+            this.vcwService.save(vcwDTO, principal.getSubject()));
   }
   
 }

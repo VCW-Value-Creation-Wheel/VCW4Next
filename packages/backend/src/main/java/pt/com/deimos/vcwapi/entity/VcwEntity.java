@@ -46,7 +46,6 @@ public class VcwEntity extends BaseNamedEntity{
     @Column
     private Boolean closed;
 
-    @CreationTimestamp
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     @Column(name = "closed_at")
     private LocalDateTime closedAt;
