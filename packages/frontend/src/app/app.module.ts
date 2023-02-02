@@ -3,6 +3,8 @@ import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { AngularSvgIconModule } from 'angular-svg-icon';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 
 import { AppComponent } from './app.component';
 import { SharedModule } from 'shared';
@@ -37,6 +39,7 @@ import { NewProjectComponent } from 'features/project/new-project/new-project.co
     ReactiveFormsModule,
     FormsModule,
     KeycloakAngularModule,
+    BrowserAnimationsModule
   ],
   providers: [
     {
