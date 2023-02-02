@@ -19,6 +19,7 @@ import java.util.Set;
 public class VcwEntity extends BaseNamedEntity{
 
     @Column(name = "business_model_canvas_id")
+    @JsonIgnore
     private Long businessModelCanvasId;
 
     @Column(nullable=false)
@@ -91,6 +92,11 @@ public class VcwEntity extends BaseNamedEntity{
                     updatable = false
             )
     )
-    @JsonIgnore
     private Set<FileEntity> attachments = new HashSet<>();
+
+
+    @ManyToMany(mappedBy = "vcws")
+    @JsonIgnore
+    Set<ProjectEntity> projects = new HashSet<>();
+
 }

@@ -19,6 +19,10 @@ public class VcwService {
     return this.vcwRepository.findAll();
   }
 
+  public Iterable<VcwEntity> findByUser(String userId) {
+    return this.vcwRepository.findByProjectsProjectHasUserRoleEntitiesUserInum(userId);
+  }
+
   public VcwEntity save(VcwEntity vcwEntity) {
     return this.vcwRepository.save(vcwEntity);
   }

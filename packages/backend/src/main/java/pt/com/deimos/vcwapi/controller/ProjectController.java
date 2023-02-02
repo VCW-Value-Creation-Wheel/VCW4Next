@@ -39,8 +39,12 @@ public class ProjectController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<Object> getByProjectId(@PathVariable(value = "id") Long id) {
-    Optional<ProjectEntity> projectEntityOptional = this.projectService.findById(id);
+  public ResponseEntity<Object> getByIdAndUser(
+          @PathVariable(value = "id") Long id,
+          @AuthenticationPrincipal Jwt principal) {
+
+    Optional<ProjectEntity> projectEntityOptional =
+            this.projectService.findByIdAndUser(id, principal.getSubject());
 
     if(projectEntityOptional.isEmpty()) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Project not found");
@@ -49,31 +53,31 @@ public class ProjectController {
     return ResponseEntity.ok(projectEntityOptional.get());
   }
 
-  @PostMapping
+  @PostMapping("/new")
   public ResponseEntity<Object> store(
-      @RequestBody @Valid ProjectDTO projectDTO
+          @RequestBody @Valid ProjectDTO projectDTO,
+          @AuthenticationPrincipal Jwt principal
   ) {
-    ProjectEntity projectEntity = new ProjectEntity();
-    BeanUtils.copyProperties(projectDTO, projectEntity);
-
-    return ResponseEntity.status(HttpStatus.CREATED).body(this.projectService.save(projectEntity));
+    return ResponseEntity.status(HttpStatus.CREATED).body(
+            this.projectService.save(projectDTO, principal.getSubject())
+    );
   }
 
-  @PutMapping("/{id}")
-  public ResponseEntity<Object> update(
-      @PathVariable Long id,
-      @RequestBody @Valid ProjectDTO projectDTO
-  ) {
-    Optional<ProjectEntity> projectEntityOptional = this.projectService.findById(id);
-
-    if(projectEntityOptional.isEmpty()) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Project not found");
-    }
-
-    BeanUtils.copyProperties(projectDTO, projectEntityOptional.get());
-
-    return ResponseEntity.status(HttpStatus.OK).body(this.projectService.save(projectEntityOptional.get()));
-  }
+//  @PutMapping("/{id}")
+//  public ResponseEntity<Object> update(
+//      @PathVariable Long id,
+//      @RequestBody @Valid ProjectDTO projectDTO
+//  ) {
+//    Optional<ProjectEntity> projectEntityOptional = this.projectService.findById(id);
+//
+//    if(projectEntityOptional.isEmpty()) {
+//      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Project not found");
+//    }
+//
+//    BeanUtils.copyProperties(projectDTO, projectEntityOptional.get());
+//
+//    return ResponseEntity.status(HttpStatus.OK).body(this.projectService.update(projectEntityOptional.get()));
+//  }
 
   @DeleteMapping("/{id}")
   public ResponseEntity<Object> delete(
