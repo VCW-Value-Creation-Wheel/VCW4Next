@@ -16,5 +16,7 @@ export const challengeConfig = {
 
 export const selectIdeasConfig = {
     name: [null, Validators.required],
-    lang: [null]
+    lang: [null],
+    isSelected: [null, Validators.required]
+
 }
