@@ -9,7 +9,7 @@
         ></app-button>
     </div>
 </div>
-<div [formGroup] = dataForm >
+<div [formGroup] = dataForm class="flex justify-center">
     <div class="rounded-md sm:w-1/2 lg:w-1/3 bg-gray-100 m-2 p-2">
         <div *ngFor="let idea of ideas" class="flex flex-col my-2 mx-4 p-2">
             <app-list-item
