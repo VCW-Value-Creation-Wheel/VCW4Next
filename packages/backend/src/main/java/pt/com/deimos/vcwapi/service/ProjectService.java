@@ -25,6 +25,14 @@ public class ProjectService {
     return this.projectRepository.findById(id);
   }
 
+  public Iterable<ProjectEntity> findByUser(String userId) {
+    return this.projectRepository.findByProjectHasUserRoleEntitiesUserInum(userId);
+  }
+
+  public Optional<ProjectEntity> findByIdAndUser(Long id, String userId) {
+    return this.projectRepository.findByIdAndProjectHasUserRoleEntitiesUserInum(id,userId);
+  }
+
   public ProjectEntity save(ProjectEntity projectEntity) {
     return this.projectRepository.save(projectEntity);
   }
