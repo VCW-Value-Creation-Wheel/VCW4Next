@@ -19,6 +19,7 @@ import java.util.Set;
 public class VcwEntity extends BaseNamedEntity{
 
     @Column(name = "business_model_canvas_id")
+    @JsonIgnore
     private Long businessModelCanvasId;
 
     @Column(nullable=false)
@@ -60,6 +61,7 @@ public class VcwEntity extends BaseNamedEntity{
 
     @OneToOne
     @JoinColumn(name="business_model_canvas_id", referencedColumnName = "id", insertable=false, updatable=false)
+    @JsonIgnore
     private BusinessModelCanvasEntity businessModelCanvas;
 
     @OneToMany(mappedBy = "vcw")
@@ -91,6 +93,5 @@ public class VcwEntity extends BaseNamedEntity{
                     updatable = false
             )
     )
-    @JsonIgnore
     private Set<FileEntity> attachments = new HashSet<>();
 }

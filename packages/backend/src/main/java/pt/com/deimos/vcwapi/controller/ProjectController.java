@@ -39,8 +39,12 @@ public class ProjectController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<Object> getByProjectId(@PathVariable(value = "id") Long id) {
-    Optional<ProjectEntity> projectEntityOptional = this.projectService.findById(id);
+  public ResponseEntity<Object> getByIdAndUser(
+          @PathVariable(value = "id") Long id,
+          @AuthenticationPrincipal Jwt principal) {
+
+    Optional<ProjectEntity> projectEntityOptional =
+            this.projectService.findByIdAndUser(id, principal.getSubject());
 
     if(projectEntityOptional.isEmpty()) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Project not found");
