@@ -1,7 +1,6 @@
 package pt.com.deimos.vcwapi.controller;
 
 import jakarta.validation.Valid;
-import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -53,7 +52,7 @@ public class ProjectController {
     return ResponseEntity.ok(projectEntityOptional.get());
   }
 
-  @PostMapping("/new")
+  @PostMapping
   public ResponseEntity<Object> store(
           @RequestBody @Valid ProjectDTO projectDTO,
           @AuthenticationPrincipal Jwt principal
