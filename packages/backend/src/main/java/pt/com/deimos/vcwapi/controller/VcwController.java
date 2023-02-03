@@ -8,9 +8,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
+import pt.com.deimos.vcwapi.dto.DiagnosticDTO;
 import pt.com.deimos.vcwapi.dto.VcwDTO;
 import pt.com.deimos.vcwapi.entity.VcwEntity;
 import pt.com.deimos.vcwapi.service.VcwService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/v1/vcws")
@@ -39,5 +42,14 @@ public class VcwController {
 
     return ResponseEntity.status(HttpStatus.CREATED).body(this.vcwService.save(vcwEntity));
   }
-  
+
+  @PostMapping("/{id}/diagnostics")
+  public ResponseEntity<Object> saveDiagnostics(
+          @PathVariable(value = "id") Long id,
+          @RequestBody List<@Valid DiagnosticDTO> diagnosticDTOs
+  ) {
+
+    return ResponseEntity.status(HttpStatus.CREATED).body(
+            this.vcwService.saveDiagnostics(id, diagnosticDTOs));
+  }
 }
