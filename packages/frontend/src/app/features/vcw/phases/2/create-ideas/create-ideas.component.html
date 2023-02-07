@@ -8,3 +8,10 @@
         ></app-button>
     </div>
 </div>
+<app-create-item-dialog
+    [formGroup]="dataform"
+    [checkboxes]="['Number', 'Yes/No']"
+    [checkboxFormControl]="'entryType'"
+    [checkboxCategoryLabel]="'Type'"
+    [title]="'New Idea'"
+></app-create-item-dialog>
