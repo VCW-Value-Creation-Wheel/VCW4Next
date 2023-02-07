@@ -1,13 +1,14 @@
 package pt.com.deimos.vcwapi.controller;
 
 import jakarta.validation.Valid;
-import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import pt.com.deimos.vcwapi.dto.ProjectDTO;
 import pt.com.deimos.vcwapi.entity.ProjectEntity;
 import pt.com.deimos.vcwapi.service.ProjectService;
@@ -55,11 +56,14 @@ public class ProjectController {
 
   @PostMapping
   public ResponseEntity<Object> store(
-          @RequestBody @Valid ProjectDTO projectDTO,
+          @RequestPart @Valid ProjectDTO projectDTO,
+          @RequestPart MultipartFile thumbnail,
           @AuthenticationPrincipal Jwt principal
   ) {
+
+    project.setThumbnail(thumbnail);
     return ResponseEntity.status(HttpStatus.CREATED).body(
-            this.projectService.save(projectDTO, principal.getSubject())
+            this.projectService.save(projectDTO, thumbnail, principal.getSubject())
     );
   }
 
