@@ -93,19 +93,9 @@ public class ProjectService {
             return null;
         }
 
-        //get download link from minio
-        try{
-            imageUrl = this.minioService.getDownloadUrl("assets/img/"+imageName);
-        } catch (MinioException e) {
-            System.err.println("Failed to retrieve download image url from Minio "+e);
-            //TODO: should we abort saving the project?
-            // or save without thumbnail and let user add it later?
-            return null;
-        }
-
         // set file thumbnail
         FileEntity newThumbnail = new FileEntity(creatorId, creatorId, imageName,
-                                        imageUrl, "img/"+fileExtension);
+                "assets/img/"+imageName, "img/"+fileExtension);
         return newThumbnail;
     }
 

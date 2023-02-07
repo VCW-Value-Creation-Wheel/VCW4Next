@@ -56,14 +56,13 @@ public class ProjectController {
 
   @PostMapping
   public ResponseEntity<Object> store(
-          @RequestPart @Valid ProjectDTO projectDTO,
+          @RequestPart @Valid ProjectDTO project,
           @RequestPart MultipartFile thumbnail,
           @AuthenticationPrincipal Jwt principal
   ) {
 
-    project.setThumbnail(thumbnail);
     return ResponseEntity.status(HttpStatus.CREATED).body(
-            this.projectService.save(projectDTO, thumbnail, principal.getSubject())
+            this.projectService.save(project, thumbnail, principal.getSubject())
     );
   }
 
