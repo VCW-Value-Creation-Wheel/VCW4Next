@@ -17,11 +17,21 @@
     </div>
     <div [formGroup]="formGroup" class="gap-4 flex flex-col">
         <ng-container *ngFor="let field of formFields">
-            <app-input
-                [label]="formatFieldLabel(field) | titlecase"
-                [formControlName]="field"
-                [placeholder]="formatFieldLabel(field) | titlecase"
-            ></app-input>
+            <ng-container *ngIf="field === 'file'; else normalInput">
+                <app-input-file
+                    [label]="formatFieldLabel(field) | titlecase"
+                    [formControlName]="field"
+                    ngDefaultControl
+                ></app-input-file>
+            </ng-container>
+            <ng-template #normalInput>
+                <app-input
+                    [label]="formatFieldLabel(field) | titlecase"
+                    [formControlName]="field"
+                    [placeholder]="formatFieldLabel(field) | titlecase"
+                ></app-input>
+            </ng-template>
+            
         </ng-container>
         <div class="flex flex-col gap-2" *ngIf="checkboxes.length > 0">
             <label class="text-gray-700">{{ checkboxCategoryLabel }}</label>

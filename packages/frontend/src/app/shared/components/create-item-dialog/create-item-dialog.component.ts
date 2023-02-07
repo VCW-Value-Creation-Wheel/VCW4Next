@@ -11,7 +11,6 @@ export class CreateItemDialogComponent implements OnInit {
 
   @Input() title?: string;
   @Input() formGroup: UntypedFormGroup;
-  @Input() tabs: string[] = [];
   @Input() checkboxes: string[] = [];
   @Input() checkboxFormControl?: string;
   @Input() checkboxCategoryLabel?: string;
@@ -19,17 +18,27 @@ export class CreateItemDialogComponent implements OnInit {
   @Output() cancel = new EventEmitter();
   @Output() confirm = new EventEmitter();
 
+  tabs = ['Manual', 'From File'];
+  tabControlsToExclude = {
+    0: ['file'],
+    1: ['name']
+  };
   activeTab = 0;
   checkedBox: number;
-  formFields;
+  activeFormFields: string[];
 
   constructor(private formBuilder: FormBuilder) {}
 
   ngOnInit(): void {
-    this.formFields = Object.keys(this.formGroup.controls);
+    this.changeActiveTab(0);
     if (this.checkboxFormControl && this.checkboxFormControl !== '') {
       this.formGroup.addControl(this.checkboxFormControl, this.formBuilder.control(null));
     }
+  }
+
+  get formFields(): string[] {
+    const controls: string[] = Object.keys(this.formGroup.controls);
+    return controls.filter(control => !this.isFormfieldDisabled(control) && control !== this.checkboxFormControl);
   }
 
   formatFieldLabel(fieldName: string): string {
@@ -42,6 +51,19 @@ export class CreateItemDialogComponent implements OnInit {
 
   changeActiveTab(index: number) {
     this.activeTab = index;
+    const excludeControls: string[] = this.tabControlsToExclude[this.activeTab];
+    const enableControls: string[] = this.tabControlsToExclude[this.activeTab === 0 ? 1 : 0];
+    if (enableControls) {
+      enableControls.forEach((control) => {
+        this.formGroup.controls[control].enable({onlySelf: true});
+      });
+    }
+    if (excludeControls) {
+      excludeControls.forEach((control) => {
+        this.formGroup.controls[control].disable({onlySelf: true});
+        this.formGroup.controls[control].setValue(null);
+      });
+    }
   }
 
   onCheckboxCheck(event: Option, index: number) {
@@ -53,11 +75,16 @@ export class CreateItemDialogComponent implements OnInit {
     return index === this.checkedBox;
   }
 
+  isFormfieldDisabled(control: string): boolean {
+   return this.formGroup.controls[control].disabled;
+  }
+
   onCancel() {
     this.cancel.emit();
   }
 
   onConfirm() {
+    console.log(this.formGroup)
     this.confirm.emit();
   }
 
