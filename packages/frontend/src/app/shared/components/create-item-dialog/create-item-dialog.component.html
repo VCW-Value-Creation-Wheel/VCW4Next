@@ -1,0 +1,40 @@
+<app-dialog
+    [confirmText]="'OK'"
+    [cancelText]="'Cancel'"
+    [title]="title"
+    (cancel)="onCancel()"
+    (confirm)="onConfirm()"
+>   
+    <div  class="flex flex-row gap-1 text-center text-sm w-full justify-between py-4">
+        <ng-container *ngFor="let tab of tabs; index as idx">
+            <app-tab [label]="tab"
+            class="w-1/2"
+            [isActive]="isTabActive(idx)"
+            (clicked)="changeActiveTab(idx)"></app-tab>
+        </ng-container>
+        
+
+    </div>
+    <div [formGroup]="formGroup" class="gap-4 flex flex-col">
+        <ng-container *ngFor="let field of formFields">
+            <app-input
+                [label]="formatFieldLabel(field) | titlecase"
+                [formControlName]="field"
+                [placeholder]="formatFieldLabel(field) | titlecase"
+            ></app-input>
+        </ng-container>
+        <div class="flex flex-col gap-2" *ngIf="checkboxes.length > 0">
+            <label class="text-gray-700">{{ checkboxCategoryLabel }}</label>
+            <div class="flex flex-row gap-4">
+                <ng-container *ngFor="let checkbox of checkboxes; index as idx">
+                    <app-checkbox-input
+                        [label]="checkbox"
+                        [value]="checkbox"
+                        (propagate)="onCheckboxCheck($event, idx)"
+                        [isChecked]="isBoxChecked(idx)"
+                    ></app-checkbox-input>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+</app-dialog>
