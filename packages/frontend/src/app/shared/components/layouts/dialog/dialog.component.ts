@@ -20,6 +20,7 @@ export class DialogComponent implements OnInit {
 
   @Input() classes?: string;
   @Input() noConfirmButton = false;
+  @Input() noCancelButton = false;
   @Input() title?: string;
   @Input() titleSize?: string;
   @Input() confirmText?: string;
