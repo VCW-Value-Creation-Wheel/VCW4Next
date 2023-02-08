@@ -31,7 +31,7 @@
             (click)="isShowingProfileCard = !isShowingProfileCard"
           >
             <h5 class="m-0 text-gray-50 font-bold text-1xl">
-              {{ getInitials(user.displayName) }}
+              {{ getInitials(user.preferred_username) }}
             </h5>
           </button>
       </div>
@@ -45,6 +45,7 @@
   </div>
 </nav>
 
+
 <div
   [@slideInOut]
   *ngIf="isShowingProfileCard"
@@ -56,7 +57,7 @@
       z-50
       flex flex-shrink-0
       absolute
-      m-4
+      my-2 mx-4
       right-0
       bg-white
       rounded
@@ -79,13 +80,13 @@
       "
     >
       <h1 class="m-0 text-gray-50 text-3xl font-bold">
-        {{ getInitials(user.displayName) }}
+        {{ getInitials(user.preferred_username) }}
       </h1>
     </div>
     <div class="flex flex-1 justify-between items-start">
       <div class="m-2">
         <div class="text-container">
-          <h5>{{ user.displayName }}</h5>
+          <h5>{{ user.name }}</h5>
           <span>{{ user.email }}</span>
         </div>
       </div>
