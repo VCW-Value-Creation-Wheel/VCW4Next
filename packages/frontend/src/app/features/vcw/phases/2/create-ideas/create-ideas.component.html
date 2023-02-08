@@ -9,19 +9,19 @@
     </div>
 </div>
 <div class="flex flex-col gap-4 mx-96">
-    <ng-container *ngIf="ideasList.length === 0">
+    <ng-container *ngIf="dataFormArray.controls.length === 0">
         <div class="hidden md:block py-2 px-2">
             <span class="italic">Start adding ideas!</span>
         </div>
     </ng-container>
-    <ng-container *ngFor="let idea of ideasList">
+    <ng-container *ngFor="let idea of dataFormArray.controls; index as idx">
         <app-list-item
             [isEditable]="true"
             [isSelectable]="false"
-            [value]="idea.name"
-            (editClick)="editIdea(idea)"
-            (deleteClick)="deleteIdea(idea)"
-            [icon]="getIcon(idea)"
+            [value]="idea.controls.name?.value"
+            (editClick)="editIdea(idx)"
+            (deleteClick)="deleteIdea(idx, idea.controls.name)"
+            [icon]="getIcon(idea.controls.sourceName)"
         ></app-list-item>
     </ng-container>
     <app-button

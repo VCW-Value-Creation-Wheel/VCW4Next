@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, UntypedFormArray, UntypedFormGroup } from '@angular/forms';
+import { AbstractControl, FormBuilder, UntypedFormArray, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { createIdeasConfig, Idea, PhaseNavigationService } from '@core';
 import { faFloppyDisk, faUser, IconDefinition, faGlobe } from '@fortawesome/free-solid-svg-icons';
@@ -22,8 +22,6 @@ export class CreateIdeasComponent implements OnInit {
   itemDialogOpen = false;
   confirmDialogOpen = false;
 
-  ideasList: Idea[] = [];
-
   actionConfirmText: string;
   actionConfirmTitle: string;
   actionConfirm$: Subject<boolean> = new Subject();
@@ -34,7 +32,7 @@ export class CreateIdeasComponent implements OnInit {
               private formBuilder: FormBuilder) {}
 
   ngOnInit(): void {
-    this.dataFormArray = new UntypedFormArray([]);
+    this.dataFormArray = this.formBuilder.array([]);
     this.phaseNavService.nextPhase$.subscribe((nextPhase) => {
       this.router.navigate(['../' + nextPhase], {relativeTo: this.activatedRoute});
     });
@@ -47,71 +45,54 @@ export class CreateIdeasComponent implements OnInit {
     this.actionConfirm$.pipe(take(1)).subscribe((userConfirm) => {
       this.confirmDialogOpen = false;
       if (userConfirm) {
-        console.log('save')
+        console.log('save');
       } else {
-        console.log('not save')
+        console.log('not save');
       }
-    })
+    });
   }
 
   onAddIdea() {
     this.dataform = this.formBuilder.group(createIdeasConfig);
-    this.dataFormArray.push(this.dataform);
     this.itemDialogOpen = true;
   }
 
   onCancel() {
     this.itemDialogOpen = false;
-    if (!this.editIdeaMode) {
-      this.dataFormArray.removeAt(this.dataFormArray.length - 1);
-    } else {
-      this.editIdeaMode = false;
-    }
+    this.editIdeaMode = false;
   }
 
   onConfirm() {
     // add idea to list. If from file, perform a request first then add idea if the response is successful.
     this.itemDialogOpen = false;
     if (!this.editIdeaMode) {
-      this.ideasList.push({
-        name: this.dataform.controls.name.value,
-        sourceName: this.dataform.controls.sourceName.value,
-        sourceURL: this.dataform.controls.sourceUrl.value,
-        entryType: this.dataform.controls.entryType.value
-      });
+      this.dataFormArray.push(this.dataform);
     } else {
       this.editIdeaMode = false;
-      this.ideasList[this.editIdeaIndex].name = this.dataform.controls.name.value;
-      this.ideasList[this.editIdeaIndex].sourceName = this.dataform.controls.sourceName.value;
-      this.ideasList[this.editIdeaIndex].sourceURL = this.dataform.controls.sourceUrl.value;
-      this.ideasList[this.editIdeaIndex].entryType = this.dataform.controls.entryType.value;
     }
   }
 
-  editIdea(idea: Idea) {
+  editIdea(index: number) {
     this.editIdeaMode = true;
     this.itemDialogOpen = true;
-    this.editIdeaIndex = this.ideasList.indexOf(idea);
-    this.dataform = (this.dataFormArray.at(this.editIdeaIndex) as UntypedFormGroup);
+    this.dataform = (this.dataFormArray.at(index) as UntypedFormGroup);
   }
 
-  deleteIdea(idea: Idea) {
+  deleteIdea(index: number, ideaNameControl: AbstractControl) {
     // call confirm dialog then delete idea
     this.actionConfirmTitle = 'Delete Idea';
-    this.actionConfirmText = `Are you sure you want to delete the idea "${idea.name}"?`;
+    this.actionConfirmText = `Are you sure you want to delete the idea "${ideaNameControl.value}"?`;
     this.confirmDialogOpen = true;
     this.actionConfirm$.pipe(take(1)).subscribe(userConfirm => {
       this.confirmDialogOpen = false;
       if (userConfirm) {
-        const index = this.ideasList.indexOf(idea);
-        this.ideasList.splice(index, 1);
         this.dataFormArray.removeAt(index);
       }
     });
   }
 
-  getIcon(idea: Idea): IconDefinition {
-    if (idea.sourceName) {
+  getIcon(ideaSourceControl: AbstractControl): IconDefinition {
+    if (ideaSourceControl?.value) {
       return faGlobe;
     } else {
       return faUser;
