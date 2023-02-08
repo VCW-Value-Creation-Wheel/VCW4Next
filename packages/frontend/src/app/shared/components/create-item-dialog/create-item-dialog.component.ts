@@ -14,6 +14,7 @@ export class CreateItemDialogComponent implements OnInit {
   @Input() checkboxes: string[] = [];
   @Input() checkboxFormControl?: string;
   @Input() checkboxCategoryLabel?: string;
+  @Input() isEditing = false;
 
   @Output() cancel = new EventEmitter();
   @Output() confirm = new EventEmitter();
@@ -25,14 +26,20 @@ export class CreateItemDialogComponent implements OnInit {
   };
   activeTab = 0;
   checkedBox: number;
-  activeFormFields: string[];
+  originalFormValues: {[key: string]: any}[] = [];
 
   constructor(private formBuilder: FormBuilder) {}
 
   ngOnInit(): void {
     this.changeActiveTab(0);
-    if (this.checkboxFormControl && this.checkboxFormControl !== '') {
-      this.formGroup.addControl(this.checkboxFormControl, this.formBuilder.control(null));
+    if (this.isEditing) {
+      const controls: string[] = Object.keys(this.formGroup.controls);
+      controls.forEach((control) => {
+        if (control === this.checkboxFormControl) {
+          this.checkedBox = this.checkboxes.indexOf(this.formGroup.controls[control].value);
+        }
+        this.originalFormValues.push({control: this.formGroup.controls[control].value});
+      });
     }
   }
 
@@ -80,12 +87,30 @@ export class CreateItemDialogComponent implements OnInit {
   }
 
   onCancel() {
+    if (!this.isEditing) {
+      this.clearFormFields();
+    } else {
+      this.restoreFormFields();
+    }
     this.cancel.emit();
   }
 
   onConfirm() {
-    console.log(this.formGroup)
     this.confirm.emit();
+  }
+
+  clearFormFields() {
+    const controls: string[] = Object.keys(this.formGroup.controls);
+    controls.forEach(control => {
+      this.formGroup.controls[control].setValue(null);
+    });
+  }
+
+  restoreFormFields() {
+    const controls: string[] = Object.keys(this.formGroup.controls);
+    controls.forEach(control => {
+      this.formGroup.controls[control].setValue(this.originalFormValues[control]);
+    });
   }
 
 }
