@@ -9,6 +9,11 @@
     </div>
 </div>
 <div class="flex flex-col gap-4 mx-96">
+    <ng-container *ngIf="ideasList.length === 0">
+        <div class="hidden md:block py-2 px-2">
+            <span class="italic">Start adding ideas!</span>
+        </div>
+    </ng-container>
     <ng-container *ngFor="let idea of ideasList">
         <app-list-item
             [isEditable]="true"
@@ -37,9 +42,9 @@
 ></app-create-item-dialog>
 <app-dialog
     *ngIf="confirmDialogOpen"
-    [title]="'Delete Idea'"
+    [title]="actionConfirmTitle"
     [confirmText]="'Yes'"
     [cancelText]="'No'"
-    (cancel)="onDeleteCancel()"
-    (confirm)="onDeleteConfirm()"
+    (cancel)="onActionCancel()"
+    (confirm)="onActionConfirm()"
 >{{ actionConfirmText }}</app-dialog>

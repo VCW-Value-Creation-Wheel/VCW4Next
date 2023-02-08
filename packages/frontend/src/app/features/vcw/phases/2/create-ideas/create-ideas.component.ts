@@ -25,7 +25,8 @@ export class CreateIdeasComponent implements OnInit {
   ideasList: Idea[] = [];
 
   actionConfirmText: string;
-  actionDelete$: Subject<boolean> = new Subject();
+  actionConfirmTitle: string;
+  actionConfirm$: Subject<boolean> = new Subject();
 
   constructor(private phaseNavService: PhaseNavigationService,
               private router: Router,
@@ -40,7 +41,17 @@ export class CreateIdeasComponent implements OnInit {
   }
 
   onSave() {
-
+    this.actionConfirmTitle = 'Save changes';
+    this.actionConfirmText = 'Save the changes to this phase?';
+    this.confirmDialogOpen = true;
+    this.actionConfirm$.pipe(take(1)).subscribe((userConfirm) => {
+      this.confirmDialogOpen = false;
+      if (userConfirm) {
+        console.log('save')
+      } else {
+        console.log('not save')
+      }
+    })
   }
 
   onAddIdea() {
@@ -86,9 +97,10 @@ export class CreateIdeasComponent implements OnInit {
 
   deleteIdea(idea: Idea) {
     // call confirm dialog then delete idea
+    this.actionConfirmTitle = 'Delete Idea';
     this.actionConfirmText = `Are you sure you want to delete the idea "${idea.name}"?`;
     this.confirmDialogOpen = true;
-    this.actionDelete$.pipe(take(1)).subscribe(userConfirm => {
+    this.actionConfirm$.pipe(take(1)).subscribe(userConfirm => {
       this.confirmDialogOpen = false;
       if (userConfirm) {
         const index = this.ideasList.indexOf(idea);
@@ -106,11 +118,11 @@ export class CreateIdeasComponent implements OnInit {
     }
   }
 
-  onDeleteCancel() {
-    this.actionDelete$.next(false);
+  onActionCancel() {
+    this.actionConfirm$.next(false);
   }
 
-  onDeleteConfirm() {
-    this.actionDelete$.next(true);
+  onActionConfirm() {
+    this.actionConfirm$.next(true);
   }
 }
