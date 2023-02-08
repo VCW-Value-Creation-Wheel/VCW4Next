@@ -106,11 +106,11 @@ export class CreateIdeasComponent implements OnInit {
     }
   }
 
-  onActionCancel() {
+  onDeleteCancel() {
     this.actionDelete$.next(false);
   }
 
-  onActionConfirm() {
+  onDeleteConfirm() {
     this.actionDelete$.next(true);
   }
 }
