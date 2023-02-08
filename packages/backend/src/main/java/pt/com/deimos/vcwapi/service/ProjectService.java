@@ -111,18 +111,37 @@ public class ProjectService {
         this.projectRepository.delete(projectEntity);
     }
 
-    private FileEntity processThumbnail(String creatorId, MultipartFile thumbnail){
+    private FileEntity processThumbnail(String creatorId, MultipartFile thumbnail) throws IllegalArgumentException {
 
-        String imageName, fileExtension = "";
+        String imageName, fileExtension="";
+        InputStream imageContent = null;
+        int imageSize = 0;
+        try {
+            imageName = thumbnail.getOriginalFilename();
+            imageContent = thumbnail.getInputStream();
+            fileExtension = imageName.toString().split("\\.", 2)[1];
+            imageSize = imageContent.available();
+        } catch (Exception e){
+            throw new IllegalArgumentException("Failed to process thumbnail: invalid filename");
+        }
+
+        //check if thumbnail is valid
+        if (this.minioService.validateImageSize(imageSize) == false)
+            throw new IllegalArgumentException("Failed to process thumbnail: " +
+                    "image size is too big. Size should be under "+
+                    this.minioService.MAX_IMAGE_SIZE_MB+" MB");
+
+        if (this.minioService.validateImageFileExt(fileExtension) == false)
+            throw new IllegalArgumentException("Failed to process thumbnail: " +
+                    "invalid file extension. File should be MB");
+
 
         // save thumbnail into minio
         try {
-            imageName = thumbnail.getOriginalFilename();
-            InputStream imageContent = thumbnail.getInputStream();
+
             this.minioService.uploadFile("assets/img/"+imageName, imageContent);
-            fileExtension = imageName.toString().split("\\.", 2)[1];
         } catch (Exception e) {
-            System.err.println("Failed to save thumbnail image to Minio "+e);
+            System.err.println("Failed to save thumbnail image in Minio due to error: "+e);
             //TODO: should we abort saving the project?
             // or save without thumbnail and let user add it later?
             return null;
