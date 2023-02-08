@@ -19,4 +19,5 @@ export const createIdeasConfig = {
     file: [null, Validators.required],
     sourceName: [null],
     sourceUrl: [null],
+    entryType: [null, Validators.required]
 };
