@@ -5,7 +5,7 @@
     (cancel)="onCancel()"
     (confirm)="onConfirm()"
 >   
-    <div  class="flex flex-row gap-1 text-center text-sm w-full justify-between py-4">
+    <div  class="flex flex-row gap-1 text-center text-sm w-full justify-between py-4" *ngIf="!isEditing">
         <ng-container *ngFor="let tab of tabs; index as idx">
             <app-tab [label]="tab"
             class="w-1/2"

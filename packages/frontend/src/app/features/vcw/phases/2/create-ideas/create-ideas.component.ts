@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormBuilder, UntypedFormArray, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { createIdeasConfig, Idea, PhaseNavigationService } from '@core';
-import { faFloppyDisk } from '@fortawesome/free-solid-svg-icons';
+import { faFloppyDisk, faUser, IconDefinition, faGlobe } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-create-ideas',
@@ -12,10 +12,12 @@ import { faFloppyDisk } from '@fortawesome/free-solid-svg-icons';
 export class CreateIdeasComponent implements OnInit {
 
   faFloppyDisk = faFloppyDisk;
-  
+
+  dataFormArray: UntypedFormArray;
   dataform: UntypedFormGroup;
   editIdeaMode = false;
-  itemDialogOpen = true;
+  editIdeaIndex: number;
+  itemDialogOpen = false;
 
   ideasList: Idea[] = [];
 
@@ -25,7 +27,7 @@ export class CreateIdeasComponent implements OnInit {
               private formBuilder: FormBuilder) {}
 
   ngOnInit(): void {
-    this.dataform = this.formBuilder.group(createIdeasConfig);
+    this.dataFormArray = new UntypedFormArray([]);
     this.phaseNavService.nextPhase$.subscribe((nextPhase) => {
       this.router.navigate(['../' + nextPhase], {relativeTo: this.activatedRoute});
     });
@@ -35,10 +37,19 @@ export class CreateIdeasComponent implements OnInit {
 
   }
 
+  onAddIdea() {
+    this.dataform = this.formBuilder.group(createIdeasConfig);
+    this.dataFormArray.push(this.dataform);
+    this.itemDialogOpen = true;
+  }
+
   onCancel() {
     this.itemDialogOpen = false;
-    this.editIdeaMode = false;
-    console.log(this.dataform)
+    if (!this.editIdeaMode) {
+      this.dataFormArray.removeAt(this.dataFormArray.length - 1);
+    } else {
+      this.editIdeaMode = false;
+    }
   }
 
   onConfirm() {
@@ -53,23 +64,29 @@ export class CreateIdeasComponent implements OnInit {
       });
     } else {
       this.editIdeaMode = false;
+      this.ideasList[this.editIdeaIndex].name = this.dataform.controls.name.value;
+      this.ideasList[this.editIdeaIndex].sourceName = this.dataform.controls.sourceName.value;
+      this.ideasList[this.editIdeaIndex].sourceURL = this.dataform.controls.sourceUrl.value;
+      this.ideasList[this.editIdeaIndex].entryType = this.dataform.controls.entryType.value;
     }
   }
 
   editIdea(idea: Idea) {
     this.editIdeaMode = true;
     this.itemDialogOpen = true;
+    this.editIdeaIndex = this.ideasList.indexOf(idea);
+    this.dataform = (this.dataFormArray.at(this.editIdeaIndex) as UntypedFormGroup);
   }
 
   deleteIdea(idea: Idea) {
-
+    // call confirm dialog then delete idea
   }
 
-  /* TO DO LIST
-    1 - create form: Formarray, where each entry is an idea
-    2 - idea form attributes: name, entryTypeId, sourceName, sourceDescription (DONE)
-    3 - create dialog for new idea, 2 tabs for manual & from file (IN PROGRESS)
-      3.1 - IMPLMENT VALUE ACCESSOR FOR FILE INPUT
-    4 - display all ideas as a list, with options to edit and delete.
-  */
+  getIcon(idea: Idea): IconDefinition {
+    if (idea.sourceName) {
+      return faGlobe;
+    } else {
+      return faUser;
+    }
+  }
 }
