@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { createIdeasConfig, PhaseNavigationService } from '@core';
+import { createIdeasConfig, Idea, PhaseNavigationService } from '@core';
 import { faFloppyDisk } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
@@ -14,21 +14,54 @@ export class CreateIdeasComponent implements OnInit {
   faFloppyDisk = faFloppyDisk;
   
   dataform: UntypedFormGroup;
+  editIdeaMode = false;
+  itemDialogOpen = true;
+
+  ideasList: Idea[] = [];
 
   constructor(private phaseNavService: PhaseNavigationService,
               private router: Router,
               private activatedRoute: ActivatedRoute,
-              private formBuilder: FormBuilder) {
-                this.dataform = formBuilder.group(createIdeasConfig);
-              }
+              private formBuilder: FormBuilder) {}
 
   ngOnInit(): void {
+    this.dataform = this.formBuilder.group(createIdeasConfig);
     this.phaseNavService.nextPhase$.subscribe((nextPhase) => {
       this.router.navigate(['../' + nextPhase], {relativeTo: this.activatedRoute});
     });
   }
 
   onSave() {
+
+  }
+
+  onCancel() {
+    this.itemDialogOpen = false;
+    this.editIdeaMode = false;
+    console.log(this.dataform)
+  }
+
+  onConfirm() {
+    // add idea to list. If from file, perform a request first then add idea if the response is successful.
+    this.itemDialogOpen = false;
+    if (!this.editIdeaMode) {
+      this.ideasList.push({
+        name: this.dataform.controls.name.value,
+        sourceName: this.dataform.controls.sourceName.value,
+        sourceURL: this.dataform.controls.sourceUrl.value,
+        entryType: this.dataform.controls.entryType.value
+      });
+    } else {
+      this.editIdeaMode = false;
+    }
+  }
+
+  editIdea(idea: Idea) {
+    this.editIdeaMode = true;
+    this.itemDialogOpen = true;
+  }
+
+  deleteIdea(idea: Idea) {
 
   }
 

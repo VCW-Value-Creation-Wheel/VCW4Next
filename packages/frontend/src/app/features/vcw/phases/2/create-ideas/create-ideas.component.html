@@ -8,10 +8,22 @@
         ></app-button>
     </div>
 </div>
+<div *ngFor="let idea of ideasList">
+    <app-list-item
+        [isEditable]="true"
+        [isSelectable]="false"
+        [value]="idea.name"
+        (editClick)="editIdea(idea)"
+        (deleteClick)="deleteIdea(idea)"></app-list-item>
+</div>
 <app-create-item-dialog
+    *ngIf="itemDialogOpen"
+    [isEditing]="editIdeaMode"
     [formGroup]="dataform"
     [checkboxes]="['Number', 'Yes/No']"
     [checkboxFormControl]="'entryType'"
     [checkboxCategoryLabel]="'Type'"
     [title]="'New Idea'"
+    (cancel)="onCancel()"
+    (confirm)="onConfirm()"
 ></app-create-item-dialog>
