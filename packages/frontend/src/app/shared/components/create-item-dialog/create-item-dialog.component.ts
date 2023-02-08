@@ -26,7 +26,7 @@ export class CreateItemDialogComponent implements OnInit {
   };
   activeTab = 0;
   checkedBox: number;
-  originalFormValues: {[key: string]: any}[] = [];
+  originalFormValues: {[key: string]: any} = {};
 
   constructor(private formBuilder: FormBuilder) {}
 
@@ -38,7 +38,7 @@ export class CreateItemDialogComponent implements OnInit {
         if (control === this.checkboxFormControl) {
           this.checkedBox = this.checkboxes.indexOf(this.formGroup.controls[control].value);
         }
-        this.originalFormValues.push({control: this.formGroup.controls[control].value});
+        this.originalFormValues[control] = this.formGroup.controls[control].value;
       });
     }
   }
