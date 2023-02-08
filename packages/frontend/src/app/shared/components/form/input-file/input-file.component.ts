@@ -1,5 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 
+interface Accept {
+  [key: string]: string;
+}
+
 @Component({
   selector: 'app-input-file',
   templateUrl: './input-file.component.html',
@@ -7,6 +11,7 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class InputFileComponent implements OnInit {
   @Input() label = 'Input label';
+  @Input() accepts: Accept[] = [{ '*': '*' }];
 
   constructor() {}
 
