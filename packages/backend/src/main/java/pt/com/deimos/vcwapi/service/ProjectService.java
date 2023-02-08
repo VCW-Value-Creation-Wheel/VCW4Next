@@ -62,7 +62,7 @@ public class ProjectService {
         }
 
         // add thumbnail to project if it exists
-        if (!thumbnail.isEmpty()){
+        if (thumbnail != null){
             FileEntity newThumbnail = processThumbnail(userId, thumbnail);
             Integer test = newThumbnail.getPath().length();
             newProject.setFileThumbnail(newThumbnail);

@@ -57,7 +57,7 @@ public class ProjectController {
   @PostMapping
   public ResponseEntity<Object> store(
           @RequestPart @Valid ProjectDTO project,
-          @RequestPart MultipartFile thumbnail,
+          @RequestPart(required = false) MultipartFile thumbnail,
           @AuthenticationPrincipal Jwt principal
   ) {
 
