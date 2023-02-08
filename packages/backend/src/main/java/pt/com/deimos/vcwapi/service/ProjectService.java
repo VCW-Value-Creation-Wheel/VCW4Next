@@ -1,6 +1,7 @@
 package pt.com.deimos.vcwapi.service;
 
 import io.minio.errors.MinioException;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +17,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Transactional
@@ -32,19 +35,52 @@ public class ProjectService {
     }
 
     public Iterable<ProjectEntity> findAll() {
-        return this.projectRepository.findAll();
+
+        Iterable<ProjectEntity> resultList = this.projectRepository.findAll();
+
+        //generate image urls
+        List<ProjectEntity> returnList = new ArrayList<>();
+        for  (ProjectEntity project : resultList) {
+            returnList.add(generateThumbnailUrl(project));
+        }
+
+        return returnList;
     }
 
     public Optional<ProjectEntity> findById(Long id) {
-        return this.projectRepository.findById(id);
+
+        Optional<ProjectEntity> result = this.projectRepository.findById(id);
+
+        //generate image url
+        if (!result.isEmpty())
+            result = Optional.of(generateThumbnailUrl(result.get()));
+
+        return result;
     }
 
     public Iterable<ProjectEntity> findByUser(String userId) {
-        return this.projectRepository.findByProjectHasUserRoleEntitiesUserInum(userId);
+
+        Iterable<ProjectEntity> resultList =
+                this.projectRepository.findByProjectHasUserRoleEntitiesUserInum(userId);
+
+        //generate image urls
+        List<ProjectEntity> returnList = new ArrayList<>();
+        for  (ProjectEntity project : resultList) {
+            returnList.add(generateThumbnailUrl(project));
+        }
+
+        return returnList;
     }
 
     public Optional<ProjectEntity> findByIdAndUser(Long id, String userId) {
-        return this.projectRepository.findByIdAndProjectHasUserRoleEntitiesUserInum(id, userId);
+
+        Optional<ProjectEntity> result = this.projectRepository.findByIdAndProjectHasUserRoleEntitiesUserInum(id, userId);
+
+        //generate image url
+        if (!result.isEmpty())
+            result = Optional.of(generateThumbnailUrl(result.get()));
+
+        return result;
     }
 
     public ProjectEntity save(ProjectDTO projectInfo, MultipartFile thumbnail, String userId) {
@@ -64,7 +100,6 @@ public class ProjectService {
         // add thumbnail to project if it exists
         if (thumbnail != null){
             FileEntity newThumbnail = processThumbnail(userId, thumbnail);
-            Integer test = newThumbnail.getPath().length();
             newProject.setFileThumbnail(newThumbnail);
         }
 
@@ -78,7 +113,7 @@ public class ProjectService {
 
     private FileEntity processThumbnail(String creatorId, MultipartFile thumbnail){
 
-        String imageName, imageUrl, fileExtension = "";
+        String imageName, fileExtension = "";
 
         // save thumbnail into minio
         try {
@@ -99,5 +134,25 @@ public class ProjectService {
         return newThumbnail;
     }
 
+    private ProjectEntity generateThumbnailUrl(ProjectEntity project){
 
+        ProjectEntity tempProject = new ProjectEntity();
+        BeanUtils.copyProperties(project, tempProject);
+        FileEntity thumbnail = project.getFileThumbnail();
+
+        try {
+            if (thumbnail != null) {
+                FileEntity tempThumbnail = new FileEntity();
+                BeanUtils.copyProperties(thumbnail, tempThumbnail);
+                String url = this.minioService.getDownloadUrl(tempThumbnail.getPath());
+                tempThumbnail.setPath(url);
+                tempProject.setFileThumbnail(tempThumbnail);
+            }
+        } catch (Exception e) {
+            System.err.println("Failed to get download url from Minio "+e);
+            //TODO: should we abort getting the project?
+            // or get without thumbnail url?
+        }
+        return tempProject;
+    }
 }

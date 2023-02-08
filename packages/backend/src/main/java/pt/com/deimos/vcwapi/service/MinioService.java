@@ -60,10 +60,6 @@ public class MinioService {
     public String getDownloadUrl(String filePath) throws MinioException {
 
         try {
-            // FIXME: according to minio docs and github,
-            //the urls expire after 7 days max
-            //this is an issue
-
             return minioClient.getPresignedObjectUrl(
                     GetPresignedObjectUrlArgs.builder()
                             .method(Method.GET)
