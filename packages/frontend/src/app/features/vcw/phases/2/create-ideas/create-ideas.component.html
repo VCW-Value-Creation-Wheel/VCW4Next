@@ -35,3 +35,11 @@
     (cancel)="onCancel()"
     (confirm)="onConfirm()"
 ></app-create-item-dialog>
+<app-dialog
+    *ngIf="confirmDialogOpen"
+    [title]="'Delete Idea'"
+    [confirmText]="'Yes'"
+    [cancelText]="'No'"
+    (cancel)="onActionCancel()"
+    (confirm)="onActionConfirm()"
+>{{ actionConfirmText }}</app-dialog>

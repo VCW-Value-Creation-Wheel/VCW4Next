@@ -3,6 +3,8 @@ import { FormBuilder, UntypedFormArray, UntypedFormGroup } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router';
 import { createIdeasConfig, Idea, PhaseNavigationService } from '@core';
 import { faFloppyDisk, faUser, IconDefinition, faGlobe } from '@fortawesome/free-solid-svg-icons';
+import { Subject } from 'rxjs';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-create-ideas',
@@ -18,8 +20,12 @@ export class CreateIdeasComponent implements OnInit {
   editIdeaMode = false;
   editIdeaIndex: number;
   itemDialogOpen = false;
+  confirmDialogOpen = false;
 
   ideasList: Idea[] = [];
+
+  actionConfirmText: string;
+  actionDelete$: Subject<boolean> = new Subject();
 
   constructor(private phaseNavService: PhaseNavigationService,
               private router: Router,
@@ -80,6 +86,16 @@ export class CreateIdeasComponent implements OnInit {
 
   deleteIdea(idea: Idea) {
     // call confirm dialog then delete idea
+    this.actionConfirmText = `Are you sure you want to delete the idea "${idea.name}"?`;
+    this.confirmDialogOpen = true;
+    this.actionDelete$.pipe(take(1)).subscribe(userConfirm => {
+      this.confirmDialogOpen = false;
+      if (userConfirm) {
+        const index = this.ideasList.indexOf(idea);
+        this.ideasList.splice(index, 1);
+        this.dataFormArray.removeAt(index);
+      }
+    });
   }
 
   getIcon(idea: Idea): IconDefinition {
@@ -88,5 +104,13 @@ export class CreateIdeasComponent implements OnInit {
     } else {
       return faUser;
     }
+  }
+
+  onActionCancel() {
+    this.actionDelete$.next(false);
+  }
+
+  onActionConfirm() {
+    this.actionDelete$.next(true);
   }
 }
