@@ -2,7 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, UntypedFormArray, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { createIdeasConfig, Idea, PhaseNavigationService } from '@core';
-import { faFloppyDisk, faUser, IconDefinition, faGlobe } from '@fortawesome/free-solid-svg-icons';
+import { 
+  faFloppyDisk,
+  faUser,
+  IconDefinition,
+  faGlobe,
+  faPlus,
+  faTimes,
+  faCheck,
+  faWindowMaximize
+} from '@fortawesome/free-solid-svg-icons';
 import { Subject } from 'rxjs';
 import { take } from 'rxjs/operators';
 
@@ -14,6 +23,10 @@ import { take } from 'rxjs/operators';
 export class CreateIdeasComponent implements OnInit {
 
   faFloppyDisk = faFloppyDisk;
+  faPlus = faPlus;
+  faTimes = faTimes;
+  faCheck = faCheck;
+  faWindowMaximize = faWindowMaximize;
 
   dataFormArray: UntypedFormArray;
   dataform: UntypedFormGroup;
@@ -21,6 +34,7 @@ export class CreateIdeasComponent implements OnInit {
   editIdeaIndex: number;
   itemDialogOpen = false;
   confirmDialogOpen = false;
+  simpleInputOpen = false;
 
   initialFormValue: any[];
   hasChanged = false;
@@ -85,12 +99,23 @@ export class CreateIdeasComponent implements OnInit {
 
   onAddIdea() {
     this.dataform = this.formBuilder.group(createIdeasConfig);
+    this.simpleInputOpen = true;
+    this.dataform.controls.file.disable({onlySelf: true});
+  }
+
+  onDirectAdd() {
+    this.dataFormArray.push(this.dataform);
+    this.simpleInputOpen = false;
+  }
+
+  onOpenDialog() {
     this.itemDialogOpen = true;
   }
 
   onCancel() {
     this.itemDialogOpen = false;
     this.editIdeaMode = false;
+    this.simpleInputOpen = false;
   }
 
   onConfirm() {

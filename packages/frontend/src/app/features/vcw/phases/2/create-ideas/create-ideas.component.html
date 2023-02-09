@@ -9,9 +9,9 @@
         ></app-button>
     </div>
 </div>
-<div class="flex flex-col gap-4 mx-96">
-    <ng-container *ngIf="dataFormArray.controls.length === 0">
-        <div class="hidden md:block py-2 px-2">
+<div class="flex flex-col gap-4 md:mx-64 lg:mx-80">
+    <ng-container *ngIf="dataFormArray.controls.length === 0 && !simpleInputOpen">
+        <div class="py-2 px-2">
             <span class="italic">Start adding ideas!</span>
         </div>
     </ng-container>
@@ -25,9 +25,36 @@
             [icon]="getIcon(idea.controls.sourceName)"
         ></app-list-item>
     </ng-container>
+    <div [formGroup]="dataform" *ngIf="simpleInputOpen" class="flex flex-row gap-2">
+        <app-input class="w-7/12" formControlName="name" placeholder="Type an idea..."></app-input>
+        <div class="flex flex-row justify-end">
+            <app-button
+                [label]="'Add'"
+                [isTransparent]="true"
+                [leftIcon]="faCheck"
+                [isDisabled]="!dataform.valid"
+                (buttonClick)="onDirectAdd()"
+            ></app-button>
+            <app-button
+                [label]="'Cancel'"
+                [isTransparent]="true"
+                [leftIcon]="faTimes"
+                (buttonClick)="onCancel()"
+            ></app-button>
+            <app-button
+                [label]="'Open Dialog'"
+                [isTransparent]="true"
+                [leftIcon]="faWindowMaximize"
+                (buttonClick)="onOpenDialog()"
+                ></app-button>
+        </div>
+
+    </div>
     <app-button
         (buttonClick)="onAddIdea()"
         [label]="'New Idea'"
+        [leftIcon]="faPlus"
+        *ngIf="!simpleInputOpen"
     ></app-button>
 </div>
 <app-create-item-dialog
