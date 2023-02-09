@@ -123,6 +123,7 @@ export class CreateIdeasComponent implements OnInit {
     this.itemDialogOpen = false;
     if (!this.editIdeaMode) {
       this.dataFormArray.push(this.dataform);
+      this.simpleInputOpen = false;
     } else {
       this.editIdeaMode = false;
     }
