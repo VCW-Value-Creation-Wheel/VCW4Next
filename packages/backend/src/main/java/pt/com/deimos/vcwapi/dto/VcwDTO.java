@@ -16,19 +16,4 @@ public class VcwDTO {
     @ValueOfEnum(enumClass = VcwType.class)
     private String type;
 
-    private String challenge;
-
-    private String concept;
-
-    private String valueProposition;
-
-    private String prototype;
-
-    private String threeMs;
-
-    private String executiveSummary;
-
-    private Boolean closed;
-
-    private LocalDateTime closedAt;
 }
