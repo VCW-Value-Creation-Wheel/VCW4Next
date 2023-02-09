@@ -30,13 +30,26 @@ public class ProjectController {
   public ResponseEntity<Iterable<ProjectEntity>> getAll(
           @AuthenticationPrincipal Jwt principal
   ) {
-    return ResponseEntity.ok(this.projectService.findAll());
+
+    Pair<Iterable<ProjectEntity>,String> results = this.projectService.findAll();
+    Iterable<ProjectEntity> projectList = results.getFirst();
+    String message = results.getSecond();
+
+    return ResponseEntity.status(HttpStatus.OK)
+            .header("Server Message",message).body(projectList);
   }
 
   @GetMapping
   public ResponseEntity<Iterable<ProjectEntity>> getByUser(
           @AuthenticationPrincipal Jwt principal) {
-    return ResponseEntity.ok(this.projectService.findByUser(principal.getSubject()));
+
+    Pair<Iterable<ProjectEntity>,String> results =
+            this.projectService.findByUser(principal.getSubject());
+    Iterable<ProjectEntity> projectList = results.getFirst();
+    String message = results.getSecond();
+
+    return ResponseEntity.status(HttpStatus.OK)
+            .header("Server Message",message).body(projectList);
   }
 
   @GetMapping("/{id}")
@@ -44,14 +57,18 @@ public class ProjectController {
           @PathVariable(value = "id") Long id,
           @AuthenticationPrincipal Jwt principal) {
 
-    Optional<ProjectEntity> projectEntityOptional =
+    Pair<Optional<ProjectEntity>,String> results =
             this.projectService.findByIdAndUser(id, principal.getSubject());
+
+    Optional<ProjectEntity> projectEntityOptional = results.getFirst();
+    String message = results.getSecond();
 
     if(projectEntityOptional.isEmpty()) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Project not found");
     }
 
-    return ResponseEntity.ok(projectEntityOptional.get());
+    return ResponseEntity.status(HttpStatus.OK)
+            .header("Server Message",message).body(projectEntityOptional.get());
   }
 
   @PostMapping
@@ -94,7 +111,10 @@ public class ProjectController {
   public ResponseEntity<Object> delete(
       @PathVariable Long id
   ) {
-    Optional<ProjectEntity> projectEntityOptional = this.projectService.findById(id);
+
+    Pair<Optional<ProjectEntity>,String> results =
+            this.projectService.findById(id);
+    Optional<ProjectEntity> projectEntityOptional = results.getFirst();
 
     if(projectEntityOptional.isEmpty()) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Project not found");
