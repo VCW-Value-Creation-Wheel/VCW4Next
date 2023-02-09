@@ -5,6 +5,10 @@
 
 ### Backend (Spring Boot)
 
+#### Swagger API Docs
+
+Swagger api docs are available [here](https://drive.google.com/drive/folders/1VQwP82pqk42wUuzKN550B3bcL7oOw-0t?usp=share_link).
+
 #### Minio File Storage
 🚧 Under construction
 
