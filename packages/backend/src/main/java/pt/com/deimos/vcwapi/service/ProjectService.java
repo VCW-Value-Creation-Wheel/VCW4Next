@@ -15,6 +15,7 @@ import pt.com.deimos.vcwapi.entity.ProjectHasUserRoleEntity;
 import pt.com.deimos.vcwapi.repository.ProjectRepository;
 
 import java.io.InputStream;
+import java.net.ConnectException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -106,6 +107,7 @@ public class ProjectService {
             FileEntity newThumbnail = processThumbnail(userId, thumbnail);
             newProject.setFileThumbnail(newThumbnail);}
             catch (Exception e){
+
                 return Pair.of(newProject, e.getMessage());
             }
         }
@@ -117,19 +119,27 @@ public class ProjectService {
         this.projectRepository.delete(projectEntity);
     }
 
-    private FileEntity processThumbnail(String creatorId, MultipartFile thumbnail) throws IllegalArgumentException, MinioException {
+    private FileEntity processThumbnail(String creatorId, MultipartFile thumbnail) throws IllegalArgumentException, MinioException, ConnectException {
 
-        String imageName, fileExtension="";
+        String imageName, fileExtension, imgPath="";
         InputStream imageContent = null;
         int imageSize = 0;
+
         try {
             imageName = thumbnail.getOriginalFilename();
             imageContent = thumbnail.getInputStream();
-            fileExtension = imageName.toString().split("\\.", 2)[1];
+            String[] splitName = imageName.toString().split("\\.", 2);
+            fileExtension = splitName[1];
+            imageName = splitName[0];
             imageSize = imageContent.available();
-        } catch (Exception e){
+            // hash filename to avoid issues with files with same name
+            imgPath = "assets/img/" + imageName + "-"+ this.minioService.getHashedFileName(imageName)
+                    + "." + fileExtension;
+        }
+        catch (Exception e){
             throw new IllegalArgumentException("Failed to process thumbnail: invalid filename");
         }
+
 
         //check if thumbnail is valid
         if (this.minioService.validateImageSize(imageSize) == false)
@@ -142,16 +152,17 @@ public class ProjectService {
                     "invalid file extension. File should be "+
                     java.util.Arrays.asList(MinioService.ValidImageTypes.values()));
 
+
         // save thumbnail into minio
         try {
-            this.minioService.uploadFile("assets/img/"+imageName, imageContent);
-        } catch (MinioException e) {
+            this.minioService.uploadFile(imgPath, imageContent);
+        } catch (Exception e) {
             throw new MinioException("Failed to save thumbnail image in Minio due to error: "+e);
         }
 
         // set file thumbnail
         FileEntity newThumbnail = new FileEntity(creatorId, creatorId, imageName,
-                "assets/img/"+imageName, "img/"+fileExtension);
+                imgPath, "img/"+fileExtension);
         return newThumbnail;
     }
 
