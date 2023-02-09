@@ -2,6 +2,7 @@
     [confirmText]="'OK'"
     [cancelText]="'Cancel'"
     [title]="title"
+    [confirmDisabled]="!formGroup.valid"
     (cancel)="onCancel()"
     (confirm)="onConfirm()"
 >   
@@ -17,7 +18,7 @@
     </div>
     <div [formGroup]="formGroup" class="gap-4 flex flex-col">
         <ng-container *ngFor="let field of formFields">
-            <ng-container *ngIf="field === 'file'; else normalInput">
+            <ng-container *ngIf="field === fileFormFieldName; else normalInput">
                 <app-input-file
                     [label]="formatFieldLabel(field) | titlecase"
                     [formControlName]="field"

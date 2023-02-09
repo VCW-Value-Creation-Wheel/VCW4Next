@@ -11,19 +11,17 @@ export class CreateItemDialogComponent implements OnInit {
 
   @Input() title?: string;
   @Input() formGroup: UntypedFormGroup;
+  @Input() isEditing = false;
+  @Input() tabs: string[] = [];
+  @Input() tabFormControlsToExclude: {[key: number]: string[]} = {};
+  @Input() fileFormFieldName = 'file';
   @Input() checkboxes: string[] = [];
   @Input() checkboxFormControl?: string;
   @Input() checkboxCategoryLabel?: string;
-  @Input() isEditing = false;
 
   @Output() cancel = new EventEmitter();
   @Output() confirm = new EventEmitter();
 
-  tabs = ['Manual', 'From File'];
-  tabControlsToExclude = {
-    0: ['file'],
-    1: ['name']
-  };
   activeTab = 0;
   checkedBox: number;
   originalFormValues: {[key: string]: any} = {};
@@ -58,8 +56,12 @@ export class CreateItemDialogComponent implements OnInit {
 
   changeActiveTab(index: number) {
     this.activeTab = index;
-    const excludeControls: string[] = this.tabControlsToExclude[this.activeTab];
-    const enableControls: string[] = this.tabControlsToExclude[this.activeTab === 0 ? 1 : 0];
+    let excludeControls: string[] = [];
+    let enableControls: string[] = [];
+    if (Object.keys(this.tabFormControlsToExclude).includes(this.activeTab.toString())) {
+      excludeControls = this.tabFormControlsToExclude[this.activeTab];
+      enableControls = this.tabFormControlsToExclude[this.activeTab === 0 ? 1 : 0];
+    }
     if (enableControls) {
       enableControls.forEach((control) => {
         this.formGroup.controls[control].enable({onlySelf: true});

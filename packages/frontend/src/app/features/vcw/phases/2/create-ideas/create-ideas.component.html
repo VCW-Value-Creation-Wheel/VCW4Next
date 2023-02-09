@@ -33,10 +33,10 @@
     *ngIf="itemDialogOpen"
     [isEditing]="editIdeaMode"
     [formGroup]="dataform"
-    [checkboxes]="['Number', 'Yes/No']"
-    [checkboxFormControl]="'entryType'"
-    [checkboxCategoryLabel]="'Type'"
     [title]="editIdeaMode ? 'Edit Idea': 'New Idea'"
+    [tabs] = "['Manual', 'From File']"
+    [tabFormControlsToExclude]="{'0': ['file'], '1': ['name']}"
+    [fileFormFieldName]="'file'"
     (cancel)="onCancel()"
     (confirm)="onConfirm()"
 ></app-create-item-dialog>
