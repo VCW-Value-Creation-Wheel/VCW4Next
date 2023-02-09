@@ -11,9 +11,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * This is based on the implementation in request4eo requestAPI
@@ -27,13 +24,13 @@ public class MinioService {
     @Value("${vcw4next.minio.bucket}")
     private String bucket;
 
-    private enum ValidImageTypes {png, jpeg, jpg};
+    public enum ValidImageTypes {png, jpeg, jpg};
 
-    private enum ValidDocTypes {pdf, doc, docx, xls, xlsx, ppt, pptx, txt, zip};
+    public enum ValidDocTypes {pdf, doc, docx, xls, xlsx, ppt, pptx, txt, zip};
 
-    private static final int MAX_IMAGE_SIZE_MB = 2;
+    public static final int MAX_IMAGE_SIZE_MB = 2;
 
-    private static final int MAX_DOC_SIZE_MB = 8;
+    public static final int MAX_DOC_SIZE_MB = 8;
 
     public InputStream downloadFile(String filePath) throws MinioException {
         InputStream result;

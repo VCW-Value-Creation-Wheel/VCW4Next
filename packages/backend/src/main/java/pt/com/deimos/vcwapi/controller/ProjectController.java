@@ -1,8 +1,8 @@
 package pt.com.deimos.vcwapi.controller;
 
 import jakarta.validation.Valid;
+import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -61,9 +61,17 @@ public class ProjectController {
           @AuthenticationPrincipal Jwt principal
   ) {
 
-    return ResponseEntity.status(HttpStatus.CREATED).body(
-            this.projectService.save(project, thumbnail, principal.getSubject())
-    );
+    Pair<ProjectEntity,String> results = this.projectService.save(project, thumbnail,
+            principal.getSubject());
+
+    ProjectEntity newProject = results.getFirst();
+    String message = results.getSecond();
+    if (newProject == null)
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+              .body("Unable to save project due to "+message);
+
+    return ResponseEntity.status(HttpStatus.CREATED)
+            .header("Server Message",message).body(newProject);
   }
 
 //  @PutMapping("/{id}")

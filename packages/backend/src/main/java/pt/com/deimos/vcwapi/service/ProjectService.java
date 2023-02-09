@@ -3,6 +3,7 @@ package pt.com.deimos.vcwapi.service;
 import io.minio.errors.MinioException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,10 +14,7 @@ import pt.com.deimos.vcwapi.entity.ProjectEntity;
 import pt.com.deimos.vcwapi.entity.ProjectHasUserRoleEntity;
 import pt.com.deimos.vcwapi.repository.ProjectRepository;
 
-import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -83,7 +81,7 @@ public class ProjectService {
         return result;
     }
 
-    public ProjectEntity save(ProjectDTO projectInfo, MultipartFile thumbnail, String userId) {
+    public Pair<ProjectEntity,String> save(ProjectDTO projectInfo, MultipartFile thumbnail, String userId) {
 
         ProjectEntity newProject = new ProjectEntity(userId, userId,
                 projectInfo.getName(), projectInfo.getDescription(),
@@ -97,21 +95,29 @@ public class ProjectService {
             newProject.addProjectHasUserRole(userRole);
         }
 
-        // add thumbnail to project if it exists
-        if (thumbnail != null){
-            FileEntity newThumbnail = processThumbnail(userId, thumbnail);
-            newProject.setFileThumbnail(newThumbnail);
+        newProject = this.projectRepository.save(newProject);
+        if (newProject == null ) {
+            return Pair.of(newProject, "Failed to save project.");
         }
 
-        return this.projectRepository.save(newProject);
+        // add thumbnail to project if it exists
+        if (thumbnail != null){
+            try{
+            FileEntity newThumbnail = processThumbnail(userId, thumbnail);
+            newProject.setFileThumbnail(newThumbnail);}
+            catch (Exception e){
+                return Pair.of(newProject, e.getMessage());
+            }
+        }
 
+        return Pair.of(newProject, "");
     }
 
     public void delete(ProjectEntity projectEntity) {
         this.projectRepository.delete(projectEntity);
     }
 
-    private FileEntity processThumbnail(String creatorId, MultipartFile thumbnail) throws IllegalArgumentException {
+    private FileEntity processThumbnail(String creatorId, MultipartFile thumbnail) throws IllegalArgumentException, MinioException {
 
         String imageName, fileExtension="";
         InputStream imageContent = null;
@@ -133,18 +139,14 @@ public class ProjectService {
 
         if (this.minioService.validateImageFileExt(fileExtension) == false)
             throw new IllegalArgumentException("Failed to process thumbnail: " +
-                    "invalid file extension. File should be MB");
-
+                    "invalid file extension. File should be "+
+                    java.util.Arrays.asList(MinioService.ValidImageTypes.values()));
 
         // save thumbnail into minio
         try {
-
             this.minioService.uploadFile("assets/img/"+imageName, imageContent);
-        } catch (Exception e) {
-            System.err.println("Failed to save thumbnail image in Minio due to error: "+e);
-            //TODO: should we abort saving the project?
-            // or save without thumbnail and let user add it later?
-            return null;
+        } catch (MinioException e) {
+            throw new MinioException("Failed to save thumbnail image in Minio due to error: "+e);
         }
 
         // set file thumbnail
