@@ -4,6 +4,7 @@
         <app-button
             [label]="'Save'"
             [leftIcon]="faFloppyDisk"
+            [isDisabled]="!hasChanged || itemDialogOpen"
             (buttonClick)="onSave()"
         ></app-button>
     </div>

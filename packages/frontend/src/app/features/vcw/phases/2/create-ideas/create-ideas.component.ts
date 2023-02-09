@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, UntypedFormArray, UntypedFormGroup } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, UntypedFormArray, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { createIdeasConfig, Idea, PhaseNavigationService } from '@core';
 import { faFloppyDisk, faUser, IconDefinition, faGlobe } from '@fortawesome/free-solid-svg-icons';
@@ -22,6 +22,9 @@ export class CreateIdeasComponent implements OnInit {
   itemDialogOpen = false;
   confirmDialogOpen = false;
 
+  initialFormValue: any[];
+  hasChanged = false;
+
   actionConfirmText: string;
   actionConfirmTitle: string;
   actionConfirm$: Subject<boolean> = new Subject();
@@ -34,7 +37,33 @@ export class CreateIdeasComponent implements OnInit {
   ngOnInit(): void {
     this.dataFormArray = this.formBuilder.array([]);
     this.phaseNavService.nextPhase$.subscribe((nextPhase) => {
-      this.router.navigate(['../' + nextPhase], {relativeTo: this.activatedRoute});
+      if (this.hasChanged) {
+        this.actionConfirmTitle = 'Unsaved changes';
+        this.actionConfirmText = 'Unsaved changes will be lost if you change phase. Do you still want to proceed?';
+        this.confirmDialogOpen = true;
+        this.actionConfirm$.pipe(take(1)).subscribe(userConfirm => {
+          this.confirmDialogOpen = false;
+          if (userConfirm) {
+            this.router.navigate(['../' + nextPhase], {relativeTo: this.activatedRoute});
+          }
+        });
+      } else {
+        this.router.navigate(['../' + nextPhase], {relativeTo: this.activatedRoute});
+      }
+    });
+    /*
+      Here should be performed a request to the back-end, to check and fetch existing data.
+      The code below is used to actively check for unsaved changes.
+    */
+    this.initialFormValue = this.dataFormArray.getRawValue();
+    this.dataFormArray.valueChanges.subscribe((value: FormArray) => {
+      if (Object.keys(this.initialFormValue).length !== value.length) {
+        this.hasChanged = true;
+      } else {
+        this.hasChanged = Object.keys(this.initialFormValue).some(key => {
+          return this.dataFormArray.value[key] !== this.initialFormValue[key];
+        });
+      }
     });
   }
 
@@ -45,9 +74,11 @@ export class CreateIdeasComponent implements OnInit {
     this.actionConfirm$.pipe(take(1)).subscribe((userConfirm) => {
       this.confirmDialogOpen = false;
       if (userConfirm) {
-        console.log('save');
-      } else {
-        console.log('not save');
+        /* Perform a request to the back-end to save changes. After receiving a successful response from the back-end,
+        indicating that all changes were saved, execute the two lines below in the callback.
+        */
+        this.hasChanged = false;
+        this.initialFormValue = this.dataFormArray.getRawValue();
       }
     });
   }
