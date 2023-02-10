@@ -70,10 +70,11 @@ public class VcwController {
   @PostMapping("/{id}/diagnostics")
   public ResponseEntity<Object> saveDiagnostics(
           @PathVariable(value = "id") Long id,
-          @RequestBody List<@Valid DiagnosticDTO> diagnosticDTOs
+          @RequestBody List<@Valid DiagnosticDTO> diagnosticDTOs,
+          @AuthenticationPrincipal Jwt principal
   ) {
 
     return ResponseEntity.status(HttpStatus.CREATED).body(
-            this.vcwService.saveDiagnostics(id, diagnosticDTOs));
+            this.vcwService.saveDiagnostics(principal.getSubject(), id, diagnosticDTOs));
   }
 }
