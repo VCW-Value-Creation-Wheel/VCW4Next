@@ -51,17 +51,14 @@ public class VcwService {
 
 
   // Diagnostics
-  public Iterable<DiagnosticEntity>  saveDiagnostics(String userId, Long vcwId, List<DiagnosticDTO> diagnosticDTOList) {
+  public DiagnosticEntity saveDiagnostic(String userId, Long vcwId, DiagnosticDTO diagnosticDTO) {
 
-    List<DiagnosticEntity> diagnosticList = new ArrayList<>();
-    for (DiagnosticDTO diagnosticDto : diagnosticDTOList){
-      DiagnosticEntity diagnosticEntity = new DiagnosticEntity();
-      BeanUtils.copyProperties(diagnosticDto, diagnosticEntity);
-      diagnosticEntity.setVcwId(vcwId);
-      diagnosticEntity.setCreatedBy(userId);
-      diagnosticEntity.setUpdatedBy(userId);
-      diagnosticList.add(diagnosticEntity);
-    }
-    return this.diagnosticRepository.saveAll(diagnosticList);
+    DiagnosticEntity diagnosticEntity = new DiagnosticEntity();
+    BeanUtils.copyProperties(diagnosticDTO, diagnosticEntity);
+    diagnosticEntity.setVcwId(vcwId);
+    diagnosticEntity.setCreatedBy(userId);
+    diagnosticEntity.setUpdatedBy(userId);
+
+    return this.diagnosticRepository.save(diagnosticEntity);
   }
 }

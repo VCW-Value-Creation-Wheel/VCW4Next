@@ -67,14 +67,4 @@ public class VcwController {
             this.vcwService.save(vcwDTO, principal.getSubject()));
   }
 
-  @PostMapping("/{id}/diagnostics")
-  public ResponseEntity<Object> saveDiagnostics(
-          @PathVariable(value = "id") Long id,
-          @RequestBody List<@Valid DiagnosticDTO> diagnosticDTOs,
-          @AuthenticationPrincipal Jwt principal
-  ) {
-
-    return ResponseEntity.status(HttpStatus.CREATED).body(
-            this.vcwService.saveDiagnostics(principal.getSubject(), id, diagnosticDTOs));
-  }
 }
