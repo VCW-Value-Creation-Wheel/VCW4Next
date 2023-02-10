@@ -22,3 +22,10 @@ export interface VCWPhase {
         nextPhaseId?: string;
     };
 }
+
+export type Idea = {
+    name: string,
+    sourceName: string,
+    sourceURL: string,
+    entryType: string
+};
