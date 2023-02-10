@@ -7,7 +7,11 @@
 
 #### Swagger API Docs
 
-Swagger api docs are available [here](https://drive.google.com/drive/folders/1VQwP82pqk42wUuzKN550B3bcL7oOw-0t?usp=share_link).
+Swagger api docs are available. How to view:
+1. Download vcwSwagger.yml  file from the [repository](/packages/backend/docs/vcwSwagger.yml).
+2. Go to https://editor-next.swagger.io/
+3. Go to File -> Import File
+4. Import vcwSwagger.yml
 
 #### Minio File Storage
 🚧 Under construction
