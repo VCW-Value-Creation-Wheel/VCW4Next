@@ -7,7 +7,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.util.Pair;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.multipart.MultipartFile;
 import pt.com.deimos.vcwapi.dto.ProjectDTO;
 import pt.com.deimos.vcwapi.entity.FileEntity;
 import pt.com.deimos.vcwapi.entity.ProjectEntity;
@@ -83,7 +85,8 @@ public class ProjectServiceTest {
         pList.add(p1);
         when(projectRepository.findAll()).thenReturn(pList);
 
-        Iterable<ProjectEntity> projectIt = projectService.findAll();
+        Pair<Iterable<ProjectEntity>,String> results = projectService.findAll();
+        Iterable<ProjectEntity> projectIt = results.getFirst();
         List<ProjectEntity> projectList = new ArrayList<>();
         projectIt.forEach(projectList::add);
         assertEquals(2, projectList.size());
@@ -97,13 +100,16 @@ public class ProjectServiceTest {
         Optional<ProjectEntity> optionalProject = Optional.of(p1);
         when(projectRepository.findById(1L)).thenReturn(optionalProject);
 
-        Optional<ProjectEntity> project = projectService.findById(1L);
+        Pair<Optional<ProjectEntity>,String> results = projectService.findById(1L);
+        Optional<ProjectEntity> project = results.getFirst();
+
         assertEquals(optionalProject, project);
     }
 
     @Test
     public void findProjectByIdNotExists()  {
-        Optional<ProjectEntity> project = projectService.findById(1L);
+        Pair<Optional<ProjectEntity>,String> results = projectService.findById(1L);
+        Optional<ProjectEntity> project = results.getFirst();
         assertEquals(Optional.empty(),project);
     }
 
@@ -126,7 +132,9 @@ public class ProjectServiceTest {
         BeanUtils.copyProperties(dummyRecords.get(0),p1);
         when(projectRepository.save(p1)).thenReturn(p1);
 
-        ProjectEntity savedProject = projectService.save(dummyRecords.get(0),"");
+        Pair<ProjectEntity,String> results = projectService.save(dummyRecords.get(0),null, "");
+        ProjectEntity savedProject = results.getFirst();
+
         assertEquals(savedProject.getName(),"Project 1");
         assertEquals(savedProject.getLang(),"english");
         FileEntity newFile = savedProject.getFileThumbnail();
