@@ -11,11 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.util.Arrays;
+import java.util.UUID;
 
 /**
  * This is based on the implementation in request4eo requestAPI
@@ -121,34 +117,9 @@ public class MinioService {
         return false;
     }
 
-    public String getHashedFileName(String filename) throws NoSuchAlgorithmException {
-
-        MessageDigest digest = MessageDigest.getInstance("MD5");
-        byte[] encodedhash = digest.digest(filename.getBytes(StandardCharsets.UTF_8));
-        byte[] salt = getNextSalt();
-        byte[] result = Arrays.copyOf(encodedhash, encodedhash.length + salt.length);
-        System.arraycopy(salt, 0, result, encodedhash.length, salt.length);
-
-        return bytesToHex(result);
+    public String getHashedFileName(String filename) {
+        String hash = UUID.randomUUID().toString();
+        return filename + "-" + hash;
     }
 
-    // Note:hash methods taken from spring docs:
-    // https://www.baeldung.com/sha-256-hashing-java
-    private static String bytesToHex(byte[] hash) {
-        StringBuilder hexString = new StringBuilder(2 * hash.length);
-        for (int i = 0; i < hash.length; i++) {
-            String hex = Integer.toHexString(0xff & hash[i]);
-            if(hex.length() == 1) {
-                hexString.append('0');
-            }
-            hexString.append(hex);
-        }
-        return hexString.toString();
-    }
-
-    private static byte[] getNextSalt() {
-        byte[] salt = new byte[16];
-        new SecureRandom().nextBytes(salt);
-        return salt;
-    }
 }

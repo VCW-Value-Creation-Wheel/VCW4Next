@@ -154,9 +154,10 @@ public class ProjectService {
             fileExtension = splitName[1];
             imageName = splitName[0];
             imageSize = imageContent.available();
+
             // hash filename to avoid issues with files with same name
-            imgPath = "assets/img/" + imageName + "-"+ this.minioService.getHashedFileName(imageName)
-                    + "." + fileExtension;
+            String finalName = this.minioService.getHashedFileName(imageName) + "." + fileExtension;
+            imgPath = "assets/img/" + finalName;
         }
         catch (Exception e){
             throw new IllegalArgumentException("Failed to process thumbnail: invalid filename");
