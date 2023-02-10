@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { animate, style, transition, trigger } from '@angular/animations';
 import {
   faSignInAlt,
   faSignOutAlt,
@@ -9,15 +10,28 @@ import {
 import { environment } from '../../../../../environments/environment';
 import * as pkg from '../../../../../../package.json';
 import { Subject } from 'rxjs';
+import { KeycloakService } from 'keycloak-angular';
 
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.scss']
+  styleUrls: ['./navbar.component.scss'],
+  animations: [
+    trigger('slideInOut', [
+      transition(':enter', [
+        style({ transform: 'translateX(80%)' }),
+        animate('500ms ease-in', style({ transform: 'translateX(0%)' })),
+      ]),
+      transition(':leave', [
+        animate('500ms ease-in', style({ transform: 'translateX(80%)'})),
+      ]),
+    ])
+  ]
 })
 export class NavbarComponent implements OnInit, OnDestroy {
 
   @Input() isAuthenticated: boolean | null = false;
+  @Input() userProfile: any;
   @Output() login = new EventEmitter();
   @Output() logout = new EventEmitter();
 
@@ -34,9 +48,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   componentDestroyed$ = new Subject<boolean>();
 
-
   ngOnInit(): void {
-    
+
   }
 
   ngOnDestroy(): void {
@@ -50,7 +63,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   onLogout(): void {
     this.isShowingProfileCard = false;
-
     this.logout.emit();
   }
 
@@ -67,9 +79,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   getUserData() {
-
-    // implement when an auth service exists
-    return undefined;
+    return this.userProfile;
   }
 
 }

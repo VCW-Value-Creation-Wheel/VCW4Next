@@ -5,12 +5,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pt.com.deimos.vcwapi.dto.DiagnosticDTO;
 import pt.com.deimos.vcwapi.entity.DiagnosticEntity;
+import pt.com.deimos.vcwapi.dto.VcwDTO;
 import pt.com.deimos.vcwapi.entity.VcwEntity;
 import pt.com.deimos.vcwapi.repository.DiagnosticRepository;
 import pt.com.deimos.vcwapi.repository.VcwRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Transactional
 @Service
@@ -29,7 +31,21 @@ public class VcwService {
     return this.vcwRepository.findAll();
   }
 
-  public VcwEntity save(VcwEntity vcwEntity) {
+  public Iterable<VcwEntity> findByUser(String userId) {
+    return this.vcwRepository.findByProjectsProjectHasUserRoleEntitiesUserInum(userId);
+  }
+
+  public Optional<VcwEntity> findByIdAndUser(Long vcwId, String userId) {
+    return this.vcwRepository.findByIdAndProjectsProjectHasUserRoleEntitiesUserInum(vcwId, userId);
+  }
+
+  public VcwEntity save(VcwDTO vcwDto, String userId) {
+
+    VcwEntity vcwEntity = new VcwEntity();
+    BeanUtils.copyProperties(vcwDto, vcwEntity);
+    vcwEntity.setCreatedBy(userId);
+    vcwEntity.setUpdatedBy(userId);
+
     return this.vcwRepository.save(vcwEntity);
   }
 

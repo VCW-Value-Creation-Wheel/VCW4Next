@@ -14,6 +14,7 @@ import pt.com.deimos.vcwapi.entity.VcwEntity;
 import pt.com.deimos.vcwapi.service.VcwService;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/v1/vcws")
@@ -25,22 +26,45 @@ public class VcwController {
     this.vcwService = vcwService;
   }
 
-  @GetMapping
+  @GetMapping("/admin")
   @PreAuthorize("hasAuthority('ADMIN')")
   public ResponseEntity<Iterable<VcwEntity>> index(
       @AuthenticationPrincipal Jwt principal
   ) {
     return ResponseEntity.ok(this.vcwService.findAll());
   }
-  
+
+  @GetMapping
+  public ResponseEntity<Iterable<VcwEntity>> getByUser(
+          @AuthenticationPrincipal Jwt principal) {
+    return ResponseEntity.ok(this.vcwService.findByUser(principal.getSubject()));
+  }
+
+  @GetMapping("/{id}")
+  public ResponseEntity<Object> getByIdAndUser(
+          @PathVariable(value = "id") Long id,
+          @AuthenticationPrincipal Jwt principal) {
+
+    Optional<VcwEntity> vcwEntityOptional =
+            this.vcwService.findByIdAndUser(id, principal.getSubject());
+
+    if(vcwEntityOptional.isEmpty()) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Vcw not found");
+    }
+
+    return ResponseEntity.ok(vcwEntityOptional.get());
+  }
+
+
+
   @PostMapping
   public ResponseEntity<Object> store(
-          @RequestBody @Valid VcwDTO vcwDTO
+          @RequestBody @Valid VcwDTO vcwDTO,
+          @AuthenticationPrincipal Jwt principal
   ) {
-    VcwEntity vcwEntity = new VcwEntity();
-    BeanUtils.copyProperties(vcwDTO, vcwEntity);
 
-    return ResponseEntity.status(HttpStatus.CREATED).body(this.vcwService.save(vcwEntity));
+    return ResponseEntity.status(HttpStatus.CREATED).body(
+            this.vcwService.save(vcwDTO, principal.getSubject()));
   }
 
   @PostMapping("/{id}/diagnostics")

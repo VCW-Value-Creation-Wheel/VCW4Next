@@ -44,9 +44,8 @@ public class VcwEntity extends BaseNamedEntity{
     private String executiveSummary;
 
     @Column
-    private Boolean closed;
+    private Boolean closed  = false;
 
-    @CreationTimestamp
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     @Column(name = "closed_at")
     private LocalDateTime closedAt;
@@ -61,7 +60,6 @@ public class VcwEntity extends BaseNamedEntity{
 
     @OneToOne
     @JoinColumn(name="business_model_canvas_id", referencedColumnName = "id", insertable=false, updatable=false)
-    @JsonIgnore
     private BusinessModelCanvasEntity businessModelCanvas;
 
     @OneToMany(mappedBy = "vcw")
@@ -94,4 +92,10 @@ public class VcwEntity extends BaseNamedEntity{
             )
     )
     private Set<FileEntity> attachments = new HashSet<>();
+
+
+    @ManyToMany(mappedBy = "vcws")
+    @JsonIgnore
+    Set<ProjectEntity> projects = new HashSet<>();
+
 }

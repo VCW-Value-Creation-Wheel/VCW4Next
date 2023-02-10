@@ -2,8 +2,8 @@ export const environment = {
   production: false,
   staging: false,
   identity: {
-    url: 'http://localhost:8080',
-    realm: 'vcw',
+    url: 'https://identity.staging.services4eo.com/',
+    realm: 'vcw-integration',
     clientId: 'vcw-web'
   }
 };
