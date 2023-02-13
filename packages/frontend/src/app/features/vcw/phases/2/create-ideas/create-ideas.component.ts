@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, UntypedFormArray, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { createIdeasConfig, Idea, PhaseNavigationService } from '@core';
+import { VcwMockService } from '@core/services/mocks/vcw/vcw-mock.service';
 import { 
   faFloppyDisk,
   faUser,
@@ -46,56 +47,40 @@ export class CreateIdeasComponent implements OnInit {
   constructor(private phaseNavService: PhaseNavigationService,
               private router: Router,
               private activatedRoute: ActivatedRoute,
-              private formBuilder: FormBuilder) {}
+              private formBuilder: FormBuilder,
+              private mockService: VcwMockService) {}
 
   ngOnInit(): void {
     this.dataFormArray = this.formBuilder.array([]);
     this.phaseNavService.nextPhase$.subscribe((nextPhase) => {
-      if (this.hasChanged) {
-        this.actionConfirmTitle = 'Unsaved changes';
-        this.actionConfirmText = 'Unsaved changes will be lost if you change phase. Do you still want to proceed?';
-        this.confirmDialogOpen = true;
-        this.actionConfirm$.pipe(take(1)).subscribe(userConfirm => {
-          this.confirmDialogOpen = false;
-          if (userConfirm) {
-            this.router.navigate(['../' + nextPhase], {relativeTo: this.activatedRoute});
-          }
-        });
-      } else {
         this.router.navigate(['../' + nextPhase], {relativeTo: this.activatedRoute});
-      }
     });
     /*
       Here should be performed a request to the back-end, to check and fetch existing data.
-      The code below is used to actively check for unsaved changes.
     */
-    this.initialFormValue = this.dataFormArray.getRawValue();
-    this.dataFormArray.valueChanges.subscribe((value: FormArray) => {
-      if (Object.keys(this.initialFormValue).length !== value.length) {
-        this.hasChanged = true;
-      } else {
-        this.hasChanged = Object.keys(this.initialFormValue).some(key => {
-          return this.dataFormArray.value[key] !== this.initialFormValue[key];
-        });
-      }
+    this.mockService.getIdeas().pipe(take(1)).subscribe((data) => {
+      data.forEach(d => {
+        this.dataFormArray.push(this.formBuilder.group(createIdeasConfig));
+        this.dataFormArray.at(this.dataFormArray.length - 1).patchValue(d);
+      });
     });
   }
 
-  onSave() {
-    this.actionConfirmTitle = 'Save changes';
-    this.actionConfirmText = 'Save the changes to this phase?';
-    this.confirmDialogOpen = true;
-    this.actionConfirm$.pipe(take(1)).subscribe((userConfirm) => {
-      this.confirmDialogOpen = false;
-      if (userConfirm) {
-        /* Perform a request to the back-end to save changes. After receiving a successful response from the back-end,
-        indicating that all changes were saved, execute the two lines below in the callback.
-        */
-        this.hasChanged = false;
-        this.initialFormValue = this.dataFormArray.getRawValue();
-      }
-    });
-  }
+  // onSave() {
+  //   this.actionConfirmTitle = 'Save changes';
+  //   this.actionConfirmText = 'Save the changes to this phase?';
+  //   this.confirmDialogOpen = true;
+  //   this.actionConfirm$.pipe(take(1)).subscribe((userConfirm) => {
+  //     this.confirmDialogOpen = false;
+  //     if (userConfirm) {
+  //       /* Perform a request to the back-end to save changes. After receiving a successful response from the back-end,
+  //       indicating that all changes were saved, execute the two lines below in the callback.
+  //       */
+  //       this.hasChanged = false;
+  //       this.initialFormValue = this.dataFormArray.getRawValue();
+  //     }
+  //   });
+  // }
 
   onAddIdea() {
     this.dataform = this.formBuilder.group(createIdeasConfig);
@@ -104,6 +89,7 @@ export class CreateIdeasComponent implements OnInit {
   }
 
   onDirectAdd() {
+    // send request to back-end. On successful response, push to data form array.
     this.dataFormArray.push(this.dataform);
     this.simpleInputOpen = false;
   }
@@ -122,9 +108,12 @@ export class CreateIdeasComponent implements OnInit {
     // add idea to list. If from file, perform a request first then add idea if the response is successful.
     this.itemDialogOpen = false;
     if (!this.editIdeaMode) {
+      // send request to back-end. On successful response, push to data form array.
       this.dataFormArray.push(this.dataform);
       this.simpleInputOpen = false;
     } else {
+      // send request to back-end. If successful, change the previous values in the form array.
+      this.dataFormArray.at(this.editIdeaIndex).patchValue(this.dataform.value);
       this.editIdeaMode = false;
     }
   }
@@ -132,7 +121,9 @@ export class CreateIdeasComponent implements OnInit {
   editIdea(index: number) {
     this.editIdeaMode = true;
     this.itemDialogOpen = true;
-    this.dataform = (this.dataFormArray.at(index) as UntypedFormGroup);
+    this.dataform = this.formBuilder.group(createIdeasConfig);
+    this.dataform.patchValue(this.dataFormArray.at(index).value);
+    this.editIdeaIndex = index;
   }
 
   deleteIdea(index: number, ideaNameControl: AbstractControl) {
