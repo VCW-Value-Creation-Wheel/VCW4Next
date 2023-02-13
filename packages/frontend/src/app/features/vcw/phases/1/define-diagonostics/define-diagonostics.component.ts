@@ -62,7 +62,7 @@ export class DefineDiagonosticsComponent implements OnInit {
     this.activeTab = index;
   }
 
-  onAddField() {
+  onAddRow() {
     this.dataForm = this.formbuilder.group(swotFieldRowConfig);
     this.simpleInputOpen = true;
     this.dataForm.controls.swotField.disable({onlySelf: true});

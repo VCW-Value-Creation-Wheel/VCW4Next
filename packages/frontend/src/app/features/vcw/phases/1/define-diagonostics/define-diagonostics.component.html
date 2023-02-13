@@ -72,9 +72,10 @@
 
     </div>
     <app-button
-        (buttonClick)="onAddField()"
+        (buttonClick)="onAddRow()"
         [label]="'New Row'"
         [leftIcon]="faPlus"
+        *ngIf="!simpleInputOpen"
     ></app-button>
 </div>
 <app-create-item-dialog
