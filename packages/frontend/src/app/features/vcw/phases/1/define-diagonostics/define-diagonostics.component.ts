@@ -99,6 +99,7 @@ export class DefineDiagonosticsComponent implements OnInit {
       this.dataForm.controls.swotField.setValue(this.activeTab);
       this.dataFormArray.push(this.dataForm);
       this.itemDialogOpen = false;
+      this.simpleInputOpen = false;
     } else {
       this.editRowMode = false;
       this.itemDialogOpen = false;
@@ -130,6 +131,10 @@ export class DefineDiagonosticsComponent implements OnInit {
 
   onOpenDialog() {
     this.itemDialogOpen = true;
+  }
+
+  getSwotFieldRowsNumber(swotField: number) {
+    return this.dataFormArray.controls.filter((c: any) => c.controls.swotField.value === swotField).length;
   }
 
   /*
