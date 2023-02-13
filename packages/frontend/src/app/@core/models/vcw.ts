@@ -26,6 +26,7 @@ export interface VCWPhase {
 export type Idea = {
     name: string,
     sourceName: string,
-    sourceURL: string,
-    entryType: string
+    sourceUrl: string,
+    entryTypeId: number,
+    id?: number
 };
