@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -19,8 +20,7 @@ public class ProjectDTO {
   @NotBlank
   private String lang;
 
-  private String thumbnailPath;
-
+  private MultipartFile thumbnail;
 
   @NotEmpty
   private List<@Valid ProjectHasUserRoleDTO> projectUsers;
