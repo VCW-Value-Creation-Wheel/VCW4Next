@@ -26,7 +26,11 @@ secret:
   enabled: false
   name: vcw-backend-secrets
   variables:
-    normals: {}
+    normals:
+      DATASOURCE_URL: null
+      DATASOURCE_USERNAME: null
+      DATASOURCE_PASSWORD: null
+      OAUTH2_JWT_ISSUER_URI: null
     secrets: {}
 
 # ---------------------------------------
