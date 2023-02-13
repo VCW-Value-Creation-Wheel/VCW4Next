@@ -20,6 +20,10 @@ public class DiagnosticService {
   public Iterable<DiagnosticEntity> findAll() {
     return this.diagnosticRepository.findAll();
   }
+
+  public Iterable<DiagnosticEntity> findByVcw(Long vcwId) {
+    return this.diagnosticRepository.findByVcwId(vcwId);
+  }
   
   public DiagnosticEntity save(String userId, Long diagnosticId, DiagnosticDTO diagnosticDTO) {
 
