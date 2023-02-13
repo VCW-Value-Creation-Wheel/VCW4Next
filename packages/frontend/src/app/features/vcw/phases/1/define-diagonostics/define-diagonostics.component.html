@@ -1,12 +1,5 @@
 <div class="px-4 py-4 flex flex-row justify-between mx-4 md:mx-64 lg:mx-80">
     <h1 class="text-2xl font-bold text-primary ">SWOT Analysis</h1>
-    <div>
-        <app-button
-            [label]="'Save'"
-            [leftIcon]="faFloppyDisk"
-            (buttonClick)="onSave()"
-        ></app-button>
-    </div>
 </div>
 <div class="flex flex-row gap-1 md:gap-8 text-center text-sm md:text-base md:justify-between md:py-2 md:mx-80">
     <ng-container *ngFor="let tab of swotTabs; let idx = index">
@@ -19,7 +12,48 @@
     </ng-container>
     
 </div>
-<div [formGroup]="dataForm">
+<div class="flex flex-col gap-4 mx-4 md:mx-64 lg:mx-80">
+    <ng-container *ngFor="let swotField of dataFormArray.controls; index as idx">
+        <ng-container *ngIf="swotField.controls.categoryId?.value === activeTab">
+            <app-list-item
+                [isEditable]="true"
+                [isSelectable]="false"
+                [value]="swotField.controls.title?.value"
+                (editClick)="editField(idx)"
+                (deleteClick)="deleteField(idx, swotField.controls.title)"
+            ></app-list-item>
+        </ng-container>
+        
+    </ng-container>
+    <div>
+
+    </div>
+    <app-button
+        (buttonClick)="onAddField()"
+        [label]="'New Row'"
+        [leftIcon]="faPlus"
+    ></app-button>
+</div>
+<app-create-item-dialog
+    *ngIf="itemDialogOpen"
+    [isEditing]="editFieldMode"
+    [formGroup]="dataForm"
+    [title]="editFieldMode ? 'Edit Row': 'New Row'"
+    [tabFormControlsToExclude]="{'0': ['id', 'categoryId']}"
+    [fileFormFieldName]="'file'"
+    (cancel)="onCancel()"
+    (confirm)="onConfirm()"
+></app-create-item-dialog>
+<app-dialog
+    *ngIf="confirmDialogOpen"
+    [title]="actionConfirmTitle"
+    [confirmText]="'Yes'"
+    [cancelText]="'No'"
+    (cancel)="onActionCancel()"
+    (confirm)="onActionConfirm()"
+>{{ actionConfirmText }}</app-dialog>
+
+<!-- <div [formGroup]="dataForm">
     <div class="grid grid-cols-3 md:grid-cols-3 md:px-80 text-center" formArrayName="swotFields">
         <div class="col-span-1 h-8 py-2">
             <p class="font-bold text-center">Title</p>
@@ -37,9 +71,8 @@
             </ng-container>
             <ng-container *ngIf="getSwotFieldsByCategory(activeTab).length === 0">
                 <div class="hidden md:block py-2 px-2">
-                    <span class="italic">No entries found. Click "Add row" to add a new entry.</span>
+                    <span class="italic">Start adding rows...</span>
                 </div>
-                
             </ng-container>
             <div class="border-solid border-t-2 md:mx-2 border-grey-500 md:w-1/3">
                 <app-button
@@ -75,4 +108,4 @@
         </div>
         
     </div>
-</div>
+</div> -->

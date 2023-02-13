@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, FormGroup, UntypedFormGroup } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, UntypedFormArray, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PhaseNavigationService, swotAnalysisConfig, SwotField, swotFieldsConfig } from '@core';
 import { faPlus, faMinus, faTimes, faFloppyDisk } from '@fortawesome/free-solid-svg-icons';
+import { Subject } from 'rxjs';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-define-diagonostics',
@@ -12,6 +14,7 @@ import { faPlus, faMinus, faTimes, faFloppyDisk } from '@fortawesome/free-solid-
 export class DefineDiagonosticsComponent implements OnInit {
 
   dataForm: UntypedFormGroup;
+  dataFormArray: UntypedFormArray;
 
   faPlus = faPlus;
   faMinus = faMinus;
@@ -19,6 +22,15 @@ export class DefineDiagonosticsComponent implements OnInit {
   faFloppyDisk = faFloppyDisk;
 
   activeTab = 0;
+
+  itemDialogOpen = false;
+  editFieldMode = false;
+  confirmDialogOpen = false;
+  editFieldIndex: number;
+
+  actionConfirmTitle: string;
+  actionConfirmText: string;
+  actionConfirm$: Subject<boolean> = new Subject();
 
   swotTabs = [
     'Strengths',
@@ -33,8 +45,7 @@ export class DefineDiagonosticsComponent implements OnInit {
               private phaseNavService: PhaseNavigationService,
               private router: Router,
               private activatedRoute: ActivatedRoute) {
-    this.dataForm = this.formbuilder.group(swotAnalysisConfig);
-    this.dataForm.controls.swotFields = this.formbuilder.array([]);
+    this.dataFormArray = this.formbuilder.array([]);
   }
 
 
@@ -47,6 +58,58 @@ export class DefineDiagonosticsComponent implements OnInit {
   changeTab(index: number) {
     this.activeTab = index;
   }
+
+  onAddField() {
+    this.dataForm = this.formbuilder.group(swotFieldsConfig);
+    this.itemDialogOpen = true;
+  }
+
+  editField(index: number) {
+    this.editFieldMode = true;
+    this.itemDialogOpen = true;
+    this.dataForm = this.formbuilder.group(swotFieldsConfig);
+    this.dataForm.patchValue(this.dataFormArray.at(index).value);
+    this.editFieldIndex = index;
+  }
+
+  deleteField(index: number, fieldTitleControl: AbstractControl) {
+    this.actionConfirmTitle = 'Delete Row';
+    this.actionConfirmText = `Are you sure you want to delete the row "${fieldTitleControl.value}"?`;
+    this.confirmDialogOpen = true;
+    this.actionConfirm$.pipe(take(1)).subscribe(userConfirm => {
+      this.confirmDialogOpen = false;
+      if (userConfirm) {
+        this.dataFormArray.removeAt(index);
+      }
+    });
+  }
+
+  onCancel() {
+    this.itemDialogOpen = false;
+  }
+
+  onConfirm() {
+    if (!this.editFieldMode) {
+      this.dataForm.controls.categoryId.enable({onlySelf: true});
+      this.dataForm.controls.categoryId.setValue(this.activeTab);
+      this.dataFormArray.push(this.dataForm);
+      this.itemDialogOpen = false;
+    } else {
+      this.editFieldMode = false;
+      this.itemDialogOpen = false;
+      this.dataFormArray.at(this.editFieldIndex).patchValue(this.dataForm.value);
+    }
+  }
+
+  onActionCancel() {
+    this.actionConfirm$.next(false);
+  }
+
+  onActionConfirm() {
+    this.actionConfirm$.next(true);
+  }
+
+  /*
 
   addField(tabId: number) {
     (this.dataForm.controls.swotFields as FormArray).push(
@@ -72,7 +135,7 @@ export class DefineDiagonosticsComponent implements OnInit {
   }
 
   onSave() {
-    console.log(this.isFormValid('swotFields'));
+    
   }
 
   getValidator(control: string, nestingControl?: string, index?: number): boolean {
@@ -101,4 +164,5 @@ export class DefineDiagonosticsComponent implements OnInit {
     });
     return isValid;
   }
+  */
 }
