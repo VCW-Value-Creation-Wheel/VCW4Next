@@ -3,7 +3,7 @@ import { AbstractControl, FormArray, FormBuilder, UntypedFormArray, UntypedFormG
 import { ActivatedRoute, Router } from '@angular/router';
 import { createIdeasConfig, Idea, PhaseNavigationService } from '@core';
 import { VcwMockService } from '@core/services/mocks/vcw/vcw-mock.service';
-import { 
+import {
   faFloppyDisk,
   faUser,
   IconDefinition,
@@ -153,5 +153,11 @@ export class CreateIdeasComponent implements OnInit {
 
   onActionConfirm() {
     this.actionConfirm$.next(true);
+  }
+
+  onKeyPress(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      this.onDirectAdd();
+    }
   }
 }

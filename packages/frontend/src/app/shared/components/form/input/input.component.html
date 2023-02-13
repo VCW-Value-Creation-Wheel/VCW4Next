@@ -34,5 +34,6 @@
     [maxLength]="maxLength"
     [pattern]="pattern?pattern:''"
     (ngModelChange)="handleInputChange($event)"
+    (keyup)="handleKeyPress($event)"
   /><span *ngIf="!label && required" class="text-red-500">*</span>
 </div>
