@@ -106,15 +106,17 @@ export class CreateIdeasComponent implements OnInit {
 
   onConfirm() {
     // add idea to list. If from file, perform a request first then add idea if the response is successful.
-    this.itemDialogOpen = false;
+
     if (!this.editIdeaMode) {
       // send request to back-end. On successful response, push to data form array.
       this.dataFormArray.push(this.dataform);
       this.simpleInputOpen = false;
+      this.itemDialogOpen = false;
     } else {
       // send request to back-end. If successful, change the previous values in the form array.
       this.dataFormArray.at(this.editIdeaIndex).patchValue(this.dataform.value);
       this.editIdeaMode = false;
+      this.itemDialogOpen = false;
     }
   }
 
