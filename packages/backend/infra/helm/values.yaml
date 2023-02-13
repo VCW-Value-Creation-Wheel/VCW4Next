@@ -23,15 +23,19 @@ autoscaling:
 # Variable used in Secret template
 # ---------------------------------------
 secret:
-  enabled: false
+  enabled: true
   name: vcw-backend-secrets
   variables:
     normals:
       DATASOURCE_URL: null
       DATASOURCE_USERNAME: null
-      DATASOURCE_PASSWORD: null
       OAUTH2_JWT_ISSUER_URI: null
-    secrets: {}
+      MINIO_ENDPOINT: null
+      MINIO_BUCKET: null
+    secrets:
+      DATASOURCE_PASSWORD: null
+      MINIO_ACCESS_KEY: null
+      MINIO_SECRET_KEY: null
 
 # ---------------------------------------
 # Variable used in ConfigMap template
