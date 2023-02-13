@@ -6,8 +6,7 @@ import {
   OnInit,
   Output
 } from '@angular/core';
-import { NG_VALUE_ACCESSOR } from '@angular/forms';
-import { EventOption } from '@core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
   selector: 'app-checkbox-input',
@@ -21,16 +20,19 @@ import { EventOption } from '@core';
     },
   ],
 })
-export class CheckboxInputComponent implements OnInit {
-  @Input() required = false;
-  @Input() leftLabel?: string;
-  @Input() rightLabel?: string;
+export class CheckboxInputComponent implements OnInit, ControlValueAccessor {
+  @Input() required: boolean = false;
+  @Input() label?: string;
+
   @Input() identifier!: string;
-  @Input() disabled = false;
-  @Input('value') _value?: string | number = '';
+  @Input() disabled: boolean = false;
+  @Input('value') _value?: any = '';
   @Input() helperText?: string;
-  @Input() error = false;
-  @Output() emitInputChange = new EventEmitter<EventOption>();
+  @Input() error: boolean = false;
+  @Input() isChecked: boolean = false;
+
+  @Output() state = new EventEmitter<boolean>();
+  @Output() propagate = new EventEmitter();
 
   onChange: any = () => {};
   onTouched: any = () => {};
@@ -61,7 +63,16 @@ export class CheckboxInputComponent implements OnInit {
     this.onTouched = fn;
   }
 
-  onValueChange(value: EventOption['value']) {
-    this.emitInputChange.emit({ value, id: this.identifier });
+  onClick() {
+    this.isChecked = !this.isChecked;
+    this.state.emit(this.isChecked);
+
+    this.propagate.emit({
+      value: this.value,
+      checked: this.isChecked,
+      label: this.label
+    });
   }
+
+
 }
