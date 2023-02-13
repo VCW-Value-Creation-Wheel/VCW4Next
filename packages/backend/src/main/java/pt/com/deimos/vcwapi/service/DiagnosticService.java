@@ -7,6 +7,8 @@ import pt.com.deimos.vcwapi.dto.DiagnosticDTO;
 import pt.com.deimos.vcwapi.entity.DiagnosticEntity;
 import pt.com.deimos.vcwapi.repository.DiagnosticRepository;
 
+import java.util.Optional;
+
 @Transactional
 @Service
 public class DiagnosticService {
@@ -24,6 +26,10 @@ public class DiagnosticService {
   public Iterable<DiagnosticEntity> findByVcw(Long vcwId) {
     return this.diagnosticRepository.findByVcwId(vcwId);
   }
+
+  public Optional<DiagnosticEntity> findById(Long diagnosticId) {
+    return this.diagnosticRepository.findById(diagnosticId);
+  }
   
   public DiagnosticEntity save(String userId, Long diagnosticId, DiagnosticDTO diagnosticDTO) {
 
@@ -34,6 +40,10 @@ public class DiagnosticService {
     diagnosticEntity.setUpdatedBy(userId);
 
     return this.diagnosticRepository.save(diagnosticEntity);
+  }
+
+  public void delete(DiagnosticEntity diagnosticEntity) {
+    this.diagnosticRepository.delete(diagnosticEntity);
   }
 
 }

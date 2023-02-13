@@ -49,16 +49,4 @@ public class VcwService {
     return this.vcwRepository.save(vcwEntity);
   }
 
-
-  // Diagnostics
-  public DiagnosticEntity saveDiagnostic(String userId, Long vcwId, DiagnosticDTO diagnosticDTO) {
-
-    DiagnosticEntity diagnosticEntity = new DiagnosticEntity();
-    BeanUtils.copyProperties(diagnosticDTO, diagnosticEntity);
-    diagnosticEntity.setVcwId(vcwId);
-    diagnosticEntity.setCreatedBy(userId);
-    diagnosticEntity.setUpdatedBy(userId);
-
-    return this.diagnosticRepository.save(diagnosticEntity);
-  }
 }

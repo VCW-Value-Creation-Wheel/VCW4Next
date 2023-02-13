@@ -8,7 +8,6 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import pt.com.deimos.vcwapi.dto.DiagnosticDTO;
 import pt.com.deimos.vcwapi.entity.DiagnosticEntity;
-import pt.com.deimos.vcwapi.entity.ProjectEntity;
 import pt.com.deimos.vcwapi.service.DiagnosticService;
 
 import java.util.Optional;
@@ -40,6 +39,18 @@ public class DiagnosticController {
                 this.diagnosticService.save(principal.getSubject(), vcw_id, diagnosticDTO));
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> delete(@PathVariable Long id) {
+        Optional<DiagnosticEntity> diagnosticEntityOptional =
+                this.diagnosticService.findById(id);
 
+        if(diagnosticEntityOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Diagnostic not found");
+        }
+
+        this.diagnosticService.delete(diagnosticEntityOptional.get());
+
+        return ResponseEntity.noContent().build();
+    }
 
 }
