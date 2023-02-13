@@ -69,6 +69,7 @@ Create the name of the service account to use
 Helper for parse env variables
 */}}
 {{- define "helpers.list-env-variables"}}
+{{- $appName := include "app.name" . -}}
 {{- range $key, $val := .Values.secret.variables.normals }}
 - name: {{ $key }}
   value: {{ $val | quote }}
@@ -77,7 +78,7 @@ Helper for parse env variables
 - name: {{ $key }}
   valueFrom:
     secretKeyRef:
-      name: {{ include "app.name" . }}-secrets
+      name: {{ $appName }}-secrets
       key: {{ $key }}
 {{- end}}
 {{- end }}
