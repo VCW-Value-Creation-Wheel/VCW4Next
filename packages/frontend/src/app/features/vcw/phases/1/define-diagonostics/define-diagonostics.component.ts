@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, UntypedFormArray, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PhaseNavigationService, SwotFieldRow, swotFieldRowConfig } from '@core';
+import { VcwMockService } from '@core/services/mocks/vcw/vcw-mock.service';
 import { faPlus, faMinus, faTimes, faFloppyDisk, faCheck, faWindowMaximize } from '@fortawesome/free-solid-svg-icons';
 import { Subject } from 'rxjs';
 import { take } from 'rxjs/operators';
@@ -42,19 +43,26 @@ export class DefineDiagonosticsComponent implements OnInit {
     'Threats'
   ];
 
-  swotFields: SwotFieldRow[] = [];
-
-  constructor(private formbuilder: FormBuilder,
+  constructor(private formBuilder: FormBuilder,
               private phaseNavService: PhaseNavigationService,
               private router: Router,
-              private activatedRoute: ActivatedRoute) {
-    this.dataFormArray = this.formbuilder.array([]);
+              private activatedRoute: ActivatedRoute,
+              private mockService: VcwMockService) {
+    this.dataFormArray = this.formBuilder.array([]);
   }
 
 
   ngOnInit(): void {
     this.phaseNavService.nextPhase$.subscribe((nextPhase) => {
       this.router.navigate(['../' + nextPhase], {relativeTo: this.activatedRoute});
+    });
+
+    // mocks! Remove after back-end integration is implemented
+    this.mockService.getSwotFieldRows().pipe(take(1)).subscribe(data => {
+      data.forEach(d => {
+        this.dataFormArray.push(this.formBuilder.group(swotFieldRowConfig));
+        this.dataFormArray.at(this.dataFormArray.length - 1).patchValue(d);
+      });
     });
   }
 
@@ -63,7 +71,7 @@ export class DefineDiagonosticsComponent implements OnInit {
   }
 
   onAddRow() {
-    this.dataForm = this.formbuilder.group(swotFieldRowConfig);
+    this.dataForm = this.formBuilder.group(swotFieldRowConfig);
     this.simpleInputOpen = true;
     this.dataForm.controls.swotField.disable({onlySelf: true});
   }
@@ -71,7 +79,7 @@ export class DefineDiagonosticsComponent implements OnInit {
   editRow(index: number) {
     this.editRowMode = true;
     this.itemDialogOpen = true;
-    this.dataForm = this.formbuilder.group(swotFieldRowConfig);
+    this.dataForm = this.formBuilder.group(swotFieldRowConfig);
     this.dataForm.patchValue(this.dataFormArray.at(index).value);
     this.editRowIndex = index;
   }
@@ -141,7 +149,7 @@ export class DefineDiagonosticsComponent implements OnInit {
 
   addField(tabId: number) {
     (this.dataForm.controls.swotFields as FormArray).push(
-      this.formbuilder.group(swotFieldRowConfig)
+      this.formBuilder.group(swotFieldRowConfig)
     );
 
     this.swotFields.push({

@@ -57,6 +57,7 @@ export class CreateIdeasComponent implements OnInit {
     });
     /*
       Here should be performed a request to the back-end, to check and fetch existing data.
+      The code below is using mocks.
     */
     this.mockService.getIdeas().pipe(take(1)).subscribe((data) => {
       data.forEach(d => {

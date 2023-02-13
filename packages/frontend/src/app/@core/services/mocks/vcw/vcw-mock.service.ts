@@ -1,11 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Idea, VCW } from '@core/models/vcw';
+import { Idea, SwotFieldRow, VCW } from '@core/models/vcw';
 import { Observable, of} from 'rxjs';
 
 const ServiceUrl = 'assets/mocks/vcws.json';
 
 const ideasUrl = 'assets/mocks/ideas.json';
+const swotUrl = 'assets/mocks/swot.json';
 
 @Injectable({
   providedIn: 'root'
@@ -32,5 +33,9 @@ export class VcwMockService {
 
   public getIdeas(): Observable<Idea[]> {
     return this.http.get<Idea[]>(ideasUrl);
+  }
+
+  getSwotFieldRows(): Observable<SwotFieldRow[]> {
+    return this.http.get<SwotFieldRow[]>(swotUrl);
   }
 }
