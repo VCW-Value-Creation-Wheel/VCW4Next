@@ -24,7 +24,7 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "app.serviceAccountName" . }}
+      serviceAccountName: {{ include "app.name" . }}-service-account
       securityContext:
         {{- toYaml .Values.deployment.podSecurityContext | nindent 8 }}
       containers:
