@@ -5,8 +5,21 @@ metadata:
   name: {{ .Values.configmap.name }}
 data:
   application.properties: |-
+    server.port=8081
+
+    spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+    spring.jpa.properties.hibernate.default_schema=application
+    spring.flyway.schemas=application
+    spring.jpa.hibernate.ddl-auto=none
+
     spring.datasource.url=jdbc:postgresql://100.100.3.108:6543/vcw_develop
     spring.datasource.username=vcw
     spring.datasource.password=vkn8bmd_mqy4dmj5AJG
+
+    spring.security.oauth2.resourceserver.jwt.issuer-uri=https://identity.staging.services4eo.com/realms/vcw-integration
+
+    # Log sql statements and their parameters
+    # logging.level.org.hibernate.SQL=debug
+    # logging.level.org.hibernate.type.descriptor.sql=trace
 
 {{- end }}
