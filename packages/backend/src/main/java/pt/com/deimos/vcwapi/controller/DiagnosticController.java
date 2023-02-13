@@ -39,6 +39,23 @@ public class DiagnosticController {
                 this.diagnosticService.save(principal.getSubject(), vcw_id, diagnosticDTO));
     }
 
+      @PutMapping("/{id}")
+      public ResponseEntity<Object> update(
+          @PathVariable Long id,
+          @RequestBody @Valid DiagnosticDTO diagnosticDTO
+      ) {
+        Optional<DiagnosticEntity> diagnosticEntityOptional = this.diagnosticService.findById(id);
+
+        if(diagnosticEntityOptional.isEmpty()) {
+          return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Diagnostic not found");
+        }
+
+
+
+        return ResponseEntity.status(HttpStatus.OK).body(
+                this.diagnosticService.update(diagnosticEntityOptional.get(), diagnosticDTO));
+      }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> delete(@PathVariable Long id) {
         Optional<DiagnosticEntity> diagnosticEntityOptional =

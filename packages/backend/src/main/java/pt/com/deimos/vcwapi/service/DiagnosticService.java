@@ -42,6 +42,11 @@ public class DiagnosticService {
     return this.diagnosticRepository.save(diagnosticEntity);
   }
 
+  public DiagnosticEntity update(DiagnosticEntity oldDiagnostic, DiagnosticDTO editedInfo) {
+    BeanUtils.copyProperties(editedInfo, oldDiagnostic);
+    return this.diagnosticRepository.save(oldDiagnostic);
+  }
+
   public void delete(DiagnosticEntity diagnosticEntity) {
     this.diagnosticRepository.delete(diagnosticEntity);
   }
