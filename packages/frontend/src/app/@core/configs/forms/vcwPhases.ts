@@ -7,7 +7,8 @@ export const swotAnalysisConfig = {
 export const swotFieldsConfig = {
     title: [null, Validators.required],
     description: [null, Validators.required],
-    categoryId: [null, Validators.required]
+    categoryId: [null, Validators.required],
+    id: [null]
 };
 
 export const challengeConfig = {
