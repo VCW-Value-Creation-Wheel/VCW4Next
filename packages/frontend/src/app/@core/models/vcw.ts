@@ -7,7 +7,7 @@ export interface VCW {
     thumbnailUrl?: string;
 }
 
-export interface SwotField {
+export interface SwotFieldRow {
     categoryId: number;
     title: string;
     description: string;

@@ -13,21 +13,17 @@
     
 </div>
 <div class="flex flex-col gap-4 mx-4 md:mx-64 lg:mx-80">
-    <ng-container *ngFor="let swotField of dataFormArray.controls; index as idx">
-        <ng-container *ngIf="swotField.controls.categoryId?.value === activeTab">
+    <ng-container *ngFor="let row of dataFormArray.controls; index as idx">
+        <ng-container *ngIf="row.controls.swotField?.value === activeTab">
             <app-list-item
                 [isEditable]="true"
                 [isSelectable]="false"
-                [value]="swotField.controls.title?.value"
-                (editClick)="editField(idx)"
-                (deleteClick)="deleteField(idx, swotField.controls.title)"
+                [value]="row.controls.name?.value"
+                (editClick)="editRow(idx)"
+                (deleteClick)="deleteRow(idx, row.controls.name)"
             ></app-list-item>
         </ng-container>
-        
     </ng-container>
-    <div>
-
-    </div>
     <app-button
         (buttonClick)="onAddField()"
         [label]="'New Row'"
@@ -36,10 +32,10 @@
 </div>
 <app-create-item-dialog
     *ngIf="itemDialogOpen"
-    [isEditing]="editFieldMode"
+    [isEditing]="editRowMode"
     [formGroup]="dataForm"
-    [title]="editFieldMode ? 'Edit Row': 'New Row'"
-    [tabFormControlsToExclude]="{'0': ['id', 'categoryId']}"
+    [title]="editRowMode ? 'Edit Row': 'New Row'"
+    [tabFormControlsToExclude]="{'0': ['id', 'swotField']}"
     [fileFormFieldName]="'file'"
     (cancel)="onCancel()"
     (confirm)="onConfirm()"

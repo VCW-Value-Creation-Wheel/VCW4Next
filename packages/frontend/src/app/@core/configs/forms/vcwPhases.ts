@@ -4,10 +4,10 @@ export const swotAnalysisConfig = {
     swotFields: [null]
 };
 
-export const swotFieldsConfig = {
-    title: [null, Validators.required],
-    description: [null, Validators.required],
-    categoryId: [null, Validators.required],
+export const swotFieldRowConfig = {
+    name: [null, Validators.required],
+    description: [null],
+    swotField: [null, Validators.required],
     id: [null]
 };
 

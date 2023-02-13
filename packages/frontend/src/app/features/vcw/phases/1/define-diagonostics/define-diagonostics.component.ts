@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, UntypedFormArray, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PhaseNavigationService, swotAnalysisConfig, SwotField, swotFieldsConfig } from '@core';
+import { PhaseNavigationService, SwotFieldRow, swotFieldRowConfig } from '@core';
 import { faPlus, faMinus, faTimes, faFloppyDisk } from '@fortawesome/free-solid-svg-icons';
 import { Subject } from 'rxjs';
 import { take } from 'rxjs/operators';
@@ -24,9 +24,9 @@ export class DefineDiagonosticsComponent implements OnInit {
   activeTab = 0;
 
   itemDialogOpen = false;
-  editFieldMode = false;
+  editRowMode = false;
   confirmDialogOpen = false;
-  editFieldIndex: number;
+  editRowIndex: number;
 
   actionConfirmTitle: string;
   actionConfirmText: string;
@@ -39,7 +39,7 @@ export class DefineDiagonosticsComponent implements OnInit {
     'Threats'
   ];
 
-  swotFields: SwotField[] = [];
+  swotFields: SwotFieldRow[] = [];
 
   constructor(private formbuilder: FormBuilder,
               private phaseNavService: PhaseNavigationService,
@@ -60,21 +60,21 @@ export class DefineDiagonosticsComponent implements OnInit {
   }
 
   onAddField() {
-    this.dataForm = this.formbuilder.group(swotFieldsConfig);
+    this.dataForm = this.formbuilder.group(swotFieldRowConfig);
     this.itemDialogOpen = true;
   }
 
-  editField(index: number) {
-    this.editFieldMode = true;
+  editRow(index: number) {
+    this.editRowMode = true;
     this.itemDialogOpen = true;
-    this.dataForm = this.formbuilder.group(swotFieldsConfig);
+    this.dataForm = this.formbuilder.group(swotFieldRowConfig);
     this.dataForm.patchValue(this.dataFormArray.at(index).value);
-    this.editFieldIndex = index;
+    this.editRowIndex = index;
   }
 
-  deleteField(index: number, fieldTitleControl: AbstractControl) {
+  deleteRow(index: number, rowNameControl: AbstractControl) {
     this.actionConfirmTitle = 'Delete Row';
-    this.actionConfirmText = `Are you sure you want to delete the row "${fieldTitleControl.value}"?`;
+    this.actionConfirmText = `Are you sure you want to delete the row "${rowNameControl.value}"?`;
     this.confirmDialogOpen = true;
     this.actionConfirm$.pipe(take(1)).subscribe(userConfirm => {
       this.confirmDialogOpen = false;
@@ -89,15 +89,16 @@ export class DefineDiagonosticsComponent implements OnInit {
   }
 
   onConfirm() {
-    if (!this.editFieldMode) {
-      this.dataForm.controls.categoryId.enable({onlySelf: true});
-      this.dataForm.controls.categoryId.setValue(this.activeTab);
+    if (!this.editRowMode) {
+      this.dataForm.controls.swotField.enable({onlySelf: true});
+      this.dataForm.controls.swotField.setValue(this.activeTab);
       this.dataFormArray.push(this.dataForm);
       this.itemDialogOpen = false;
     } else {
-      this.editFieldMode = false;
+      this.editRowMode = false;
       this.itemDialogOpen = false;
-      this.dataFormArray.at(this.editFieldIndex).patchValue(this.dataForm.value);
+      this.dataForm.controls.swotField.enable({onlySelf: true});
+      this.dataFormArray.at(this.editRowIndex).patchValue(this.dataForm.value);
     }
   }
 
@@ -113,7 +114,7 @@ export class DefineDiagonosticsComponent implements OnInit {
 
   addField(tabId: number) {
     (this.dataForm.controls.swotFields as FormArray).push(
-      this.formbuilder.group(swotFieldsConfig)
+      this.formbuilder.group(swotFieldRowConfig)
     );
 
     this.swotFields.push({
