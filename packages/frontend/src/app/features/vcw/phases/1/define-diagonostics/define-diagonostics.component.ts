@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, UntypedFormArray, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PhaseNavigationService, SwotFieldRow, swotFieldRowConfig } from '@core';
-import { faPlus, faMinus, faTimes, faFloppyDisk } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faMinus, faTimes, faFloppyDisk, faCheck, faWindowMaximize } from '@fortawesome/free-solid-svg-icons';
 import { Subject } from 'rxjs';
 import { take } from 'rxjs/operators';
 
@@ -19,6 +19,8 @@ export class DefineDiagonosticsComponent implements OnInit {
   faPlus = faPlus;
   faMinus = faMinus;
   faTimes = faTimes;
+  faCheck = faCheck;
+  faWindowMaximize = faWindowMaximize;
   faFloppyDisk = faFloppyDisk;
 
   activeTab = 0;
@@ -26,6 +28,7 @@ export class DefineDiagonosticsComponent implements OnInit {
   itemDialogOpen = false;
   editRowMode = false;
   confirmDialogOpen = false;
+  simpleInputOpen = false;
   editRowIndex: number;
 
   actionConfirmTitle: string;
@@ -61,7 +64,8 @@ export class DefineDiagonosticsComponent implements OnInit {
 
   onAddField() {
     this.dataForm = this.formbuilder.group(swotFieldRowConfig);
-    this.itemDialogOpen = true;
+    this.simpleInputOpen = true;
+    this.dataForm.controls.swotField.disable({onlySelf: true});
   }
 
   editRow(index: number) {
@@ -86,6 +90,7 @@ export class DefineDiagonosticsComponent implements OnInit {
 
   onCancel() {
     this.itemDialogOpen = false;
+    this.simpleInputOpen = false;
   }
 
   onConfirm() {
@@ -108,6 +113,23 @@ export class DefineDiagonosticsComponent implements OnInit {
 
   onActionConfirm() {
     this.actionConfirm$.next(true);
+  }
+
+  onKeyPress(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      this.onDirectAdd();
+    }
+  }
+
+  onDirectAdd() {
+    this.dataForm.controls.swotField.enable({onlySelf: true});
+    this.dataForm.controls.swotField.setValue(this.activeTab);
+    this.dataFormArray.push(this.dataForm);
+    this.simpleInputOpen = false;
+  }
+
+  onOpenDialog() {
+    this.itemDialogOpen = true;
   }
 
   /*
