@@ -25,7 +25,7 @@
                 [isSelectable]="false"
                 [value]="row.controls.name?.value"
                 (editClick)="editRow(idx)"
-                (deleteClick)="deleteRow(idx, row.controls.name)"
+                (deleteClick)="deleteRow(idx, row.controls.name, row.controls.id)"
             ></app-list-item>
         </ng-container>
     </ng-container>

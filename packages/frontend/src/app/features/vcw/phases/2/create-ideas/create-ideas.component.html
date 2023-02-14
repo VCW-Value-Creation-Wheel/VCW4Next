@@ -13,11 +13,11 @@
             [isSelectable]="false"
             [value]="idea.controls.name?.value"
             (editClick)="editIdea(idx)"
-            (deleteClick)="deleteIdea(idx, idea.controls.name)"
+            (deleteClick)="deleteIdea(idx, idea.controls.name, idea.controls.id)"
             [icon]="getIcon(idea.controls.sourceName)"
         ></app-list-item>
     </ng-container>
-    <div [formGroup]="dataform" *ngIf="simpleInputOpen" class="flex flex-row gap-2">
+    <div [formGroup]="dataForm" *ngIf="simpleInputOpen" class="flex flex-row gap-2">
         <app-input class="w-8/12 md:w-7/12 lg:w-10/12"
             formControlName="name"
             placeholder="Type an idea..."
@@ -27,7 +27,7 @@
                 [label]="'Add'"
                 [isTransparent]="true"
                 [leftIcon]="faCheck"
-                [isDisabled]="!dataform.valid"
+                [isDisabled]="!dataForm.valid"
                 (buttonClick)="onDirectAdd()"
             ></app-button>
             <app-button
@@ -69,11 +69,12 @@
 <app-create-item-dialog
     *ngIf="itemDialogOpen"
     [isEditing]="editIdeaMode"
-    [formGroup]="dataform"
+    [formGroup]="dataForm"
     [title]="editIdeaMode ? 'Edit Idea': 'New Idea'"
     [tabs] = "['Manual', 'From File']"
     [tabFormControlsToExclude]="{'0': ['file', 'id'], '1': ['name', 'id']}"
     [fileFormFieldName]="'file'"
+    [isAwaitingAction]="isLoading"
     (cancel)="onCancel()"
     (confirm)="onConfirm()"
 ></app-create-item-dialog>

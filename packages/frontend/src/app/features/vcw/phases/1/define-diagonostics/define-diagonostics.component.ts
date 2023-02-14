@@ -102,14 +102,14 @@ export class DefineDiagonosticsComponent implements OnInit {
     this.editRowIndex = index;
   }
 
-  deleteRow(index: number, rowNameControl: AbstractControl) {
+  deleteRow(index: number, rowNameControl: AbstractControl, rowIdControl: AbstractControl) {
     this.actionConfirmTitle = 'Delete Row';
     this.actionConfirmText = `Are you sure you want to delete the row "${rowNameControl.value}"?`;
     this.confirmDialogOpen = true;
     this.actionConfirm$.pipe(take(1)).subscribe(userConfirm => {
       this.confirmDialogOpen = false;
       if (userConfirm) {
-        this.vcwPhasesService.deleteDiagnostic(this.vcwId, index)
+        this.vcwPhasesService.deleteDiagnostic(this.vcwId, rowIdControl.value)
         .pipe(take(1))
         .subscribe(response => {
           this.dataFormArray.removeAt(index);
@@ -144,7 +144,8 @@ export class DefineDiagonosticsComponent implements OnInit {
           .during(5000).show();
         });
       } else {
-        // display error
+        this.snackbarService.danger('Error', 'Invalid data. Please review your form.')
+          .during(5000).show();
       }
 
     } else {
@@ -162,6 +163,9 @@ export class DefineDiagonosticsComponent implements OnInit {
           this.snackbarService.danger('Error', 'Unable to save the requested changes. Try again later.')
           .during(5000).show();
         });
+      } else {
+        this.snackbarService.danger('Error', 'Invalid data. Please review your form.')
+          .during(5000).show();
       }
     }
   }

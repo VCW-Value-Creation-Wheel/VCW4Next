@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, UntypedFormArray, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { createIdeasConfig, Idea, PhaseNavigationService } from '@core';
+import { createIdeasConfig, Idea, PhaseNavigationService, SnackbarService } from '@core';
 import { VcwMockService } from '@core/services/mocks/vcw/vcw-mock.service';
+import { VcwPhasesService } from '@core/services/vcwPhases/vcw-phases.service';
 import {
   faFloppyDisk,
   faUser,
@@ -30,7 +31,7 @@ export class CreateIdeasComponent implements OnInit {
   faWindowMaximize = faWindowMaximize;
 
   dataFormArray: UntypedFormArray;
-  dataform: UntypedFormGroup;
+  dataForm: UntypedFormGroup;
   editIdeaMode = false;
   editIdeaIndex: number;
   itemDialogOpen = false;
@@ -39,6 +40,8 @@ export class CreateIdeasComponent implements OnInit {
 
   initialFormValue: any[];
   hasChanged = false;
+  vcwId: number;
+  isLoading = false;
 
   actionConfirmText: string;
   actionConfirmTitle: string;
@@ -48,6 +51,8 @@ export class CreateIdeasComponent implements OnInit {
               private router: Router,
               private activatedRoute: ActivatedRoute,
               private formBuilder: FormBuilder,
+              private vcwPhasesService: VcwPhasesService,
+              private snackbarService: SnackbarService,
               private mockService: VcwMockService) {}
 
   ngOnInit(): void {
@@ -55,43 +60,41 @@ export class CreateIdeasComponent implements OnInit {
     this.phaseNavService.nextPhase$.subscribe((nextPhase) => {
         this.router.navigate(['../' + nextPhase], {relativeTo: this.activatedRoute});
     });
+
+    this.vcwId = parseInt(this.activatedRoute.snapshot.paramMap.get('vcw_id'), 10);
+
+    this.vcwPhasesService.getIdeas(this.vcwId).pipe(take(1)).subscribe(data => {
+
+      data.forEach(dataItem => {
+        this.dataFormArray.push(this.formBuilder.group(createIdeasConfig));
+        this.dataFormArray.at(this.dataFormArray.length - 1).patchValue(dataItem);
+      });
+    }, error => {
+      this.snackbarService.danger('Data Fetching Error', 'Unable to check and retrieve data from the server. Try again later.')
+      .during(5000).show();
+    });
+
     /*
       Here should be performed a request to the back-end, to check and fetch existing data.
       The code below is using mocks.
     */
-    this.mockService.getIdeas().pipe(take(1)).subscribe((data) => {
-      data.forEach(d => {
-        this.dataFormArray.push(this.formBuilder.group(createIdeasConfig));
-        this.dataFormArray.at(this.dataFormArray.length - 1).patchValue(d);
-      });
-    });
+    // this.mockService.getIdeas().pipe(take(1)).subscribe((data) => {
+    //   data.forEach(d => {
+    //     this.dataFormArray.push(this.formBuilder.group(createIdeasConfig));
+    //     this.dataFormArray.at(this.dataFormArray.length - 1).patchValue(d);
+    //   });
+    // });
   }
 
-  // onSave() {
-  //   this.actionConfirmTitle = 'Save changes';
-  //   this.actionConfirmText = 'Save the changes to this phase?';
-  //   this.confirmDialogOpen = true;
-  //   this.actionConfirm$.pipe(take(1)).subscribe((userConfirm) => {
-  //     this.confirmDialogOpen = false;
-  //     if (userConfirm) {
-  //       /* Perform a request to the back-end to save changes. After receiving a successful response from the back-end,
-  //       indicating that all changes were saved, execute the two lines below in the callback.
-  //       */
-  //       this.hasChanged = false;
-  //       this.initialFormValue = this.dataFormArray.getRawValue();
-  //     }
-  //   });
-  // }
-
   onAddIdea() {
-    this.dataform = this.formBuilder.group(createIdeasConfig);
+    this.dataForm = this.formBuilder.group(createIdeasConfig);
     this.simpleInputOpen = true;
-    this.dataform.controls.file.disable({onlySelf: true});
+    this.dataForm.controls.file.disable({onlySelf: true});
   }
 
   onDirectAdd() {
     // send request to back-end. On successful response, push to data form array.
-    this.dataFormArray.push(this.dataform);
+    this.dataFormArray.push(this.dataForm);
     this.simpleInputOpen = false;
   }
 
@@ -107,29 +110,61 @@ export class CreateIdeasComponent implements OnInit {
 
   onConfirm() {
     // add idea to list. If from file, perform a request first then add idea if the response is successful.
-
+    this.isLoading = true;
     if (!this.editIdeaMode) {
       // send request to back-end. On successful response, push to data form array.
-      this.dataFormArray.push(this.dataform);
-      this.simpleInputOpen = false;
-      this.itemDialogOpen = false;
+      if (this.dataForm.valid) {
+        this.vcwPhasesService.createIdea(this.vcwId, this.dataForm.value)
+        .pipe(take(1))
+        .subscribe(response => {
+          this.dataFormArray.push(this.dataForm);
+          this.itemDialogOpen = false;
+          this.simpleInputOpen = false;
+          this.isLoading = false;
+        }, error => {
+          this.isLoading = false;
+          this.snackbarService.danger('Error', 'Unable to create new idea. Try again later.')
+          .during(5000).show();
+        });
+      } else {
+        this.isLoading = false;
+        this.snackbarService.danger('Error', 'Invalid data. Please review your form.')
+          .during(5000).show();
+      }
     } else {
       // send request to back-end. If successful, change the previous values in the form array.
-      this.dataFormArray.at(this.editIdeaIndex).patchValue(this.dataform.value);
-      this.editIdeaMode = false;
-      this.itemDialogOpen = false;
+      if (this.dataForm.valid) {
+        const id = this.dataForm.controls.id.value;
+        this.vcwPhasesService.editIdea(this.vcwId, id, this.dataForm.value)
+        .pipe(take(1))
+        .subscribe(response => {
+          this.editIdeaMode = false;
+          this.itemDialogOpen = false;
+          this.isLoading = false;
+          this.dataFormArray.at(this.editIdeaIndex).patchValue(this.dataForm.value);
+        }, error => {
+          this.isLoading = false;
+          this.dataForm.controls.swotField.disable({onlySelf: true});
+          this.snackbarService.danger('Error', 'Unable to save the requested changes. Try again later.')
+          .during(5000).show();
+        });
+      } else {
+        this.isLoading = false;
+        this.snackbarService.danger('Error', 'Invalid data. Please review your form.')
+          .during(5000).show();
+      }
     }
   }
 
   editIdea(index: number) {
     this.editIdeaMode = true;
     this.itemDialogOpen = true;
-    this.dataform = this.formBuilder.group(createIdeasConfig);
-    this.dataform.patchValue(this.dataFormArray.at(index).value);
+    this.dataForm = this.formBuilder.group(createIdeasConfig);
+    this.dataForm.patchValue(this.dataFormArray.at(index).value);
     this.editIdeaIndex = index;
   }
 
-  deleteIdea(index: number, ideaNameControl: AbstractControl) {
+  deleteIdea(index: number, ideaNameControl: AbstractControl, ideaIdControl: AbstractControl) {
     // call confirm dialog then delete idea
     this.actionConfirmTitle = 'Delete Idea';
     this.actionConfirmText = `Are you sure you want to delete the idea "${ideaNameControl.value}"?`;
@@ -137,7 +172,14 @@ export class CreateIdeasComponent implements OnInit {
     this.actionConfirm$.pipe(take(1)).subscribe(userConfirm => {
       this.confirmDialogOpen = false;
       if (userConfirm) {
-        this.dataFormArray.removeAt(index);
+        this.vcwPhasesService.deleteIdea(this.vcwId, ideaIdControl.value)
+        .pipe(take(1))
+        .subscribe(response => {
+          this.dataFormArray.removeAt(index);
+        }, error => {
+          this.snackbarService.danger('Error', 'Unable to delete idea. Try again later.')
+          .during(5000).show();
+        });
       }
     });
   }
