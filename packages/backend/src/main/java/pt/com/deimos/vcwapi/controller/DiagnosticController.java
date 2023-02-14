@@ -13,7 +13,7 @@ import pt.com.deimos.vcwapi.service.DiagnosticService;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/v1/vcws/{vcw_id}/diagnostics")
+@RequestMapping("/v1/projects/{project_id}/vcws/{vcw_id}/diagnostics")
 public class DiagnosticController {
 
     private final DiagnosticService diagnosticService;

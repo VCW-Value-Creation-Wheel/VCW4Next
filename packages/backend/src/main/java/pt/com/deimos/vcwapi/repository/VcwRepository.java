@@ -7,8 +7,6 @@ import java.util.Optional;
 
 public interface VcwRepository extends CrudRepository<VcwEntity, Long> {
 
-    Iterable<VcwEntity> findByProjectsProjectHasUserRoleEntitiesUserInum(String userId);
-
-    Optional<VcwEntity> findByIdAndProjectsProjectHasUserRoleEntitiesUserInum(Long vcwId, String userId);
+    Iterable<VcwEntity> findByProjectsId(Long projectId);
 
 }

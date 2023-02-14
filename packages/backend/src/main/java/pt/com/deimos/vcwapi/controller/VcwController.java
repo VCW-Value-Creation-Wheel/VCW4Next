@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/v1/vcws")
+@RequestMapping("/v1/projects/{project_id}/vcws")
 public class VcwController {
 
   private final VcwService vcwService;
@@ -34,19 +34,12 @@ public class VcwController {
     return ResponseEntity.ok(this.vcwService.findAll());
   }
 
-  @GetMapping
-  public ResponseEntity<Iterable<VcwEntity>> getByUser(
-          @AuthenticationPrincipal Jwt principal) {
-    return ResponseEntity.ok(this.vcwService.findByUser(principal.getSubject()));
-  }
-
   @GetMapping("/{id}")
-  public ResponseEntity<Object> getByIdAndUser(
-          @PathVariable(value = "id") Long id,
-          @AuthenticationPrincipal Jwt principal) {
+  public ResponseEntity<Object> getById(
+          @PathVariable(value = "id") Long id) {
 
     Optional<VcwEntity> vcwEntityOptional =
-            this.vcwService.findByIdAndUser(id, principal.getSubject());
+            this.vcwService.findById(id);
 
     if(vcwEntityOptional.isEmpty()) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Vcw not found");
@@ -55,7 +48,11 @@ public class VcwController {
     return ResponseEntity.ok(vcwEntityOptional.get());
   }
 
-
+  @GetMapping
+  public ResponseEntity<Iterable<VcwEntity>> getByProject(
+          @PathVariable(value = "project_id") Long projectId) {
+    return ResponseEntity.ok(this.vcwService.findByProject(projectId));
+  }
 
   @PostMapping
   public ResponseEntity<Object> store(
