@@ -1,9 +1,5 @@
 import {Validators} from '@angular/forms';
 
-export const swotAnalysisConfig = {
-    swotFields: [null]
-};
-
 export const swotFieldRowConfig = {
     name: [null, Validators.required],
     description: [null],

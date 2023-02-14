@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { challengeConfig, PhaseNavigationService } from '@core';
+import { challengeConfig, PhaseNavigationService, VcwPhasesService } from '@core';
 import { faFloppyDisk } from '@fortawesome/free-solid-svg-icons';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-challenge',
@@ -15,11 +16,15 @@ export class ChallengeComponent implements OnInit {
 
   dataForm: UntypedFormGroup;
 
+  projectId: number;
+  vcwId: number;
+
   constructor(
     private phaseNavService: PhaseNavigationService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private vcwPhasesService: VcwPhasesService
   ){
     this.dataForm = this.formBuilder.group(challengeConfig);
   }
@@ -27,10 +32,23 @@ export class ChallengeComponent implements OnInit {
     this.phaseNavService.nextPhase$.subscribe((nextPhase) => {
       this.router.navigate(['../' + nextPhase], {relativeTo: this.activatedRoute});
     });
+
+    this.projectId = parseInt(this.activatedRoute.snapshot.paramMap.get('project_id'), 10);
+    this.vcwId = parseInt(this.activatedRoute.snapshot.paramMap.get('vcw_id'), 10);
+
+    this.vcwPhasesService.getChallenge(this.vcwId, this.projectId)
+    .pipe(take(1))
+    .subscribe(data => {
+      if (data) {
+        this.dataForm.controls.challenge.patchValue(data);
+      }
+    });
   }
 
   onSave() {
-    console.log(this.isFormValid('challenge'));
+    if (this.isFormValid('challenge')) {
+      this.vcwPhasesService.createChallenge(this.vcwId, this.projectId, this.dataForm.controls.challenge.value);
+    }
   }
 
   isFormValid(control: string) {
