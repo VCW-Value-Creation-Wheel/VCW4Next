@@ -9,8 +9,6 @@ import { environment } from '../../../../environments/environment';
 })
 export class ProjectsService {
 
-  private id: number;
-
   private projectsBaseUrl = `${environment.api}/projects`;
 
   httpOptions = {
@@ -21,14 +19,6 @@ export class ProjectsService {
   };
 
   constructor(private http: HttpClient) { }
-
-  public get projectId() {
-    return this.id;
-  }
-
-  public set projectId(newId: number) {
-    this.id = newId;
-  }
 
   getProjects(): Observable<Project[]> {
     return this.http.get<Project[]>(this.projectsBaseUrl, this.httpOptions);

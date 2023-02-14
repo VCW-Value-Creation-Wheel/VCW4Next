@@ -4,7 +4,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import {
   createIdeasConfig,
   PhaseNavigationService,
-  ProjectsService,
   SnackbarService,
   VcwPhasesService
 } from '@core';
@@ -46,6 +45,7 @@ export class CreateIdeasComponent implements OnInit {
   initialFormValue: any[];
   hasChanged = false;
   vcwId: number;
+  projectId: number;
   isLoading = false;
 
   actionConfirmText: string;
@@ -57,7 +57,6 @@ export class CreateIdeasComponent implements OnInit {
               private activatedRoute: ActivatedRoute,
               private formBuilder: FormBuilder,
               private vcwPhasesService: VcwPhasesService,
-              private projectsService: ProjectsService,
               private snackbarService: SnackbarService,
               private mockService: VcwMockService) {}
 
@@ -68,9 +67,9 @@ export class CreateIdeasComponent implements OnInit {
     });
 
     this.vcwId = parseInt(this.activatedRoute.snapshot.paramMap.get('vcw_id'), 10);
-    this.projectsService.projectId = parseInt(this.activatedRoute.snapshot.paramMap.get('project_id'), 10);
+    this.projectId = parseInt(this.activatedRoute.snapshot.paramMap.get('project_id'), 10);
 
-    this.vcwPhasesService.getIdeas(this.vcwId, this.projectsService.projectId).pipe(take(1)).subscribe(data => {
+    this.vcwPhasesService.getIdeas(this.vcwId, this.projectId).pipe(take(1)).subscribe(data => {
 
       data.forEach(dataItem => {
         this.dataFormArray.push(this.formBuilder.group(createIdeasConfig));
@@ -121,7 +120,7 @@ export class CreateIdeasComponent implements OnInit {
     if (!this.editIdeaMode) {
       // send request to back-end. On successful response, push to data form array.
       if (this.dataForm.valid) {
-        this.vcwPhasesService.createIdea(this.vcwId, this.projectsService.projectId, this.dataForm.value)
+        this.vcwPhasesService.createIdea(this.vcwId, this.projectId, this.dataForm.value)
         .pipe(take(1))
         .subscribe(response => {
           this.dataFormArray.push(this.dataForm);
@@ -142,7 +141,7 @@ export class CreateIdeasComponent implements OnInit {
       // send request to back-end. If successful, change the previous values in the form array.
       if (this.dataForm.valid) {
         const id = this.dataForm.controls.id.value;
-        this.vcwPhasesService.editIdea(this.vcwId, this.projectsService.projectId, id, this.dataForm.value)
+        this.vcwPhasesService.editIdea(this.vcwId, this.projectId, id, this.dataForm.value)
         .pipe(take(1))
         .subscribe(response => {
           this.editIdeaMode = false;
@@ -179,7 +178,7 @@ export class CreateIdeasComponent implements OnInit {
     this.actionConfirm$.pipe(take(1)).subscribe(userConfirm => {
       this.confirmDialogOpen = false;
       if (userConfirm) {
-        this.vcwPhasesService.deleteIdea(this.vcwId, this.projectsService.projectId, ideaIdControl.value)
+        this.vcwPhasesService.deleteIdea(this.vcwId, this.projectId, ideaIdControl.value)
         .pipe(take(1))
         .subscribe(response => {
           this.dataFormArray.removeAt(index);
