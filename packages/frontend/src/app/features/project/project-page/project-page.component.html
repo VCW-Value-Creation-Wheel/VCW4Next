@@ -1,20 +1,22 @@
-<div class="pl-4 py-4">
-    <h1 class="text-2xl font-bold text-primary">{{project?.title}}</h1>
-</div>
-<div class="m-2 p-2">{{project?.description}}</div>
-<div class="justify-between gap-4 pl-4 py-4 w-full flex flex-wrap">
-    <app-button
-        [leftIcon]="faPlus"
-        [label]="'New VCW'"
-        [isDisabled]="false"
-        class="py-8 px-4"
-        (buttonClick)="addNewVcw()"
-    ></app-button>
-<div class="grid grid-cols-12 gap-4 w-full px-4 py-4">
-    <div *ngFor="let vcw of vcws" class="col-span-12 md:col-span-4 text-center gap-4 px-2 pb-2">
-        <app-vcw-card
-            [vcw]="vcw"
-            (clickEvent)="onVcwClick(vcw)"
-        ></app-vcw-card>
+<div *ngIf="project$ | async; let project">
+    <div class="pl-4 py-4">
+        <h1 class="text-2xl font-bold text-primary">{{project.name | async}}</h1>
+    </div>
+    <div class="m-2 p-2">{{project.description}}</div>
+    <div class="justify-between gap-4 pl-4 py-4 w-full flex flex-wrap">
+        <app-button
+            [leftIcon]="faPlus"
+            [label]="'New VCW'"
+            [isDisabled]="false"
+            class="py-8 px-4"
+            (buttonClick)="addNewVcw()"
+        ></app-button>
+    <div class="grid grid-cols-12 gap-4 w-full px-4 py-4">
+        <div *ngFor="let vcw of vcws$ | async" class="col-span-12 md:col-span-4 text-center gap-4 px-2 pb-2">
+            <app-vcw-card
+                [vcw]="vcw"
+                (clickEvent)="onVcwClick(vcw)"
+            ></app-vcw-card>
+        </div>
     </div>
 </div>

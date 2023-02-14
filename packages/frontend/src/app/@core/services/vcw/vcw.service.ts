@@ -29,4 +29,9 @@ export class VcwService {
     const url = `${this.baseUrl}/${projectId}/vcws`;
     return this.http.post(url, VcwData, this.httpOptions);
   }
+
+  getVcw(projectId: number, vcwId: number): Observable<VCW> {
+    const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}`;
+    return this.http.get<VCW>(url, this.httpOptions);
+  }
 }

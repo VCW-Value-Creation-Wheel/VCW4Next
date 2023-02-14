@@ -218,33 +218,6 @@ export class DefineDiagonosticsComponent implements OnInit {
 
   /*
 
-  addField(tabId: number) {
-    (this.dataForm.controls.swotFields as FormArray).push(
-      this.formBuilder.group(swotFieldRowConfig)
-    );
-
-    this.swotFields.push({
-      categoryId: tabId,
-      title: '',
-      description: ''
-    });
-    ((this.dataForm.controls.swotFields as FormArray).controls[this.swotFields.length - 1] as FormGroup)
-      .controls.categoryId.setValue(tabId);
-  }
-
-  removeField(fieldId: number) {
-    this.swotFields.splice(fieldId, 1);
-    (this.dataForm.controls.swotFields as FormArray).removeAt(fieldId);
-  }
-
-  getSwotFieldsByCategory(categoryId: number): SwotField[] {
-    return this.swotFields.filter(field => field.categoryId === categoryId);
-  }
-
-  onSave() {
-    
-  }
-
   getValidator(control: string, nestingControl?: string, index?: number): boolean {
     let validator;
     if (nestingControl) {

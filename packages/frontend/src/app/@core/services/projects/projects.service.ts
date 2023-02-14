@@ -28,4 +28,9 @@ export class ProjectsService {
     return this.http.post(this.projectsBaseUrl, projectData, this.httpOptions);
   }
 
+  getProjectById(projectId: number): Observable<Project> {
+    const url = `${this.projectsBaseUrl}/${projectId}`;
+    return this.http.get<Project>(url, this.httpOptions);
+  }
+
 }

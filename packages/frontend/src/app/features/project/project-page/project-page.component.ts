@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MockProjectService, Project } from '@core';
-import { VCW } from '@core/models/vcw';
+import { MockProjectService, Project, VcwService, VCW, ProjectsService } from '@core';
 import { VcwMockService } from '@core/services/mocks/vcw/vcw-mock.service';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-project-page',
@@ -12,24 +12,31 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 })
 export class ProjectPageComponent implements OnInit {
 
-  project: Project;
+  projectId: number;
 
   faPlus = faPlus;
-  vcws: VCW[] = [];
+  // vcws: VCW[] = [];
+  vcws$: Observable<VCW>;
+  project$: Observable<Project>;
 
   constructor( 
-    private vcwService: VcwMockService,
+    private vcwMockService: VcwMockService,
     private mockProjectService: MockProjectService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private vcwService: VcwService,
+    private projectsService: ProjectsService
     ) { }
 
   ngOnInit(): void {
-    this.mockProjectService.getById(Number(this.route.snapshot.paramMap.get('project_id'))).subscribe(project =>{
-      this.project = project;
-      this.vcwService.getVcws(this.project.id).subscribe((vcws => this.vcws = vcws));
-    });
+    // this.mockProjectService.getById(Number(this.route.snapshot.paramMap.get('project_id'))).subscribe(project =>{
+    //   this.project = project;
+    //   this.vcwService.getVcws(this.project.id).subscribe((vcws => this.vcws = vcws));
+    // });
     // this loads a mock for testing. Disable this when loading from the back-end.
+    this.projectId = parseInt(this.route.snapshot.paramMap.get('project_id'), 10);
+    this.project$ = this.projectsService.getProjectById(this.projectId);
+    this.vcws$ = this.vcwService.getProjectVcws(this.projectId);
   }
 
   onVcwClick(vcw: VCW) {

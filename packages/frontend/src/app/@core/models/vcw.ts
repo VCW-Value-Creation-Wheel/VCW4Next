@@ -1,7 +1,8 @@
 export interface VCW {
     id: number;
+    type: string;
     projectId: number;
-    title: string;
+    name: string;
     challenge: string;
     description: string;
     thumbnailUrl?: string;
