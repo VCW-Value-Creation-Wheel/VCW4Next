@@ -1,9 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, UntypedFormArray, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PhaseNavigationService, SnackbarService, SwotFieldRow, swotFieldRowConfig } from '@core';
+import {
+  PhaseNavigationService,
+  ProjectsService,
+  SnackbarService,
+  swotFieldRowConfig,
+  VcwPhasesService
+} from '@core';
 import { VcwMockService } from '@core/services/mocks/vcw/vcw-mock.service';
-import { VcwPhasesService } from '@core/services/vcwPhases/vcw-phases.service';
 import { faPlus, faMinus, faTimes, faFloppyDisk, faCheck, faWindowMaximize } from '@fortawesome/free-solid-svg-icons';
 import { Subject } from 'rxjs';
 import { take } from 'rxjs/operators';
@@ -50,6 +55,7 @@ export class DefineDiagonosticsComponent implements OnInit {
               private router: Router,
               private activatedRoute: ActivatedRoute,
               private vcwPhasesService: VcwPhasesService,
+              private projectsService: ProjectsService,
               private snackbarService: SnackbarService,
               private mockService: VcwMockService) {
     this.dataFormArray = this.formBuilder.array([]);
@@ -62,8 +68,9 @@ export class DefineDiagonosticsComponent implements OnInit {
     });
 
     this.vcwId = parseInt(this.activatedRoute.snapshot.paramMap.get('vcw_id'), 10);
+    this.projectsService.projectId = parseInt(this.activatedRoute.snapshot.paramMap.get('project_id'), 10);
 
-    this.vcwPhasesService.getDiagnostics(this.vcwId).pipe(take(1)).subscribe(data => {
+    this.vcwPhasesService.getDiagnostics(this.vcwId, this.projectsService.projectId).pipe(take(1)).subscribe(data => {
 
       data.forEach(dataItem => {
         this.dataFormArray.push(this.formBuilder.group(swotFieldRowConfig));
@@ -109,7 +116,7 @@ export class DefineDiagonosticsComponent implements OnInit {
     this.actionConfirm$.pipe(take(1)).subscribe(userConfirm => {
       this.confirmDialogOpen = false;
       if (userConfirm) {
-        this.vcwPhasesService.deleteDiagnostic(this.vcwId, rowIdControl.value)
+        this.vcwPhasesService.deleteDiagnostic(this.vcwId, this.projectsService.projectId, rowIdControl.value)
         .pipe(take(1))
         .subscribe(response => {
           this.dataFormArray.removeAt(index);
@@ -131,7 +138,7 @@ export class DefineDiagonosticsComponent implements OnInit {
       this.dataForm.controls.swotField.enable({onlySelf: true});
       this.dataForm.controls.swotField.setValue(this.activeTab);
       if (this.dataForm.valid) {
-        this.vcwPhasesService.createDiagnostic(this.vcwId, this.dataForm.value)
+        this.vcwPhasesService.createDiagnostic(this.vcwId, this.projectsService.projectId, this.dataForm.value)
         .pipe(take(1))
         .subscribe(response => {
           this.dataFormArray.push(this.dataForm);
@@ -152,7 +159,7 @@ export class DefineDiagonosticsComponent implements OnInit {
       this.dataForm.controls.swotField.enable({onlySelf: true});
       if (this.dataForm.valid) {
         const id = this.dataForm.controls.id.value;
-        this.vcwPhasesService.editDiagnostic(this.vcwId, id, this.dataForm.value)
+        this.vcwPhasesService.editDiagnostic(this.vcwId, this.projectsService.projectId, id, this.dataForm.value)
         .pipe(take(1))
         .subscribe(response => {
           this.editRowMode = false;
@@ -188,7 +195,7 @@ export class DefineDiagonosticsComponent implements OnInit {
     this.dataForm.controls.swotField.enable({onlySelf: true});
     this.dataForm.controls.swotField.setValue(this.activeTab);
     if (this.dataForm.valid) {
-      this.vcwPhasesService.createDiagnostic(this.vcwId, this.dataForm.value)
+      this.vcwPhasesService.createDiagnostic(this.vcwId, this.projectsService.projectId, this.dataForm.value)
         .pipe(take(1))
         .subscribe(response => {
           this.dataFormArray.push(this.dataForm);

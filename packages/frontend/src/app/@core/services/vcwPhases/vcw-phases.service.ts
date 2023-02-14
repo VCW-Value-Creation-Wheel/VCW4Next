@@ -9,7 +9,7 @@ import { environment } from '../../../../environments/environment';
 })
 export class VcwPhasesService {
 
-  vcwBaseUrl = `${environment.api}/vcws`;
+  baseUrl = `${environment.api}/projects`;
 
   httpOptions = {
     headers: new HttpHeaders({
@@ -18,63 +18,63 @@ export class VcwPhasesService {
     }),
   };
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   // Phase 1a
-  getDiagnostics(vcwId: number): Observable<SwotFieldRow[]> {
-    const url = `${this.vcwBaseUrl}/${vcwId}/diagnostics`;
+  getDiagnostics(vcwId: number, projectId: number): Observable<SwotFieldRow[]> {
+    const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/diagnostics`;
     return this.http.get<SwotFieldRow[]>(url, this.httpOptions);
   }
 
-  createDiagnostic(vcwId: number, diagnosticData: SwotFieldRow): Observable<any> {
-    const url = `${this.vcwBaseUrl}/${vcwId}/diagnostics`;
+  createDiagnostic(vcwId: number, projectId: number, diagnosticData: SwotFieldRow): Observable<any> {
+    const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/diagnostics`;
     return this.http.post(url, diagnosticData, this.httpOptions);
   }
 
-  deleteDiagnostic(vcwId: number, diagnosticId: number): Observable<any> {
-    const url = `${this.vcwBaseUrl}/${vcwId}/diagnostics/${diagnosticId}`;
+  deleteDiagnostic(vcwId: number, projectId: number, diagnosticId: number): Observable<any> {
+    const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/diagnostics/${diagnosticId}`;
     return this.http.delete(url, this.httpOptions);
   }
 
-  editDiagnostic(vcwId: number, diagnosticId: number, diagnosticData: SwotFieldRow): Observable<SwotFieldRow> {
-    const url = `${this.vcwBaseUrl}/${vcwId}/diagnostics/${diagnosticId}`;
+  editDiagnostic(vcwId: number, projectId: number, diagnosticId: number, diagnosticData: SwotFieldRow): Observable<SwotFieldRow> {
+    const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/diagnostics/${diagnosticId}`;
     return this.http.put<SwotFieldRow>(url, diagnosticData, this.httpOptions);
   }
 
   // Phase 1b
-  getChallenge(vcwId: number): Observable<string> {
-    const url = `${this.vcwBaseUrl}/${vcwId}/challenges`;
+  getChallenge(vcwId: number, projectId: number): Observable<string> {
+    const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/challenges`;
     return this.http.get<string>(url, this.httpOptions);
   }
 
-  createChallenge(vcwId: number, data: string): Observable<any> {
-    const url = `${this.vcwBaseUrl}/${vcwId}/challenges`;
+  createChallenge(vcwId: number, projectId: number, data: string): Observable<any> {
+    const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/challenges`;
     return this.http.post(url, data, this.httpOptions);
   }
 
-  editChallenge(vcwId: number, data: string): Observable<string> {
-    const url = `${this.vcwBaseUrl}/${vcwId}/challenges`;
+  editChallenge(vcwId: number, projectId: number, data: string): Observable<string> {
+    const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/challenges`;
     return this.http.put<string>(url, data, this.httpOptions);
   }
 
   // Phase 2a
-  getIdeas(vcwId: number): Observable<Idea[]> {
-    const url = `${this.vcwBaseUrl}/${vcwId}/ideas`;
+  getIdeas(vcwId: number, projectId: number): Observable<Idea[]> {
+    const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/ideas`;
     return this.http.get<Idea[]>(url, this.httpOptions);
   }
 
-  createIdea(vcwId: number, ideaData: Idea): Observable<any> {
-    const url = `${this.vcwBaseUrl}/${vcwId}/ideas`;
+  createIdea(vcwId: number, projectId: number, ideaData: Idea): Observable<any> {
+    const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/ideas`;
     return this.http.post(url, ideaData, this.httpOptions);
   }
 
-  editIdea(vcwId: number, ideaId: number, ideaData: Idea): Observable<Idea> {
-    const url = `${this.vcwBaseUrl}/${vcwId}/ideas/${ideaId}`;
+  editIdea(vcwId: number, projectId: number, ideaId: number, ideaData: Idea): Observable<Idea> {
+    const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/ideas/${ideaId}`;
     return this.http.put<Idea>(url, ideaData, this.httpOptions);
   }
 
-  deleteIdea(vcwId: number, ideaId: number): Observable<any> {
-    const url = `${this.vcwBaseUrl}/${vcwId}/ideas/${ideaId}`;
+  deleteIdea(vcwId: number, projectId: number, ideaId: number): Observable<any> {
+    const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/ideas/${ideaId}`;
     return this.http.delete(url, this.httpOptions);
   }
 }
