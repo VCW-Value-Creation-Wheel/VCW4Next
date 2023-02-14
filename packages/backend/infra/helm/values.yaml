@@ -131,8 +131,5 @@ serviceAccount:
 minio:
   auth:
     existingSecret: vcw-backend-secrets
-  persistence:
-    enabled: true
-    storageClass: "backedup"
   statefulset:
     replicaCount: 1
