@@ -134,3 +134,5 @@ minio:
   persistence:
     enabled: true
     storageClass: "backedup"
+  statefulset:
+    replicaCount: 1
