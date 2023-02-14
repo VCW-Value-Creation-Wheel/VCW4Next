@@ -56,12 +56,13 @@ public class VcwController {
 
   @PostMapping
   public ResponseEntity<Object> store(
+          @PathVariable(value = "project_id") Long projectId,
           @RequestBody @Valid VcwDTO vcwDTO,
           @AuthenticationPrincipal Jwt principal
   ) {
 
     return ResponseEntity.status(HttpStatus.CREATED).body(
-            this.vcwService.save(vcwDTO, principal.getSubject()));
+            this.vcwService.save(vcwDTO, principal.getSubject(), projectId));
   }
 
 }

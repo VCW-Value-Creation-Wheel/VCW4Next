@@ -94,8 +94,11 @@ public class VcwEntity extends BaseNamedEntity{
     private Set<FileEntity> attachments = new HashSet<>();
 
 
-    @ManyToMany(mappedBy = "vcws")
+    @ManyToMany(mappedBy = "vcws", cascade = CascadeType.ALL)
     @JsonIgnore
     Set<ProjectEntity> projects = new HashSet<>();
+
+
+    public void addProject(ProjectEntity p){projects.add(p);}
 
 }
