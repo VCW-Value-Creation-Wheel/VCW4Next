@@ -3,6 +3,7 @@
     [cancelText]="'Cancel'"
     [title]="title"
     [confirmDisabled]="!formGroup.valid"
+    [awaitingAction]="isAwaitingAction"
     (cancel)="onCancel()"
     (confirm)="onConfirm()"
 >   
