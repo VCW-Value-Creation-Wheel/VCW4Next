@@ -25,7 +25,8 @@ export class ProjectListComponent implements OnInit {
   ngOnInit(): void {
     // this loads a mock for testing. Disable this when loading from the back-end.
     // this.projectMock.projects().subscribe((projects => this.projects = projects));
-    this.projects$ = this.projectsService.getProjects();
+    this.projects$ = this.projectMock.projects();
+    // this.projects$ = this.projectsService.getProjects();
   }
 
   onProjectClick(projectId: number) {

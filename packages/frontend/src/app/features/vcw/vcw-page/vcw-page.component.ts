@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { VCW, VcwService } from '@core';
+import { VcwMockService } from '@core/services/mocks/vcw/vcw-mock.service';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { Observable } from 'rxjs';
 
@@ -21,13 +22,15 @@ export class VcwPageComponent implements OnInit {
 
   constructor(private router: Router,
               private activatedRoute: ActivatedRoute,
-              private vcwService: VcwService) {}
+              private vcwService: VcwService,
+              private vcwMockService: VcwMockService) {}
 
   ngOnInit(): void {
     // this.vcwType = 'method';
     this.projectId = parseInt(this.activatedRoute.snapshot.paramMap.get('project_id'), 10);
     this.vcwId = parseInt(this.activatedRoute.snapshot.paramMap.get('vcw_id'), 10);
-    this.vcw$ = this.vcwService.getVcw(this.projectId, this.vcwId);
+    this.vcw$ = this.vcwMockService.getVcwById(this.vcwId);
+    // this.vcw$ = this.vcwService.getVcw(this.projectId, this.vcwId);
   }
 
   onClick(id: string) {

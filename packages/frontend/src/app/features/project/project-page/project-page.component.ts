@@ -16,7 +16,7 @@ export class ProjectPageComponent implements OnInit {
 
   faPlus = faPlus;
   // vcws: VCW[] = [];
-  vcws$: Observable<VCW>;
+  vcws$: Observable<VCW[]>;
   project$: Observable<Project>;
 
   constructor( 
@@ -35,8 +35,12 @@ export class ProjectPageComponent implements OnInit {
     // });
     // this loads a mock for testing. Disable this when loading from the back-end.
     this.projectId = parseInt(this.route.snapshot.paramMap.get('project_id'), 10);
-    this.project$ = this.projectsService.getProjectById(this.projectId);
-    this.vcws$ = this.vcwService.getProjectVcws(this.projectId);
+
+    this.project$ = this.mockProjectService.getById(this.projectId);
+    this.vcws$ = this.vcwMockService.getVcws(this.projectId);
+
+    // this.project$ = this.projectsService.getProjectById(this.projectId);
+    // this.vcws$ = this.vcwService.getProjectVcws(this.projectId);
   }
 
   onVcwClick(vcw: VCW) {
