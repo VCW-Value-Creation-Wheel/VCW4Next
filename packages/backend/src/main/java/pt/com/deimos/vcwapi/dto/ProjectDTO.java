@@ -22,7 +22,6 @@ public class ProjectDTO {
 
   private MultipartFile thumbnail;
 
-  @NotEmpty
   private List<@Valid ProjectHasUserRoleDTO> projectUsers;
 
 }
