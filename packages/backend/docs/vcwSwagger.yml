@@ -148,7 +148,7 @@ paths:
           schema:
             type: List<{String, Long}>
   
-  /vcws/:
+  /projects/{project_id}/vcws/:
     post:
       tags:
         - New Vcw Page
@@ -186,7 +186,7 @@ paths:
           required: true
           schema:
             type: string
-  /vcws/{vcw_id} :
+  /projects/{project_id}/vcws/{vcw_id} :
     get:
       tags:
         - Vcw Page
@@ -223,13 +223,48 @@ paths:
           schema:
             type: string
 
-  /vcws/{vcw_id}/diagnostics:
+  /projects/{project_id}/vcws/{vcw_id}/diagnostics:
+    get:
+      tags:
+        - Diagnostics page (swot fields)
+      summary: Shows all diagnostics of the given vcw. 🚧
+      description: TODO
+      operationId: getByVcw
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/examples/diagnostic-new'
+        '404':
+          description: Diagnostic not found
+          content:
+            'text/plain; charset=utf-8':
+              schema:
+                type: string
+                example: 'Diagnostic not found'
+      parameters:
+        - name: vcw_id
+          in: path
+          description: "vcw id"
+          required: true
+          schema:
+            type: integer
+        - name: diagnostic_id
+          in: path
+          description: "diagnostic id"
+          required: true
+          schema:
+            type: integer
     post:
       tags:
         - Diagnostics page (swot fields)
       summary: Creates a single diagnostic. 🚧
       description: TODO
-      operationId: saveDiagnostic
+      operationId: save
       responses:
         '201':
           description: Created diagnostics
@@ -272,13 +307,13 @@ paths:
           required: true
           schema:
             type: string
-  /vcws/{vcw_id}/diagnostics/{diagnostic_id}:
+  /projects/{project_id}/vcws/{vcw_id}/diagnostics/{diagnostic_id}:
     put:
       tags:
         - Diagnostics page (swot fields)
       summary: Edits the given diagnostic. 🚧
       description: TODO
-      operationId: editDiagnostic
+      operationId: update
       responses:
         '201':
           description: Edited diagnostic
@@ -333,7 +368,7 @@ paths:
         - Diagnostics page (swot fields)
       summary: Deletes the given diagnostic. 🚧
       description: TODO
-      operationId: deleteDiagnostic
+      operationId: delete
       responses:
         '400':
           description: Invalid diagnostic id supplied
@@ -352,7 +387,7 @@ paths:
             type: integer
             format: int64
 
-  /vcws/{vcw_id}/challenges:
+  /projects/{project_id}/vcws/{vcw_id}/challenges:
     post:
       tags:
         - Vcw challenge page
@@ -428,7 +463,7 @@ paths:
           schema:
             type: string
 
-  /vcws/{vcw_id}/ideas/:
+  /projects/{project_id}/vcws/{vcw_id}/ideas/:
     get:
       tags:
         - Ideas page
@@ -469,7 +504,7 @@ paths:
       operationId: saveIdeas
 
 
-  /vcws/{vcw_id}/ideas/{idea_id}:
+  /projects/{project_id}/vcws/{vcw_id}/ideas/{idea_id}:
     put:
       tags:
         - Ideas page
