@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { challengeConfig, PhaseNavigationService, SnackbarService, VcwPhasesService } from '@core';
 import { faFloppyDisk } from '@fortawesome/free-solid-svg-icons';
 import { take } from 'rxjs/operators';
+import { environment } from '../../../../../../environments/environment';
 
 @Component({
   selector: 'app-challenge',
@@ -20,6 +21,8 @@ export class ChallengeComponent implements OnInit {
   vcwId: number;
   isEditing = false;
 
+  useMocks: boolean;
+
   constructor(
     private phaseNavService: PhaseNavigationService,
     private router: Router,
@@ -31,6 +34,8 @@ export class ChallengeComponent implements OnInit {
     this.dataForm = this.formBuilder.group(challengeConfig);
   }
   ngOnInit(): void {
+    this.useMocks = environment.activateMocks;
+
     this.phaseNavService.nextPhase$.subscribe((nextPhase) => {
       this.router.navigate(['../' + nextPhase], {relativeTo: this.activatedRoute});
     });
@@ -38,14 +43,19 @@ export class ChallengeComponent implements OnInit {
     this.projectId = parseInt(this.activatedRoute.snapshot.paramMap.get('project_id'), 10);
     this.vcwId = parseInt(this.activatedRoute.snapshot.paramMap.get('vcw_id'), 10);
 
-    this.vcwPhasesService.getChallenge(this.vcwId, this.projectId)
-    .pipe(take(1))
-    .subscribe(data => {
-      if (data) {
-        this.isEditing = true;
-        this.dataForm.controls.challenge.patchValue(data);
-      }
-    });
+    if (!this.useMocks) {
+      this.vcwPhasesService.getChallenge(this.vcwId, this.projectId)
+      .pipe(take(1))
+      .subscribe(data => {
+        if (data) {
+          this.isEditing = true;
+          this.dataForm.controls.challenge.patchValue(data);
+        }
+      }, error => {
+        this.snackbarService.danger('Data Fetching Error', 'Unable to check and retrieve data from the server. Try again later.')
+          .during(5000).show();
+      });
+    }
   }
 
   onSave() {

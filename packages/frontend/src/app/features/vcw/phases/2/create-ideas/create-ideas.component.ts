@@ -20,6 +20,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { Subject } from 'rxjs';
 import { take } from 'rxjs/operators';
+import { environment } from '../../../../../../environments/environment';
 
 @Component({
   selector: 'app-create-ideas',
@@ -48,6 +49,8 @@ export class CreateIdeasComponent implements OnInit {
   projectId: number;
   isLoading = false;
 
+  useMocks: boolean;
+
   actionConfirmText: string;
   actionConfirmTitle: string;
   actionConfirm$: Subject<boolean> = new Subject();
@@ -61,6 +64,8 @@ export class CreateIdeasComponent implements OnInit {
               private mockService: VcwMockService) {}
 
   ngOnInit(): void {
+    this.useMocks = environment.activateMocks;
+
     this.dataFormArray = this.formBuilder.array([]);
     this.phaseNavService.nextPhase$.subscribe((nextPhase) => {
         this.router.navigate(['../' + nextPhase], {relativeTo: this.activatedRoute});
@@ -69,27 +74,30 @@ export class CreateIdeasComponent implements OnInit {
     this.vcwId = parseInt(this.activatedRoute.snapshot.paramMap.get('vcw_id'), 10);
     this.projectId = parseInt(this.activatedRoute.snapshot.paramMap.get('project_id'), 10);
 
-    this.vcwPhasesService.getIdeas(this.vcwId, this.projectId).pipe(take(1)).subscribe(data => {
-
-      data.forEach(dataItem => {
-        this.dataFormArray.push(this.formBuilder.group(createIdeasConfig));
-        this.dataFormArray.at(this.dataFormArray.length - 1).patchValue(dataItem);
+    if (!this.useMocks) {
+      this.vcwPhasesService.getIdeas(this.vcwId, this.projectId).pipe(take(1)).subscribe(data => {
+        data.forEach(dataItem => {
+          this.dataFormArray.push(this.formBuilder.group(createIdeasConfig));
+          this.dataFormArray.at(this.dataFormArray.length - 1).patchValue(dataItem);
+        });
+      }, error => {
+        this.snackbarService.danger('Data Fetching Error', 'Unable to check and retrieve data from the server. Try again later.')
+        .during(5000).show();
       });
-    }, error => {
-      this.snackbarService.danger('Data Fetching Error', 'Unable to check and retrieve data from the server. Try again later.')
-      .during(5000).show();
-    });
+    }
 
     /*
       Here should be performed a request to the back-end, to check and fetch existing data.
       The code below is using mocks.
     */
-    // this.mockService.getIdeas().pipe(take(1)).subscribe((data) => {
-    //   data.forEach(d => {
-    //     this.dataFormArray.push(this.formBuilder.group(createIdeasConfig));
-    //     this.dataFormArray.at(this.dataFormArray.length - 1).patchValue(d);
-    //   });
-    // });
+    if (this.useMocks) {
+      this.mockService.getIdeas().pipe(take(1)).subscribe((data) => {
+        data.forEach(d => {
+          this.dataFormArray.push(this.formBuilder.group(createIdeasConfig));
+          this.dataFormArray.at(this.dataFormArray.length - 1).patchValue(d);
+        });
+      });
+    }
   }
 
   onAddIdea() {
@@ -100,8 +108,24 @@ export class CreateIdeasComponent implements OnInit {
 
   onDirectAdd() {
     // send request to back-end. On successful response, push to data form array.
-    this.dataFormArray.push(this.dataForm);
-    this.simpleInputOpen = false;
+    if (this.dataForm.valid) {
+      if (this.useMocks) {
+        this.dataFormArray.push(this.dataForm);
+        this.simpleInputOpen = false;
+      } else {
+        this.vcwPhasesService.createDiagnostic(this.vcwId, this.projectId, this.dataForm.value)
+        .pipe(take(1))
+        .subscribe(response => {
+          this.dataFormArray.push(this.dataForm);
+          this.simpleInputOpen = false;
+        }, error => {
+          this.dataForm.controls.swotField.disable({onlySelf: true});
+          this.dataForm.controls.swotField.setValue(null);
+          this.snackbarService.danger('Error', 'Unable to create new idea. Try again later.')
+          .during(5000).show();
+        });
+      }
+    }
   }
 
   onOpenDialog() {
@@ -115,23 +139,30 @@ export class CreateIdeasComponent implements OnInit {
   }
 
   onConfirm() {
-    // add idea to list. If from file, perform a request first then add idea if the response is successful.
+    // TODO: If from file, perform a request first then add idea(s) if the response is successful.
     this.isLoading = true;
     if (!this.editIdeaMode) {
       // send request to back-end. On successful response, push to data form array.
       if (this.dataForm.valid) {
-        this.vcwPhasesService.createIdea(this.vcwId, this.projectId, this.dataForm.value)
-        .pipe(take(1))
-        .subscribe(response => {
+        if (this.useMocks) {
           this.dataFormArray.push(this.dataForm);
           this.itemDialogOpen = false;
           this.simpleInputOpen = false;
           this.isLoading = false;
-        }, error => {
-          this.isLoading = false;
-          this.snackbarService.danger('Error', 'Unable to create new idea. Try again later.')
-          .during(5000).show();
-        });
+        } else {
+          this.vcwPhasesService.createIdea(this.vcwId, this.projectId, this.dataForm.value)
+          .pipe(take(1))
+          .subscribe(response => {
+            this.dataFormArray.push(this.dataForm);
+            this.itemDialogOpen = false;
+            this.simpleInputOpen = false;
+            this.isLoading = false;
+          }, error => {
+            this.isLoading = false;
+            this.snackbarService.danger('Error', 'Unable to create new idea. Try again later.')
+            .during(5000).show();
+          });
+        }
       } else {
         this.isLoading = false;
         this.snackbarService.danger('Error', 'Invalid data. Please review your form.')
@@ -140,20 +171,27 @@ export class CreateIdeasComponent implements OnInit {
     } else {
       // send request to back-end. If successful, change the previous values in the form array.
       if (this.dataForm.valid) {
-        const id = this.dataForm.controls.id.value;
-        this.vcwPhasesService.editIdea(this.vcwId, this.projectId, id, this.dataForm.value)
-        .pipe(take(1))
-        .subscribe(response => {
+        if (this.useMocks) {
           this.editIdeaMode = false;
           this.itemDialogOpen = false;
           this.isLoading = false;
           this.dataFormArray.at(this.editIdeaIndex).patchValue(this.dataForm.value);
-        }, error => {
-          this.isLoading = false;
-          this.dataForm.controls.swotField.disable({onlySelf: true});
-          this.snackbarService.danger('Error', 'Unable to save the requested changes. Try again later.')
-          .during(5000).show();
-        });
+        } else {
+          const id = this.dataForm.controls.id.value;
+          this.vcwPhasesService.editIdea(this.vcwId, this.projectId, id, this.dataForm.value)
+          .pipe(take(1))
+          .subscribe(response => {
+            this.editIdeaMode = false;
+            this.itemDialogOpen = false;
+            this.isLoading = false;
+            this.dataFormArray.at(this.editIdeaIndex).patchValue(this.dataForm.value);
+          }, error => {
+            this.isLoading = false;
+            this.dataForm.controls.swotField.disable({onlySelf: true});
+            this.snackbarService.danger('Error', 'Unable to save the requested changes. Try again later.')
+            .during(5000).show();
+          });
+        }
       } else {
         this.isLoading = false;
         this.snackbarService.danger('Error', 'Invalid data. Please review your form.')
@@ -178,14 +216,18 @@ export class CreateIdeasComponent implements OnInit {
     this.actionConfirm$.pipe(take(1)).subscribe(userConfirm => {
       this.confirmDialogOpen = false;
       if (userConfirm) {
-        this.vcwPhasesService.deleteIdea(this.vcwId, this.projectId, ideaIdControl.value)
-        .pipe(take(1))
-        .subscribe(response => {
+        if (this.useMocks) {
           this.dataFormArray.removeAt(index);
-        }, error => {
-          this.snackbarService.danger('Error', 'Unable to delete idea. Try again later.')
-          .during(5000).show();
-        });
+        } else {
+          this.vcwPhasesService.deleteIdea(this.vcwId, this.projectId, ideaIdControl.value)
+          .pipe(take(1))
+          .subscribe(response => {
+            this.dataFormArray.removeAt(index);
+          }, error => {
+            this.snackbarService.danger('Error', 'Unable to delete idea. Try again later.')
+            .during(5000).show();
+          });
+        }
       }
     });
   }

@@ -11,6 +11,7 @@ import { VcwMockService } from '@core/services/mocks/vcw/vcw-mock.service';
 import { faPlus, faMinus, faTimes, faFloppyDisk, faCheck, faWindowMaximize } from '@fortawesome/free-solid-svg-icons';
 import { Subject } from 'rxjs';
 import { take } from 'rxjs/operators';
+import { environment } from '../../../../../../environments/environment';
 
 @Component({
   selector: 'app-define-diagonostics',
@@ -39,6 +40,8 @@ export class DefineDiagonosticsComponent implements OnInit {
   simpleInputOpen = false;
   editRowIndex: number;
 
+  useMocks: boolean;
+
   actionConfirmTitle: string;
   actionConfirmText: string;
   actionConfirm$: Subject<boolean> = new Subject();
@@ -62,6 +65,8 @@ export class DefineDiagonosticsComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.useMocks = environment.activateMocks;
+
     this.phaseNavService.nextPhase$.subscribe((nextPhase) => {
       this.router.navigate(['../' + nextPhase], {relativeTo: this.activatedRoute});
     });
@@ -69,25 +74,27 @@ export class DefineDiagonosticsComponent implements OnInit {
     this.vcwId = parseInt(this.activatedRoute.snapshot.paramMap.get('vcw_id'), 10);
     this.projectId = parseInt(this.activatedRoute.snapshot.paramMap.get('project_id'), 10);
 
-    this.vcwPhasesService.getDiagnostics(this.vcwId, this.projectId).pipe(take(1)).subscribe(data => {
-
-      data.forEach(dataItem => {
-        this.dataFormArray.push(this.formBuilder.group(swotFieldRowConfig));
-        this.dataFormArray.at(this.dataFormArray.length - 1).patchValue(dataItem);
+    if (!this.useMocks) {
+      this.vcwPhasesService.getDiagnostics(this.vcwId, this.projectId).pipe(take(1)).subscribe(data => {
+        data.forEach(dataItem => {
+          this.dataFormArray.push(this.formBuilder.group(swotFieldRowConfig));
+          this.dataFormArray.at(this.dataFormArray.length - 1).patchValue(dataItem);
+        });
+      }, error => {
+        this.snackbarService.danger('Data Fetching Error', 'Unable to check and retrieve data from the server. Try again later.')
+        .during(5000).show();
       });
-    }, error => {
-      this.snackbarService.danger('Data Fetching Error', 'Unable to check and retrieve data from the server. Try again later.')
-      .during(5000).show();
-    });
+    }
 
     // mocks! Remove after back-end integration is implemented
-    // this.mockService.getSwotFieldRows().pipe(take(1)).subscribe(data => {
-    //   console.log(this.vcwId)
-    //   data.forEach(d => {
-    //     this.dataFormArray.push(this.formBuilder.group(swotFieldRowConfig));
-    //     this.dataFormArray.at(this.dataFormArray.length - 1).patchValue(d);
-    //   });
-    // });
+    if (this.useMocks) {
+      this.mockService.getSwotFieldRows().pipe(take(1)).subscribe(data => {
+        data.forEach(d => {
+          this.dataFormArray.push(this.formBuilder.group(swotFieldRowConfig));
+          this.dataFormArray.at(this.dataFormArray.length - 1).patchValue(d);
+        });
+      });
+    }
   }
 
   changeTab(index: number) {
@@ -115,14 +122,18 @@ export class DefineDiagonosticsComponent implements OnInit {
     this.actionConfirm$.pipe(take(1)).subscribe(userConfirm => {
       this.confirmDialogOpen = false;
       if (userConfirm) {
-        this.vcwPhasesService.deleteDiagnostic(this.vcwId, this.projectId, rowIdControl.value)
-        .pipe(take(1))
-        .subscribe(response => {
+        if (this.useMocks) {
           this.dataFormArray.removeAt(index);
-        }, error => {
-          this.snackbarService.danger('Error', 'Unable to delete the requested row. Try again later.')
-          .during(5000).show();
-        });
+        } else {
+          this.vcwPhasesService.deleteDiagnostic(this.vcwId, this.projectId, rowIdControl.value)
+          .pipe(take(1))
+          .subscribe(response => {
+            this.dataFormArray.removeAt(index);
+          }, error => {
+            this.snackbarService.danger('Error', 'Unable to delete the requested row. Try again later.')
+            .during(5000).show();
+          });
+        }
       }
     });
   }
@@ -137,18 +148,24 @@ export class DefineDiagonosticsComponent implements OnInit {
       this.dataForm.controls.swotField.enable({onlySelf: true});
       this.dataForm.controls.swotField.setValue(this.activeTab);
       if (this.dataForm.valid) {
-        this.vcwPhasesService.createDiagnostic(this.vcwId, this.projectId, this.dataForm.value)
-        .pipe(take(1))
-        .subscribe(response => {
+        if (this.useMocks) {
           this.dataFormArray.push(this.dataForm);
           this.itemDialogOpen = false;
           this.simpleInputOpen = false;
-        }, error => {
-          this.dataForm.controls.swotField.disable({onlySelf: true});
-          this.dataForm.controls.swotField.setValue(null);
-          this.snackbarService.danger('Error', 'Unable to create new row. Try again later.')
-          .during(5000).show();
-        });
+        } else {
+          this.vcwPhasesService.createDiagnostic(this.vcwId, this.projectId, this.dataForm.value)
+          .pipe(take(1))
+          .subscribe(response => {
+            this.dataFormArray.push(this.dataForm);
+            this.itemDialogOpen = false;
+            this.simpleInputOpen = false;
+          }, error => {
+            this.dataForm.controls.swotField.disable({onlySelf: true});
+            this.dataForm.controls.swotField.setValue(null);
+            this.snackbarService.danger('Error', 'Unable to create new row. Try again later.')
+            .during(5000).show();
+          });
+        }
       } else {
         this.snackbarService.danger('Error', 'Invalid data. Please review your form.')
           .during(5000).show();
@@ -157,18 +174,24 @@ export class DefineDiagonosticsComponent implements OnInit {
     } else {
       this.dataForm.controls.swotField.enable({onlySelf: true});
       if (this.dataForm.valid) {
-        const id = this.dataForm.controls.id.value;
-        this.vcwPhasesService.editDiagnostic(this.vcwId, this.projectId, id, this.dataForm.value)
-        .pipe(take(1))
-        .subscribe(response => {
+        if (this.useMocks) {
           this.editRowMode = false;
           this.itemDialogOpen = false;
           this.dataFormArray.at(this.editRowIndex).patchValue(this.dataForm.value);
-        }, error => {
-          this.dataForm.controls.swotField.disable({onlySelf: true});
-          this.snackbarService.danger('Error', 'Unable to save the requested changes. Try again later.')
-          .during(5000).show();
-        });
+        } else {
+          const id = this.dataForm.controls.id.value;
+          this.vcwPhasesService.editDiagnostic(this.vcwId, this.projectId, id, this.dataForm.value)
+          .pipe(take(1))
+          .subscribe(response => {
+            this.editRowMode = false;
+            this.itemDialogOpen = false;
+            this.dataFormArray.at(this.editRowIndex).patchValue(this.dataForm.value);
+          }, error => {
+            this.dataForm.controls.swotField.disable({onlySelf: true});
+            this.snackbarService.danger('Error', 'Unable to save the requested changes. Try again later.')
+            .during(5000).show();
+          });
+        }
       } else {
         this.snackbarService.danger('Error', 'Invalid data. Please review your form.')
           .during(5000).show();
@@ -194,7 +217,11 @@ export class DefineDiagonosticsComponent implements OnInit {
     this.dataForm.controls.swotField.enable({onlySelf: true});
     this.dataForm.controls.swotField.setValue(this.activeTab);
     if (this.dataForm.valid) {
-      this.vcwPhasesService.createDiagnostic(this.vcwId, this.projectId, this.dataForm.value)
+      if (this.useMocks) {
+        this.dataFormArray.push(this.dataForm);
+        this.simpleInputOpen = false;
+      } else {
+        this.vcwPhasesService.createDiagnostic(this.vcwId, this.projectId, this.dataForm.value)
         .pipe(take(1))
         .subscribe(response => {
           this.dataFormArray.push(this.dataForm);
@@ -205,6 +232,7 @@ export class DefineDiagonosticsComponent implements OnInit {
           this.snackbarService.danger('Error', 'Unable to create new row. Try again later.')
           .during(5000).show();
         });
+      }
     }
   }
 

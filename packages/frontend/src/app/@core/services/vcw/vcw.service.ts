@@ -20,9 +20,9 @@ export class VcwService {
 
   constructor(private http: HttpClient) { }
 
-  getProjectVcws(projectId: number): Observable<VCW> {
+  getProjectVcws(projectId: number): Observable<VCW[]> {
     const url = `${this.baseUrl}/${projectId}/vcws`;
-    return this.http.get<VCW>(url, this.httpOptions);
+    return this.http.get<VCW[]>(url, this.httpOptions);
   }
 
   createVcw(projectId: number, VcwData: VCW): Observable<any> {
