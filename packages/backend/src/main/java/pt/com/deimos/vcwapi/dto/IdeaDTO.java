@@ -7,4 +7,8 @@ import lombok.Data;
 public class IdeaDTO {
     @NotBlank
     private String name;
+
+    private Long entryTypeId;
+
+    private SourceDTO source;
 }

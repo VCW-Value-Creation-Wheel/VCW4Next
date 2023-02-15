@@ -1,8 +1,12 @@
 package pt.com.deimos.vcwapi.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
+import pt.com.deimos.vcwapi.dto.IdeaDTO;
 import pt.com.deimos.vcwapi.entity.IdeaEntity;
 import pt.com.deimos.vcwapi.service.IdeaService;
 
@@ -25,15 +29,15 @@ public class IdeaController {
     return ResponseEntity.ok(this.ideaService.findByVcw(vcwId));
   }
 
-//  @PostMapping
-//  public ResponseEntity<Object> save(@PathVariable Long vcw_id,
-//                                     @RequestBody @Valid IdeaDTO ideaDTO,
-//                                     @AuthenticationPrincipal Jwt principal
-//  ) {
-//
-//    return ResponseEntity.status(HttpStatus.CREATED).body(
-//            this.ideaService.save(principal.getSubject(), vcw_id, ideaDTO));
-//  }
+  @PostMapping
+  public ResponseEntity<Object> save(@PathVariable Long vcw_id,
+                                     @RequestBody @Valid IdeaDTO ideaDTO,
+                                     @AuthenticationPrincipal Jwt principal
+  ) {
+
+    return ResponseEntity.status(HttpStatus.CREATED).body(
+            this.ideaService.save(principal.getSubject(), vcw_id, ideaDTO));
+  }
 //
 //  @PutMapping("/{id}")
 //  public ResponseEntity<Object> update(

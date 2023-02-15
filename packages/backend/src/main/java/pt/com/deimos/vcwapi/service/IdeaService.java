@@ -31,7 +31,7 @@ public class IdeaService {
     return this.ideaRepository.findById(ideaId);
   }
 
-  public IdeaEntity save(String userId, IdeaDTO ideaDTO) {
+  public IdeaEntity save(String userId, Long vcwId, IdeaDTO ideaDTO) {
 
     IdeaEntity newIdea = new IdeaEntity();
     newIdea.setCreatedBy(userId);
@@ -39,23 +39,27 @@ public class IdeaService {
     newIdea.setName(ideaDTO.getName());
 
     //link to entry type
-    newIdea.setEntryTypeId(1L);
+    newIdea.setEntryTypeId(ideaDTO.getEntryTypeId());
 
     // create/connect to source
     //TODO: won't sources repeat if we are always creating sources everytime?
     SourceEntity s = new SourceEntity();
-    s.setName("");
-    s.setDescription("");
-    s.setUrl("");
+    BeanUtils.copyProperties(ideaDTO.getSource(), s);
     s.setCreatedBy(userId);
     s.setUpdatedBy(userId);
-    s.addIdea(newIdea);
     newIdea.setSource(s);
+    s.addIdea(newIdea);
+
+    //connect idea with vcw
+    VcwHasIdeaEntity vcwIdea = new VcwHasIdeaEntity();
+    vcwIdea.setVcwId(vcwId);
+    newIdea.setVcwHasIdeaEntity(vcwIdea);
 
     newIdea = this.ideaRepository.save(newIdea);
     if (newIdea == null ) {
-      throw new BadRequestException("Failed to save project.");
+      throw new BadRequestException("Failed to save idea.");
     }
+
 
     return newIdea;
   }

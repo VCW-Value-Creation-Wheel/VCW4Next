@@ -30,7 +30,7 @@ public class IdeaEntity extends BaseNamedEntity{
     @JsonIgnore
     private List<IdeaAndCriteriaEntity> ideasAndCriterias;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="source_id", referencedColumnName = "id", insertable=false, updatable=false)
     private SourceEntity source;
 
@@ -43,6 +43,6 @@ public class IdeaEntity extends BaseNamedEntity{
     @JsonIgnore
     Set<KeywordEntity> ideaHasKeywords = new HashSet<>();
 
-    @OneToOne(mappedBy = "idea", optional = false)
+    @OneToOne(mappedBy = "idea", optional = false, cascade = CascadeType.ALL)
     private VcwHasIdeaEntity vcwHasIdeaEntity;
 }
