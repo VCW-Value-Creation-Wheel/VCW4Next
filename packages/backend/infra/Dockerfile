@@ -1,7 +1,7 @@
 #################################
 ### stage 1 - generate build ###
 #################################
-FROM eclipse-temurin:11-jdk-alpine as builder
+FROM eclipse-temurin:17.0.6_10-jdk-alpine as builder
 
 WORKDIR /home/app/
 
@@ -18,7 +18,7 @@ RUN chmod +x mvnw && \
 ################################
 ### stage 2 - package java  ###
 ################################
-FROM eclipse-temurin:11-jre-alpine
+FROM eclipse-temurin:17.0.6_10-jre-alpine
 
 COPY --from=builder /home/app/app.jar /app.jar
 
