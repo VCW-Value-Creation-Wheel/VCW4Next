@@ -31,4 +31,8 @@ public class SourceEntity extends BaseNamedEntity{
     @OneToMany(mappedBy = "source")
     @JsonIgnore
     private List<IdeaAndCriteriaEntity> ideaAndCriteriaEntities;
+
+    public void addIdea(IdeaEntity idea){
+        this.ideas.add(idea);
+    }
 }
