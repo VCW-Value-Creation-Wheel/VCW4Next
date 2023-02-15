@@ -388,43 +388,27 @@ paths:
             format: int64
 
   /projects/{project_id}/vcws/{vcw_id}/challenges:
-    post:
+    get:
       tags:
         - Vcw challenge page
-      summary: Creates the vcw challenge. 🚧
+      summary: Shows the vcw challenge. 🚧
       description: TODO
-      operationId: saveChallenge
+      operationId: getChallenge
       responses:
-        '201':
-          description: Created challenge
+        '200':
+          description: successful operation
           content:
             application/json:
               schema:
-                type: string
-                example: lorem ipsum blah
-
-        '400':
-          description: Invalid arguments
+                type: object
+                example: {"test": "test"}
+        '404':
+          description: Challenge not found
           content:
-            application/json:
-              example: {
-                "timestamp": "2023-01-31T12:03:11.417+00:00",
-                "status": 400,
-                "error": "Bad Request",
-                "trace": "...MethodArgumentNotValidException: Validation failed for..."}
-      parameters:
-        - name: vcw_id
-          in: path
-          description: "vcw id"
-          required: true
-          schema:
-            type: integer
-        - name: challenge
-          in: formData
-          description: "block of text describing the challenge"
-          required: true
-          schema:
-            type: string
+            'text/plain; charset=utf-8':
+              schema:
+                type: string
+                example: 'Challenge not found'
     put:
       tags:
         - Vcw challenge page
