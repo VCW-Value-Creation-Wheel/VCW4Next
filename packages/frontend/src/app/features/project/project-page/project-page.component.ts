@@ -29,13 +29,10 @@ export class ProjectPageComponent implements OnInit {
     ) { }
 
   ngOnInit(): void {
-    // this.mockProjectService.getById(Number(this.route.snapshot.paramMap.get('project_id'))).subscribe(project =>{
-    //   this.project = project;
-    //   this.vcwService.getVcws(this.project.id).subscribe((vcws => this.vcws = vcws));
-    // });
-    // this loads a mock for testing. Disable this when loading from the back-end.
+    
     this.projectId = parseInt(this.route.snapshot.paramMap.get('project_id'), 10);
 
+    // this loads a mock for testing. Disable this when loading from the back-end.
     this.project$ = this.mockProjectService.getById(this.projectId);
     this.vcws$ = this.vcwMockService.getVcws(this.projectId);
 

@@ -29,7 +29,10 @@ export class VcwPageComponent implements OnInit {
     // this.vcwType = 'method';
     this.projectId = parseInt(this.activatedRoute.snapshot.paramMap.get('project_id'), 10);
     this.vcwId = parseInt(this.activatedRoute.snapshot.paramMap.get('vcw_id'), 10);
+
+    // mock
     this.vcw$ = this.vcwMockService.getVcwById(this.vcwId);
+
     // this.vcw$ = this.vcwService.getVcw(this.projectId, this.vcwId);
   }
 

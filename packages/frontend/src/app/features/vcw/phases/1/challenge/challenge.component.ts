@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { challengeConfig, PhaseNavigationService, VcwPhasesService } from '@core';
+import { challengeConfig, PhaseNavigationService, SnackbarService, VcwPhasesService } from '@core';
 import { faFloppyDisk } from '@fortawesome/free-solid-svg-icons';
 import { take } from 'rxjs/operators';
 
@@ -18,13 +18,15 @@ export class ChallengeComponent implements OnInit {
 
   projectId: number;
   vcwId: number;
+  isEditing = false;
 
   constructor(
     private phaseNavService: PhaseNavigationService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private formBuilder: FormBuilder,
-    private vcwPhasesService: VcwPhasesService
+    private vcwPhasesService: VcwPhasesService,
+    private snackbarService: SnackbarService
   ){
     this.dataForm = this.formBuilder.group(challengeConfig);
   }
@@ -40,6 +42,7 @@ export class ChallengeComponent implements OnInit {
     .pipe(take(1))
     .subscribe(data => {
       if (data) {
+        this.isEditing = true;
         this.dataForm.controls.challenge.patchValue(data);
       }
     });
@@ -47,7 +50,26 @@ export class ChallengeComponent implements OnInit {
 
   onSave() {
     if (this.isFormValid('challenge')) {
-      this.vcwPhasesService.createChallenge(this.vcwId, this.projectId, this.dataForm.controls.challenge.value);
+      if (this.isEditing) {
+        this.vcwPhasesService.editChallenge(this.vcwId, this.projectId, this.dataForm.controls.challenge.value)
+        .pipe(take(1))
+        .subscribe(response => {
+          this.snackbarService.success('Success!', 'Your changes were saved.').during(5000).show();
+        }, error => {
+          this.snackbarService.danger('Error', 'Unable to save your changes. Please try again later.')
+          .during(5000).show();
+        });
+      } else {
+        this.vcwPhasesService.createChallenge(this.vcwId, this.projectId, this.dataForm.controls.challenge.value)
+        .pipe(take(1))
+        .subscribe(response => {
+          this.isEditing = true;
+          this.snackbarService.success('Success!', 'Your changes were saved.').during(5000).show();
+        }, error => {
+          this.snackbarService.danger('Error', 'Unable to save your changes. Please try again later.')
+          .during(5000).show();
+        });
+      }
     }
   }
 
