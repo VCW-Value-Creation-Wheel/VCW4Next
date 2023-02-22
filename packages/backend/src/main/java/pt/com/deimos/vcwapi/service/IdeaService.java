@@ -4,14 +4,13 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pt.com.deimos.vcwapi.dto.IdeaDTO;
-import pt.com.deimos.vcwapi.dto.ProjectHasUserRoleDTO;
-import pt.com.deimos.vcwapi.entity.*;
+import pt.com.deimos.vcwapi.entity.IdeaEntity;
+import pt.com.deimos.vcwapi.entity.SourceEntity;
+import pt.com.deimos.vcwapi.entity.VcwHasIdeaEntity;
 import pt.com.deimos.vcwapi.exceptions.BadRequestException;
 import pt.com.deimos.vcwapi.repository.IdeaRepository;
 
 import java.util.Optional;
-
-
 
 @Transactional
 @Service
@@ -42,24 +41,26 @@ public class IdeaService {
     newIdea.setEntryTypeId(ideaDTO.getEntryTypeId());
 
     // create/connect to source
-    //TODO: won't sources repeat if we are always creating sources everytime?
+    //NOTE: Currently we are creating a source everytime, which causes repeated sources
+    // In a future version with more detailed frontend, there should be a way to get
+    // all project's sources (like a dropdown) and select one if needed or create a new one.
     SourceEntity s = new SourceEntity();
     BeanUtils.copyProperties(ideaDTO.getSource(), s);
     s.setCreatedBy(userId);
     s.setUpdatedBy(userId);
     newIdea.setSource(s);
-    s.addIdea(newIdea);
 
     //connect idea with vcw
     VcwHasIdeaEntity vcwIdea = new VcwHasIdeaEntity();
     vcwIdea.setVcwId(vcwId);
+    vcwIdea.setIdea(newIdea);
+    vcwIdea.setSelected(false);
     newIdea.setVcwHasIdeaEntity(vcwIdea);
 
     newIdea = this.ideaRepository.save(newIdea);
     if (newIdea == null ) {
       throw new BadRequestException("Failed to save idea.");
     }
-
 
     return newIdea;
   }

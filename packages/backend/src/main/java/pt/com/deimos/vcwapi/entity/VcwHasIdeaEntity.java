@@ -18,19 +18,19 @@ public class VcwHasIdeaEntity {
     @Column(name = "vcw_id", nullable = false)
     private Long vcwId;
 
-    @Column(name = "idea_id", nullable = false)
-    private Long ideaId;
+    //NOTE: removed idea_id id because it was causing conflicts
+    //while saving idea objects with hibernate
 
     @Column
     private Boolean selected;
-
 
     @ManyToOne(optional = false)
     @JoinColumn(name="vcw_id", referencedColumnName = "id", insertable=false, updatable=false)
     private VcwEntity vcw;
 
     @OneToOne(optional=false)
-    @JoinColumn(name="idea_id", referencedColumnName = "id", insertable=false, updatable=false)
+    @JoinColumn(name="idea_id", referencedColumnName = "id")
     @JsonIgnore
     private IdeaEntity idea;
+
 }
