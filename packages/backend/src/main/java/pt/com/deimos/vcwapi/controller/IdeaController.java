@@ -38,21 +38,21 @@ public class IdeaController {
     return ResponseEntity.status(HttpStatus.CREATED).body(
             this.ideaService.save(principal.getSubject(), vcw_id, ideaDTO));
   }
-//
-//  @PutMapping("/{id}")
-//  public ResponseEntity<Object> update(
-//          @PathVariable Long id,
-//          @RequestBody @Valid IdeaDTO ideaDTO
-//  ) {
-//    Optional<IdeaEntity> ideaEntityOptional = this.ideaService.findById(id);
-//
-//    if(ideaEntityOptional.isEmpty()) {
-//      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Idea not found");
-//    }
-//
-//    return ResponseEntity.status(HttpStatus.OK).body(
-//            this.ideaService.update(ideaEntityOptional.get(), ideaDTO));
-//  }
+
+  @PutMapping("/{id}")
+  public ResponseEntity<Object> update(
+          @PathVariable Long id,
+          @RequestBody @Valid IdeaDTO ideaDTO
+  ) {
+    Optional<IdeaEntity> ideaEntityOptional = this.ideaService.findById(id);
+
+    if(ideaEntityOptional.isEmpty()) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Idea not found");
+    }
+
+    return ResponseEntity.status(HttpStatus.OK).body(
+            this.ideaService.update(ideaEntityOptional.get(), ideaDTO));
+  }
 
   @DeleteMapping("/{id}")
   public ResponseEntity<Object> delete(@PathVariable Long id) {
