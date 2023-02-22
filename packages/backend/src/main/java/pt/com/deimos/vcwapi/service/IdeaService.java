@@ -44,11 +44,13 @@ public class IdeaService {
     //NOTE: Currently we are creating a source everytime, which causes repeated sources
     // In a future version with more detailed frontend, there should be a way to get
     // all project's sources (like a dropdown) and select one if needed or create a new one.
-    SourceEntity s = new SourceEntity();
-    BeanUtils.copyProperties(ideaDTO.getSource(), s);
-    s.setCreatedBy(userId);
-    s.setUpdatedBy(userId);
-    newIdea.setSource(s);
+    if (ideaDTO.getSource() != null) {
+      SourceEntity s = new SourceEntity();
+      BeanUtils.copyProperties(ideaDTO.getSource(), s);
+      s.setCreatedBy(userId);
+      s.setUpdatedBy(userId);
+      newIdea.setSource(s);
+    }
 
     //connect idea with vcw
     VcwHasIdeaEntity vcwIdea = new VcwHasIdeaEntity();
