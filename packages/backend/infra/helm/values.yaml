@@ -23,18 +23,26 @@ autoscaling:
 # Variable used in Secret template
 # ---------------------------------------
 secret:
-  enabled: false
-  name: vcw-backend-secrets
+  enabled: true
   variables:
-    normals: {}
-    secrets: {}
+    normals:
+      DATASOURCE_URL: null
+      DATASOURCE_USERNAME: null
+      OAUTH2_JWT_ISSUER_URI: null
+      MINIO_ENDPOINT: null
+      MINIO_BUCKET: null
+    secrets:
+      DATASOURCE_PASSWORD: null
+      MINIO_ACCESS_KEY: null
+      MINIO_SECRET_KEY: null
+      root-user: null
+      root-password: null
 
 # ---------------------------------------
 # Variable used in ConfigMap template
 # ---------------------------------------
 configmap:
-  enabled: true
-  name: vcw-backend-configmap
+  enabled: false
 
 # ---------------------------------------
 # Variable used in Deployment template
@@ -61,7 +69,7 @@ deployment:
   # Additional environment variables for nextocean mapped from Secret or ConfigMap
   extraEnvFrom: ""
   # Define which port will be used in the containers
-  containerPort: 8080
+  containerPort: 8081
   # Startup probe configuration
   startupProbe: { }
   # Liveness probe configuration
@@ -108,13 +116,20 @@ ingress:
 # ---------------------------------------
 service:
   type: ClusterIP
-  port: 8080
+  port: 8081
 
 serviceAccount:
   # Specifies whether a service account should be created
   create: true
   # Annotations to add to the service account
   annotations: {}
-  # The name of the service account to use.
-  # If not set and create is true, a name is generated using the fullname template
-  name: "configmap-reader"
+
+
+# ---------------------------------------
+# MINIO VALUES
+# ---------------------------------------
+minio:
+  auth:
+    existingSecret: vcw-backend-secrets
+  statefulset:
+    replicaCount: 1

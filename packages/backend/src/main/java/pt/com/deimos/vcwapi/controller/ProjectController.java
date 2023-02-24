@@ -1,13 +1,14 @@
 package pt.com.deimos.vcwapi.controller;
 
 import jakarta.validation.Valid;
-import org.springframework.beans.BeanUtils;
+import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import pt.com.deimos.vcwapi.dto.ProjectDTO;
 import pt.com.deimos.vcwapi.entity.ProjectEntity;
 import pt.com.deimos.vcwapi.service.ProjectService;
@@ -29,13 +30,26 @@ public class ProjectController {
   public ResponseEntity<Iterable<ProjectEntity>> getAll(
           @AuthenticationPrincipal Jwt principal
   ) {
-    return ResponseEntity.ok(this.projectService.findAll());
+
+    Pair<Iterable<ProjectEntity>,String> results = this.projectService.findAll();
+    Iterable<ProjectEntity> projectList = results.getFirst();
+    String message = results.getSecond();
+
+    return ResponseEntity.status(HttpStatus.OK)
+            .header("Server Message",message).body(projectList);
   }
 
   @GetMapping
   public ResponseEntity<Iterable<ProjectEntity>> getByUser(
           @AuthenticationPrincipal Jwt principal) {
-    return ResponseEntity.ok(this.projectService.findByUser(principal.getSubject()));
+
+    Pair<Iterable<ProjectEntity>,String> results =
+            this.projectService.findByUser(principal.getSubject());
+    Iterable<ProjectEntity> projectList = results.getFirst();
+    String message = results.getSecond();
+
+    return ResponseEntity.status(HttpStatus.OK)
+            .header("Server Message",message).body(projectList);
   }
 
   @GetMapping("/{id}")
@@ -43,47 +57,64 @@ public class ProjectController {
           @PathVariable(value = "id") Long id,
           @AuthenticationPrincipal Jwt principal) {
 
-    Optional<ProjectEntity> projectEntityOptional =
+    Pair<Optional<ProjectEntity>,String> results =
             this.projectService.findByIdAndUser(id, principal.getSubject());
+
+    Optional<ProjectEntity> projectEntityOptional = results.getFirst();
+    String message = results.getSecond();
 
     if(projectEntityOptional.isEmpty()) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Project not found");
     }
 
-    return ResponseEntity.ok(projectEntityOptional.get());
+    return ResponseEntity.status(HttpStatus.OK)
+            .header("Server Message",message).body(projectEntityOptional.get());
   }
 
   @PostMapping
   public ResponseEntity<Object> store(
-      @RequestBody @Valid ProjectDTO projectDTO
+          @RequestPart @Valid ProjectDTO project,
+          @RequestPart(required = false) MultipartFile thumbnail,
+          @AuthenticationPrincipal Jwt principal
   ) {
-    ProjectEntity projectEntity = new ProjectEntity();
-    BeanUtils.copyProperties(projectDTO, projectEntity);
 
-    return ResponseEntity.status(HttpStatus.CREATED).body(this.projectService.save(projectEntity));
+    Pair<ProjectEntity,String> results = this.projectService.save(project, thumbnail,
+            principal.getSubject());
+
+    ProjectEntity newProject = results.getFirst();
+    String message = results.getSecond();
+    if (newProject == null)
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+              .body("Unable to save project due to "+message);
+
+    return ResponseEntity.status(HttpStatus.CREATED)
+            .header("Server Message",message).body(newProject);
   }
 
-  @PutMapping("/{id}")
-  public ResponseEntity<Object> update(
-      @PathVariable Long id,
-      @RequestBody @Valid ProjectDTO projectDTO
-  ) {
-    Optional<ProjectEntity> projectEntityOptional = this.projectService.findById(id);
-
-    if(projectEntityOptional.isEmpty()) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Project not found");
-    }
-
-    BeanUtils.copyProperties(projectDTO, projectEntityOptional.get());
-
-    return ResponseEntity.status(HttpStatus.OK).body(this.projectService.save(projectEntityOptional.get()));
-  }
+//  @PutMapping("/{id}")
+//  public ResponseEntity<Object> update(
+//      @PathVariable Long id,
+//      @RequestBody @Valid ProjectDTO projectDTO
+//  ) {
+//    Optional<ProjectEntity> projectEntityOptional = this.projectService.findById(id);
+//
+//    if(projectEntityOptional.isEmpty()) {
+//      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Project not found");
+//    }
+//
+//    BeanUtils.copyProperties(projectDTO, projectEntityOptional.get());
+//
+//    return ResponseEntity.status(HttpStatus.OK).body(this.projectService.update(projectEntityOptional.get()));
+//  }
 
   @DeleteMapping("/{id}")
   public ResponseEntity<Object> delete(
       @PathVariable Long id
   ) {
-    Optional<ProjectEntity> projectEntityOptional = this.projectService.findById(id);
+
+    Pair<Optional<ProjectEntity>,String> results =
+            this.projectService.findById(id);
+    Optional<ProjectEntity> projectEntityOptional = results.getFirst();
 
     if(projectEntityOptional.isEmpty()) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Project not found");

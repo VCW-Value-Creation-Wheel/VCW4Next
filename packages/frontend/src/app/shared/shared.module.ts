@@ -21,7 +21,8 @@ import {
   ProjectCardComponent,
   PhaseNavigationComponent,
   TabComponent,
-  DialogComponent
+  DialogComponent,
+  SnackbarComponent
 } from './components';
 import { RegexInputDirective } from './directives';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -32,6 +33,7 @@ import { VcwCardComponent } from './components/vcw-card/vcw-card.component';
 import { CkeEditorComponent } from './components/form/cke-editor/cke-editor.component';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { ListItemComponent } from './components/list-item/list-item.component';
+import { CreateItemDialogComponent } from './components/create-item-dialog/create-item-dialog.component';
 
 
 @NgModule({
@@ -59,7 +61,9 @@ import { ListItemComponent } from './components/list-item/list-item.component';
     DialogComponent,
     VcwCardComponent,
     CkeEditorComponent,
-    ListItemComponent
+    ListItemComponent,
+    CreateItemDialogComponent,
+    SnackbarComponent
   ],
   imports: [
     CommonModule,
@@ -100,7 +104,9 @@ import { ListItemComponent } from './components/list-item/list-item.component';
     DialogComponent,
     VcwCardComponent,
     CkeEditorComponent,
-    ListItemComponent
+    ListItemComponent,
+    CreateItemDialogComponent,
+    SnackbarComponent
   ]
 })
 export class SharedModule { }

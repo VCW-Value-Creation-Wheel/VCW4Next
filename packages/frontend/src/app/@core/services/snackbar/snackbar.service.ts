@@ -51,14 +51,14 @@ export class SnackbarService {
   }
 
   public success = (title: string, message: string) =>
-    this.setSnackbarOptions('success', title, message);
+    this.setSnackbarOptions('success', title, message)
 
   public info = (title: string, message: string) =>
-    this.setSnackbarOptions('info', title, message);
+    this.setSnackbarOptions('info', title, message)
 
   public warning = (title: string, message: string) =>
-    this.setSnackbarOptions('warning', title, message);
+    this.setSnackbarOptions('warning', title, message)
 
   public danger = (title: string, message: string) =>
-    this.setSnackbarOptions('danger', title, message);
+    this.setSnackbarOptions('danger', title, message)
 }

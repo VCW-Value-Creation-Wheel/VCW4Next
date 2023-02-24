@@ -1,13 +1,14 @@
 export interface VCW {
     id: number;
+    type: string;
     projectId: number;
-    title: string;
+    name: string;
     challenge: string;
     description: string;
     thumbnailUrl?: string;
 }
 
-export interface SwotField {
+export interface SwotFieldRow {
     categoryId: number;
     title: string;
     description: string;
@@ -22,3 +23,11 @@ export interface VCWPhase {
         nextPhaseId?: string;
     };
 }
+
+export type Idea = {
+    name: string,
+    sourceName: string,
+    sourceUrl: string,
+    entryTypeId: number,
+    id?: number
+};

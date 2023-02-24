@@ -1,12 +1,5 @@
-<div class="px-4 py-4 flex flex-row justify-between">
+<div class="px-4 py-4 flex flex-row justify-between mx-4 md:mx-64 lg:mx-80">
     <h1 class="text-2xl font-bold text-primary ">SWOT Analysis</h1>
-    <div class="md:mx-8 ">
-        <app-button
-            [label]="'Save'"
-            [leftIcon]="faFloppyDisk"
-            (buttonClick)="onSave()"
-        ></app-button>
-    </div>
 </div>
 <div class="flex flex-row gap-1 md:gap-8 text-center text-sm md:text-base md:justify-between md:py-2 md:mx-80">
     <ng-container *ngFor="let tab of swotTabs; let idx = index">
@@ -19,60 +12,87 @@
     </ng-container>
     
 </div>
-<div [formGroup]="dataForm">
-    <div class="grid grid-cols-3 md:grid-cols-3 md:px-80 text-center" formArrayName="swotFields">
-        <div class="col-span-1 h-8 py-2">
-            <p class="font-bold text-center">Title</p>
-            <ng-container *ngFor="let field of swotFields; index as idx">
-                <ng-container *ngIf="field.categoryId === activeTab">
-                    <div class="py-2 px-2" [formGroupName]="idx">
-                        <app-input
-                            [(ngModel)]="field.title"
-                            placeholder=""
-                            formControlName="title"
-                            [required]="getValidator('title', 'swotFields', idx)"
-                        ></app-input>
-                    </div>
-                </ng-container>
-            </ng-container>
-            <ng-container *ngIf="getSwotFieldsByCategory(activeTab).length === 0">
-                <div class="hidden md:block py-2 px-2">
-                    <span class="italic">No entries found. Click "Add row" to add a new entry.</span>
-                </div>
-                
-            </ng-container>
-            <div class="border-solid border-t-2 md:mx-2 border-grey-500 md:w-1/3">
-                <app-button
-                [label]="'Add row'"
-                [leftIcon]="faPlus"
-                (buttonClick)="addField(activeTab)"
-                [isWhite]="false"
+<div class="flex flex-col gap-4 mx-4 md:mx-64 lg:mx-80">
+    <ng-container *ngIf="getSwotFieldRowsNumber(activeTab) === 0 && !simpleInputOpen">
+        <div class="py-2 px-2">
+            <span class="italic">Swot Field empty</span>
+        </div>
+    </ng-container>
+    <ng-container *ngFor="let row of dataFormArray.controls; index as idx">
+        <ng-container *ngIf="row.controls.swotField?.value === activeTab">
+            <app-list-item
+                [isEditable]="true"
+                [isSelectable]="false"
+                [value]="row.controls.name?.value"
+                (editClick)="editRow(idx)"
+                (deleteClick)="deleteRow(idx, row.controls.name, row.controls.id)"
+            ></app-list-item>
+        </ng-container>
+    </ng-container>
+    <div [formGroup]="dataForm" *ngIf="simpleInputOpen" class="flex flex-row gap-2">
+        <app-input class="w-8/12 md:w-7/12 lg:w-10/12"
+            formControlName="name"
+            placeholder="Type something here..."
+            (emitKeyPress)="onKeyPress($event)"></app-input>
+        <div class="hidden md:flex md:flex-row md:justify-end">
+            <app-button
+                [label]="'Add'"
                 [isTransparent]="true"
+                [leftIcon]="faCheck"
+                [isDisabled]="!dataForm.valid"
+                (buttonClick)="onDirectAdd()"
             ></app-button>
-            </div>
-            
+            <app-button
+                [label]="'Cancel'"
+                [isTransparent]="true"
+                [leftIcon]="faTimes"
+                (buttonClick)="onCancel()"
+            ></app-button>
+            <app-button
+                [label]="'Dialog'"
+                [isTransparent]="true"
+                [leftIcon]="faWindowMaximize"
+                (buttonClick)="onOpenDialog()"
+                ></app-button>
         </div>
-        <div class="col-span-2 h-8 py-2">
-            <p class="font-bold text-center w-3/4 md:w-11/12">Description</p>
-            <ng-container *ngFor="let field of swotFields; index as idx">
-                <ng-container *ngIf="field.categoryId === activeTab">
-                    <div class="py-2 px-2 flex flex-row" [formGroupName]="idx">
-                        <app-input
-                            [(ngModel)]="field.description" 
-                            placeholder=""
-                            class="w-11/12"
-                            formControlName="description"
-                            [required]="getValidator('description', 'swotFields', idx)"
-                        ></app-input>
-                        <app-icon-button
-                            [icon]="faTimes"
-                            (btnClick)="removeField(idx)"
-                        ></app-icon-button>
-                    </div> 
-                </ng-container>
-                
-            </ng-container>
+        <div class="flex flex-row justify-end md:hidden">
+            <app-icon-button
+                [icon]="faCheck"
+                (btnClick)="onDirectAdd()"
+            ></app-icon-button>
+            <app-icon-button
+                [icon]="faTimes"
+                (btnClick)="onCancel()"
+            ></app-icon-button>
+            <app-icon-button
+                [icon]="faWindowMaximize"
+                (btnClick)="onOpenDialog()"
+            ></app-icon-button>
         </div>
-        
+
     </div>
+    <app-button
+        (buttonClick)="onAddRow()"
+        [label]="'New Row'"
+        [leftIcon]="faPlus"
+        *ngIf="!simpleInputOpen"
+    ></app-button>
 </div>
+<app-create-item-dialog
+    *ngIf="itemDialogOpen"
+    [isEditing]="editRowMode"
+    [formGroup]="dataForm"
+    [title]="editRowMode ? 'Edit Row': 'New Row'"
+    [tabFormControlsToExclude]="{'0': ['id', 'swotField']}"
+    [fileFormFieldName]="'file'"
+    (cancel)="onCancel()"
+    (confirm)="onConfirm()"
+></app-create-item-dialog>
+<app-dialog
+    *ngIf="confirmDialogOpen"
+    [title]="actionConfirmTitle"
+    [confirmText]="'Yes'"
+    [cancelText]="'No'"
+    (cancel)="onActionCancel()"
+    (confirm)="onActionConfirm()"
+>{{ actionConfirmText }}</app-dialog>

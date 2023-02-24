@@ -1,7 +1,7 @@
 #################################
 ### stage 1 - generate build ###
 #################################
-FROM ghcr.io/graalvm/native-image:ol9-java17-22 as builder
+FROM eclipse-temurin:17-jdk-alpine as builder
 
 WORKDIR /home/app/
 
@@ -10,20 +10,18 @@ COPY .mvn .mvn
 COPY pom.xml .
 COPY src src
 
-RUN chmod +x mvnw \
-    && ./mvnw -Pnative native:compile -DskipTests
+RUN chmod +x mvnw && \
+    ./mvnw install -DskipTests && \
+    cp /home/app/target/*.jar app.jar && \
+    java -Djarmode=layertools -jar app.jar extract
 
-######################################
-### stage 2 - package application  ###
-######################################
-FROM alpine:3.17
-LABEL maintainer="ScrumTroopers Team"
+################################
+### stage 2 - package java  ###
+################################
+FROM eclipse-temurin:17-jre-alpine
 
-WORKDIR /home/app
-
-RUN apk add --no-cache libstdc++ gcompat libc6-compat
-COPY --from=builder /home/app/target/vcwApi /home/app/
+COPY --from=builder /home/app/app.jar /app.jar
 
 EXPOSE 8080
 
-ENTRYPOINT [ "./vcwApi" ]
+ENTRYPOINT [ "java",  "-Xms512m", "-Xmx512m", "-jar", "/app.jar" ]

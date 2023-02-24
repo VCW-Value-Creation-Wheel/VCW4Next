@@ -11,3 +11,7 @@ keywords:
 maintainers:
   - name: ScrumTroopers Team
   - name: Deimos Engenharia - Data Systems Team
+dependencies:
+  - name: minio
+    version: 12.1.5
+    repository: https://charts.bitnami.com/bitnami
