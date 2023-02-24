@@ -135,12 +135,6 @@ paths:
           required: true
           schema:
             type: string
-        - name: Users and Roles
-          in: formData
-          description: list of projects users and roles selected using dropdowns ([{userId, roleId}])
-          required: true
-          schema:
-            type: List<{String, Long}>
   /projects/{project_id}/thumbnails:
     get:
       tags:
@@ -274,6 +268,146 @@ paths:
           required: true
           schema:
             type: integer
+
+  /projects/{project_id}/users:
+    get:
+      tags:
+        - New Project Page
+      summary: Shows all project users.
+      description: TODO
+      operationId: getProjectUser
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                example: [{"userInum": "b68986e1-81d8-4813-ada5-172442d8944d", "role": {"id": 1, "name":"Coordinator", "description":"test"}}]
+        '404':
+          description: Project user not found
+          content:
+            'text/plain; charset=utf-8':
+              schema:
+                type: string
+                example: 'Project user not found'
+      parameters:
+        - name: project_id
+          in: path
+          description: "project_id"
+          required: true
+          schema:
+            type: integer
+    post:
+      tags:
+        - New Project Page
+      summary: Adds a project user
+      description: TODO
+      operationId: saveThumbnail
+      responses:
+        '201':
+          description: Added user
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {"userInum": "b68986e1-81d8-4813-ada5-172442d8944d", "role": {"id": 1, "name":"Coordinator", "description":"test"}}
+        '400':
+          description: Invalid arguments
+          content:
+            application/json:
+              example: {
+                "timestamp": "2023-01-31T12:03:11.417+00:00",
+                "status": 400,
+                "error": "Bad Request",
+                "trace": "...MethodArgumentNotValidException: Validation failed for..."}
+      parameters:
+        - name: project_id
+          in: path
+          description: "project_id"
+          required: true
+          schema:
+            type: integer
+        - name: role id
+          in: formData
+          description: "role_id"
+          required: true
+          schema:
+            type: integer
+        - name: user id
+          in: formData
+          description: "user_id"
+          required: true
+          schema:
+            type: string
+
+  /projects/{project_id}/users/{user_id}:
+    put:
+      tags:
+        - New Project Page
+      summary: Updates a project user
+      description: TODO
+      operationId: updateProjectUser
+      responses:
+        '200':
+          description: Updated project user
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {"userInum": "b68986e1-81d8-4813-ada5-172442d8944d", "role": {"id": 2, "name":"Key decision maker", "description":"test"}}
+        '400':
+          description: Invalid arguments
+          content:
+            application/json:
+              example: {
+                "timestamp": "2023-01-31T12:03:11.417+00:00",
+                "status": 400,
+                "error": "Bad Request",
+                "trace": "...MethodArgumentNotValidException: Validation failed for..."}
+      parameters:
+        - name: project_id
+          in: path
+          description: "project_id"
+          required: true
+          schema:
+            type: integer
+        - name: user id
+          in: path
+          description: "user_id"
+          required: false
+          schema:
+            type: string
+        - name: role id
+          in: formData
+          description: "role_id"
+          required: false
+          schema:
+            type: integer
+    delete:
+      tags:
+        - New Project Page
+      summary: Removes a project user.
+      description: TODO
+      operationId: deleteProjectUser
+      responses:
+        '400':
+          description: Invalid user id supplied
+        '404':
+          description: User not found
+      parameters:
+        - name: project_id
+          in: path
+          description: "project_id"
+          required: true
+          schema:
+            type: integer
+        - name: user id
+          in: path
+          description: "user_id"
+          required: false
+          schema:
+            type: string
 
   /projects/{project_id}/vcws/:
     post:
