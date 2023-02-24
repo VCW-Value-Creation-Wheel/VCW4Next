@@ -8,9 +8,9 @@ import {
   Output,
   SimpleChanges
 } from '@angular/core';
-import {NG_VALUE_ACCESSOR} from '@angular/forms';
-import {EventOption} from '@core';
-import {faInfoCircle} from '@fortawesome/free-solid-svg-icons';
+import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { EventOption } from '@core';
+import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-input',
@@ -44,6 +44,7 @@ export class InputComponent implements OnInit, OnChanges {
   @Input() required?: boolean;
   @Input() pattern?: string;
   @Output() emitInputChange = new EventEmitter<EventOption>();
+  @Output() emitKeyPress = new EventEmitter<KeyboardEvent>();
 
 
   onChange: any = () => {
@@ -55,7 +56,7 @@ export class InputComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if(this.isDisabled){
+    if (this.isDisabled) {
       this.value = undefined;
       // this.propagateSelected()
     }
@@ -71,7 +72,7 @@ export class InputComponent implements OnInit, OnChanges {
     this.onTouched();
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   writeValue(value: string): void {
     if (value) this._value = value;
@@ -91,5 +92,9 @@ export class InputComponent implements OnInit, OnChanges {
 
   wrapperClass() {
     return { 'gap-2': this.label };
+  }
+
+  handleKeyPress(event: KeyboardEvent) {
+    this.emitKeyPress.emit(event);
   }
 }

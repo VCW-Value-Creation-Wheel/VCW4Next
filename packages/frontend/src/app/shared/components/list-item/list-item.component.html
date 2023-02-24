@@ -9,7 +9,7 @@
     (click)="toggleSelect()"
     >
     <div class="flex px-4 my-auto gap-4">
-        <fa-icon [icon]="icon"></fa-icon>
+        <fa-icon *ngIf=" icon" [icon]="icon"></fa-icon>
         <span>{{ value }}</span>
     </div>
     <div class="flex flex-row gap-1" *ngIf="isEditable">

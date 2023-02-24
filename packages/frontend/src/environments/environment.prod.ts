@@ -5,5 +5,7 @@ export const environment = {
     url: 'http://localhost:8080',
     realm: 'vcw',
     clientId: 'vcw-web'
-  }
+  },
+  api: 'https://vcw-api.develop.s4eo.com',
+  activateMocks: false
 };

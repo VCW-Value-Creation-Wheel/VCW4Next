@@ -1,0 +1,26 @@
+[
+    {
+        "id": 1,
+        "name": "Portugal",
+        "sourceName": "Wikipedia",
+        "sourceUrl": "https://wikipedia.org"
+    },
+    {
+        "id": 2,
+        "name": "Spain",
+        "sourceName": "Wikipedia",
+        "sourceUrl": "https://wikipedia.org"
+    },
+    {
+        "id": 3,
+        "name": "France",
+        "sourceName": "Wikipedia",
+        "sourceUrl": "https://wikipedia.org"
+    },
+    {
+        "id": 4,
+        "name": "Italy",
+        "sourceName": "",
+        "sourceUrl": ""
+    }
+]

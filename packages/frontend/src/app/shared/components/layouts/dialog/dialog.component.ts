@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faTimes, faCircleNotch } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-dialog',
@@ -17,6 +17,7 @@ export class DialogComponent implements OnInit {
 
   faCheck = faCheck;
   faTimes = faTimes;
+  faCircleNotch = faCircleNotch;
 
   @Input() classes?: string;
   @Input() noConfirmButton = false;
@@ -28,6 +29,7 @@ export class DialogComponent implements OnInit {
   @Input() cancelText?: string;
   @Input() buttonVariant: 'solid' | 'transparent' | 'solid red' = 'solid';
   @Input() size = 'md';
+  @Input() awaitingAction = false;
 
   @Output() confirm = new EventEmitter();
   @Output() cancel = new EventEmitter();

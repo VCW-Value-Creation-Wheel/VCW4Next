@@ -79,15 +79,20 @@
           [label]="cancelText ?? 'Cancel'"
           (buttonClick)="onCancel()"
           [isDangerous]="true"
+          [isDisabled]="awaitingAction"
         ></app-button>
         <app-button
           *ngIf="!noConfirmButton"
-          [isDisabled]="confirmDisabled"
+          [isDisabled]="confirmDisabled || awaitingAction"
           [leftIcon]="faCheck"
           [label]="confirmText ?? 'Confirm'"
           (buttonClick)="onConfirm()"
         >
         </app-button>
+        <div class="flex flex-row" *ngIf="awaitingAction">
+          <fa-icon [icon]="faCircleNotch" size="2x" class="animate-spin opacity-50"></fa-icon>
+        </div>
+        
       </div>
     </div>
   </div>
