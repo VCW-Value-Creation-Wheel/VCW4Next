@@ -91,7 +91,7 @@ paths:
             schema:
               type: string
 
-  /projects :
+  /projects:
     post:
       tags:
         - New Project Page
@@ -135,19 +135,146 @@ paths:
           required: true
           schema:
             type: string
-        - name: thumbnailPath
-          in: formData
-          description: project thumbnail path
-          required: false
-          schema:
-            type: string
         - name: Users and Roles
           in: formData
           description: list of projects users and roles selected using dropdowns ([{userId, roleId}])
           required: true
           schema:
             type: List<{String, Long}>
-  
+  /projects/{project_id}/thumbnails:
+    get:
+      tags:
+        - New Project Page
+      summary: Show project thumbnail.
+      description: TODO
+      operationId: getProjectThumbnail
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/examples/thumbnail-new'
+        '404':
+          description: Thumbnail not found
+          content:
+            'text/plain; charset=utf-8':
+              schema:
+                type: string
+                example: 'Thumbnail not found'
+      parameters:
+        - name: project_id
+          in: path
+          description: "project_id"
+          required: true
+          schema:
+            type: integer
+    post:
+      tags:
+        - New Project Page
+      summary: Creates a project thumbnail
+      description: TODO
+      operationId: saveThumbnail
+      responses:
+        '201':
+          description: Created Thumbnail
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/examples/thumbnail-new'
+        '400':
+          description: Invalid arguments
+          content:
+            application/json:
+              example: {
+                "timestamp": "2023-01-31T12:03:11.417+00:00",
+                "status": 400,
+                "error": "Bad Request",
+                "trace": "...MethodArgumentNotValidException: Validation failed for..."}
+      parameters:
+        - name: project_id
+          in: path
+          description: "project_id"
+          required: true
+          schema:
+            type: integer
+        - name: thumbnail
+          in: formData
+          description: thumbnail image file
+          required: false
+          schema:
+            type: MultipartFile
+
+  /projects/{project_id}/thumbnails/{thumbnail_id}:
+    put:
+      tags:
+        - New Project Page
+      summary: Updates the project thumbnail.
+      description: TODO
+      operationId: updateThumbnail
+      responses:
+        '200':
+          description: Updated thumbnail
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/examples/thumbnail-new'
+        '400':
+          description: Invalid arguments
+          content:
+            application/json:
+              example: {
+                "timestamp": "2023-01-31T12:03:11.417+00:00",
+                "status": 400,
+                "error": "Bad Request",
+                "trace": "...MethodArgumentNotValidException: Validation failed for..."}
+      parameters:
+        - name: project_id
+          in: path
+          description: "project_id"
+          required: true
+          schema:
+            type: integer
+        - name: thumbnail_id
+          in: path
+          description: "thumbnail_id"
+          required: true
+          schema:
+            type: integer
+        - name: thumbnail
+          in: formData
+          description: thumbnail image file
+          required: true
+          schema:
+            type: MultipartFile
+    delete:
+      tags:
+        - New Project Page
+      summary: Deletes the project thumbnail.
+      description: TODO
+      operationId: deleteThumbnail
+      responses:
+        '400':
+          description: Invalid thumbnail id supplied
+        '404':
+          description: Thumbnail not found
+      parameters:
+        - name: project_id
+          in: path
+          description: "project_id"
+          required: true
+          schema:
+            type: integer
+        - name: thumbnail_id
+          in: path
+          description: "thumbnail_id"
+          required: true
+          schema:
+            type: integer
+
   /projects/{project_id}/vcws/:
     post:
       tags:
@@ -307,6 +434,7 @@ paths:
           required: true
           schema:
             type: string
+
   /projects/{project_id}/vcws/{vcw_id}/diagnostics/{diagnostic_id}:
     put:
       tags:
@@ -388,43 +516,28 @@ paths:
             format: int64
 
   /projects/{project_id}/vcws/{vcw_id}/challenges:
-    post:
+    get:
       tags:
         - Vcw challenge page
-      summary: Creates the vcw challenge. 🚧
+      summary: Shows the vcw challenge. 🚧
       description: TODO
-      operationId: saveChallenge
+      operationId: getChallenge
       responses:
-        '201':
-          description: Created challenge
+        '200':
+          description: successful operation
           content:
             application/json:
               schema:
-                type: string
-                example: lorem ipsum blah
-
-        '400':
-          description: Invalid arguments
+                type: object
+                example: {"challenge":"The FitnessGram™ Pacer Test is a multistage aerobic capacity test that progressively gets more difficult as it continues. The 20 meter pacer test will begin in 30 seconds. Line up at the start. The running speed starts slowly, but gets faster each minute after you hear this signal. [beep] A single lap should be completed each time you hear this sound. [ding] Remember to run in a straight line, and run as long as possible. The second time you fail to complete a lap before the sound, your test is over. The test will begin on the word start. On your mark, get ready, start."
+                }
+        '404':
+          description: Challenge not found
           content:
-            application/json:
-              example: {
-                "timestamp": "2023-01-31T12:03:11.417+00:00",
-                "status": 400,
-                "error": "Bad Request",
-                "trace": "...MethodArgumentNotValidException: Validation failed for..."}
-      parameters:
-        - name: vcw_id
-          in: path
-          description: "vcw id"
-          required: true
-          schema:
-            type: integer
-        - name: challenge
-          in: formData
-          description: "block of text describing the challenge"
-          required: true
-          schema:
-            type: string
+            'text/plain; charset=utf-8':
+              schema:
+                type: string
+                example: 'Challenge not found'
     put:
       tags:
         - Vcw challenge page
@@ -438,8 +551,7 @@ paths:
             application/json:
               schema:
                 type: string
-                example: lorem ipsum blah
-
+                example: "The FitnessGram™ Pacer Test is a multistage aerobic capacity test that progressively gets more difficult as it continues. The 20 meter pacer test will begin in 30 seconds. Line up at the start. The running speed starts slowly, but gets faster each minute after you hear this signal. [beep] A single lap should be completed each time you hear this sound. [ding] Remember to run in a straight line, and run as long as possible. The second time you fail to complete a lap before the sound, your test is over. The test will begin on the word start. On your mark, get ready, start."
         '400':
           description: Invalid arguments
           content:
