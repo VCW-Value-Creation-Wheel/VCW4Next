@@ -17,8 +17,7 @@ import pt.com.deimos.vcwapi.exceptions.NotFoundException;
 import pt.com.deimos.vcwapi.repository.ProjectRepository;
 
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 
@@ -36,21 +35,7 @@ public class ProjectService {
     }
 
     public Iterable<ProjectEntity> findAll() throws MinioException {
-
-        Iterable<ProjectEntity> resultList = this.projectRepository.findAll();
-
-        //generate image urls
-        List<ProjectEntity> returnList = new ArrayList<>();
-        try {
-            for  (ProjectEntity project : resultList) {
-                returnList.add(generateThumbnailUrl(project));
-            }
-        }
-        catch(Exception e){
-            throw new InternalErrorException("Failed to generate project thumbnail url: "+e);
-        }
-
-        return returnList;
+        return this.projectRepository.findAll();
     }
 
     public Optional<ProjectEntity> findById(Long id) throws MinioException {
@@ -60,50 +45,19 @@ public class ProjectService {
         if (result.isEmpty())
             throw new NotFoundException("Project does not exist.");
 
-        //generate image url
-        try {
-            result = Optional.of(generateThumbnailUrl(result.get()));
-        }
-        catch(Exception e){
-            throw new InternalErrorException("Failed to generate project thumbnail url: "+e);
-        }
-
         return result;
     }
 
     public Iterable<ProjectEntity> findByUser(String userId) throws MinioException {
-
-        Iterable<ProjectEntity> resultList =
-                this.projectRepository.findByProjectHasUserRoleEntitiesUserInum(userId);
-
-        //generate image urls
-        List<ProjectEntity> returnList = new ArrayList<>();
-        try {
-            for  (ProjectEntity project : resultList) {
-                returnList.add(generateThumbnailUrl(project));
-            }
-        }
-        catch(Exception e){
-            throw new InternalErrorException("Failed to generate project thumbnail url: "+e);
-        }
-
-        return returnList;
+        return this.projectRepository.findByProjectHasUserRoleEntitiesUserInum(userId);
     }
 
-    public Optional<ProjectEntity> findByIdAndUser(Long id, String userId) throws MinioException {
+    public Optional<ProjectEntity> findByIdAndUser(Long id, String userId) {
 
         Optional<ProjectEntity> result = this.projectRepository.findByIdAndProjectHasUserRoleEntitiesUserInum(id, userId);
 
         if (result.isEmpty())
             throw new NotFoundException("Project does not exist.");
-
-        //generate image url
-        try {
-            result = Optional.of(generateThumbnailUrl(result.get()));
-        }
-        catch(Exception e){
-            throw new InternalErrorException("Failed to generate project thumbnail url: "+e);
-        }
 
         return result;
     }
@@ -127,22 +81,115 @@ public class ProjectService {
             throw new BadRequestException("Failed to save project.");
         }
 
-        // add thumbnail to project if it exists
-        if (thumbnail != null){
-            try{
-                FileEntity newThumbnail = processThumbnail(userId, thumbnail);
-                newProject.setFileThumbnail(newThumbnail);}
-            catch (Exception e){
-                //TODO: send message to frontend to alert that thumbnail was not saved.
-                // Not throwing exception because the project can be created without thumbnaiil.
-            }
-        }
 
         return newProject;
     }
 
     public void delete(ProjectEntity projectEntity) {
         this.projectRepository.delete(projectEntity);
+    }
+
+
+    // Thumbnails
+
+    public FileEntity getThumbnail(ProjectEntity project) {
+
+        FileEntity thumbnail = project.getFileThumbnail();
+        if (thumbnail == null)
+            throw new NotFoundException("Thumbnail does not exist.");
+
+        //generate image url
+        FileEntity tempThumbnail = null;
+        try {
+            tempThumbnail = new FileEntity();
+            BeanUtils.copyProperties(thumbnail, tempThumbnail);
+            String url = this.minioService.getDownloadUrl(tempThumbnail.getPath());
+            tempThumbnail.setPath(url);
+        }
+        catch(Exception e){
+            throw new InternalErrorException("Failed to generate thumbnail url: "+e);
+        }
+
+        return tempThumbnail;
+    }
+
+
+    public FileEntity saveThumbnail(String userId, ProjectEntity project,
+                                    MultipartFile thumbnail) {
+
+        FileEntity newThumbnail;
+        try{
+            newThumbnail = processThumbnail(userId, thumbnail);
+            project.setFileThumbnail(newThumbnail);
+            newThumbnail.setProject(project);
+            project = this.projectRepository.save(project);
+        }
+        catch (MinioException e){
+            throw new InternalErrorException("Failed to save thumbnail: "+e);
+        }
+
+        return project.getFileThumbnail();
+    }
+
+    public FileEntity updateThumbnail(String userId, ProjectEntity project,
+                                      FileEntity oldThumbnail, MultipartFile thumbnail) {
+
+        // NOTE: since frontend is still limited, the only update would be to
+        // replace a previously existing thumbnail
+        // change this later if we need to update more attributes besides content
+
+        if (thumbnail.isEmpty()) {
+            throw new BadRequestException("Failed to update thumbnail: new thumbnail provided is null.");
+        }
+
+        //create new replacement thumbnail
+        FileEntity newThumbnail = null;
+        try{
+            FileEntity t = project.getFileThumbnail();
+
+            newThumbnail = processThumbnail(userId, thumbnail);
+            t.setPath(newThumbnail.getPath());
+            t.setName(newThumbnail.getName());
+            t.setFileType(newThumbnail.getFileType());
+            t.setUpdatedBy(userId);
+            t.setUpdatedAt(LocalDateTime.now());
+        }
+        catch (MinioException e){
+            throw new InternalErrorException("Failed to update thumbnail: "+e);
+        }
+        // delete old thumbnail
+        try{
+            this.minioService.delete(oldThumbnail.getPath());
+        }
+        catch (MinioException e){
+            throw new InternalErrorException("Failed to remove old thumbnail: "+e);
+        }
+
+        //save project
+        project = this.projectRepository.save(project);
+        newThumbnail = project.getFileThumbnail();
+
+        return newThumbnail;
+    }
+
+    public void deleteThumbnail(ProjectEntity project){
+
+        FileEntity thumbnail = project.getFileThumbnail();
+        if (thumbnail == null)
+            throw new NotFoundException("Failed to remove thumbnail: Thumbnail does not exist.");
+
+        // delete thumbnail
+        try{
+            this.minioService.delete(thumbnail.getPath());
+        }
+        catch (MinioException e){
+            throw new InternalErrorException("Failed to remove thumbnail: "+e);
+        }
+
+        //remove thumbnail from project
+        project.setFileThumbnail(null);
+        this.projectRepository.save(project);
+
     }
 
     private FileEntity processThumbnail(String creatorId, MultipartFile thumbnail) throws BadRequestException, MinioException {
