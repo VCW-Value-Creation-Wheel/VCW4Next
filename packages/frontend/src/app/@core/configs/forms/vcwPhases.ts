@@ -13,8 +13,11 @@ export const challengeConfig = {
 
 export const selectIdeasConfig = {
     name: [null, Validators.required],
-    lang: [null],
-    isSelected: [null, Validators.required]
+    file: [null, Validators.required],
+    sourceName: [null],
+    sourceUrl: [null],
+    isSelected: [null],
+    id: [null]
 
 };
 

@@ -1,15 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { challengeConfig, PhaseNavigationService, selectIdeasConfig } from '@core';
+import { challengeConfig, Idea, PhaseNavigationService, selectIdeasConfig, VcwPhasesService } from '@core';
 import { faFloppyDisk } from '@fortawesome/free-solid-svg-icons';
-
-interface Idea {
-  id: number;
-  name: string;
-  lang?: string;
-  isSelected: boolean;
-}
 
 @Component({
   selector: 'app-select-ideas',
@@ -22,34 +15,50 @@ export class SelectIdeasComponent implements OnInit{
 
   dataForm: UntypedFormGroup;
 
+  vcwId: number;
+  projectId: number;
+
   ideas: Idea[] = [
     {
       id : 1,
       name: 'Portugal',
-      isSelected: false
+      isSelected: false,
+      sourceName:'portugal',
+      sourceUrl: 'testeUrl',
+      entryTypeId: 1,
     },
     {
       id : 2,
       name: 'Spain',
-      isSelected: false
+      isSelected: false,
+      sourceName:'spain',
+      sourceUrl: 'testeUrl',
+      entryTypeId: 1,
     },
     {
       id : 3,
       name: 'France',
-      isSelected: false
+      isSelected: false,
+      sourceName:'france',
+      sourceUrl: 'testeUrl',
+      entryTypeId: 1,
     },
   ]
+
 
   constructor(
       private phaseNavService: PhaseNavigationService,
       private router: Router,
       private activatedRoute: ActivatedRoute,
-      private formBuilder: FormBuilder
+      private formBuilder: FormBuilder,
+      private vcwPhasesService: VcwPhasesService,
     ){
     this.dataForm = this.formBuilder.group(selectIdeasConfig);
   }
 
   ngOnInit(): void {
+    this.vcwId = parseInt(this.activatedRoute.snapshot.paramMap.get('vcw_id'), 10);
+    this.projectId = parseInt(this.activatedRoute.snapshot.paramMap.get('project_id'), 10);
     this.phaseNavService.nextPhase$.subscribe((nextPhase) => {
       this.router.navigate(['../' + nextPhase], {relativeTo: this.activatedRoute});
     });
@@ -63,6 +72,8 @@ export class SelectIdeasComponent implements OnInit{
 
   toggleSelected(id: number): void {
     this.ideas.find(idea => idea.id === id).isSelected = !this.ideas.find(idea => idea.id === id).isSelected;
+    let ideaData = this.ideas.find(idea => idea.id === id);
+    this.vcwPhasesService.editIdea(this.vcwId, this.projectId, id, ideaData);
   }
 
 }
