@@ -77,6 +77,7 @@ public class ProjectEntity extends BaseNamedEntity{
      projectHasUserRoleEntities.add(p);
   }
 
+
   public void addVcw(VcwEntity vcw){
     vcws.add(vcw);
   }
@@ -84,6 +85,7 @@ public class ProjectEntity extends BaseNamedEntity{
   public void addKeyword(KeywordEntity keyword){
     projectHasKeywords.add(keyword);
   }
+
 
 
 }

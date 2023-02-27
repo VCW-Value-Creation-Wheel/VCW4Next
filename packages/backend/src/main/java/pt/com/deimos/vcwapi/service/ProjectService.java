@@ -18,6 +18,8 @@ import pt.com.deimos.vcwapi.repository.ProjectRepository;
 
 import java.io.InputStream;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 
@@ -68,12 +70,12 @@ public class ProjectService {
                 projectInfo.getName(), projectInfo.getDescription(),
                 projectInfo.getLang());
 
-        // connect users and roles
+        // save user as project owner to not lose access
         for (ProjectHasUserRoleDTO user : projectInfo.getProjectUsers()) {
-            ProjectHasUserRoleEntity userRole = new ProjectHasUserRoleEntity(
-                    userId, userId, user.getRoleId(), user.getUserId());
-            userRole.setProject(newProject);
-            newProject.addProjectHasUserRole(userRole);
+            //ProjectHasUserRoleEntity userRole = new ProjectHasUserRoleEntity(
+            //        userId, userId, user.getRoleId(), user.getUserId());
+            //userRole.setProject(newProject);
+            //newProject.addProjectHasUserRole(userRole);
         }
 
         newProject = this.projectRepository.save(newProject);

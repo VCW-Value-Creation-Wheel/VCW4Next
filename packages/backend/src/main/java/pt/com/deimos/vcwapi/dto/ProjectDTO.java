@@ -20,8 +20,6 @@ public class ProjectDTO {
   @NotBlank
   private String lang;
 
-  private MultipartFile thumbnail;
-
   @NotEmpty
   private List<@Valid ProjectHasUserRoleDTO> projectUsers;
 

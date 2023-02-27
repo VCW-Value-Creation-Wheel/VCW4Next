@@ -10,13 +10,16 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import pt.com.deimos.vcwapi.dto.ProjectDTO;
+import pt.com.deimos.vcwapi.dto.ProjectHasUserRoleDTO;
 import pt.com.deimos.vcwapi.entity.FileEntity;
 import pt.com.deimos.vcwapi.entity.ProjectEntity;
+import pt.com.deimos.vcwapi.entity.ProjectHasUserRoleEntity;
 import pt.com.deimos.vcwapi.exceptions.BadRequestException;
 import pt.com.deimos.vcwapi.exceptions.InternalErrorException;
 import pt.com.deimos.vcwapi.exceptions.NotFoundException;
 import pt.com.deimos.vcwapi.service.ProjectService;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -113,6 +116,10 @@ public class ProjectController {
 //
 //    return ResponseEntity.noContent().build();
 //  }
+
+
+
+
 
   @GetMapping("{id}/thumbnails")
   public ResponseEntity<Object> getThumbnail(

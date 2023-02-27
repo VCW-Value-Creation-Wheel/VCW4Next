@@ -1,5 +1,6 @@
 package pt.com.deimos.vcwapi.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,5 +25,6 @@ public class RoleEntity {
 
 
     @OneToMany(mappedBy = "role")
+    @JsonIgnore
     private List<ProjectHasUserRoleEntity> projectHasUserRoleEntities;
 }
