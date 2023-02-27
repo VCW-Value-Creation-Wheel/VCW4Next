@@ -72,7 +72,7 @@ export class SelectIdeasComponent implements OnInit{
 
   toggleSelected(id: number): void {
     this.ideas.find(idea => idea.id === id).isSelected = !this.ideas.find(idea => idea.id === id).isSelected;
-    let ideaData = this.ideas.find(idea => idea.id === id);
+    const ideaData = this.ideas.find(idea => idea.id === id);
     this.vcwPhasesService.editIdea(this.vcwId, this.projectId, id, ideaData);
   }
 
