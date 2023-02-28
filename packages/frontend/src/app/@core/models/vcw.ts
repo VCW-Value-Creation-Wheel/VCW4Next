@@ -32,3 +32,12 @@ export type Idea = {
     id?: number,
     isSelected: boolean,
 };
+
+export type Criteria = {
+    name: string,
+    sourceName: string,
+    sourceUrl: string,
+    entryTypeId: number,
+    id?: number,
+    isSelected: boolean,
+};
