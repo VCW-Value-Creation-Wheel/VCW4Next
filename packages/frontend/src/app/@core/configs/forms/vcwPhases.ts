@@ -9,17 +9,8 @@ export const swotFieldRowConfig = {
 
 export const challengeConfig = {
     challenge: [null, Validators.required]
-}
-
-export const selectIdeasConfig = {
-    name: [null, Validators.required],
-    file: [null, Validators.required],
-    sourceName: [null],
-    sourceUrl: [null],
-    isSelected: [null],
-    id: [null]
-
 };
+
 
 export const createIdeasConfig = {
     name: [null, Validators.required],

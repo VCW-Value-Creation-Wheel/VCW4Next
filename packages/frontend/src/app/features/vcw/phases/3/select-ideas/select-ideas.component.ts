@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { challengeConfig, Idea, PhaseNavigationService, selectIdeasConfig, VcwPhasesService } from '@core';
+import { Idea, PhaseNavigationService, VcwPhasesService } from '@core';
 import { VcwMockService } from '@core/services/mocks/vcw/vcw-mock.service';
 import { faFloppyDisk, faGlobe, faUser, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import { environment } from '../../../../../../environments/environment';
@@ -14,8 +13,6 @@ import { environment } from '../../../../../../environments/environment';
 export class SelectIdeasComponent implements OnInit{
 
   faFloppyDisk = faFloppyDisk;
-
-  dataForm: UntypedFormGroup;
 
   vcwId: number;
   projectId: number;
@@ -31,9 +28,7 @@ export class SelectIdeasComponent implements OnInit{
       private activatedRoute: ActivatedRoute,
       private vcwPhasesService: VcwPhasesService,
       private vcwMockService: VcwMockService,
-    ){
-
-  }
+    ){}
 
   ngOnInit(): void {
     this.useMocks = environment.activateMocks;
@@ -57,8 +52,6 @@ export class SelectIdeasComponent implements OnInit{
   onSave() {
   }
 
-  isFormValid(control: string) {
-  }
 
   toggleSelected(id: number): void {
     if (!this.useMocks){
