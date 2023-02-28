@@ -62,7 +62,7 @@ export class SelectIdeasComponent implements OnInit{
 
   toggleSelected(id: number): void {
     if (!this.useMocks){
-      const ideaData = this.ideas.find(idea => idea.id === id);
+      const ideaData = JSON.parse(JSON.stringify(this.ideas.find(idea => idea.id === id)));
       ideaData.isSelected = !ideaData.isSelected;
       this.vcwPhasesService.editIdea(this.vcwId, this.projectId, id, ideaData)
       .subscribe(data =>{
