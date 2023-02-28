@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.crossstore.ChangeSetPersister;
-import org.springframework.data.util.Pair;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -88,7 +87,7 @@ public class ProjectControllerTest {
         BeanUtils.copyProperties(dummyRecords.get(1),p1);
         pList.add(p1);
         //mock a project object
-        Mockito.when(projectService.findAll()).thenReturn(Pair.of(pList,""));
+        Mockito.when(projectService.findAll()).thenReturn(pList);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/v1/projects")
                .accept(MediaType.APPLICATION_JSON))
@@ -112,7 +111,7 @@ public class ProjectControllerTest {
 
         ProjectEntity p1 = new ProjectEntity();
         BeanUtils.copyProperties(dummyRecords.get(0),p1);
-        Mockito.when(projectService.findById(1L)).thenReturn(Pair.of(java.util.Optional.of(p1),""));
+        Mockito.when(projectService.findById(1L)).thenReturn(java.util.Optional.of(p1));
 
         mockMvc.perform(MockMvcRequestBuilders
                 .get("/v1/projects/1")
@@ -130,7 +129,7 @@ public class ProjectControllerTest {
 
         ProjectEntity p1 = new ProjectEntity();
         BeanUtils.copyProperties(dummyRecords.get(0),p1);
-        Mockito.when(projectService.save(dummyRecords.get(1),null,"")).thenReturn(Pair.of(p1,""));
+        Mockito.when(projectService.save(dummyRecords.get(1),null)).thenReturn(p1);
 
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/v1/projects")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -158,8 +157,8 @@ public class ProjectControllerTest {
         ProjectDTO editedDto = new ProjectDTO();
         BeanUtils.copyProperties(editedProject,editedDto);
         BeanUtils.copyProperties(dummyRecords.get(1),p1);
-        Mockito.when(projectService.save(dummyRecords.get(1),null,"")).thenReturn(Pair.of(p1,""));
-        Mockito.when(projectService.save(editedDto,null,"")).thenReturn(Pair.of(editedProject,""));
+        Mockito.when(projectService.save(dummyRecords.get(1),null)).thenReturn(p1);
+        Mockito.when(projectService.save(editedDto,null)).thenReturn(editedProject);
 
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.put("/v1/projects")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -182,7 +181,7 @@ public class ProjectControllerTest {
 
         ProjectEntity p1 = new ProjectEntity();
         BeanUtils.copyProperties(dummyRecords.get(0),p1);
-        Mockito.when(projectService.findById(2L)).thenReturn(Pair.of(Optional.of(p1),""));
+        Mockito.when(projectService.findById(2L)).thenReturn(Optional.of(p1));
 
         mockMvc.perform(MockMvcRequestBuilders
                         .delete("/v1/projects/2")
