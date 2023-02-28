@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, UntypedFormGroup } from '@angular/forms';
+import { AbstractControl, FormBuilder, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { challengeConfig, Idea, PhaseNavigationService, selectIdeasConfig, VcwPhasesService } from '@core';
-import { faFloppyDisk } from '@fortawesome/free-solid-svg-icons';
+import { VcwMockService } from '@core/services/mocks/vcw/vcw-mock.service';
+import { faFloppyDisk, faGlobe, faUser, IconDefinition } from '@fortawesome/free-solid-svg-icons';
+import { environment } from '../../../../../../environments/environment';
 
 @Component({
   selector: 'app-select-ideas',
@@ -18,50 +20,38 @@ export class SelectIdeasComponent implements OnInit{
   vcwId: number;
   projectId: number;
 
-  ideas: Idea[] = [
-    {
-      id : 1,
-      name: 'Portugal',
-      isSelected: false,
-      sourceName:'portugal',
-      sourceUrl: 'testeUrl',
-      entryTypeId: 1,
-    },
-    {
-      id : 2,
-      name: 'Spain',
-      isSelected: false,
-      sourceName:'spain',
-      sourceUrl: 'testeUrl',
-      entryTypeId: 1,
-    },
-    {
-      id : 3,
-      name: 'France',
-      isSelected: false,
-      sourceName:'france',
-      sourceUrl: 'testeUrl',
-      entryTypeId: 1,
-    },
-  ]
+  ideas: Idea[];
+
+  useMocks: boolean;
 
 
   constructor(
       private phaseNavService: PhaseNavigationService,
       private router: Router,
       private activatedRoute: ActivatedRoute,
-      private formBuilder: FormBuilder,
       private vcwPhasesService: VcwPhasesService,
+      private vcwMockService: VcwMockService,
     ){
-    this.dataForm = this.formBuilder.group(selectIdeasConfig);
+
   }
 
   ngOnInit(): void {
+    this.useMocks = environment.activateMocks;
+
     this.vcwId = parseInt(this.activatedRoute.snapshot.paramMap.get('vcw_id'), 10);
     this.projectId = parseInt(this.activatedRoute.snapshot.paramMap.get('project_id'), 10);
     this.phaseNavService.nextPhase$.subscribe((nextPhase) => {
       this.router.navigate(['../' + nextPhase], {relativeTo: this.activatedRoute});
     });
+
+    if (this.useMocks){
+      this.vcwMockService.getIdeas().subscribe(
+      data => this.ideas = data);
+    } else{
+      this.vcwPhasesService.getIdeas(this.vcwId, this.projectId).subscribe(
+        data => this.ideas = data);
+    }
+
   }
 
   onSave() {
@@ -71,9 +61,24 @@ export class SelectIdeasComponent implements OnInit{
   }
 
   toggleSelected(id: number): void {
-    this.ideas.find(idea => idea.id === id).isSelected = !this.ideas.find(idea => idea.id === id).isSelected;
-    const ideaData = this.ideas.find(idea => idea.id === id);
-    this.vcwPhasesService.editIdea(this.vcwId, this.projectId, id, ideaData);
+    if (!this.useMocks){
+      const ideaData = this.ideas.find(idea => idea.id === id);
+      ideaData.isSelected = !ideaData.isSelected;
+      this.vcwPhasesService.editIdea(this.vcwId, this.projectId, id, ideaData)
+      .subscribe(data =>{
+        this.ideas.find(idea => idea.id === id).isSelected = !this.ideas.find(idea => idea.id === id).isSelected;
+      });
+    } else {
+      this.ideas.find(idea => idea.id === id).isSelected = !this.ideas.find(idea => idea.id === id).isSelected;
+    }
+  }
+
+  getIcon(value: string): IconDefinition {
+    if (value) {
+      return faGlobe;
+    } else {
+      return faUser;
+    }
   }
 
 }
