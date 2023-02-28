@@ -11,6 +11,7 @@ import { VcwJourneyComponent } from './vcw-page/vcw-journey/vcw-journey.componen
 import { VcwSprintComponent } from './vcw-page/vcw-sprint/vcw-sprint.component';
 import { SelectIdeasComponent } from './phases/3/select-ideas/select-ideas.component';
 import { CreateIdeasComponent } from './phases/2/create-ideas/create-ideas.component';
+import { CriteriaPageComponent } from './phases/2/criteria-page/criteria-page.component';
 
 
 
@@ -23,7 +24,8 @@ import { CreateIdeasComponent } from './phases/2/create-ideas/create-ideas.compo
     VcwSprintComponent,
     ChallengeComponent,
     SelectIdeasComponent,
-    CreateIdeasComponent],
+    CreateIdeasComponent,
+    CriteriaPageComponent],
   imports: [
     CommonModule,
     ReactiveFormsModule,
