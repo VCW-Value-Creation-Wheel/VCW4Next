@@ -83,10 +83,18 @@ export class PurificationPageComponent implements OnInit {
   }
 
   onIdeaSelect(index: number) {
-    this.selectedIdeaIndex = index;
+    if (this.selectedIdeaIndex === index) {
+      this.selectedIdeaIndex = undefined;
+    } else {
+      this.selectedIdeaIndex = index;
+    }
   }
 
   onCriteriaSelect(index: number) {
-    this.selectedCriteriaIndex = index;
+    if (this.selectedCriteriaIndex === index) {
+      this.selectedCriteriaIndex = undefined;
+    } else {
+      this.selectedCriteriaIndex = index;
+    }
   }
 }
