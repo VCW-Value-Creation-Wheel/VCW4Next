@@ -29,7 +29,8 @@ export type Idea = {
     sourceName: string,
     sourceUrl: string,
     entryTypeId: number,
-    id?: number
+    id?: number,
+    isSelected: boolean,
 };
 
 export type Criteria = {

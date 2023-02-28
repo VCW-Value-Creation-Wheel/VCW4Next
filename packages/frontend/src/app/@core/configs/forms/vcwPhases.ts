@@ -11,6 +11,7 @@ export const challengeConfig = {
     challenge: [null, Validators.required]
 };
 
+
 export const createIdeasConfig = {
     name: [null, Validators.required],
     file: [null, Validators.required],

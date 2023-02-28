@@ -19,11 +19,10 @@ export class ListItemComponent implements OnInit {
   @Input() isSelectable = false;
   @Input() value: string;
   @Input() icon?: IconDefinition;
+  @Input() isSelected = false;
   @Output() editClick = new EventEmitter();
   @Output() deleteClick = new EventEmitter();
   @Output() selectChange = new EventEmitter<boolean>();
-
-  isSelected = false;
 
   constructor() {}
 
@@ -41,7 +40,6 @@ export class ListItemComponent implements OnInit {
 
   toggleSelect() {
     if (this.isSelectable) {
-      this.isSelected = !this.isSelected;
       this.selectChange.emit(this.isSelected);
     }
   }

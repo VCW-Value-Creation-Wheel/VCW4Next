@@ -9,6 +9,7 @@ import { VcwPageComponent } from './vcw-page/vcw-page.component';
 import { VCWMethodComponent } from './vcw-page/vcw-method/vcw-method.component';
 import { VcwJourneyComponent } from './vcw-page/vcw-journey/vcw-journey.component';
 import { VcwSprintComponent } from './vcw-page/vcw-sprint/vcw-sprint.component';
+import { SelectIdeasComponent } from './phases/3/select-ideas/select-ideas.component';
 import { CreateIdeasComponent } from './phases/2/create-ideas/create-ideas.component';
 import { PurificationPageComponent } from './phases/2/purification-page/purification-page.component';
 
@@ -16,14 +17,16 @@ import { PurificationPageComponent } from './phases/2/purification-page/purifica
 
 @NgModule({
   declarations: [
-    DefineDiagonosticsComponent, 
-    VcwPageComponent, 
-    VCWMethodComponent, 
-    VcwJourneyComponent, 
+    DefineDiagonosticsComponent,
+    VcwPageComponent,
+    VCWMethodComponent,
+    VcwJourneyComponent,
     VcwSprintComponent,
     ChallengeComponent,
     CreateIdeasComponent,
-    PurificationPageComponent],
+    PurificationPageComponent,
+    CreateIdeasComponent
+  ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
