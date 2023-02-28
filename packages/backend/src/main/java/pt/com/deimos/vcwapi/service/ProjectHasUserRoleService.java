@@ -3,6 +3,7 @@ package pt.com.deimos.vcwapi.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pt.com.deimos.vcwapi.dto.ProjectHasUserRoleDTO;
+import pt.com.deimos.vcwapi.entity.DiagnosticEntity;
 import pt.com.deimos.vcwapi.entity.ProjectEntity;
 import pt.com.deimos.vcwapi.entity.ProjectHasUserRoleEntity;
 import pt.com.deimos.vcwapi.entity.RoleEntity;
@@ -21,7 +22,6 @@ public class ProjectHasUserRoleService {
 
     private final ProjectRepository projectRepository;
     private final ProjectHasUserRoleRepository projectHasUserRoleRepository;
-
     private final RoleRepository roleRepository;
 
     public ProjectHasUserRoleService(ProjectRepository projectRepository,
@@ -67,10 +67,6 @@ public class ProjectHasUserRoleService {
             throw new BadRequestException("Failed to add user: invalid role.");
 
         //create user
-        //ProjectHasUserRoleEntity newUser = new ProjectHasUserRoleEntity();
-        //BeanUtils.copyProperties(userDTO,newUser);
-        //
-        //project.addProjectHasUserRole(newUser);
         ProjectHasUserRoleEntity newUser = new ProjectHasUserRoleEntity();
         newUser.setRole(role.get());
         newUser.setUserInum(userDTO.getUserId());
@@ -92,12 +88,13 @@ public class ProjectHasUserRoleService {
 
         //update role
         user.setRole(role.get());
-        //ProjectHasUserRoleEntity userRoleEntity = projectUsers.getProjectUserRole(projectUserId);
-        //userRoleEntity.setRoleId(userDTO.getRoleId());
-        //userRoleEntity.setUpdatedBy(userId);
-        //userRoleEntity.setUpdatedAt(LocalDateTime.now());
 
         return this.projectHasUserRoleRepository.save(user);
     }
+
+    public void delete(ProjectHasUserRoleEntity userRole) {
+        this.projectHasUserRoleRepository.delete(userRole);
+    }
+
 
 }

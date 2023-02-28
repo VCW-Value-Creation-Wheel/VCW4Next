@@ -10,10 +10,8 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import pt.com.deimos.vcwapi.dto.ProjectDTO;
-import pt.com.deimos.vcwapi.dto.ProjectHasUserRoleDTO;
 import pt.com.deimos.vcwapi.entity.FileEntity;
 import pt.com.deimos.vcwapi.entity.ProjectEntity;
-import pt.com.deimos.vcwapi.entity.ProjectHasUserRoleEntity;
 import pt.com.deimos.vcwapi.exceptions.BadRequestException;
 import pt.com.deimos.vcwapi.exceptions.InternalErrorException;
 import pt.com.deimos.vcwapi.exceptions.NotFoundException;
@@ -73,12 +71,11 @@ public class ProjectController {
 
   @PostMapping
   public ResponseEntity<Object> store(
-          @RequestPart @Valid ProjectDTO project,
-          @RequestPart(required = false) MultipartFile thumbnail,
+          @RequestBody @Valid ProjectDTO project,
           @AuthenticationPrincipal Jwt principal
   ) {
 
-    ProjectEntity results = this.projectService.save(project, thumbnail, principal.getSubject());
+    ProjectEntity results = this.projectService.save(project, principal.getSubject());
 
     return ResponseEntity.status(HttpStatus.CREATED).body(results);
   }

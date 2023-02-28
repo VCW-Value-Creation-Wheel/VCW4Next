@@ -20,7 +20,5 @@ public class ProjectDTO {
   @NotBlank
   private String lang;
 
-  @NotEmpty
-  private List<@Valid ProjectHasUserRoleDTO> projectUsers;
 
 }

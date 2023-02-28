@@ -11,10 +11,12 @@ import pt.com.deimos.vcwapi.dto.ProjectHasUserRoleDTO;
 import pt.com.deimos.vcwapi.entity.FileEntity;
 import pt.com.deimos.vcwapi.entity.ProjectEntity;
 import pt.com.deimos.vcwapi.entity.ProjectHasUserRoleEntity;
+import pt.com.deimos.vcwapi.entity.RoleEntity;
 import pt.com.deimos.vcwapi.exceptions.BadRequestException;
 import pt.com.deimos.vcwapi.exceptions.InternalErrorException;
 import pt.com.deimos.vcwapi.exceptions.NotFoundException;
 import pt.com.deimos.vcwapi.repository.ProjectRepository;
+import pt.com.deimos.vcwapi.repository.RoleRepository;
 
 import java.io.InputStream;
 import java.time.LocalDateTime;
@@ -33,6 +35,7 @@ public class ProjectService {
     private MinioService minioService;
 
     public ProjectService(ProjectRepository projectRepository) {
+
         this.projectRepository = projectRepository;
     }
 
@@ -64,19 +67,23 @@ public class ProjectService {
         return result;
     }
 
-    public ProjectEntity save(ProjectDTO projectInfo, MultipartFile thumbnail, String userId) {
+    public ProjectEntity save(ProjectDTO projectInfo, String userId) {
 
         ProjectEntity newProject = new ProjectEntity(userId, userId,
                 projectInfo.getName(), projectInfo.getDescription(),
                 projectInfo.getLang());
 
-        // save user as project owner to not lose access
-        for (ProjectHasUserRoleDTO user : projectInfo.getProjectUsers()) {
-            //ProjectHasUserRoleEntity userRole = new ProjectHasUserRoleEntity(
-            //        userId, userId, user.getRoleId(), user.getUserId());
-            //userRole.setProject(newProject);
-            //newProject.addProjectHasUserRole(userRole);
-        }
+        //save user as project coordinator
+        ProjectHasUserRoleEntity userRole = new ProjectHasUserRoleEntity();
+        userRole.setUserInum(userId);
+        userRole.setCreatedBy(userId);
+        userRole.setUpdatedBy(userId);
+        RoleEntity proxy = new RoleEntity();
+        proxy.setId(1L);
+        userRole.setRole(proxy);
+
+        userRole.setProject(newProject);
+        newProject.addProjectHasUserRole(userRole);
 
         newProject = this.projectRepository.save(newProject);
         if (newProject == null ) {

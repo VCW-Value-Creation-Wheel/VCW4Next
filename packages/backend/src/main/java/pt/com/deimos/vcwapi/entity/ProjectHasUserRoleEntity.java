@@ -13,11 +13,6 @@ import lombok.Setter;
 @Table(name = "project_has_user_role")
 public class ProjectHasUserRoleEntity extends BaseEntity{
 
-    public ProjectHasUserRoleEntity(String updatedBy, String createdBy, String userInum) {
-        super(updatedBy, createdBy);
-        this.userInum = userInum;
-    }
-
     @Column(name="user_inum", nullable=false)
     private String userInum;
 
