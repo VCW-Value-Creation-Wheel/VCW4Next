@@ -44,7 +44,8 @@ ALTER TABLE application.project
 
 ALTER TABLE application.project_has_user_role
   DROP CONSTRAINT fk_project_has_user_role_on_created_by,
-  DROP CONSTRAINT fk_project_has_user_role_on_updated_by;
+  DROP CONSTRAINT fk_project_has_user_role_on_updated_by,
+  DROP CONSTRAINT fk_project_has_user_role_on_user_inum;
 
 ALTER TABLE application.diagnostic
   DROP CONSTRAINT fk_diagnostic_on_created_by,
