@@ -18,6 +18,7 @@ export class CreateItemDialogComponent implements OnInit {
   @Input() checkboxes: string[] = [];
   @Input() checkboxFormControl?: string;
   @Input() checkboxCategoryLabel?: string;
+  @Input() isAwaitingAction = false;
 
   @Output() cancel = new EventEmitter();
   @Output() confirm = new EventEmitter();

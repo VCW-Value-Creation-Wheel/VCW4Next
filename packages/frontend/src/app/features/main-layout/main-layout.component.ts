@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { PhaseNavigationService } from '@core';
 import { KeycloakService } from 'keycloak-angular';
 import { Subject } from 'rxjs';
@@ -19,6 +19,7 @@ export class MainLayoutComponent implements OnInit, OnDestroy {
   userProfile: any;
 
   constructor(private route: Router,
+              private activatedRoute: ActivatedRoute,
               private phaseNavigationService: PhaseNavigationService,
               private keycloak: KeycloakService) { }
 
@@ -47,7 +48,7 @@ export class MainLayoutComponent implements OnInit, OnDestroy {
   }
 
   get vcwPhaseId() {
-    return this.currentRoute?.split('/phases/')[1];
+    return this.currentRoute?.split('/phases/')[1].split('/')[0];
   }
 
   get vcwPhaseFullName() {

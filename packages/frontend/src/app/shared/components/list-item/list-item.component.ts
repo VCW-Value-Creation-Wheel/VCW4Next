@@ -15,10 +15,10 @@ export class ListItemComponent implements OnInit {
 
   @Input() mainBgColor = 'bg-blue-100';
   @Input() selectedBgColor = 'bg-green-200';
-  @Input() icon: IconDefinition = faUser;
   @Input() isEditable = true;
   @Input() isSelectable = false;
   @Input() value: string;
+  @Input() icon?: IconDefinition;
   @Output() editClick = new EventEmitter();
   @Output() deleteClick = new EventEmitter();
   @Output() selectChange = new EventEmitter<boolean>();
