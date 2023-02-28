@@ -31,3 +31,11 @@ export type Idea = {
     entryTypeId: number,
     id?: number
 };
+
+export type Criteria = {
+    name: string,
+    sourceName: string,
+    sourceUrl: string,
+    entryTypeId: number,
+    id?: number
+};
