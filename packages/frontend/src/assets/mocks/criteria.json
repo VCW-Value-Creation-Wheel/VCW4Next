@@ -4,5 +4,17 @@
         "name": "FAO Member",
         "sourceName": "",
         "sourceUrl": ""
+    },
+    {
+        "id": 2,
+        "name": "Coastline",
+        "sourceName": "",
+        "sourceUrl": ""
+    },
+    {
+        "id": 3,
+        "name": "Population",
+        "sourceName": "",
+        "sourceUrl": ""
     }
 ]
