@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, UntypedFormArray, UntypedFormGroup } from '@angular/forms';
+import { AbstractControl, FormBuilder, UntypedFormArray, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { createCriteriaConfig, createIdeasConfig, PhaseNavigationService, VcwPhasesService } from '@core';
 import { VcwMockService } from '@core/services/mocks/vcw/vcw-mock.service';
+import { faGlobe, faUser, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import { Subject } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { environment } from '../../../../../../environments/environment';
@@ -14,6 +15,9 @@ import { environment } from '../../../../../../environments/environment';
 })
 export class PurificationPageComponent implements OnInit {
 
+  faGlobe = faGlobe;
+  faUser = faUser;
+
   useMocks: boolean;
   vcwId: number;
   projectId: number;
@@ -22,6 +26,9 @@ export class PurificationPageComponent implements OnInit {
   criteriaFormArray: UntypedFormArray;
   ideaDataForm: UntypedFormGroup;
   criteriaDataForm: UntypedFormGroup;
+
+  selectedIdeaIndex: number;
+  selectedCriteriaIndex: number;
 
   actionConfirmText: string;
   actionConfirmTitle: string;
@@ -65,5 +72,21 @@ export class PurificationPageComponent implements OnInit {
         });
       });
     }
+  }
+
+  getIcon(ideaSourceControl: AbstractControl): IconDefinition {
+    if (ideaSourceControl?.value) {
+      return faGlobe;
+    } else {
+      return faUser;
+    }
+  }
+
+  onIdeaSelect(index: number) {
+    this.selectedIdeaIndex = index;
+  }
+
+  onCriteriaSelect(index: number) {
+    this.selectedCriteriaIndex = index;
   }
 }

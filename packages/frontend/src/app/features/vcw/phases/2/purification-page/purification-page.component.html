@@ -1,1 +1,26 @@
-<p>purification-page works!</p>
+<div class="flex flex-row gap-8 mx-4 pt-16 grid grid-cols-2 md:mx-64 lg:mx-80">
+    <div class="flex flex-col col-span-1 gap-4">
+        <ng-container *ngFor="let idea of ideaFormArray.controls; index as idx">
+            <app-list-item
+                [isEditable]="true"
+                [isSelectable]="true"
+                [value]="idea.controls.name?.value"
+                [icon]="getIcon(idea.controls.sourceName)"
+                [isSelected]="selectedIdeaIndex === idx"
+                (selectChange)="onIdeaSelect(idx)"
+            ></app-list-item>
+        </ng-container>
+    </div>
+    <div class="flex flex-col col-span-1 gap-4">
+        <ng-container *ngFor="let criteria of criteriaFormArray.controls; index as idx">
+            <app-list-item
+                [isEditable]="true"
+                [isSelectable]="true"
+                [value]="criteria.controls.name?.value"
+                [icon]="getIcon(criteria.controls.sourceName)"
+                [isSelected]="selectedCriteriaIndex === idx"
+                (selectChange)="onCriteriaSelect(idx)"
+            ></app-list-item>
+        </ng-container>
+    </div>
+</div>
