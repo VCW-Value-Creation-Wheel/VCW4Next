@@ -18,9 +18,6 @@ public class VcwHasCriteriaEntity {
     @Column(name = "vcw_id", nullable = false)
     private Long vcwId;
 
-    @Column(name = "criteria_id", nullable = false)
-    private Long criteriaId;
-
     @Column
     private Boolean selected;
 
@@ -45,7 +42,7 @@ public class VcwHasCriteriaEntity {
     private VcwEntity vcw;
 
     @OneToOne(optional = false)
-    @JoinColumn(name="criteria_id", referencedColumnName = "id", insertable=false, updatable=false)
+    @JoinColumn(name="criteria_id", referencedColumnName = "id")
     @JsonIgnore
     private CriteriaEntity criteria;
 }
