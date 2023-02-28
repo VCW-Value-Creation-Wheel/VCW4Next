@@ -1,8 +1,8 @@
 package pt.com.deimos.vcwapi.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,10 +19,5 @@ public class ProjectDTO {
 
   @NotBlank
   private String lang;
-
-  private MultipartFile thumbnail;
-
-  @NotEmpty
-  private List<@Valid ProjectHasUserRoleDTO> projectUsers;
 
 }

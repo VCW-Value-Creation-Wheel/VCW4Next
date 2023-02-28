@@ -1,13 +1,5 @@
 <div class="py-4 flex flex-row justify-between mx-4 md:mx-64 lg:mx-80">
     <h1 class="text-2xl font-bold text-primary">Ideas</h1>
-    <div>
-        <app-button
-            [label]="'Save'"
-            [leftIcon]="faFloppyDisk"
-            [isDisabled]="!hasChanged || itemDialogOpen"
-            (buttonClick)="onSave()"
-        ></app-button>
-    </div>
 </div>
 <div class="flex flex-col gap-4 mx-4 md:mx-64 lg:mx-80">
     <ng-container *ngIf="dataFormArray.controls.length === 0 && !simpleInputOpen">
@@ -21,18 +13,21 @@
             [isSelectable]="false"
             [value]="idea.controls.name?.value"
             (editClick)="editIdea(idx)"
-            (deleteClick)="deleteIdea(idx, idea.controls.name)"
+            (deleteClick)="deleteIdea(idx, idea.controls.name, idea.controls.id)"
             [icon]="getIcon(idea.controls.sourceName)"
         ></app-list-item>
     </ng-container>
-    <div [formGroup]="dataform" *ngIf="simpleInputOpen" class="flex flex-row gap-2">
-        <app-input class="w-8/12 md:w-7/12 lg:w-10/12" formControlName="name" placeholder="Type an idea..."></app-input>
+    <div [formGroup]="dataForm" *ngIf="simpleInputOpen" class="flex flex-row gap-2">
+        <app-input class="w-8/12 md:w-7/12 lg:w-10/12"
+            formControlName="name"
+            placeholder="Type an idea..."
+            (emitKeyPress)="onKeyPress($event)"></app-input>
         <div class="hidden md:flex md:flex-row md:justify-end">
             <app-button
                 [label]="'Add'"
                 [isTransparent]="true"
                 [leftIcon]="faCheck"
-                [isDisabled]="!dataform.valid"
+                [isDisabled]="!dataForm.valid"
                 (buttonClick)="onDirectAdd()"
             ></app-button>
             <app-button
@@ -74,11 +69,12 @@
 <app-create-item-dialog
     *ngIf="itemDialogOpen"
     [isEditing]="editIdeaMode"
-    [formGroup]="dataform"
+    [formGroup]="dataForm"
     [title]="editIdeaMode ? 'Edit Idea': 'New Idea'"
     [tabs] = "['Manual', 'From File']"
-    [tabFormControlsToExclude]="{'0': ['file'], '1': ['name']}"
+    [tabFormControlsToExclude]="{'0': ['file', 'id'], '1': ['name', 'id']}"
     [fileFormFieldName]="'file'"
+    [isAwaitingAction]="isLoading"
     (cancel)="onCancel()"
     (confirm)="onConfirm()"
 ></app-create-item-dialog>

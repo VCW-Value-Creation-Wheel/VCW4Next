@@ -1,0 +1,26 @@
+[
+    {
+        "id": 0,
+        "name": "Strength entry",
+        "description": "Something",
+        "swotField": 0
+    },
+    {
+        "id": 1,
+        "name": "Weakness entry",
+        "description": "",
+        "swotField": 1
+    },
+    {
+        "id": 2,
+        "name": "Threat entry",
+        "description": "Stranger danger",
+        "swotField": 3
+    },
+    {
+        "id": 3,
+        "name": "Opportunity entry",
+        "description": "Great chance!",
+        "swotField": 2
+    }
+]

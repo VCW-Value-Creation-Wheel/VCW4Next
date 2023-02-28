@@ -3,6 +3,7 @@
     [cancelText]="'Cancel'"
     [title]="title"
     [confirmDisabled]="!formGroup.valid"
+    [awaitingAction]="isAwaitingAction"
     (cancel)="onCancel()"
     (confirm)="onConfirm()"
 >   
@@ -30,6 +31,7 @@
                     [label]="formatFieldLabel(field) | titlecase"
                     [formControlName]="field"
                     [placeholder]="formatFieldLabel(field) | titlecase"
+                    *ngIf="!tabFormControlsToExclude[activeTab].includes(field)"
                 ></app-input>
             </ng-template>
             

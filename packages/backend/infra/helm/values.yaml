@@ -35,6 +35,8 @@ secret:
       DATASOURCE_PASSWORD: null
       MINIO_ACCESS_KEY: null
       MINIO_SECRET_KEY: null
+      root-user: null
+      root-password: null
 
 # ---------------------------------------
 # Variable used in ConfigMap template
@@ -121,3 +123,13 @@ serviceAccount:
   create: true
   # Annotations to add to the service account
   annotations: {}
+
+
+# ---------------------------------------
+# MINIO VALUES
+# ---------------------------------------
+minio:
+  auth:
+    existingSecret: vcw-backend-secrets
+  statefulset:
+    replicaCount: 1

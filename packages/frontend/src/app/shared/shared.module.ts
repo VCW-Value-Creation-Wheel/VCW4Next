@@ -21,7 +21,8 @@ import {
   ProjectCardComponent,
   PhaseNavigationComponent,
   TabComponent,
-  DialogComponent
+  DialogComponent,
+  SnackbarComponent
 } from './components';
 import { RegexInputDirective } from './directives';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -61,7 +62,8 @@ import { CreateItemDialogComponent } from './components/create-item-dialog/creat
     VcwCardComponent,
     CkeEditorComponent,
     ListItemComponent,
-    CreateItemDialogComponent
+    CreateItemDialogComponent,
+    SnackbarComponent
   ],
   imports: [
     CommonModule,
@@ -103,7 +105,8 @@ import { CreateItemDialogComponent } from './components/create-item-dialog/creat
     VcwCardComponent,
     CkeEditorComponent,
     ListItemComponent,
-    CreateItemDialogComponent
+    CreateItemDialogComponent,
+    SnackbarComponent
   ]
 })
 export class SharedModule { }
