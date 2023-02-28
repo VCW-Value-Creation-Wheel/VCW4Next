@@ -1,0 +1,18 @@
+
+<div class="px-4 py-4 flex flex-row justify-between">
+</div>
+<div class="flex justify-center">
+    <div class="rounded-md w-2/3 m-2 p-2">
+        <h1 class="text-2xl font-bold text-primary ">Select Ideas</h1>
+        <div *ngFor="let idea of ideas" class="flex flex-col my-4">
+            <app-list-item
+            [value]="idea.name"
+            [isSelectable]="true"
+            [isEditable]="false"
+            (selectChange)="toggleSelected(idea.id)"
+            [icon]="getIcon(idea.sourceName)"
+            [isSelected]="idea.isSelected"
+            ></app-list-item>
+        </div>
+    </div>
+</div>
