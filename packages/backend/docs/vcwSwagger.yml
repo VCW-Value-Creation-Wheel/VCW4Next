@@ -275,7 +275,7 @@ paths:
         - New Project Page
       summary: Shows all project users.
       description: TODO
-      operationId: getProjectUser
+      operationId: getAllProjectUsers
       responses:
         '200':
           description: successful operation
@@ -342,6 +342,40 @@ paths:
             type: string
 
   /projects/{project_id}/users/{user_id}:
+    get:
+      tags:
+        - New Project Page
+      summary: Shows project user with given id.
+      description: TODO
+      operationId: getProjectUserById
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                example: [{"userInum": "b68986e1-81d8-4813-ada5-172442d8944d", "role": {"id": 1, "name":"Coordinator", "description":"test"}}]
+        '404':
+          description: Project user not found
+          content:
+            'text/plain; charset=utf-8':
+              schema:
+                type: string
+                example: 'Project user not found'
+      parameters:
+        - name: project_id
+          in: path
+          description: "project_id"
+          required: true
+          schema:
+            type: integer
+        - name: user id
+          in: path
+          description: "user_id"
+          required: false
+          schema:
+            type: string
     put:
       tags:
         - New Project Page
