@@ -10,6 +10,7 @@ import { VCWMethodComponent } from './vcw-page/vcw-method/vcw-method.component';
 import { VcwJourneyComponent } from './vcw-page/vcw-journey/vcw-journey.component';
 import { VcwSprintComponent } from './vcw-page/vcw-sprint/vcw-sprint.component';
 import { CreateIdeasComponent } from './phases/2/create-ideas/create-ideas.component';
+import { PurificationPageComponent } from './phases/2/purification-page/purification-page.component';
 
 
 
@@ -21,7 +22,8 @@ import { CreateIdeasComponent } from './phases/2/create-ideas/create-ideas.compo
     VcwJourneyComponent, 
     VcwSprintComponent,
     ChallengeComponent,
-    CreateIdeasComponent],
+    CreateIdeasComponent,
+    PurificationPageComponent],
   imports: [
     CommonModule,
     ReactiveFormsModule,
