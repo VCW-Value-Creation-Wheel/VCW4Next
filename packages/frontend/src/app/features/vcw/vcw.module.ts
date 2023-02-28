@@ -25,7 +25,8 @@ import { PurificationPageComponent } from './phases/2/purification-page/purifica
     ChallengeComponent,
     CreateIdeasComponent,
     PurificationPageComponent,
-    CreateIdeasComponent
+    CreateIdeasComponent,
+    SelectIdeasComponent
   ],
   imports: [
     CommonModule,
