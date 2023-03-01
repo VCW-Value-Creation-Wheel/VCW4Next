@@ -383,4 +383,8 @@ export class PurificationPageComponent implements OnInit {
       }
     }
   }
+
+  createEditPair() {
+    
+  }
 }

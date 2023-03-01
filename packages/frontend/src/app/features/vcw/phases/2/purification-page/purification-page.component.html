@@ -62,7 +62,8 @@
     </div>
     <div class="flex justify-center col-span-2">
         <app-button
-            (buttonClick)="onAddCriteria()"
+            [isDisabled]="!(selectedIdeaIndex && selectedCriteriaIndex)"
+            (buttonClick)="createEditPair()"
             [label]="'Create/Edit Pair'"
         ></app-button>
     </div>
