@@ -8,6 +8,8 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import pt.com.deimos.vcwapi.dto.DiagnosticDTO;
 import pt.com.deimos.vcwapi.entity.DiagnosticEntity;
+import pt.com.deimos.vcwapi.entity.ProjectEntity;
+import pt.com.deimos.vcwapi.exceptions.NotFoundException;
 import pt.com.deimos.vcwapi.service.DiagnosticService;
 
 import java.util.Optional;
@@ -24,26 +26,46 @@ public class DiagnosticController {
 
     @GetMapping
     public ResponseEntity<Iterable<DiagnosticEntity>> getByVcw(
+            @AuthenticationPrincipal Jwt principal,
+            @PathVariable(value = "project_id") Long projectId,
             @PathVariable(value = "vcw_id") Long vcwId) {
 
-            return ResponseEntity.ok(this.diagnosticService.findByVcw(vcwId));
+        Optional<ProjectEntity> project =
+                this.diagnosticService.findProjectByIdAndUser(projectId, principal.getSubject());
+        if (project.isEmpty())
+            throw new NotFoundException("Project not found.");
+
+        return ResponseEntity.ok(this.diagnosticService.findByVcw(vcwId));
     }
 
     @PostMapping
-    public ResponseEntity<Object> save(@PathVariable Long vcw_id,
+    public ResponseEntity<Object> save(
+            @PathVariable(value = "project_id") Long projectId,
+            @PathVariable(value = "vcw_id") Long vcwId,
             @RequestBody @Valid DiagnosticDTO diagnosticDTO,
             @AuthenticationPrincipal Jwt principal
     ) {
+        Optional<ProjectEntity> project =
+                this.diagnosticService.findProjectByIdAndUser(projectId, principal.getSubject());
+        if (project.isEmpty())
+            throw new NotFoundException("Project not found.");
 
         return ResponseEntity.status(HttpStatus.CREATED).body(
-                this.diagnosticService.save(principal.getSubject(), vcw_id, diagnosticDTO));
+                this.diagnosticService.save(principal.getSubject(), vcwId, diagnosticDTO));
     }
 
       @PutMapping("/{id}")
       public ResponseEntity<Object> update(
-          @PathVariable Long id,
-          @RequestBody @Valid DiagnosticDTO diagnosticDTO
+              @AuthenticationPrincipal Jwt principal,
+              @PathVariable(value = "project_id") Long projectId,
+              @PathVariable Long id,
+              @RequestBody @Valid DiagnosticDTO diagnosticDTO
       ) {
+
+        Optional<ProjectEntity> project =
+              this.diagnosticService.findProjectByIdAndUser(projectId, principal.getSubject());
+        if (project.isEmpty())
+              throw new NotFoundException("Project not found.");
         Optional<DiagnosticEntity> diagnosticEntityOptional = this.diagnosticService.findById(id);
 
         if(diagnosticEntityOptional.isEmpty()) {
@@ -55,7 +77,16 @@ public class DiagnosticController {
       }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> delete(@PathVariable Long id) {
+    public ResponseEntity<Object> delete(
+            @AuthenticationPrincipal Jwt principal,
+            @PathVariable(value = "project_id") Long projectId,
+            @PathVariable Long id) {
+
+        Optional<ProjectEntity> project =
+                this.diagnosticService.findProjectByIdAndUser(projectId, principal.getSubject());
+        if (project.isEmpty())
+            throw new NotFoundException("Project not found.");
+
         Optional<DiagnosticEntity> diagnosticEntityOptional =
                 this.diagnosticService.findById(id);
 

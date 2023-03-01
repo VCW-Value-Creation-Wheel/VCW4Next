@@ -5,7 +5,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pt.com.deimos.vcwapi.dto.DiagnosticDTO;
 import pt.com.deimos.vcwapi.entity.DiagnosticEntity;
+import pt.com.deimos.vcwapi.entity.ProjectEntity;
 import pt.com.deimos.vcwapi.repository.DiagnosticRepository;
+import pt.com.deimos.vcwapi.repository.ProjectRepository;
 
 import java.util.Optional;
 
@@ -14,9 +16,15 @@ import java.util.Optional;
 public class DiagnosticService {
 
   private final DiagnosticRepository diagnosticRepository;
+  private final ProjectRepository projectRepository;
 
-  public DiagnosticService(DiagnosticRepository diagnosticRepository) {
+  public DiagnosticService(DiagnosticRepository diagnosticRepository, ProjectRepository projectRepository) {
     this.diagnosticRepository = diagnosticRepository;
+    this.projectRepository = projectRepository;
+  }
+
+  public Optional<ProjectEntity> findProjectByIdAndUser(Long project_id, String userId) {
+    return this.projectRepository.findByIdAndProjectHasUserRoleEntitiesUserInum(project_id, userId);
   }
 
   public Iterable<DiagnosticEntity> findAll() {

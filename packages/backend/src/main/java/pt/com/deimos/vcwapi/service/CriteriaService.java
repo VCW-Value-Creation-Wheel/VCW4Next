@@ -5,10 +5,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pt.com.deimos.vcwapi.dto.CriteriaDTO;
 import pt.com.deimos.vcwapi.entity.CriteriaEntity;
+import pt.com.deimos.vcwapi.entity.ProjectEntity;
 import pt.com.deimos.vcwapi.entity.SourceEntity;
 import pt.com.deimos.vcwapi.entity.VcwHasCriteriaEntity;
 import pt.com.deimos.vcwapi.exceptions.BadRequestException;
 import pt.com.deimos.vcwapi.repository.CriteriaRepository;
+import pt.com.deimos.vcwapi.repository.ProjectRepository;
 
 import java.util.Optional;
 
@@ -17,9 +19,15 @@ import java.util.Optional;
 public class CriteriaService {
 
   private final CriteriaRepository criteriaRepository;
+  private final ProjectRepository projectRepository;
 
-  public CriteriaService(CriteriaRepository criteriaRepository) {
+  public CriteriaService(ProjectRepository projectRepository, CriteriaRepository criteriaRepository) {
     this.criteriaRepository = criteriaRepository;
+    this.projectRepository = projectRepository;
+  }
+
+  public Optional<ProjectEntity> findProjectByIdAndUser(Long project_id, String userId) {
+    return this.projectRepository.findByIdAndProjectHasUserRoleEntitiesUserInum(project_id, userId);
   }
 
   public Iterable<CriteriaEntity> findByVcw(Long vcwId) {
