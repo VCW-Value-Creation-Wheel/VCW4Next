@@ -1,19 +1,18 @@
 package pt.com.deimos.vcwapi.controller;
 
 import jakarta.validation.Valid;
-import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
-import pt.com.deimos.vcwapi.dto.DiagnosticDTO;
+import pt.com.deimos.vcwapi.dto.ChallengeDTO;
 import pt.com.deimos.vcwapi.dto.VcwDTO;
 import pt.com.deimos.vcwapi.entity.VcwEntity;
 import pt.com.deimos.vcwapi.service.VcwService;
 
-import java.util.List;
+import java.util.Collections;
 import java.util.Optional;
 
 @RestController
@@ -65,4 +64,40 @@ public class VcwController {
             this.vcwService.save(vcwDTO, principal.getSubject(), projectId));
   }
 
+
+  // challenges
+
+  @GetMapping("/{id}/challenges")
+  public ResponseEntity<Object> getChallenge(
+          @PathVariable(value = "id") Long id) {
+
+    Optional<VcwEntity> vcwEntityOptional =
+            this.vcwService.findById(id);
+
+    if(vcwEntityOptional.isEmpty()) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Vcw not found");
+    }
+
+    //find challenge
+    String challenge = vcwEntityOptional.get().getChallenge();
+    return ResponseEntity.ok(Collections.singletonMap("challenge", challenge));
+  }
+
+  @PutMapping("/{id}/challenges")
+  public ResponseEntity<String> saveChallenges(
+          @PathVariable(value = "id") Long vcwId,
+          @RequestBody ChallengeDTO challenge
+  ) {
+
+    Optional<VcwEntity> vcwEntityOptional = this.vcwService.findById(vcwId);
+    if(vcwEntityOptional.isEmpty()) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Vcw not found");
+    }
+    VcwEntity editedVcw = vcwEntityOptional.get();
+    editedVcw.setChallenge(challenge.getChallenge());
+
+    return ResponseEntity.status(HttpStatus.OK).body(
+            this.vcwService.update(editedVcw).getChallenge());
+
+  }
 }

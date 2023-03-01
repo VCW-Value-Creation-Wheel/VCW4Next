@@ -63,4 +63,8 @@ public class VcwService {
     return this.vcwRepository.save(vcwEntity);
   }
 
+  public VcwEntity update(VcwEntity editedVcw) {
+    return this.vcwRepository.save(editedVcw);
+  }
+
 }

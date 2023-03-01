@@ -50,8 +50,6 @@ public class DiagnosticController {
           return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Diagnostic not found");
         }
 
-
-
         return ResponseEntity.status(HttpStatus.OK).body(
                 this.diagnosticService.update(diagnosticEntityOptional.get(), diagnosticDTO));
       }
