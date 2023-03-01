@@ -16,6 +16,7 @@ export class SimpleItemInputComponent implements OnInit {
   @Input() dataForm: UntypedFormGroup;
   @Input() formControlFieldName = 'name';
   @Input() placeholderText = 'Type something...';
+  @Input() simpleInterface = false;
   @Output() keyPressed = new EventEmitter<KeyboardEvent>();
   @Output() addClicked = new EventEmitter();
   @Output() cancelClicked = new EventEmitter();

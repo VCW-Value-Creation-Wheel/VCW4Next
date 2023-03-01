@@ -12,6 +12,7 @@
         </ng-container>
         <app-simple-item-input
             *ngIf="simpleIdeaInputOpen"
+            [simpleInterface]="true"
             [dataForm]="ideaDataForm"
             [placeholderText]="'Type an idea here...'"
             (addClicked)="onDirectIdeaAdd()"
@@ -19,6 +20,7 @@
             (openDialogClicked)="onOpenIdeaDialog()"
         ></app-simple-item-input>
         <app-button
+            *ngIf="!simpleIdeaInputOpen"
             (buttonClick)="onAddIdea()"
             [label]="'New Idea'"
             [leftIcon]="faPlus"
@@ -37,6 +39,7 @@
         </ng-container>
         <app-simple-item-input
             *ngIf="simpleCriteriaInputOpen"
+            [simpleInterface]="true"
             [dataForm]="criteriaDataForm"
             [placeholderText]="'Type a criteria here...'"
             (addClicked)="onDirectCriteriaAdd()"
@@ -44,6 +47,7 @@
             (openDialogClicked)="onOpenCriteriaDialog()"
         ></app-simple-item-input>
         <app-button
+            *ngIf="!simpleCriteriaInputOpen"
             (buttonClick)="onAddCriteria()"
             [label]="'New Criteria'"
             [leftIcon]="faPlus"
