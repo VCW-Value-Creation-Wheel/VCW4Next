@@ -18,6 +18,8 @@ public class CriteriaDTO {
     @NotNull
     private Long entryTypeId;
 
+    private SourceDTO source;
+
     @ValueOfEnum(enumClass = ValueType.class)
     private String valueType;
     

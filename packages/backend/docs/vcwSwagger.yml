@@ -139,7 +139,7 @@ paths:
     get:
       tags:
         - New Project Page
-      summary: Show project thumbnail.
+      summary: Show project thumbnail 🟢
       description: TODO
       operationId: getProjectThumbnail
       responses:
@@ -167,7 +167,7 @@ paths:
     post:
       tags:
         - New Project Page
-      summary: Creates a project thumbnail
+      summary: Creates a project thumbnail 🟢
       description: TODO
       operationId: saveThumbnail
       responses:
@@ -205,7 +205,7 @@ paths:
     put:
       tags:
         - New Project Page
-      summary: Updates the project thumbnail.
+      summary: Updates the project thumbnail 🟢
       description: TODO
       operationId: updateThumbnail
       responses:
@@ -247,7 +247,7 @@ paths:
     delete:
       tags:
         - New Project Page
-      summary: Deletes the project thumbnail.
+      summary: Deletes the project thumbnail 🟢
       description: TODO
       operationId: deleteThumbnail
       responses:
@@ -273,7 +273,7 @@ paths:
     get:
       tags:
         - New Project Page
-      summary: Shows all project users.
+      summary: Shows all project users 🟢
       description: TODO
       operationId: getAllProjectUsers
       responses:
@@ -301,7 +301,7 @@ paths:
     post:
       tags:
         - New Project Page
-      summary: Adds a project user
+      summary: Adds a project user 🟢
       description: TODO
       operationId: saveThumbnail
       responses:
@@ -345,7 +345,7 @@ paths:
     get:
       tags:
         - New Project Page
-      summary: Shows project user with given id.
+      summary: Shows project user with given id 🟢
       description: TODO
       operationId: getProjectUserById
       responses:
@@ -379,7 +379,7 @@ paths:
     put:
       tags:
         - New Project Page
-      summary: Updates a project user
+      summary: Updates a project user 🟢
       description: TODO
       operationId: updateProjectUser
       responses:
@@ -421,7 +421,7 @@ paths:
     delete:
       tags:
         - New Project Page
-      summary: Removes a project user.
+      summary: Removes a project user 🟢
       description: TODO
       operationId: deleteProjectUser
       responses:
@@ -522,7 +522,7 @@ paths:
     get:
       tags:
         - Diagnostics page (swot fields)
-      summary: Shows all diagnostics of the given vcw. 🚧
+      summary: Shows all diagnostics of the given vcw. 🟢
       description: TODO
       operationId: getByVcw
       responses:
@@ -557,7 +557,7 @@ paths:
     post:
       tags:
         - Diagnostics page (swot fields)
-      summary: Creates a single diagnostic. 🚧
+      summary: Creates a single diagnostic. 🟢
       description: TODO
       operationId: save
       responses:
@@ -607,7 +607,7 @@ paths:
     put:
       tags:
         - Diagnostics page (swot fields)
-      summary: Edits the given diagnostic. 🚧
+      summary: Edits the given diagnostic. 🟢
       description: TODO
       operationId: update
       responses:
@@ -662,7 +662,7 @@ paths:
     delete:
       tags:
         - Diagnostics page (swot fields)
-      summary: Deletes the given diagnostic. 🚧
+      summary: Deletes the given diagnostic. 🟢
       description: TODO
       operationId: delete
       responses:
@@ -687,7 +687,7 @@ paths:
     get:
       tags:
         - Vcw challenge page
-      summary: Shows the vcw challenge. 🚧
+      summary: Shows the vcw challenge. 🟢
       description: TODO
       operationId: getChallenge
       responses:
@@ -709,7 +709,7 @@ paths:
     put:
       tags:
         - Vcw challenge page
-      summary: Edits the vcw challenge. 🚧
+      summary: Edits the vcw challenge. 🟢
       description: TODO
       operationId: editChallenge
       responses:
@@ -747,7 +747,7 @@ paths:
     get:
       tags:
         - Ideas page
-      summary: Gets all ideas of the vcw. 🚧
+      summary: Gets all ideas of the vcw. 🟢
       description: TODO
       operationId: getIdeas
       responses:
@@ -758,8 +758,7 @@ paths:
               schema:
                 type: array
                 item:
-                  -$ref: '#/components/examples/ideas-new'
-
+                $ref: '#/components/examples/ideas-new'
         '400':
           description: Invalid arguments
           content:
@@ -779,24 +778,111 @@ paths:
     post:
       tags:
         - Ideas page
-      summary: Adds new idea 🚧
+      summary: Adds new idea 🟢
       description: TODO
-      operationId: saveIdeas
-
+      operationId: save
+      responses:
+        '201':
+          description: Created idea
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/examples/ideas-new'
+        '400':
+          description: Invalid arguments
+          content:
+            application/json:
+              example: {
+                "timestamp": "2023-01-31T12:03:11.417+00:00",
+                "status": 400,
+                "error": "Bad Request",
+                "trace": "...MethodArgumentNotValidException: Validation failed for..." }
+      parameters:
+        - name: vcw_id
+          in: path
+          description: "vcw id"
+          required: true
+          schema:
+            type: integer
+        - name: entryTypeId
+          in: formData
+          description: "Type of entry: user (1), vcw_project (2) or third_party (3)."
+          required: true
+          schema:
+            type: Long
+            example: 3
+        - name: source
+          in: formData
+          description: idea source
+          required: true
+          schema:
+            type: object
+            example:
+              source:
+                zomato: string
+                url: string
 
   /projects/{project_id}/vcws/{vcw_id}/ideas/{idea_id}:
     put:
       tags:
         - Ideas page
-      summary: Edits given idea 🚧
+      summary: Edits given idea 🟢
       description: TODO
-      operationId: editIdea
+      operationId: update
+      responses:
+        '201':
+          description: Updated idea
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/examples/ideas-new'
+        '400':
+          description: Invalid arguments
+          content:
+            application/json:
+              example: {
+                "timestamp": "2023-01-31T12:03:11.417+00:00",
+                "status": 400,
+                "error": "Bad Request",
+                "trace": "...MethodArgumentNotValidException: Validation failed for..." }
+      parameters:
+        - name: vcw_id
+          in: path
+          description: "vcw id"
+          required: true
+          schema:
+            type: integer
+        - name: idea_id
+          in: path
+          description: "idea id"
+          required: true
+          schema:
+            type: integer
+        - name: entryTypeId
+          in: formData
+          description: "Type of entry: user (1), vcw_project (2) or third_party (3)."
+          required: true
+          schema:
+            type: Long
+            example: 3
+        - name: source
+          in: formData
+          description: idea source
+          required: true
+          schema:
+            type: object
+            example:
+              source:
+                zomato: string
+                url: string
     delete:
       tags:
         - Ideas page
-      summary: Deletes given idea 🚧
+      summary: Deletes given idea 🟢
       description: TODO
-      operationId: deleteIdea
+      operationId: delete
       responses:
         '400':
           description: Invalid idea id supplied
@@ -809,11 +895,182 @@ paths:
           required: true
         - name: idea_id
           in: path
-          description: Diagnostic id to delete
+          description: Idea id to delete
           required: true
           schema:
             type: integer
             format: int64
+  /projects/{project_id}/vcws/{vcw_id}/criterias/:
+    get:
+      tags:
+        - Criterias page
+      summary: Gets all criterias of the vcw. 🚧
+      description: TODO
+      operationId: getCriterias
+      responses:
+        '201':
+          description: Created criterias
+          content:
+            application/json:
+              schema:
+                type: array
+                $ref: '#/components/examples/criteria-new'
+        '400':
+          description: Invalid arguments
+          content:
+            application/json:
+              example: {
+                "timestamp": "2023-01-31T12:03:11.417+00:00",
+                "status": 400,
+                "error": "Bad Request",
+                "trace": "...MethodArgumentNotValidException: Validation failed for..." }
+      parameters:
+        - name: vcw_id
+          in: path
+          description: "vcw id"
+          required: true
+          schema:
+            type: integer
+    post:
+      tags:
+        - Criterias page
+      summary: Adds new criteria 🚧
+      description: TODO
+      operationId: save
+      responses:
+        '201':
+          description: Created criteria
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/examples/criteria-new'
+        '400':
+          description: Invalid arguments
+          content:
+            application/json:
+              example: {
+                "timestamp": "2023-01-31T12:03:11.417+00:00",
+                "status": 400,
+                "error": "Bad Request",
+                "trace": "...MethodArgumentNotValidException: Validation failed for..." }
+      parameters:
+        - name: vcw_id
+          in: path
+          description: "vcw id"
+          required: true
+          schema:
+            type: integer
+        - name: entryTypeId
+          in: formData
+          description: "Type of entry: user (1), vcw_project (2) or third_party (3)."
+          required: true
+          schema:
+            type: Long
+            example: 3
+        - name: valueType
+          in: formData
+          description: "Type of value, it can be 'number' or 'yes_or_no'"
+          required: true
+          schema:
+            type: string
+            example: number
+        - name: source
+          in: formData
+          description: criteria source
+          required: true
+          schema:
+            type: object
+            example:
+              source:
+                zomato: string
+                url: string
+
+  /projects/{project_id}/vcws/{vcw_id}/criterias/{criteria_id}:
+    put:
+      tags:
+        - Criterias page
+      summary: Updates given criteria 🚧
+      description: TODO
+      operationId: update
+      responses:
+        '201':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/examples/criteria-new'
+        '400':
+          description: Invalid arguments
+          content:
+            application/json:
+              example: {
+                "timestamp": "2023-01-31T12:03:11.417+00:00",
+                "status": 400,
+                "error": "Bad Request",
+                "trace": "...MethodArgumentNotValidException: Validation failed for..." }
+      parameters:
+        - name: vcw_id
+          in: path
+          description: "vcw id"
+          required: true
+          schema:
+            type: integer
+        - name: criteria_id
+          in: path
+          description: "criteria id"
+          required: true
+          schema:
+            type: integer
+        - name: entryTypeId
+          in: formData
+          description: "Type of entry: user (1), vcw_project (2) or third_party (3)."
+          required: true
+          schema:
+            type: Long
+            example: 3
+        - name: valueType
+          in: formData
+          description: "Type of value, it can be 'number' or 'yes_or_no'"
+          required: true
+          schema:
+            type: string
+            example: number
+        - name: source
+          in: formData
+          description: criteria source
+          required: true
+          schema:
+            type: object
+            example:
+              source:
+                zomato: string
+                url: string
+    delete:
+      tags:
+        - Criterias page
+      summary: Deletes given criteria 🚧
+      description: TODO
+      operationId: delete
+      responses:
+        '400':
+          description: Invalid criteria id supplied
+        '404':
+          description: Criteria not found
+      parameters:
+        - name: vcw_id
+          in: path
+          description: "vcw id"
+          required: true
+        - name: criteria_id
+          in: path
+          description: Criteria id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+
 components:
   schemas:
     Vcw:
@@ -1756,6 +2013,48 @@ components:
           type: array
       xml:
         name: 'vcw-new-null'
+    ideas-new:
+      properties:
+        name:
+          type: string
+          example: 'Italian food is tasty'
+        entryTypeId:
+          type: Long
+          example: 3
+        source:
+          type: object
+          $ref: '#/components/examples/source-new'
+      xml:
+        name: 'ideas-new'
+    criteria-new:
+      properties:
+        name:
+          type: string
+          example: Price
+        entryTypeId:
+          type: Long
+          example: 3
+        valueType:
+          type: string
+          example: number
+        source:
+          type: object
+          $ref: '#/components/examples/source-new'
+      xml:
+        name: 'criteria-new'
+    source-new:
+      properties:
+        name:
+          type: string
+          example: zomato
+        description:
+          type: string
+          example: null
+        url:
+          type: string
+          example: www.zomato.com
+      xml:
+        name: 'source-new'
     diagnostics-new:
       properties:
         swotField:
