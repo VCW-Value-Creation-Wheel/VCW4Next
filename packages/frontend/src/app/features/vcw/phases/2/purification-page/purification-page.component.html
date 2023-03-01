@@ -20,6 +20,7 @@
             (addClicked)="onDirectIdeaAdd()"
             (cancelClicked)="onCancel()"
             (openDialogClicked)="onOpenIdeaDialog()"
+            (keyPressed)="onKeyPress($event)"
         ></app-simple-item-input>
         <app-button
             *ngIf="!simpleIdeaInputOpen"
@@ -49,6 +50,7 @@
             (addClicked)="onDirectCriteriaAdd()"
             (cancelClicked)="onCancel()"
             (openDialogClicked)="onOpenCriteriaDialog()"
+            (keyPressed)="onKeyPress($event)"
         ></app-simple-item-input>
         <app-button
             class="ml-auto"

@@ -373,4 +373,14 @@ export class PurificationPageComponent implements OnInit {
   onActionConfirm() {
     this.actionConfirm$.next(true);
   }
+
+  onKeyPress(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      if (this.simpleIdeaInputOpen) {
+        this.onDirectIdeaAdd();
+      } else if (this.simpleCriteriaInputOpen) {
+        this.onDirectCriteriaAdd();
+      }
+    }
+  }
 }
