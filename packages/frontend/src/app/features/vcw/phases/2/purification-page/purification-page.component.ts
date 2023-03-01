@@ -3,7 +3,7 @@ import { AbstractControl, FormBuilder, UntypedFormArray, UntypedFormGroup } from
 import { ActivatedRoute, Router } from '@angular/router';
 import { createCriteriaConfig, createIdeasConfig, PhaseNavigationService, VcwPhasesService } from '@core';
 import { VcwMockService } from '@core/services/mocks/vcw/vcw-mock.service';
-import { faGlobe, faUser, IconDefinition } from '@fortawesome/free-solid-svg-icons';
+import { faGlobe, faPlus, faUser, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import { Subject } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { environment } from '../../../../../../environments/environment';
@@ -17,6 +17,7 @@ export class PurificationPageComponent implements OnInit {
 
   faGlobe = faGlobe;
   faUser = faUser;
+  faPlus = faPlus;
 
   useMocks: boolean;
   vcwId: number;
@@ -29,6 +30,9 @@ export class PurificationPageComponent implements OnInit {
 
   selectedIdeaIndex: number;
   selectedCriteriaIndex: number;
+
+  simpleIdeaInputOpen = false;
+  simpleCriteriaInputOpen = false;
 
   actionConfirmText: string;
   actionConfirmTitle: string;
@@ -96,5 +100,15 @@ export class PurificationPageComponent implements OnInit {
     } else {
       this.selectedCriteriaIndex = index;
     }
+  }
+
+  onAddIdea() {
+    this.ideaDataForm = this.formBuilder.group(createIdeasConfig);
+    this.simpleIdeaInputOpen = true;
+    this.ideaDataForm.controls.file.disable({onlySelf: true});
+  }
+
+  onAddCriteria() {
+
   }
 }
