@@ -18,20 +18,20 @@ public class IdeaEntity extends BaseNamedEntity{
     @Column(name = "entry_type_id")
     private Long entryTypeId;
 
-    @Column(name = "source_id")
-    private Long sourceId;
-
+    //NOTE: removed source_id because it was causing conflicts
+    //while saving idea objects with hibernate
 
     @ManyToOne(optional = false)
     @JoinColumn(name="entry_type_id", referencedColumnName = "id", insertable=false, updatable=false)
+    @JsonIgnore
     private EntryTypeEntity entryType;
 
     @OneToMany(mappedBy = "idea")
     @JsonIgnore
     private List<IdeaAndCriteriaEntity> ideasAndCriterias;
 
-    @ManyToOne
-    @JoinColumn(name="source_id", referencedColumnName = "id", insertable=false, updatable=false)
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="source_id", referencedColumnName = "id")
     private SourceEntity source;
 
     @ManyToMany
@@ -43,6 +43,7 @@ public class IdeaEntity extends BaseNamedEntity{
     @JsonIgnore
     Set<KeywordEntity> ideaHasKeywords = new HashSet<>();
 
-    @OneToOne(mappedBy = "idea", optional = false)
+    @OneToOne(mappedBy = "idea", optional = false, cascade = CascadeType.ALL)
+    @JsonIgnore
     private VcwHasIdeaEntity vcwHasIdeaEntity;
 }
