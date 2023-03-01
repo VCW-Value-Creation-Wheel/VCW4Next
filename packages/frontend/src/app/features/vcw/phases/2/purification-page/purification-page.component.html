@@ -8,6 +8,8 @@
                 [icon]="getIcon(idea.controls.sourceName)"
                 [isSelected]="selectedIdeaIndex === idx"
                 (selectChange)="onIdeaSelect(idx)"
+                (editClick)="editIdea(idx)"
+                (deleteClick)="deleteIdea(idx, idea.controls.name, idea.controls.id)"
             ></app-list-item>
         </ng-container>
         <app-simple-item-input
@@ -35,6 +37,8 @@
                 [icon]="getIcon(criteria.controls.sourceName)"
                 [isSelected]="selectedCriteriaIndex === idx"
                 (selectChange)="onCriteriaSelect(idx)"
+                (editClick)="editCriteria(idx)"
+                (deleteClick)="deleteCriteria(idx, criteria.controls.name, criteria.controls.id)"
             ></app-list-item>
         </ng-container>
         <app-simple-item-input
@@ -61,3 +65,38 @@
     </div>
     
 </div>
+
+<app-create-item-dialog
+    *ngIf="ideaItemDialogOpen"
+    [isEditing]="editIdeaMode"
+    [formGroup]="ideaDataForm"
+    [title]="editIdeaMode ? 'Edit Idea': 'New Idea'"
+    [tabs] = "['Manual', 'From File']"
+    [tabFormControlsToExclude]="{'0': ['file', 'id'], '1': ['name', 'id']}"
+    [fileFormFieldName]="'file'"
+    [isAwaitingAction]="isLoading"
+    (cancel)="onCancel()"
+    (confirm)="onIdeaConfirm()"
+></app-create-item-dialog>
+
+<app-create-item-dialog
+    *ngIf="criteriaItemDialogOpen"
+    [isEditing]="editCriteriaMode"
+    [formGroup]="criteriaDataForm"
+    [title]="editCriteriaMode ? 'Edit Criteria': 'New Criteria'"
+    [tabs] = "['Manual', 'From File']"
+    [tabFormControlsToExclude]="{'0': ['file', 'id'], '1': ['name', 'id']}"
+    [fileFormFieldName]="'file'"
+    [isAwaitingAction]="isLoading"
+    (cancel)="onCancel()"
+    (confirm)="onCriteriaConfirm()"
+></app-create-item-dialog>
+
+<app-dialog
+    *ngIf="confirmDialogOpen"
+    [title]="actionConfirmTitle"
+    [confirmText]="'Yes'"
+    [cancelText]="'No'"
+    (cancel)="onActionCancel()"
+    (confirm)="onActionConfirm()"
+>{{ actionConfirmText }}</app-dialog>

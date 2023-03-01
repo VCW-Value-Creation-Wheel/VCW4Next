@@ -41,6 +41,8 @@ export class PurificationPageComponent implements OnInit {
   editCriteriaIndex: number;
   confirmDialogOpen = false;
 
+  isLoading = false;
+
   actionConfirmText: string;
   actionConfirmTitle: string;
   actionConfirm$: Subject<boolean> = new Subject();
@@ -240,5 +242,135 @@ export class PurificationPageComponent implements OnInit {
         }
       }
     });
+  }
+
+  onIdeaConfirm() {
+    // TODO: If from file, perform a request first then add idea(s) if the response is successful.
+    this.isLoading = true;
+    if (!this.editIdeaMode) {
+      // send request to back-end. On successful response, push to data form array.
+      if (this.ideaDataForm.valid) {
+        if (this.useMocks) {
+          this.ideaFormArray.push(this.ideaDataForm);
+          this.ideaItemDialogOpen = false;
+          this.simpleIdeaInputOpen = false;
+          this.isLoading = false;
+        } else {
+          this.vcwPhasesService.createIdea(this.vcwId, this.projectId, this.ideaDataForm.value)
+          .pipe(take(1))
+          .subscribe(response => {
+            this.ideaFormArray.push(this.ideaDataForm);
+            this.ideaItemDialogOpen = false;
+            this.simpleIdeaInputOpen = false;
+            this.isLoading = false;
+          }, error => {
+            this.isLoading = false;
+            this.snackbarService.danger('Error', 'Unable to create new idea. Try again later.')
+            .during(5000).show();
+          });
+        }
+      } else {
+        this.isLoading = false;
+        this.snackbarService.danger('Error', 'Invalid data. Please review your form.')
+          .during(5000).show();
+      }
+    } else {
+      // send request to back-end. If successful, change the previous values in the form array.
+      if (this.ideaDataForm.valid) {
+        if (this.useMocks) {
+          this.editIdeaMode = false;
+          this.ideaItemDialogOpen = false;
+          this.isLoading = false;
+          this.ideaFormArray.at(this.editIdeaIndex).patchValue(this.ideaDataForm.value);
+        } else {
+          const id = this.ideaDataForm.controls.id.value;
+          this.vcwPhasesService.editIdea(this.vcwId, this.projectId, id, this.ideaDataForm.value)
+          .pipe(take(1))
+          .subscribe(response => {
+            this.editIdeaMode = false;
+            this.ideaItemDialogOpen = false;
+            this.isLoading = false;
+            this.ideaFormArray.at(this.editIdeaIndex).patchValue(this.ideaDataForm.value);
+          }, error => {
+            this.isLoading = false;
+            this.snackbarService.danger('Error', 'Unable to save the requested changes. Try again later.')
+            .during(5000).show();
+          });
+        }
+      } else {
+        this.isLoading = false;
+        this.snackbarService.danger('Error', 'Invalid data. Please review your form.')
+          .during(5000).show();
+      }
+    }
+  }
+
+  onCriteriaConfirm() {
+    // TODO: If from file, perform a request first then add criteria(s) if the response is successful.
+    this.isLoading = true;
+    if (!this.editCriteriaMode) {
+      // send request to back-end. On successful response, push to data form array.
+      if (this.criteriaDataForm.valid) {
+        if (this.useMocks) {
+          this.criteriaFormArray.push(this.criteriaDataForm);
+          this.criteriaItemDialogOpen = false;
+          this.simpleCriteriaInputOpen = false;
+          this.isLoading = false;
+        } else {
+          // this.vcwPhasesService.createCriteria(this.vcwId, this.projectId, this.criteriaDataForm.value)
+          // .pipe(take(1))
+          // .subscribe(response => {
+          //   this.criteriaFormArray.push(this.criteriaDataForm);
+          //   this.criteriaItemDialogOpen = false;
+          //   this.simpleCriteriaInputOpen = false;
+          //   this.isLoading = false;
+          // }, error => {
+          //   this.isLoading = false;
+          //   this.snackbarService.danger('Error', 'Unable to create new criteria. Try again later.')
+          //   .during(5000).show();
+          // });
+        }
+      } else {
+        this.isLoading = false;
+        this.snackbarService.danger('Error', 'Invalid data. Please review your form.')
+          .during(5000).show();
+      }
+    } else {
+      // send request to back-end. If successful, change the previous values in the form array.
+      if (this.criteriaDataForm.valid) {
+        if (this.useMocks) {
+          this.editCriteriaMode = false;
+          this.criteriaItemDialogOpen = false;
+          this.isLoading = false;
+          this.criteriaFormArray.at(this.editCriteriaIndex).patchValue(this.criteriaDataForm.value);
+        } else {
+          // const id = this.criteriaDataForm.controls.id.value;
+          // this.vcwPhasesService.editCriteria(this.vcwId, this.projectId, id, this.criteriaDataForm.value)
+          // .pipe(take(1))
+          // .subscribe(response => {
+          //   this.editCriteriaMode = false;
+          //   this.criteriaItemDialogOpen = false;
+          //   this.isLoading = false;
+          //   this.criteriaFormArray.at(this.editCriteriaIndex).patchValue(this.criteriaDataForm.value);
+          // }, error => {
+          //   this.isLoading = false;
+          //   this.snackbarService.danger('Error', 'Unable to save the requested changes. Try again later.')
+          //   .during(5000).show();
+          // });
+        }
+      } else {
+        this.isLoading = false;
+        this.snackbarService.danger('Error', 'Invalid data. Please review your form.')
+          .during(5000).show();
+      }
+    }
+  }
+
+  onActionCancel() {
+    this.actionConfirm$.next(false);
+  }
+
+  onActionConfirm() {
+    this.actionConfirm$.next(true);
   }
 }
