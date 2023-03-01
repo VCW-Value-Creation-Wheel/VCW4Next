@@ -60,11 +60,17 @@
             [leftIcon]="faPlus"
         ></app-button>
     </div>
-    <div class="flex justify-center col-span-2">
+    <div class="flex justify-center col-span-2 gap-4">
         <app-button
-            [isDisabled]="!(selectedIdeaIndex && selectedCriteriaIndex)"
+            [isDisabled]="!(selectedIdeaIndex !== undefined && selectedCriteriaIndex !== undefined)"
             (buttonClick)="createEditPair()"
             [label]="'Create/Edit Pair'"
+        ></app-button>
+        <app-button
+            [isDisabled]="!(selectedIdeaIndex !== undefined && selectedCriteriaIndex !== undefined) || !isExistingPair"
+            (buttonClick)="deletePair()"
+            [label]="'Delete Pair'"
+            [isDangerous]="true"
         ></app-button>
     </div>
     
@@ -94,6 +100,17 @@
     [isAwaitingAction]="isLoading"
     (cancel)="onCancel()"
     (confirm)="onCriteriaConfirm()"
+></app-create-item-dialog>
+
+<app-create-item-dialog
+    *ngIf="createPairDialogOpen"
+    [isEditing]="editPairMode"
+    [formGroup]="pairDataForm"
+    [title]="editPairMode ? 'Edit Pair': 'New Pair'"
+    [tabFormControlsToExclude]="{'0': ['ideaId', 'criteriaId']}"
+    [isAwaitingAction]="isLoading"
+    (cancel)="onCancel()"
+    (confirm)="onPairConfirm()"
 ></app-create-item-dialog>
 
 <app-dialog

@@ -1,7 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, UntypedFormArray, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { createCriteriaConfig, createIdeasConfig, PhaseNavigationService, SnackbarService, VcwPhasesService } from '@core';
+import { createCriteriaConfig,
+  createIdeasConfig,
+  createPairConfig,
+  PhaseNavigationService,
+  SnackbarService,
+  VcwPhasesService
+} from '@core';
 import { VcwMockService } from '@core/services/mocks/vcw/vcw-mock.service';
 import { faGlobe, faPlus, faUser, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import { Subject } from 'rxjs';
@@ -27,6 +33,8 @@ export class PurificationPageComponent implements OnInit {
   criteriaFormArray: UntypedFormArray;
   ideaDataForm: UntypedFormGroup;
   criteriaDataForm: UntypedFormGroup;
+  pairFormArray: UntypedFormArray;
+  pairDataForm: UntypedFormGroup;
 
   selectedIdeaIndex: number;
   selectedCriteriaIndex: number;
@@ -40,6 +48,9 @@ export class PurificationPageComponent implements OnInit {
   editCriteriaMode = false;
   editCriteriaIndex: number;
   confirmDialogOpen = false;
+  createPairDialogOpen = false;
+  editPairMode = false;
+  editPairIndex: number;
 
   isLoading = false;
 
@@ -60,6 +71,7 @@ export class PurificationPageComponent implements OnInit {
 
     this.ideaFormArray = this.formBuilder.array([]);
     this.criteriaFormArray = this.formBuilder.array([]);
+    this.pairFormArray = this.formBuilder.array([]);
 
     this.phaseNavService.nextPhase$.subscribe((nextPhase) => {
         this.router.navigate(['../' + nextPhase], {relativeTo: this.activatedRoute});
@@ -149,6 +161,8 @@ export class PurificationPageComponent implements OnInit {
     this.criteriaItemDialogOpen = false;
     this.editCriteriaMode = false;
     this.simpleCriteriaInputOpen = false;
+
+    this.createPairDialogOpen = false;
   }
 
   editIdea(index: number) {
@@ -385,6 +399,42 @@ export class PurificationPageComponent implements OnInit {
   }
 
   createEditPair() {
+    if (this.isExistingPair) {
+
+    } else {
+      this.pairDataForm = this.formBuilder.group(createPairConfig);
+      this.pairDataForm.controls.ideaId.setValue(this.ideaFormArray.at(this.selectedIdeaIndex).get('id').value);
+      this.pairDataForm.controls.ideaName.setValue(this.ideaFormArray.at(this.selectedIdeaIndex).get('name').value);
+      this.pairDataForm.controls.criteriaId.setValue(this.criteriaFormArray.at(this.selectedCriteriaIndex).get('id').value);
+      this.pairDataForm.controls.criteriaName.setValue(this.criteriaFormArray.at(this.selectedCriteriaIndex).get('name').value);
+      this.createPairDialogOpen = true;
+    }
+  }
+
+  deletePair() {
     
+  }
+
+  onPairConfirm() {
+    if (this.editPairMode) {
+      this.pairDataForm.controls.ideaId.enable({onlySelf: true});
+      this.pairDataForm.controls.ideaId.setValue(this.selectedIdeaIndex);
+      this.pairDataForm.controls.criteriaId.enable({onlySelf: true});
+      this.pairDataForm.controls.criteriaId.setValue(this.selectedCriteriaIndex);
+      this.pairFormArray.at(this.editPairIndex).patchValue(this.pairDataForm);
+      this.createPairDialogOpen = false;
+    } else {
+      this.pairDataForm.controls.ideaId.enable({onlySelf: true});
+      this.pairDataForm.controls.ideaId.setValue(this.selectedIdeaIndex);
+      this.pairDataForm.controls.criteriaId.enable({onlySelf: true});
+      this.pairDataForm.controls.criteriaId.setValue(this.selectedCriteriaIndex);
+      this.pairFormArray.push(this.pairDataForm);
+      this.createPairDialogOpen = false;
+    }
+  }
+
+  get isExistingPair(): boolean {
+    return this.pairFormArray.controls.some(control =>
+      control.get('ideaId').value === this.selectedIdeaIndex && control.get('criteriaId').value === this.selectedCriteriaIndex);
   }
 }

@@ -27,3 +27,11 @@ export const createCriteriaConfig = {
     sourceUrl: [null],
     id: [null]
 };
+
+export const createPairConfig = {
+    ideaId: [null, Validators.required],
+    ideaName: [null],
+    criteriaId: [null, Validators.required],
+    criteriaName: [null],
+    value: [null, Validators. required]
+};
