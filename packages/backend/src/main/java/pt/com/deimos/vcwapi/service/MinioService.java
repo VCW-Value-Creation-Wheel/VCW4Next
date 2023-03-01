@@ -1,9 +1,6 @@
 package pt.com.deimos.vcwapi.service;
 
-import io.minio.GetObjectArgs;
-import io.minio.GetPresignedObjectUrlArgs;
-import io.minio.MinioClient;
-import io.minio.PutObjectArgs;
+import io.minio.*;
 import io.minio.errors.MinioException;
 import io.minio.http.Method;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,6 +60,18 @@ public class MinioService {
             String message = "Failed to upload file to Minio: " + e;
             System.err.println(message);
             throw new MinioException(message);
+        }
+    }
+
+    public void delete(String filePath) throws MinioException{
+        try {
+            RemoveObjectArgs args = RemoveObjectArgs.builder()
+                    .bucket(bucket)
+                    .object(filePath)
+                    .build();
+            minioClient.removeObject(args);
+        } catch (Exception e) {
+            throw new MinioException("Failed to delete file from Minio: " + e);
         }
     }
 

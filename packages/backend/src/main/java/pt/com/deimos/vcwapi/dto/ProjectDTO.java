@@ -9,7 +9,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @Data
-@JsonSerialize
 public class ProjectDTO {
 
   @NotBlank
@@ -20,9 +19,5 @@ public class ProjectDTO {
 
   @NotBlank
   private String lang;
-
-  private MultipartFile thumbnail;
-
-  private List<@Valid ProjectHasUserRoleDTO> projectUsers;
 
 }

@@ -43,7 +43,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/examples/project-new'
+                  $ref: '#/components/examples/project-return'
       parameters:
         - name: userId
           in: header
@@ -67,7 +67,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/examples/project-new'
+                  $ref: '#/components/examples/project-return'
         '404':
           description: Project not found
           content:
@@ -80,18 +80,18 @@ paths:
             in: path
             description: project id
             required: true
-            
+
             schema:
               type: Long
           - name: userId
             in: header
             description: Id from logged in user.
             required: true
-            
+
             schema:
               type: string
 
-  /projects :
+  /projects:
     post:
       tags:
         - New Project Page
@@ -135,20 +135,315 @@ paths:
           required: true
           schema:
             type: string
-        - name: thumbnailPath
+  /projects/{project_id}/thumbnails:
+    get:
+      tags:
+        - New Project Page
+      summary: Show project thumbnail.
+      description: TODO
+      operationId: getProjectThumbnail
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/examples/thumbnail-new'
+        '404':
+          description: Thumbnail not found
+          content:
+            'text/plain; charset=utf-8':
+              schema:
+                type: string
+                example: 'Thumbnail not found'
+      parameters:
+        - name: project_id
+          in: path
+          description: "project_id"
+          required: true
+          schema:
+            type: integer
+    post:
+      tags:
+        - New Project Page
+      summary: Creates a project thumbnail
+      description: TODO
+      operationId: saveThumbnail
+      responses:
+        '201':
+          description: Created Thumbnail
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/examples/thumbnail-new'
+        '400':
+          description: Invalid arguments
+          content:
+            application/json:
+              example: {
+                "timestamp": "2023-01-31T12:03:11.417+00:00",
+                "status": 400,
+                "error": "Bad Request",
+                "trace": "...MethodArgumentNotValidException: Validation failed for..."}
+      parameters:
+        - name: project_id
+          in: path
+          description: "project_id"
+          required: true
+          schema:
+            type: integer
+        - name: thumbnail
           in: formData
-          description: project thumbnail path
+          description: thumbnail image file
+          required: false
+          schema:
+            type: MultipartFile
+
+  /projects/{project_id}/thumbnails/{thumbnail_id}:
+    put:
+      tags:
+        - New Project Page
+      summary: Updates the project thumbnail.
+      description: TODO
+      operationId: updateThumbnail
+      responses:
+        '200':
+          description: Updated thumbnail
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/examples/thumbnail-new'
+        '400':
+          description: Invalid arguments
+          content:
+            application/json:
+              example: {
+                "timestamp": "2023-01-31T12:03:11.417+00:00",
+                "status": 400,
+                "error": "Bad Request",
+                "trace": "...MethodArgumentNotValidException: Validation failed for..."}
+      parameters:
+        - name: project_id
+          in: path
+          description: "project_id"
+          required: true
+          schema:
+            type: integer
+        - name: thumbnail_id
+          in: path
+          description: "thumbnail_id"
+          required: true
+          schema:
+            type: integer
+        - name: thumbnail
+          in: formData
+          description: thumbnail image file
+          required: true
+          schema:
+            type: MultipartFile
+    delete:
+      tags:
+        - New Project Page
+      summary: Deletes the project thumbnail.
+      description: TODO
+      operationId: deleteThumbnail
+      responses:
+        '400':
+          description: Invalid thumbnail id supplied
+        '404':
+          description: Thumbnail not found
+      parameters:
+        - name: project_id
+          in: path
+          description: "project_id"
+          required: true
+          schema:
+            type: integer
+        - name: thumbnail_id
+          in: path
+          description: "thumbnail_id"
+          required: true
+          schema:
+            type: integer
+
+  /projects/{project_id}/users:
+    get:
+      tags:
+        - New Project Page
+      summary: Shows all project users.
+      description: TODO
+      operationId: getAllProjectUsers
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                example: [{"userInum": "b68986e1-81d8-4813-ada5-172442d8944d", "role": {"id": 1, "name":"Coordinator", "description":"test"}}]
+        '404':
+          description: Project user not found
+          content:
+            'text/plain; charset=utf-8':
+              schema:
+                type: string
+                example: 'Project user not found'
+      parameters:
+        - name: project_id
+          in: path
+          description: "project_id"
+          required: true
+          schema:
+            type: integer
+    post:
+      tags:
+        - New Project Page
+      summary: Adds a project user
+      description: TODO
+      operationId: saveThumbnail
+      responses:
+        '201':
+          description: Added user
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {"userInum": "b68986e1-81d8-4813-ada5-172442d8944d", "role": {"id": 1, "name":"Coordinator", "description":"test"}}
+        '400':
+          description: Invalid arguments
+          content:
+            application/json:
+              example: {
+                "timestamp": "2023-01-31T12:03:11.417+00:00",
+                "status": 400,
+                "error": "Bad Request",
+                "trace": "...MethodArgumentNotValidException: Validation failed for..."}
+      parameters:
+        - name: project_id
+          in: path
+          description: "project_id"
+          required: true
+          schema:
+            type: integer
+        - name: role id
+          in: formData
+          description: "role_id"
+          required: true
+          schema:
+            type: integer
+        - name: user id
+          in: formData
+          description: "user_id"
+          required: true
+          schema:
+            type: string
+
+  /projects/{project_id}/users/{user_id}:
+    get:
+      tags:
+        - New Project Page
+      summary: Shows project user with given id.
+      description: TODO
+      operationId: getProjectUserById
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                example: [{"userInum": "b68986e1-81d8-4813-ada5-172442d8944d", "role": {"id": 1, "name":"Coordinator", "description":"test"}}]
+        '404':
+          description: Project user not found
+          content:
+            'text/plain; charset=utf-8':
+              schema:
+                type: string
+                example: 'Project user not found'
+      parameters:
+        - name: project_id
+          in: path
+          description: "project_id"
+          required: true
+          schema:
+            type: integer
+        - name: user id
+          in: path
+          description: "user_id"
           required: false
           schema:
             type: string
-        - name: Users and Roles
-          in: formData
-          description: list of projects users and roles selected using dropdowns ([{userId, roleId}])
+    put:
+      tags:
+        - New Project Page
+      summary: Updates a project user
+      description: TODO
+      operationId: updateProjectUser
+      responses:
+        '200':
+          description: Updated project user
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {"userInum": "b68986e1-81d8-4813-ada5-172442d8944d", "role": {"id": 2, "name":"Key decision maker", "description":"test"}}
+        '400':
+          description: Invalid arguments
+          content:
+            application/json:
+              example: {
+                "timestamp": "2023-01-31T12:03:11.417+00:00",
+                "status": 400,
+                "error": "Bad Request",
+                "trace": "...MethodArgumentNotValidException: Validation failed for..."}
+      parameters:
+        - name: project_id
+          in: path
+          description: "project_id"
           required: true
           schema:
-            type: List<{String, Long}>
-  
-  /vcws/:
+            type: integer
+        - name: user id
+          in: path
+          description: "user_id"
+          required: false
+          schema:
+            type: string
+        - name: role id
+          in: formData
+          description: "role_id"
+          required: false
+          schema:
+            type: integer
+    delete:
+      tags:
+        - New Project Page
+      summary: Removes a project user.
+      description: TODO
+      operationId: deleteProjectUser
+      responses:
+        '400':
+          description: Invalid user id supplied
+        '404':
+          description: User not found
+      parameters:
+        - name: project_id
+          in: path
+          description: "project_id"
+          required: true
+          schema:
+            type: integer
+        - name: user id
+          in: path
+          description: "user_id"
+          required: false
+          schema:
+            type: string
+
+  /projects/{project_id}/vcws/:
     post:
       tags:
         - New Vcw Page
@@ -186,7 +481,7 @@ paths:
           required: true
           schema:
             type: string
-  /vcws/{vcw_id} :
+  /projects/{project_id}/vcws/{vcw_id} :
     get:
       tags:
         - Vcw Page
@@ -223,13 +518,48 @@ paths:
           schema:
             type: string
 
-  /vcws/{vcw_id}/diagnostics:
+  /projects/{project_id}/vcws/{vcw_id}/diagnostics:
+    get:
+      tags:
+        - Diagnostics page (swot fields)
+      summary: Shows all diagnostics of the given vcw. 🚧
+      description: TODO
+      operationId: getByVcw
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/examples/diagnostic-new'
+        '404':
+          description: Diagnostic not found
+          content:
+            'text/plain; charset=utf-8':
+              schema:
+                type: string
+                example: 'Diagnostic not found'
+      parameters:
+        - name: vcw_id
+          in: path
+          description: "vcw id"
+          required: true
+          schema:
+            type: integer
+        - name: diagnostic_id
+          in: path
+          description: "diagnostic id"
+          required: true
+          schema:
+            type: integer
     post:
       tags:
         - Diagnostics page (swot fields)
       summary: Creates a single diagnostic. 🚧
       description: TODO
-      operationId: saveDiagnostic
+      operationId: save
       responses:
         '201':
           description: Created diagnostics
@@ -272,13 +602,14 @@ paths:
           required: true
           schema:
             type: string
-  /vcws/{vcw_id}/diagnostics/{diagnostic_id}:
+
+  /projects/{project_id}/vcws/{vcw_id}/diagnostics/{diagnostic_id}:
     put:
       tags:
         - Diagnostics page (swot fields)
       summary: Edits the given diagnostic. 🚧
       description: TODO
-      operationId: editDiagnostic
+      operationId: update
       responses:
         '201':
           description: Edited diagnostic
@@ -333,7 +664,7 @@ paths:
         - Diagnostics page (swot fields)
       summary: Deletes the given diagnostic. 🚧
       description: TODO
-      operationId: deleteDiagnostic
+      operationId: delete
       responses:
         '400':
           description: Invalid diagnostic id supplied
@@ -352,44 +683,29 @@ paths:
             type: integer
             format: int64
 
-  /vcws/{vcw_id}/challenges:
-    post:
+  /projects/{project_id}/vcws/{vcw_id}/challenges:
+    get:
       tags:
         - Vcw challenge page
-      summary: Creates the vcw challenge. 🚧
+      summary: Shows the vcw challenge. 🚧
       description: TODO
-      operationId: saveChallenge
+      operationId: getChallenge
       responses:
-        '201':
-          description: Created challenge
+        '200':
+          description: successful operation
           content:
             application/json:
               schema:
-                type: string
-                example: lorem ipsum blah
-
-        '400':
-          description: Invalid arguments
+                type: object
+                example: {"challenge":"The FitnessGram™ Pacer Test is a multistage aerobic capacity test that progressively gets more difficult as it continues. The 20 meter pacer test will begin in 30 seconds. Line up at the start. The running speed starts slowly, but gets faster each minute after you hear this signal. [beep] A single lap should be completed each time you hear this sound. [ding] Remember to run in a straight line, and run as long as possible. The second time you fail to complete a lap before the sound, your test is over. The test will begin on the word start. On your mark, get ready, start."
+                }
+        '404':
+          description: Challenge not found
           content:
-            application/json:
-              example: {
-                "timestamp": "2023-01-31T12:03:11.417+00:00",
-                "status": 400,
-                "error": "Bad Request",
-                "trace": "...MethodArgumentNotValidException: Validation failed for..."}
-      parameters:
-        - name: vcw_id
-          in: path
-          description: "vcw id"
-          required: true
-          schema:
-            type: integer
-        - name: challenge
-          in: formData
-          description: "block of text describing the challenge"
-          required: true
-          schema:
-            type: string
+            'text/plain; charset=utf-8':
+              schema:
+                type: string
+                example: 'Challenge not found'
     put:
       tags:
         - Vcw challenge page
@@ -403,8 +719,7 @@ paths:
             application/json:
               schema:
                 type: string
-                example: lorem ipsum blah
-
+                example: "The FitnessGram™ Pacer Test is a multistage aerobic capacity test that progressively gets more difficult as it continues. The 20 meter pacer test will begin in 30 seconds. Line up at the start. The running speed starts slowly, but gets faster each minute after you hear this signal. [beep] A single lap should be completed each time you hear this sound. [ding] Remember to run in a straight line, and run as long as possible. The second time you fail to complete a lap before the sound, your test is over. The test will begin on the word start. On your mark, get ready, start."
         '400':
           description: Invalid arguments
           content:
@@ -428,7 +743,7 @@ paths:
           schema:
             type: string
 
-  /vcws/{vcw_id}/ideas/:
+  /projects/{project_id}/vcws/{vcw_id}/ideas/:
     get:
       tags:
         - Ideas page
@@ -469,7 +784,7 @@ paths:
       operationId: saveIdeas
 
 
-  /vcws/{vcw_id}/ideas/{idea_id}:
+  /projects/{project_id}/vcws/{vcw_id}/ideas/{idea_id}:
     put:
       tags:
         - Ideas page
@@ -1267,7 +1582,7 @@ components:
         fileType:
           type: string
           example: "jpg"
-    project-new:
+    project-return:
       properties:
         id:
           type: int
@@ -1296,6 +1611,39 @@ components:
         fileThumbnail:
           type: object
           $ref: '#/components/examples/thumbnail-new'
+        vcws:
+          type: array
+      xml:
+        name: 'project-return'
+    project-new:
+      properties:
+        id:
+          type: int
+          example: 1
+        created_at:
+          type: string
+          example: '31-01-2023 11:00:26'
+        updated_at:
+          type: string
+          example: '31-01-2023 11:00:26'
+        created_by:
+          type: string
+          example: b68986e1-81d8-4813-ada5-172442d8944d
+        updated_by:
+          type: String
+          example: b68986e1-81d8-4813-ada5-172442d8944d
+        name:
+          type: string
+          example: "test project 1"
+        description:
+          type: string
+          example: "test description"
+        lang:
+          type: string
+          example: english
+        fileThumbnail:
+          type: object
+          example: null
         vcws:
           type: array
       xml:

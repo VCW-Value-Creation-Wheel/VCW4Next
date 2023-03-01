@@ -1,5 +1,6 @@
 package pt.com.deimos.vcwapi;
 
+import io.minio.errors.MinioException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -7,9 +8,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.util.Pair;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.multipart.MultipartFile;
 import pt.com.deimos.vcwapi.dto.ProjectDTO;
 import pt.com.deimos.vcwapi.entity.FileEntity;
 import pt.com.deimos.vcwapi.entity.ProjectEntity;
@@ -20,12 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.AssertionsForClassTypes.not;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @WebMvcTest(ProjectServiceTest.class)
 public class ProjectServiceTest {
@@ -74,7 +69,7 @@ public class ProjectServiceTest {
 
 
     @Test
-    public void findAllProjectsSuccess() {
+    public void findAllProjectsSuccess() throws MinioException {
 
         //mock repository with dummy data
         List<ProjectEntity> pList = new ArrayList<>();
@@ -85,31 +80,28 @@ public class ProjectServiceTest {
         pList.add(p1);
         when(projectRepository.findAll()).thenReturn(pList);
 
-        Pair<Iterable<ProjectEntity>,String> results = projectService.findAll();
-        Iterable<ProjectEntity> projectIt = results.getFirst();
+        Iterable<ProjectEntity> results = projectService.findAll();
         List<ProjectEntity> projectList = new ArrayList<>();
-        projectIt.forEach(projectList::add);
+        results.forEach(projectList::add);
         assertEquals(2, projectList.size());
         assertTrue(projectList.containsAll(pList));
     }
     @Test
-    public void findProjectById() {
+    public void findProjectById() throws MinioException {
         //mock repository with dummy data
         ProjectEntity p1 = new ProjectEntity();
         BeanUtils.copyProperties(dummyRecords.get(0),p1);
         Optional<ProjectEntity> optionalProject = Optional.of(p1);
         when(projectRepository.findById(1L)).thenReturn(optionalProject);
 
-        Pair<Optional<ProjectEntity>,String> results = projectService.findById(1L);
-        Optional<ProjectEntity> project = results.getFirst();
+        Optional<ProjectEntity> project = projectService.findById(1L);
 
         assertEquals(optionalProject, project);
     }
 
     @Test
-    public void findProjectByIdNotExists()  {
-        Pair<Optional<ProjectEntity>,String> results = projectService.findById(1L);
-        Optional<ProjectEntity> project = results.getFirst();
+    public void findProjectByIdNotExists() throws MinioException {
+        Optional<ProjectEntity> project  = projectService.findById(1L);
         assertEquals(Optional.empty(),project);
     }
 
@@ -132,8 +124,7 @@ public class ProjectServiceTest {
         BeanUtils.copyProperties(dummyRecords.get(0),p1);
         when(projectRepository.save(p1)).thenReturn(p1);
 
-        Pair<ProjectEntity,String> results = projectService.save(dummyRecords.get(0),null, "");
-        ProjectEntity savedProject = results.getFirst();
+        ProjectEntity savedProject = projectService.save(dummyRecords.get(0),null);
 
         assertEquals(savedProject.getName(),"Project 1");
         assertEquals(savedProject.getLang(),"english");
