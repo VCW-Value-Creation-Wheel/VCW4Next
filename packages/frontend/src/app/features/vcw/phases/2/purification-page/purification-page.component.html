@@ -51,6 +51,7 @@
             (openDialogClicked)="onOpenCriteriaDialog()"
         ></app-simple-item-input>
         <app-button
+            class="ml-auto"
             *ngIf="!simpleCriteriaInputOpen"
             (buttonClick)="onAddCriteria()"
             [label]="'New Criteria'"
