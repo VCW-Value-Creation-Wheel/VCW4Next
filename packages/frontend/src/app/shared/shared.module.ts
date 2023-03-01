@@ -34,6 +34,7 @@ import { CkeEditorComponent } from './components/form/cke-editor/cke-editor.comp
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { ListItemComponent } from './components/list-item/list-item.component';
 import { CreateItemDialogComponent } from './components/create-item-dialog/create-item-dialog.component';
+import { SimpleItemInputComponent } from './components/simple-item-input/simple-item-input.component';
 
 
 @NgModule({
@@ -63,7 +64,8 @@ import { CreateItemDialogComponent } from './components/create-item-dialog/creat
     CkeEditorComponent,
     ListItemComponent,
     CreateItemDialogComponent,
-    SnackbarComponent
+    SnackbarComponent,
+    SimpleItemInputComponent
   ],
   imports: [
     CommonModule,
@@ -106,7 +108,8 @@ import { CreateItemDialogComponent } from './components/create-item-dialog/creat
     CkeEditorComponent,
     ListItemComponent,
     CreateItemDialogComponent,
-    SnackbarComponent
+    SnackbarComponent,
+    SimpleItemInputComponent
   ]
 })
 export class SharedModule { }
