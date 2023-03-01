@@ -119,8 +119,6 @@ export class CreateIdeasComponent implements OnInit {
           this.dataFormArray.push(this.dataForm);
           this.simpleInputOpen = false;
         }, error => {
-          this.dataForm.controls.swotField.disable({onlySelf: true});
-          this.dataForm.controls.swotField.setValue(null);
           this.snackbarService.danger('Error', 'Unable to create new idea. Try again later.')
           .during(5000).show();
         });
@@ -187,7 +185,6 @@ export class CreateIdeasComponent implements OnInit {
             this.dataFormArray.at(this.editIdeaIndex).patchValue(this.dataForm.value);
           }, error => {
             this.isLoading = false;
-            this.dataForm.controls.swotField.disable({onlySelf: true});
             this.snackbarService.danger('Error', 'Unable to save the requested changes. Try again later.')
             .during(5000).show();
           });

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, UntypedFormArray, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { createCriteriaConfig, createIdeasConfig, PhaseNavigationService, VcwPhasesService } from '@core';
+import { createCriteriaConfig, createIdeasConfig, PhaseNavigationService, SnackbarService, VcwPhasesService } from '@core';
 import { VcwMockService } from '@core/services/mocks/vcw/vcw-mock.service';
 import { faGlobe, faPlus, faUser, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import { Subject } from 'rxjs';
@@ -33,6 +33,13 @@ export class PurificationPageComponent implements OnInit {
 
   simpleIdeaInputOpen = false;
   simpleCriteriaInputOpen = false;
+  ideaItemDialogOpen = false;
+  criteriaItemDialogOpen = false;
+  editIdeaMode = false;
+  editIdeaIndex: number;
+  editCriteriaMode = false;
+  editCriteriaIndex: number;
+  confirmDialogOpen = false;
 
   actionConfirmText: string;
   actionConfirmTitle: string;
@@ -43,7 +50,8 @@ export class PurificationPageComponent implements OnInit {
               private activatedRoute: ActivatedRoute,
               private vcwPhasesService: VcwPhasesService,
               private mockService: VcwMockService,
-              private formBuilder: FormBuilder) {}
+              private formBuilder: FormBuilder,
+              private snackbarService: SnackbarService) {}
 
   ngOnInit(): void {
     this.useMocks = environment.activateMocks;
@@ -108,7 +116,129 @@ export class PurificationPageComponent implements OnInit {
     this.ideaDataForm.controls.file.disable({onlySelf: true});
   }
 
-  onAddCriteria() {
+  onDirectIdeaAdd() {
+    if (this.ideaDataForm.valid) {
+      if (this.useMocks) {
+        this.ideaFormArray.push(this.ideaDataForm);
+        this.simpleIdeaInputOpen = false;
+      } else {
+        this.vcwPhasesService.createDiagnostic(this.vcwId, this.projectId, this.ideaDataForm.value)
+        .pipe(take(1))
+        .subscribe(response => {
+          this.ideaFormArray.push(this.ideaDataForm);
+          this.simpleIdeaInputOpen = false;
+        }, error => {
+          this.snackbarService.danger('Error', 'Unable to create new idea. Try again later.')
+          .during(5000).show();
+        });
+      }
+    }
+  }
 
+  onOpenIdeaDialog() {
+    this.ideaItemDialogOpen = true;
+  }
+
+  onCancel() {
+    this.ideaItemDialogOpen = false;
+    this.editIdeaMode = false;
+    this.simpleIdeaInputOpen = false;
+
+    this.criteriaItemDialogOpen = false;
+    this.editCriteriaMode = false;
+    this.simpleCriteriaInputOpen = false;
+  }
+
+  editIdea(index: number) {
+    this.editIdeaMode = true;
+    this.ideaItemDialogOpen = true;
+    this.ideaDataForm = this.formBuilder.group(createIdeasConfig);
+    this.ideaDataForm.patchValue(this.ideaFormArray.at(index).value);
+    this.editIdeaIndex = index;
+  }
+
+  deleteIdea(index: number, ideaNameControl: AbstractControl, ideaIdControl: AbstractControl) {
+    // call confirm dialog then delete idea
+    this.actionConfirmTitle = 'Delete Idea';
+    this.actionConfirmText = `Are you sure you want to delete the idea "${ideaNameControl.value}"?`;
+    this.confirmDialogOpen = true;
+    this.actionConfirm$.pipe(take(1)).subscribe(userConfirm => {
+      this.confirmDialogOpen = false;
+      if (userConfirm) {
+        if (this.useMocks) {
+          this.ideaFormArray.removeAt(index);
+        } else {
+          this.vcwPhasesService.deleteIdea(this.vcwId, this.projectId, ideaIdControl.value)
+          .pipe(take(1))
+          .subscribe(response => {
+            this.ideaFormArray.removeAt(index);
+          }, error => {
+            this.snackbarService.danger('Error', 'Unable to delete idea. Try again later.')
+            .during(5000).show();
+          });
+        }
+      }
+    });
+  }
+
+  onAddCriteria() {
+    this.criteriaDataForm = this.formBuilder.group(createCriteriaConfig);
+    this.simpleCriteriaInputOpen = true;
+    this.criteriaDataForm.controls.file.disable({onlySelf: true});
+  }
+
+  onDirectCriteriaAdd() {
+    if (this.criteriaDataForm.valid) {
+      if (this.useMocks) {
+        this.criteriaFormArray.push(this.criteriaDataForm);
+        this.simpleCriteriaInputOpen = false;
+      } else {
+        this.vcwPhasesService.createDiagnostic(this.vcwId, this.projectId, this.criteriaDataForm.value)
+        .pipe(take(1))
+        .subscribe(response => {
+          this.criteriaFormArray.push(this.criteriaDataForm);
+          this.simpleCriteriaInputOpen = false;
+        }, error => {
+          this.snackbarService.danger('Error', 'Unable to create new criteria. Try again later.')
+          .during(5000).show();
+        });
+      }
+    }
+  }
+
+  onOpenCriteriaDialog() {
+    this.criteriaItemDialogOpen = true;
+  }
+
+  editCriteria(index: number) {
+    this.editCriteriaMode = true;
+    this.criteriaItemDialogOpen = true;
+    this.criteriaDataForm = this.formBuilder.group(createCriteriaConfig);
+    this.criteriaDataForm.patchValue(this.criteriaFormArray.at(index).value);
+    this.editCriteriaIndex = index;
+  }
+
+  deleteCriteria(index: number, criteriaNameControl: AbstractControl, criteriaIdControl: AbstractControl) {
+    // call confirm dialog then delete criteria
+    this.actionConfirmTitle = 'Delete Criteria';
+    this.actionConfirmText = `Are you sure you want to delete the criteria "${criteriaNameControl.value}"?`;
+    this.confirmDialogOpen = true;
+    this.actionConfirm$.pipe(take(1)).subscribe(userConfirm => {
+      this.confirmDialogOpen = false;
+      if (userConfirm) {
+        if (this.useMocks) {
+          this.criteriaFormArray.removeAt(index);
+        } else {
+          // this.vcwPhasesService.deleteIdea(this.vcwId, this.projectId, criteriaIdControl.value)
+          // .pipe(take(1))
+          // .subscribe(response => {
+          //   this.criteriaFormArray.removeAt(index);
+          // }, error => {
+          //   this.snackbarService.danger('Error', 'Unable to delete criteria. Try again later.')
+          //   .during(5000).show();
+          // });
+        }
+      }
+    });
   }
 }

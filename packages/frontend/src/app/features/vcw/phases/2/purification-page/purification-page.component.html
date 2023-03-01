@@ -10,6 +10,14 @@
                 (selectChange)="onIdeaSelect(idx)"
             ></app-list-item>
         </ng-container>
+        <app-simple-item-input
+            *ngIf="simpleIdeaInputOpen"
+            [dataForm]="ideaDataForm"
+            [placeholderText]="'Type an idea here...'"
+            (addClicked)="onDirectIdeaAdd()"
+            (cancelClicked)="onCancel()"
+            (openDialogClicked)="onOpenIdeaDialog()"
+        ></app-simple-item-input>
         <app-button
             (buttonClick)="onAddIdea()"
             [label]="'New Idea'"
@@ -27,6 +35,14 @@
                 (selectChange)="onCriteriaSelect(idx)"
             ></app-list-item>
         </ng-container>
+        <app-simple-item-input
+            *ngIf="simpleCriteriaInputOpen"
+            [dataForm]="criteriaDataForm"
+            [placeholderText]="'Type a criteria here...'"
+            (addClicked)="onDirectCriteriaAdd()"
+            (cancelClicked)="onCancel()"
+            (openDialogClicked)="onOpenCriteriaDialog()"
+        ></app-simple-item-input>
         <app-button
             (buttonClick)="onAddCriteria()"
             [label]="'New Criteria'"
