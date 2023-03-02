@@ -5,10 +5,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pt.com.deimos.vcwapi.dto.IdeaDTO;
 import pt.com.deimos.vcwapi.entity.IdeaEntity;
+import pt.com.deimos.vcwapi.entity.ProjectEntity;
 import pt.com.deimos.vcwapi.entity.SourceEntity;
 import pt.com.deimos.vcwapi.entity.VcwHasIdeaEntity;
 import pt.com.deimos.vcwapi.exceptions.BadRequestException;
 import pt.com.deimos.vcwapi.repository.IdeaRepository;
+import pt.com.deimos.vcwapi.repository.ProjectRepository;
 
 import java.util.Optional;
 
@@ -17,9 +19,16 @@ import java.util.Optional;
 public class IdeaService {
 
   private final IdeaRepository ideaRepository;
+  private final ProjectRepository projectRepository;
+  
 
-  public IdeaService(IdeaRepository ideaRepository) {
+  public IdeaService(IdeaRepository ideaRepository, ProjectRepository projectRepository) {
     this.ideaRepository = ideaRepository;
+    this.projectRepository = projectRepository;
+  }
+
+  public Optional<ProjectEntity> findProjectByIdAndUser(Long project_id, String userId) {
+    return this.projectRepository.findByIdAndProjectHasUserRoleEntitiesUserInum(project_id, userId);
   }
 
   public Iterable<IdeaEntity> findByVcw(Long vcwId) {

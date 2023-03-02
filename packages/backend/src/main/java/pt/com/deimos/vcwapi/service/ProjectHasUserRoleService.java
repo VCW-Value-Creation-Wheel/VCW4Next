@@ -3,7 +3,6 @@ package pt.com.deimos.vcwapi.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pt.com.deimos.vcwapi.dto.ProjectHasUserRoleDTO;
-import pt.com.deimos.vcwapi.entity.DiagnosticEntity;
 import pt.com.deimos.vcwapi.entity.ProjectEntity;
 import pt.com.deimos.vcwapi.entity.ProjectHasUserRoleEntity;
 import pt.com.deimos.vcwapi.entity.RoleEntity;
@@ -33,13 +32,7 @@ public class ProjectHasUserRoleService {
     }
 
     public Optional<ProjectEntity> findProjectByIdAndUser(Long project_id, String userId) {
-
-        Optional<ProjectEntity> result = this.projectRepository.findByIdAndProjectHasUserRoleEntitiesUserInum(project_id, userId);
-
-        if (result.isEmpty())
-            throw new NotFoundException("Project does not exist.");
-
-        return result;
+        return this.projectRepository.findByIdAndProjectHasUserRoleEntitiesUserInum(project_id, userId);
     }
 
     public Iterable<ProjectHasUserRoleEntity> findByProject(Long projectId) {

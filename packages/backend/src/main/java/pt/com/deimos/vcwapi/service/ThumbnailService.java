@@ -37,14 +37,8 @@ public class ThumbnailService {
         this.thumbnailRepository = thumbnailRepository;
     }
 
-    public Optional<ProjectEntity> findProjectByIdAndUser(Long project_id, String thumbnailId) {
-
-        Optional<ProjectEntity> result = this.projectRepository.findByIdAndProjectHasUserRoleEntitiesUserInum(project_id, thumbnailId);
-
-        if (result.isEmpty())
-            throw new NotFoundException("Project does not exist.");
-
-        return result;
+    public Optional<ProjectEntity> findProjectByIdAndUser(Long project_id, String userId) {
+        return this.projectRepository.findByIdAndProjectHasUserRoleEntitiesUserInum(project_id, userId);
     }
 
     public FileEntity findByProject(Long projectId) {

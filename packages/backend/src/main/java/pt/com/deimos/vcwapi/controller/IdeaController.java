@@ -8,6 +8,8 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import pt.com.deimos.vcwapi.dto.IdeaDTO;
 import pt.com.deimos.vcwapi.entity.IdeaEntity;
+import pt.com.deimos.vcwapi.entity.ProjectEntity;
+import pt.com.deimos.vcwapi.exceptions.NotFoundException;
 import pt.com.deimos.vcwapi.service.IdeaService;
 
 import java.util.Optional;
@@ -24,16 +26,30 @@ public class IdeaController {
 
   @GetMapping
   public ResponseEntity<Iterable<IdeaEntity>> getByVcw(
+          @AuthenticationPrincipal Jwt principal,
+          @PathVariable(value = "project_id") Long projectId,
           @PathVariable(value = "vcw_id") Long vcwId) {
+
+    Optional<ProjectEntity> project =
+            this.ideaService.findProjectByIdAndUser(projectId, principal.getSubject());
+    if (project.isEmpty())
+      throw new NotFoundException("Project not found.");
 
     return ResponseEntity.ok(this.ideaService.findByVcw(vcwId));
   }
 
   @PostMapping
-  public ResponseEntity<Object> save(@PathVariable Long vcw_id,
-                                     @RequestBody @Valid IdeaDTO ideaDTO,
-                                     @AuthenticationPrincipal Jwt principal
+  public ResponseEntity<Object> save(
+          @AuthenticationPrincipal Jwt principal,
+          @PathVariable(value = "project_id") Long projectId,
+          @PathVariable Long vcw_id,
+          @RequestBody @Valid IdeaDTO ideaDTO
   ) {
+
+    Optional<ProjectEntity> project =
+            this.ideaService.findProjectByIdAndUser(projectId, principal.getSubject());
+    if (project.isEmpty())
+      throw new NotFoundException("Project not found.");
 
     return ResponseEntity.status(HttpStatus.CREATED).body(
             this.ideaService.save(principal.getSubject(), vcw_id, ideaDTO));
@@ -41,9 +57,17 @@ public class IdeaController {
 
   @PutMapping("/{id}")
   public ResponseEntity<Object> update(
+          @AuthenticationPrincipal Jwt principal,
+          @PathVariable(value = "project_id") Long projectId,
           @PathVariable Long id,
           @RequestBody @Valid IdeaDTO ideaDTO
   ) {
+
+    Optional<ProjectEntity> project =
+            this.ideaService.findProjectByIdAndUser(projectId, principal.getSubject());
+    if (project.isEmpty())
+      throw new NotFoundException("Project not found.");
+
     Optional<IdeaEntity> ideaEntityOptional = this.ideaService.findById(id);
 
     if(ideaEntityOptional.isEmpty()) {
@@ -55,7 +79,16 @@ public class IdeaController {
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<Object> delete(@PathVariable Long id) {
+  public ResponseEntity<Object> delete(
+          @AuthenticationPrincipal Jwt principal,
+          @PathVariable(value = "project_id") Long projectId,
+          @PathVariable Long id) {
+
+    Optional<ProjectEntity> project =
+            this.ideaService.findProjectByIdAndUser(projectId, principal.getSubject());
+    if (project.isEmpty())
+      throw new NotFoundException("Project not found.");
+
     Optional<IdeaEntity> ideaEntityOptional =
             this.ideaService.findById(id);
 

@@ -9,7 +9,9 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import pt.com.deimos.vcwapi.dto.ChallengeDTO;
 import pt.com.deimos.vcwapi.dto.VcwDTO;
+import pt.com.deimos.vcwapi.entity.ProjectEntity;
 import pt.com.deimos.vcwapi.entity.VcwEntity;
+import pt.com.deimos.vcwapi.exceptions.NotFoundException;
 import pt.com.deimos.vcwapi.service.VcwService;
 
 import java.util.Collections;
@@ -35,8 +37,15 @@ public class VcwController {
 
   @GetMapping("/{id}")
   public ResponseEntity<Object> getById(
+          @PathVariable(value = "project_id") Long projectId,
+          @AuthenticationPrincipal Jwt principal,
           @PathVariable(value = "id") Long id) {
 
+    Optional<ProjectEntity> project =
+            this.vcwService.findProjectByIdAndUser(projectId, principal.getSubject());
+    if (project.isEmpty())
+      throw new NotFoundException("Project not found.");
+    
     Optional<VcwEntity> vcwEntityOptional =
             this.vcwService.findById(id);
 
@@ -49,7 +58,14 @@ public class VcwController {
 
   @GetMapping
   public ResponseEntity<Iterable<VcwEntity>> getByProject(
-          @PathVariable(value = "project_id") Long projectId) {
+          @PathVariable(value = "project_id") Long projectId,
+          @AuthenticationPrincipal Jwt principal) {
+
+    Optional<ProjectEntity> project =
+            this.vcwService.findProjectByIdAndUser(projectId, principal.getSubject());
+    if (project.isEmpty())
+      throw new NotFoundException("Project not found.");
+    
     return ResponseEntity.ok(this.vcwService.findByProject(projectId));
   }
 
@@ -60,6 +76,11 @@ public class VcwController {
           @AuthenticationPrincipal Jwt principal
   ) {
 
+    Optional<ProjectEntity> project = this.vcwService.findProjectByIdAndUser(
+            projectId, principal.getSubject());
+    if (project.isEmpty())
+      throw new NotFoundException("Project not found.");
+    
     return ResponseEntity.status(HttpStatus.CREATED).body(
             this.vcwService.save(vcwDTO, principal.getSubject(), projectId));
   }
@@ -69,8 +90,15 @@ public class VcwController {
 
   @GetMapping("/{id}/challenges")
   public ResponseEntity<Object> getChallenge(
-          @PathVariable(value = "id") Long id) {
+          @PathVariable(value = "id") Long id,
+          @PathVariable(value = "project_id") Long projectId,
+          @AuthenticationPrincipal Jwt principal) {
 
+    Optional<ProjectEntity> project = this.vcwService.findProjectByIdAndUser(
+            projectId, principal.getSubject());
+    if (project.isEmpty())
+      throw new NotFoundException("Project not found.");
+    
     Optional<VcwEntity> vcwEntityOptional =
             this.vcwService.findById(id);
 
@@ -86,9 +114,16 @@ public class VcwController {
   @PutMapping("/{id}/challenges")
   public ResponseEntity<String> saveChallenges(
           @PathVariable(value = "id") Long vcwId,
-          @RequestBody ChallengeDTO challenge
+          @RequestBody ChallengeDTO challenge,
+          @PathVariable(value = "project_id") Long projectId,
+          @AuthenticationPrincipal Jwt principal
   ) {
 
+    Optional<ProjectEntity> project = this.vcwService.findProjectByIdAndUser(
+            projectId, principal.getSubject());
+    if (project.isEmpty())
+      throw new NotFoundException("Project not found.");
+    
     Optional<VcwEntity> vcwEntityOptional = this.vcwService.findById(vcwId);
     if(vcwEntityOptional.isEmpty()) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Vcw not found");
