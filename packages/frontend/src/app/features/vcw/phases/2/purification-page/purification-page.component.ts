@@ -431,7 +431,23 @@ export class PurificationPageComponent implements OnInit {
   }
 
   deletePair() {
-    
+    const selectedIdeaId = this.ideaFormArray.at(this.selectedIdeaIndex).get('id').value;
+    const selectedCriteriaId = this.criteriaFormArray.at(this.selectedCriteriaIndex).get('id').value;
+    const pairDataForm = (this.pairFormArray.controls.find(control =>
+      control.get('ideaId').value === selectedIdeaId
+      && control.get('criteriaId').value === selectedCriteriaId) as FormGroup);
+    this.actionConfirmTitle = 'Delete Pair';
+    this.actionConfirmText = `Are you sure you want to delete the pair
+      "${pairDataForm.controls.ideaName.value}" - "${pairDataForm.controls.criteriaName.value}"?`;
+    this.confirmDialogOpen = true;
+    this.actionConfirm$.pipe(take(1)).subscribe((userConfirm) => {
+      this.confirmDialogOpen = false;
+      if (userConfirm) {
+        const pairIndex = this.pairFormArray.controls.indexOf(pairDataForm);
+        this.pairFormArray.removeAt(pairIndex);
+        this.checkForExistingPair();
+      }
+    });
   }
 
   onPairConfirm() {
@@ -455,7 +471,7 @@ export class PurificationPageComponent implements OnInit {
   }
 
   checkForExistingPair() {
-    if (this.selectedIdeaIndex && this.selectedCriteriaIndex) {
+    if (this.selectedIdeaIndex !== undefined && this.selectedCriteriaIndex !== undefined) {
       const selectedIdeaId = this.ideaFormArray.at(this.selectedIdeaIndex).get('id').value;
       const selectedCriteriaId = this.criteriaFormArray.at(this.selectedCriteriaIndex).get('id').value;
       this.existingPairSelected = this.pairFormArray.controls.some(control =>
