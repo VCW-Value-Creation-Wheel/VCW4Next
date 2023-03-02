@@ -167,6 +167,14 @@ export class PurificationPageComponent implements OnInit {
     this.simpleCriteriaInputOpen = false;
 
     this.createPairDialogOpen = false;
+
+    if (this.editPairMode) {
+      this.editPairMode = false;
+      this.pairDataForm.controls.ideaId.enable({onlySelf: true});
+      this.pairDataForm.controls.ideaId.setValue(this.ideaFormArray.at(this.selectedIdeaIndex).get('id').value);
+      this.pairDataForm.controls.criteriaId.enable({onlySelf: true});
+      this.pairDataForm.controls.criteriaId.setValue(this.criteriaFormArray.at(this.selectedCriteriaIndex).get('id').value);
+    }
   }
 
   editIdea(index: number) {
@@ -405,9 +413,11 @@ export class PurificationPageComponent implements OnInit {
   createEditPair() {
     if (this.existingPairSelected) {
       this.editPairMode = true;
+      const selectedIdeaId = this.ideaFormArray.at(this.selectedIdeaIndex).get('id').value;
+      const selectedCriteriaId = this.criteriaFormArray.at(this.selectedCriteriaIndex).get('id').value;
       this.pairDataForm = (this.pairFormArray.controls.find(control =>
-        control.get('ideaId').value === this.selectedIdeaIndex
-        && control.get('criteriaId').value === this.selectedCriteriaIndex) as FormGroup);
+        control.get('ideaId').value === selectedIdeaId
+        && control.get('criteriaId').value === selectedCriteriaId) as FormGroup);
       this.editPairIndex = this.pairFormArray.controls.indexOf(this.pairDataForm);
       this.createPairDialogOpen = true;
     } else {
@@ -427,17 +437,17 @@ export class PurificationPageComponent implements OnInit {
   onPairConfirm() {
     if (this.editPairMode) {
       this.pairDataForm.controls.ideaId.enable({onlySelf: true});
-      this.pairDataForm.controls.ideaId.setValue(this.selectedIdeaIndex);
+      this.pairDataForm.controls.ideaId.setValue(this.ideaFormArray.at(this.selectedIdeaIndex).get('id').value);
       this.pairDataForm.controls.criteriaId.enable({onlySelf: true});
-      this.pairDataForm.controls.criteriaId.setValue(this.selectedCriteriaIndex);
+      this.pairDataForm.controls.criteriaId.setValue(this.criteriaFormArray.at(this.selectedCriteriaIndex).get('id').value);
       this.pairFormArray.at(this.editPairIndex).patchValue(this.pairDataForm.value);
       this.createPairDialogOpen = false;
       this.editPairMode = false;
     } else {
       this.pairDataForm.controls.ideaId.enable({onlySelf: true});
-      this.pairDataForm.controls.ideaId.setValue(this.selectedIdeaIndex);
+      this.pairDataForm.controls.ideaId.setValue(this.ideaFormArray.at(this.selectedIdeaIndex).get('id').value);
       this.pairDataForm.controls.criteriaId.enable({onlySelf: true});
-      this.pairDataForm.controls.criteriaId.setValue(this.selectedCriteriaIndex);
+      this.pairDataForm.controls.criteriaId.setValue(this.criteriaFormArray.at(this.selectedCriteriaIndex).get('id').value);
       this.pairFormArray.push(this.pairDataForm);
       this.createPairDialogOpen = false;
     }
@@ -445,7 +455,13 @@ export class PurificationPageComponent implements OnInit {
   }
 
   checkForExistingPair() {
-    this.existingPairSelected = this.pairFormArray.controls.some(control =>
-      control.get('ideaId').value === this.selectedIdeaIndex && control.get('criteriaId').value === this.selectedCriteriaIndex);
+    if (this.selectedIdeaIndex && this.selectedCriteriaIndex) {
+      const selectedIdeaId = this.ideaFormArray.at(this.selectedIdeaIndex).get('id').value;
+      const selectedCriteriaId = this.criteriaFormArray.at(this.selectedCriteriaIndex).get('id').value;
+      this.existingPairSelected = this.pairFormArray.controls.some(control =>
+        control.get('ideaId').value === selectedIdeaId && control.get('criteriaId').value === selectedCriteriaId);
+    } else {
+      this.existingPairSelected = false;
+    }
   }
 }
