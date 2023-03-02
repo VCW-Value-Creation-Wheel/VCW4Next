@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, UntypedFormArray, UntypedFormGroup } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, UntypedFormArray, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { createCriteriaConfig,
   createIdeasConfig,
@@ -51,6 +51,8 @@ export class PurificationPageComponent implements OnInit {
   createPairDialogOpen = false;
   editPairMode = false;
   editPairIndex: number;
+
+  existingPairSelected = false;
 
   isLoading = false;
 
@@ -113,6 +115,7 @@ export class PurificationPageComponent implements OnInit {
       this.selectedIdeaIndex = undefined;
     } else {
       this.selectedIdeaIndex = index;
+      this.checkForExistingPair();
     }
   }
 
@@ -121,6 +124,7 @@ export class PurificationPageComponent implements OnInit {
       this.selectedCriteriaIndex = undefined;
     } else {
       this.selectedCriteriaIndex = index;
+      this.checkForExistingPair();
     }
   }
 
@@ -399,8 +403,13 @@ export class PurificationPageComponent implements OnInit {
   }
 
   createEditPair() {
-    if (this.isExistingPair) {
-
+    if (this.existingPairSelected) {
+      this.editPairMode = true;
+      this.pairDataForm = (this.pairFormArray.controls.find(control =>
+        control.get('ideaId').value === this.selectedIdeaIndex
+        && control.get('criteriaId').value === this.selectedCriteriaIndex) as FormGroup);
+      this.editPairIndex = this.pairFormArray.controls.indexOf(this.pairDataForm);
+      this.createPairDialogOpen = true;
     } else {
       this.pairDataForm = this.formBuilder.group(createPairConfig);
       this.pairDataForm.controls.ideaId.setValue(this.ideaFormArray.at(this.selectedIdeaIndex).get('id').value);
@@ -421,8 +430,9 @@ export class PurificationPageComponent implements OnInit {
       this.pairDataForm.controls.ideaId.setValue(this.selectedIdeaIndex);
       this.pairDataForm.controls.criteriaId.enable({onlySelf: true});
       this.pairDataForm.controls.criteriaId.setValue(this.selectedCriteriaIndex);
-      this.pairFormArray.at(this.editPairIndex).patchValue(this.pairDataForm);
+      this.pairFormArray.at(this.editPairIndex).patchValue(this.pairDataForm.value);
       this.createPairDialogOpen = false;
+      this.editPairMode = false;
     } else {
       this.pairDataForm.controls.ideaId.enable({onlySelf: true});
       this.pairDataForm.controls.ideaId.setValue(this.selectedIdeaIndex);
@@ -431,10 +441,11 @@ export class PurificationPageComponent implements OnInit {
       this.pairFormArray.push(this.pairDataForm);
       this.createPairDialogOpen = false;
     }
+    this.checkForExistingPair();
   }
 
-  get isExistingPair(): boolean {
-    return this.pairFormArray.controls.some(control =>
+  checkForExistingPair() {
+    this.existingPairSelected = this.pairFormArray.controls.some(control =>
       control.get('ideaId').value === this.selectedIdeaIndex && control.get('criteriaId').value === this.selectedCriteriaIndex);
   }
 }

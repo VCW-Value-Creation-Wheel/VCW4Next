@@ -67,7 +67,7 @@
             [label]="'Create/Edit Pair'"
         ></app-button>
         <app-button
-            [isDisabled]="!(selectedIdeaIndex !== undefined && selectedCriteriaIndex !== undefined) || !isExistingPair"
+            [isDisabled]="!(selectedIdeaIndex !== undefined && selectedCriteriaIndex !== undefined) || !existingPairSelected"
             (buttonClick)="deletePair()"
             [label]="'Delete Pair'"
             [isDangerous]="true"
