@@ -13,11 +13,6 @@ import java.time.LocalDateTime;
 @Table(name = "idea_and_criteria")
 public class IdeaAndCriteriaEntity extends BaseEntity{
 
-    @Column(name = "idea_id", nullable = false)
-    private Long ideaId;
-
-    @Column(name = "criteria_id", nullable = false)
-    private Long criteriaId;
 
     @Column
     private Float value;
@@ -34,14 +29,14 @@ public class IdeaAndCriteriaEntity extends BaseEntity{
 
 
     @ManyToOne(optional = false)
-    @JoinColumn(name="idea_id", referencedColumnName = "id", insertable=false, updatable=false)
+    @JoinColumn(name="idea_id", referencedColumnName = "id")
     private IdeaEntity idea;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name="criteria_id", referencedColumnName = "id", insertable=false, updatable=false)
+    @JoinColumn(name="criteria_id", referencedColumnName = "id")
     private CriteriaEntity criteria;
 
-    @ManyToOne
-    @JoinColumn(name="source_id", referencedColumnName = "id", insertable=false, updatable=false)
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="source_id", referencedColumnName = "id")
     private SourceEntity source;
 }
