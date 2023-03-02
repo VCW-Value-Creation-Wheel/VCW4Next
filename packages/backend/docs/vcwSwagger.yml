@@ -28,7 +28,7 @@ tags:
     externalDocs:
       url: http://vcw-app.develop.s4eo.com/projects/1/new-vcw
 paths:
-  /projects/:
+  /projects:
     get:
       tags:
         - Project List Page
@@ -51,47 +51,6 @@ paths:
           required: true
           schema:
             type: string
-
-  /projects/{id} :
-    get:
-      tags:
-        - Project Page
-      summary: Shows project with given id if the user has access to it. 🟢
-      description:
-      operationId: getByIdAndUser
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/examples/project-return'
-        '404':
-          description: Project not found
-          content:
-            'text/plain; charset=utf-8':
-              schema:
-                type: string
-                example: 'Project not found'
-        parameters:
-          - name: id
-            in: path
-            description: project id
-            required: true
-
-            schema:
-              type: Long
-          - name: userId
-            in: header
-            description: Id from logged in user.
-            required: true
-
-            schema:
-              type: string
-
-  /projects:
     post:
       tags:
         - New Project Page
@@ -135,6 +94,46 @@ paths:
           required: true
           schema:
             type: string
+  /projects/{id} :
+    get:
+      tags:
+        - Project Page
+      summary: Shows project with given id if the user has access to it. 🟢
+      description:
+      operationId: getByIdAndUser
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/examples/project-return'
+        '404':
+          description: Project not found
+          content:
+            'text/plain; charset=utf-8':
+              schema:
+                type: string
+                example: 'Project not found'
+        parameters:
+          - name: id
+            in: path
+            description: project id
+            required: true
+
+            schema:
+              type: Long
+          - name: userId
+            in: header
+            description: Id from logged in user.
+            required: true
+
+            schema:
+              type: string
+
+
   /projects/{project_id}/thumbnails:
     get:
       tags:
@@ -1070,6 +1069,202 @@ paths:
           schema:
             type: integer
             format: int64
+
+  /projects/{project_id}/vcws/{vcw_id}/ideasAndCriterias:
+    get:
+      tags:
+        - Purification and population page
+      summary: Gets all ideaAndCriteria pairs available for the current vcw 🚧
+      description: TODO
+      operationId: getByVcw
+      responses:
+        '201':
+          description: Created criterias
+          content:
+            application/json:
+              schema:
+                type: array
+                $ref: '#/components/examples/ideas-and-criterias-new'
+        '400':
+          description: Invalid arguments
+          content:
+            application/json:
+              example: {
+                "timestamp": "2023-01-31T12:03:11.417+00:00",
+                "status": 400,
+                "error": "Bad Request",
+                "trace": "...MethodArgumentNotValidException: Validation failed for..." }
+      parameters:
+        - name: project_id
+          in: path
+          description: "project id"
+          required: true
+          schema:
+            type: integer
+        - name: vcw_id
+          in: path
+          description: "vcw id"
+          required: true
+          schema:
+            type: integer
+    post:
+      tags:
+        - Purification and population page
+      summary: Adds new ideaAndCriteria pair to vcw 🚧
+      description: TODO
+      operationId: save
+      responses:
+        '201':
+          description: Created ideaAndCriteria pair-
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/examples/ideas-and-criterias-new'
+        '400':
+          description: Invalid arguments
+          content:
+            application/json:
+              example: {
+                "timestamp": "2023-01-31T12:03:11.417+00:00",
+                "status": 400,
+                "error": "Bad Request",
+                "trace": "...MethodArgumentNotValidException: Validation failed for..." }
+      parameters:
+        - name: project_id
+          in: path
+          description: "project id"
+          required: true
+          schema:
+            type: integer
+        - name: vcw_id
+          in: path
+          description: "vcw id"
+          required: true
+          schema:
+            type: integer
+        - name: ideaId
+          in: formData
+          description: "Selected idea id"
+          required: true
+          schema:
+            type: Long
+            example: 3
+        - name: criteriaId
+          in: formData
+          description: "Selected criteria id"
+          required: true
+          schema:
+            type: Long
+            example: 3
+        - name: value
+          in: formData
+          description: "Associated value"
+          required: true
+          schema:
+            type: Float
+            example: 3
+        - name: source
+          in: formData
+          description: Idea and criteria source
+          required: false
+          schema:
+            type: object
+            example:
+              source:
+                zomato: string
+                url: string
+
+  /projects/{project_id}/vcws/{vcw_id}/ideasAndCriterias/{ideaAndCriteria_id}:
+    put:
+      tags:
+        - Purification and population page
+      summary: Updates given idea and criteria pair 🚧
+      description: TODO
+      operationId: update
+      responses:
+        '201':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/examples/ideas-and-criterias-new'
+        '400':
+          description: Invalid arguments
+          content:
+            application/json:
+              example: {
+                "timestamp": "2023-01-31T12:03:11.417+00:00",
+                "status": 400,
+                "error": "Bad Request",
+                "trace": "...MethodArgumentNotValidException: Validation failed for..." }
+      parameters:
+        - name: project_id
+          in: path
+          description: "project id"
+          required: true
+          schema:
+            type: integer
+        - name: ideaAndCriteria_id
+          in: path
+          description: "ideaAndCriteria id"
+          required: true
+          schema:
+            type: integer
+        - name: ideaId
+          in: formData
+          description: "Selected idea id"
+          required: true
+          schema:
+            type: Long
+            example: 3
+        - name: criteriaId
+          in: formData
+          description: "Selected criteria id"
+          required: true
+          schema:
+            type: Long
+            example: 3
+        - name: value
+          in: formData
+          description: "Associated value"
+          required: true
+          schema:
+            type: Float
+            example: 3
+        - name: source
+          in: formData
+          description: Idea and criteria source
+          required: false
+          schema:
+            type: object
+            example:
+              source:
+                zomato: string
+                url: string
+    delete:
+      tags:
+        - Purification and population page
+      summary: Deletes given idea and criteria pair 🚧
+      description: TODO
+      operationId: delete
+      responses:
+        '400':
+          description: Invalid ideaAndCriteria id supplied
+        '404':
+          description: ideaAndCriteria not found
+      parameters:
+        - name: project_id
+          in: path
+          description: "project id"
+          required: true
+        - name: ideaAndCriteria_id
+          in: path
+          description: "ideaAndCriteria id"
+          required: true
+          schema:
+            type: integer
 
 components:
   schemas:
