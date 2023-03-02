@@ -10,6 +10,7 @@
                 (selectChange)="onIdeaSelect(idx)"
                 (editClick)="editIdea(idx)"
                 (deleteClick)="deleteIdea(idx, idea.controls.name, idea.controls.id)"
+                [mainBgColor]="getIdeaMainColor(idea.controls.id)"
             ></app-list-item>
         </ng-container>
         <app-simple-item-input
@@ -40,6 +41,7 @@
                 (selectChange)="onCriteriaSelect(idx)"
                 (editClick)="editCriteria(idx)"
                 (deleteClick)="deleteCriteria(idx, criteria.controls.name, criteria.controls.id)"
+                [mainBgColor]="getCriteriaMainColor(criteria.controls.id)"
             ></app-list-item>
         </ng-container>
         <app-simple-item-input

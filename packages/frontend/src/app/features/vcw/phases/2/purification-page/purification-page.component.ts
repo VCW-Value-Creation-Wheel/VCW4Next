@@ -38,6 +38,8 @@ export class PurificationPageComponent implements OnInit {
 
   selectedIdeaIndex: number;
   selectedCriteriaIndex: number;
+  linkedCriteriaIds: number[] = [];
+  linkedIdeaIds: number[] = [];
 
   simpleIdeaInputOpen = false;
   simpleCriteriaInputOpen = false;
@@ -113,18 +115,22 @@ export class PurificationPageComponent implements OnInit {
   onIdeaSelect(index: number) {
     if (this.selectedIdeaIndex === index) {
       this.selectedIdeaIndex = undefined;
+      this.linkedCriteriaIds = [];
     } else {
       this.selectedIdeaIndex = index;
       this.checkForExistingPair();
+      this.checkForLinkedCriteria();
     }
   }
 
   onCriteriaSelect(index: number) {
     if (this.selectedCriteriaIndex === index) {
       this.selectedCriteriaIndex = undefined;
+      this.linkedIdeaIds = [];
     } else {
       this.selectedCriteriaIndex = index;
       this.checkForExistingPair();
+      this.checkForLinkedIdeas();
     }
   }
 
@@ -468,6 +474,8 @@ export class PurificationPageComponent implements OnInit {
       this.createPairDialogOpen = false;
     }
     this.checkForExistingPair();
+    this.checkForLinkedIdeas();
+    this.checkForLinkedCriteria();
   }
 
   checkForExistingPair() {
@@ -478,6 +486,38 @@ export class PurificationPageComponent implements OnInit {
         control.get('ideaId').value === selectedIdeaId && control.get('criteriaId').value === selectedCriteriaId);
     } else {
       this.existingPairSelected = false;
+    }
+  }
+
+  checkForLinkedCriteria() {
+    const selectedIdeaId = this.ideaFormArray.at(this.selectedIdeaIndex).get('id').value;
+    const pairDataForms = (this.pairFormArray.controls.filter(control => control.get('ideaId').value === selectedIdeaId)
+      .map(ctrl => ctrl.value));
+    this.linkedCriteriaIds = pairDataForms.map(form => form.criteriaId);
+  }
+
+  checkForLinkedIdeas() {
+    const selectedCriteriaId = this.criteriaFormArray.at(this.selectedCriteriaIndex).get('id').value;
+    const pairDataForms = (this.pairFormArray.controls.filter(control => control.get('criteriaId').value === selectedCriteriaId)
+      .map(ctrl => ctrl.value));
+    this.linkedIdeaIds = pairDataForms.map(form => form.ideaId);
+  }
+
+  getIdeaMainColor(idControl: AbstractControl): string {
+    const id = idControl.value;
+    if (this.linkedIdeaIds.some(ideaId => ideaId === id)) {
+      return 'bg-orange-200';
+    } else {
+      return 'bg-blue-100';
+    }
+  }
+
+  getCriteriaMainColor(idControl: AbstractControl): string {
+    const id = idControl.value;
+    if (this.linkedCriteriaIds.some(criteriaId => criteriaId === id)) {
+      return 'bg-orange-200';
+    } else {
+      return 'bg-blue-100';
     }
   }
 }
