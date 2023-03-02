@@ -452,6 +452,8 @@ export class PurificationPageComponent implements OnInit {
         const pairIndex = this.pairFormArray.controls.indexOf(pairDataForm);
         this.pairFormArray.removeAt(pairIndex);
         this.checkForExistingPair();
+        this.checkForLinkedIdeas();
+        this.checkForLinkedCriteria();
       }
     });
   }
