@@ -112,12 +112,16 @@ export class CreateIdeasComponent implements OnInit {
       if (this.useMocks) {
         this.dataFormArray.push(this.dataForm);
         this.simpleInputOpen = false;
+        this.snackbarService.success('Success!', 'New idea added.')
+        .during(5000).show();
       } else {
         this.vcwPhasesService.createDiagnostic(this.vcwId, this.projectId, this.dataForm.value)
         .pipe(take(1))
         .subscribe(response => {
           this.dataFormArray.push(this.dataForm);
           this.simpleInputOpen = false;
+          this.snackbarService.success('Success!', 'New idea added.')
+          .during(5000).show();
         }, error => {
           this.snackbarService.danger('Error', 'Unable to create new idea. Try again later.')
           .during(5000).show();
@@ -147,6 +151,8 @@ export class CreateIdeasComponent implements OnInit {
           this.itemDialogOpen = false;
           this.simpleInputOpen = false;
           this.isLoading = false;
+          this.snackbarService.success('Success!', 'New idea added.')
+          .during(5000).show();
         } else {
           this.vcwPhasesService.createIdea(this.vcwId, this.projectId, this.dataForm.value)
           .pipe(take(1))
@@ -155,6 +161,8 @@ export class CreateIdeasComponent implements OnInit {
             this.itemDialogOpen = false;
             this.simpleInputOpen = false;
             this.isLoading = false;
+            this.snackbarService.success('Success!', 'New idea added.')
+            .during(5000).show();
           }, error => {
             this.isLoading = false;
             this.snackbarService.danger('Error', 'Unable to create new idea. Try again later.')
@@ -174,6 +182,8 @@ export class CreateIdeasComponent implements OnInit {
           this.itemDialogOpen = false;
           this.isLoading = false;
           this.dataFormArray.at(this.editIdeaIndex).patchValue(this.dataForm.value);
+          this.snackbarService.success('Success!', 'Your changes were saved.')
+          .during(5000).show();
         } else {
           const id = this.dataForm.controls.id.value;
           this.vcwPhasesService.editIdea(this.vcwId, this.projectId, id, this.dataForm.value)
@@ -183,6 +193,8 @@ export class CreateIdeasComponent implements OnInit {
             this.itemDialogOpen = false;
             this.isLoading = false;
             this.dataFormArray.at(this.editIdeaIndex).patchValue(this.dataForm.value);
+            this.snackbarService.success('Success!', 'Your changes were saved.')
+            .during(5000).show();
           }, error => {
             this.isLoading = false;
             this.snackbarService.danger('Error', 'Unable to save the requested changes. Try again later.')
@@ -215,11 +227,15 @@ export class CreateIdeasComponent implements OnInit {
       if (userConfirm) {
         if (this.useMocks) {
           this.dataFormArray.removeAt(index);
+          this.snackbarService.success('Success!', 'The selected idea was deleted.')
+          .during(5000).show();
         } else {
           this.vcwPhasesService.deleteIdea(this.vcwId, this.projectId, ideaIdControl.value)
           .pipe(take(1))
           .subscribe(response => {
             this.dataFormArray.removeAt(index);
+            this.snackbarService.success('Success!', 'The selected idea was deleted.')
+            .during(5000).show();
           }, error => {
             this.snackbarService.danger('Error', 'Unable to delete idea. Try again later.')
             .during(5000).show();
