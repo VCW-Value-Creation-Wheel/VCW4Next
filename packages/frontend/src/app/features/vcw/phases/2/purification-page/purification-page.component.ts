@@ -201,11 +201,17 @@ export class PurificationPageComponent implements OnInit {
       if (userConfirm) {
         if (this.useMocks) {
           this.ideaFormArray.removeAt(index);
+          this.selectedIdeaIndex = undefined;
+          this.checkForExistingPair();
+          this.linkedCriteriaIds = [];
         } else {
           this.vcwPhasesService.deleteIdea(this.vcwId, this.projectId, ideaIdControl.value)
           .pipe(take(1))
           .subscribe(response => {
             this.ideaFormArray.removeAt(index);
+            this.selectedIdeaIndex = undefined;
+            this.checkForExistingPair();
+            this.linkedCriteriaIds = [];
           }, error => {
             this.snackbarService.danger('Error', 'Unable to delete idea. Try again later.')
             .during(5000).show();
@@ -262,6 +268,9 @@ export class PurificationPageComponent implements OnInit {
       if (userConfirm) {
         if (this.useMocks) {
           this.criteriaFormArray.removeAt(index);
+          this.selectedCriteriaIndex = undefined;
+          this.checkForExistingPair();
+          this.linkedIdeaIds = [];
         } else {
           // this.vcwPhasesService.deleteIdea(this.vcwId, this.projectId, criteriaIdControl.value)
           // .pipe(take(1))
@@ -451,9 +460,12 @@ export class PurificationPageComponent implements OnInit {
       if (userConfirm) {
         const pairIndex = this.pairFormArray.controls.indexOf(pairDataForm);
         this.pairFormArray.removeAt(pairIndex);
-        this.checkForExistingPair();
-        this.checkForLinkedIdeas();
-        this.checkForLinkedCriteria();
+        this.selectedIdeaIndex = undefined;
+        this.selectedCriteriaIndex = undefined;
+        this.linkedIdeaIds = [];
+        this.linkedCriteriaIds = [];
+        this.snackbarService.success('Success!', 'The selected pair was deleted.')
+        .during(5000).show();
       }
     });
   }
@@ -467,6 +479,8 @@ export class PurificationPageComponent implements OnInit {
       this.pairFormArray.at(this.editPairIndex).patchValue(this.pairDataForm.value);
       this.createPairDialogOpen = false;
       this.editPairMode = false;
+      this.snackbarService.success('Success!', 'Your changes were saved.')
+      .during(5000).show();
     } else {
       this.pairDataForm.controls.ideaId.enable({onlySelf: true});
       this.pairDataForm.controls.ideaId.setValue(this.ideaFormArray.at(this.selectedIdeaIndex).get('id').value);
@@ -474,6 +488,8 @@ export class PurificationPageComponent implements OnInit {
       this.pairDataForm.controls.criteriaId.setValue(this.criteriaFormArray.at(this.selectedCriteriaIndex).get('id').value);
       this.pairFormArray.push(this.pairDataForm);
       this.createPairDialogOpen = false;
+      this.snackbarService.success('Success!', 'New pair created.')
+      .during(5000).show();
     }
     this.checkForExistingPair();
     this.checkForLinkedIdeas();

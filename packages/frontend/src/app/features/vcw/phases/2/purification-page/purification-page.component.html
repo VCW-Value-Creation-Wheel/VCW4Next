@@ -1,5 +1,6 @@
 <div class="flex flex-row gap-8 mx-4 pt-16 grid grid-cols-2 md:mx-64 lg:mx-80">
     <div class="flex flex-col col-span-1 gap-4">
+        <span class="text-xl font-bold text-primary">Ideas</span>
         <ng-container *ngFor="let idea of ideaFormArray.controls; index as idx">
             <app-list-item
                 [isEditable]="true"
@@ -31,6 +32,7 @@
         ></app-button>
     </div>
     <div class="flex flex-col col-span-1 gap-4">
+        <span class="text-xl font-bold text-primary">Criteria</span>
         <ng-container *ngFor="let criteria of criteriaFormArray.controls; index as idx">
             <app-list-item
                 [isEditable]="true"
@@ -66,7 +68,9 @@
         <app-button
             [isDisabled]="!(selectedIdeaIndex !== undefined && selectedCriteriaIndex !== undefined)"
             (buttonClick)="createEditPair()"
-            [label]="'Create/Edit Pair'"
+            [label]="(selectedIdeaIndex !== undefined
+                && selectedCriteriaIndex !== undefined
+                && existingPairSelected) ?  'Edit Pair' : 'Create Pair'"
         ></app-button>
         <app-button
             [isDisabled]="!(selectedIdeaIndex !== undefined && selectedCriteriaIndex !== undefined) || !existingPairSelected"
