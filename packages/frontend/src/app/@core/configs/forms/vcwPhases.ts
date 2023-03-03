@@ -25,5 +25,6 @@ export const createCriteriasConfig = {
     file: [null, Validators.required],
     sourceName: [null],
     sourceUrl: [null],
-    id: [null]
+    id: [null],
+    valueType: [null, Validators.required]
 };

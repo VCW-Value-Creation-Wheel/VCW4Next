@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { UntypedFormArray, UntypedFormGroup, FormBuilder, AbstractControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { PhaseNavigationService, VcwPhasesService, SnackbarService, createCriteriasConfig } from '@core';
@@ -14,7 +14,7 @@ import { environment } from '../../../../../../environments/environment';
   templateUrl: './criteria-page.component.html',
   styleUrls: ['./criteria-page.component.scss']
 })
-export class CriteriaPageComponent {
+export class CriteriaPageComponent implements OnInit{
   faFloppyDisk = faFloppyDisk;
   faPlus = faPlus;
   faTimes = faTimes;
@@ -34,6 +34,8 @@ export class CriteriaPageComponent {
   vcwId: number;
   projectId: number;
   isLoading = false;
+
+  valueType: string[] = ['Number', 'Yes/No'];
 
   useMocks: boolean;
 

@@ -40,4 +40,5 @@ export type Criteria = {
     entryTypeId: number,
     id?: number,
     isSelected: boolean,
+    valueType: string
 };

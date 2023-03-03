@@ -80,22 +80,22 @@ export class VcwPhasesService {
 
   // Phase 2b
   getCriterias(vcwId: number, projectId: number): Observable<Criteria[]> {
-    const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/Criterias`;
+    const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/criterias`;
     return this.http.get<Criteria[]>(url, this.httpOptions);
   }
 
   createCriteria(vcwId: number, projectId: number, CriteriaData: Criteria): Observable<any> {
-    const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/Criterias`;
+    const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/criterias`;
     return this.http.post(url, CriteriaData, this.httpOptions);
   }
 
   editCriteria(vcwId: number, projectId: number, CriteriaId: number, CriteriaData: Criteria): Observable<Criteria> {
-    const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/Criterias/${CriteriaId}`;
+    const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/criterias/${CriteriaId}`;
     return this.http.put<Criteria>(url, CriteriaData, this.httpOptions);
   }
 
   deleteCriteria(vcwId: number, projectId: number, CriteriaId: number): Observable<any> {
-    const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/Criterias/${CriteriaId}`;
+    const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/criterias/${CriteriaId}`;
     return this.http.delete(url, this.httpOptions);
   }
 }

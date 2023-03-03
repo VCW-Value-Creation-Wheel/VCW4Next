@@ -75,6 +75,8 @@
     [tabFormControlsToExclude]="{'0': ['file', 'id'], '1': ['name', 'id']}"
     [fileFormFieldName]="'file'"
     [isAwaitingAction]="isLoading"
+    [checkboxes]="valueType"
+    [checkboxFormControl]="'valueType'"
     (cancel)="onCancel()"
     (confirm)="onConfirm()"
 ></app-create-item-dialog>
