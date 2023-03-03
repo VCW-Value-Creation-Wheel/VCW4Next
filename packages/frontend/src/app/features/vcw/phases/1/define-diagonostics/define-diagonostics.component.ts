@@ -82,7 +82,7 @@ export class DefineDiagonosticsComponent implements OnInit {
         });
       }, error => {
         this.snackbarService.danger('Data Fetching Error', 'Unable to check and retrieve data from the server. Try again later.')
-        .during(5000).show();
+        .during(2000).show();
       });
     }
 
@@ -131,7 +131,7 @@ export class DefineDiagonosticsComponent implements OnInit {
             this.dataFormArray.removeAt(index);
           }, error => {
             this.snackbarService.danger('Error', 'Unable to delete the requested row. Try again later.')
-            .during(5000).show();
+            .during(2000).show();
           });
         }
       }
@@ -163,12 +163,12 @@ export class DefineDiagonosticsComponent implements OnInit {
             this.dataForm.controls.swotField.disable({onlySelf: true});
             this.dataForm.controls.swotField.setValue(null);
             this.snackbarService.danger('Error', 'Unable to create new row. Try again later.')
-            .during(5000).show();
+            .during(2000).show();
           });
         }
       } else {
         this.snackbarService.danger('Error', 'Invalid data. Please review your form.')
-          .during(5000).show();
+          .during(2000).show();
       }
 
     } else {
@@ -189,12 +189,12 @@ export class DefineDiagonosticsComponent implements OnInit {
           }, error => {
             this.dataForm.controls.swotField.disable({onlySelf: true});
             this.snackbarService.danger('Error', 'Unable to save the requested changes. Try again later.')
-            .during(5000).show();
+            .during(2000).show();
           });
         }
       } else {
         this.snackbarService.danger('Error', 'Invalid data. Please review your form.')
-          .during(5000).show();
+          .during(2000).show();
       }
     }
   }
@@ -230,7 +230,7 @@ export class DefineDiagonosticsComponent implements OnInit {
           this.dataForm.controls.swotField.disable({onlySelf: true});
           this.dataForm.controls.swotField.setValue(null);
           this.snackbarService.danger('Error', 'Unable to create new row. Try again later.')
-          .during(5000).show();
+          .during(2000).show();
         });
       }
     }

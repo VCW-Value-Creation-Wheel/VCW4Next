@@ -146,7 +146,7 @@ export class PurificationPageComponent implements OnInit {
         this.ideaFormArray.push(this.ideaDataForm);
         this.simpleIdeaInputOpen = false;
         this.snackbarService.success('Success!', 'New idea added.')
-        .during(5000).show();
+        .during(2000).show();
       } else {
         this.vcwPhasesService.createDiagnostic(this.vcwId, this.projectId, this.ideaDataForm.value)
         .pipe(take(1))
@@ -154,10 +154,10 @@ export class PurificationPageComponent implements OnInit {
           this.ideaFormArray.push(this.ideaDataForm);
           this.simpleIdeaInputOpen = false;
           this.snackbarService.success('Success!', 'New idea added.')
-          .during(5000).show();
+          .during(2000).show();
         }, error => {
           this.snackbarService.danger('Error', 'Unable to create new idea. Try again later.')
-          .during(5000).show();
+          .during(2000).show();
         });
       }
     }
@@ -209,7 +209,7 @@ export class PurificationPageComponent implements OnInit {
           this.checkForExistingPair();
           this.linkedCriteriaIds = [];
           this.snackbarService.success('Success!', 'The selected idea was deleted.')
-          .during(5000).show();
+          .during(2000).show();
         } else {
           this.vcwPhasesService.deleteIdea(this.vcwId, this.projectId, ideaIdControl.value)
           .pipe(take(1))
@@ -219,10 +219,10 @@ export class PurificationPageComponent implements OnInit {
             this.checkForExistingPair();
             this.linkedCriteriaIds = [];
             this.snackbarService.success('Success!', 'The selected idea was deleted.')
-            .during(5000).show();
+            .during(2000).show();
           }, error => {
             this.snackbarService.danger('Error', 'Unable to delete idea. Try again later.')
-            .during(5000).show();
+            .during(2000).show();
           });
         }
       }
@@ -241,7 +241,7 @@ export class PurificationPageComponent implements OnInit {
         this.criteriaFormArray.push(this.criteriaDataForm);
         this.simpleCriteriaInputOpen = false;
         this.snackbarService.success('Success!', 'New criteria added.')
-        .during(5000).show();
+        .during(2000).show();
       } else {
         this.vcwPhasesService.createDiagnostic(this.vcwId, this.projectId, this.criteriaDataForm.value)
         .pipe(take(1))
@@ -249,10 +249,10 @@ export class PurificationPageComponent implements OnInit {
           this.criteriaFormArray.push(this.criteriaDataForm);
           this.simpleCriteriaInputOpen = false;
           this.snackbarService.success('Success!', 'New criteria added.')
-          .during(5000).show();
+          .during(2000).show();
         }, error => {
           this.snackbarService.danger('Error', 'Unable to create new criteria. Try again later.')
-          .during(5000).show();
+          .during(2000).show();
         });
       }
     }
@@ -284,7 +284,7 @@ export class PurificationPageComponent implements OnInit {
           this.checkForExistingPair();
           this.linkedIdeaIds = [];
           this.snackbarService.success('Success!', 'The selected criteria was deleted.')
-          .during(5000).show();
+          .during(2000).show();
         } else {
           // this.vcwPhasesService.deleteIdea(this.vcwId, this.projectId, criteriaIdControl.value)
           // .pipe(take(1))
@@ -292,7 +292,7 @@ export class PurificationPageComponent implements OnInit {
           //   this.criteriaFormArray.removeAt(index);
           // }, error => {
           //   this.snackbarService.danger('Error', 'Unable to delete criteria. Try again later.')
-          //   .during(5000).show();
+          //   .during(2000).show();
           // });
         }
       }
@@ -311,7 +311,7 @@ export class PurificationPageComponent implements OnInit {
           this.simpleIdeaInputOpen = false;
           this.isLoading = false;
           this.snackbarService.success('Success!', 'New idea added.')
-          .during(5000).show();
+          .during(2000).show();
         } else {
           this.vcwPhasesService.createIdea(this.vcwId, this.projectId, this.ideaDataForm.value)
           .pipe(take(1))
@@ -321,17 +321,17 @@ export class PurificationPageComponent implements OnInit {
             this.simpleIdeaInputOpen = false;
             this.isLoading = false;
             this.snackbarService.success('Success!', 'New idea added.')
-            .during(5000).show();
+            .during(2000).show();
           }, error => {
             this.isLoading = false;
             this.snackbarService.danger('Error', 'Unable to create new idea. Try again later.')
-            .during(5000).show();
+            .during(2000).show();
           });
         }
       } else {
         this.isLoading = false;
         this.snackbarService.danger('Error', 'Invalid data. Please review your form.')
-          .during(5000).show();
+          .during(2000).show();
       }
     } else {
       // send request to back-end. If successful, change the previous values in the form array.
@@ -342,7 +342,7 @@ export class PurificationPageComponent implements OnInit {
           this.isLoading = false;
           this.ideaFormArray.at(this.editIdeaIndex).patchValue(this.ideaDataForm.value);
           this.snackbarService.success('Success!', 'Your changes were saved.')
-          .during(5000).show();
+          .during(2000).show();
         } else {
           const id = this.ideaDataForm.controls.id.value;
           this.vcwPhasesService.editIdea(this.vcwId, this.projectId, id, this.ideaDataForm.value)
@@ -353,17 +353,17 @@ export class PurificationPageComponent implements OnInit {
             this.isLoading = false;
             this.ideaFormArray.at(this.editIdeaIndex).patchValue(this.ideaDataForm.value);
             this.snackbarService.success('Success!', 'Your changes were saved.')
-            .during(5000).show();
+            .during(2000).show();
           }, error => {
             this.isLoading = false;
             this.snackbarService.danger('Error', 'Unable to save the requested changes. Try again later.')
-            .during(5000).show();
+            .during(2000).show();
           });
         }
       } else {
         this.isLoading = false;
         this.snackbarService.danger('Error', 'Invalid data. Please review your form.')
-          .during(5000).show();
+          .during(2000).show();
       }
     }
   }
@@ -380,7 +380,7 @@ export class PurificationPageComponent implements OnInit {
           this.simpleCriteriaInputOpen = false;
           this.isLoading = false;
           this.snackbarService.success('Success!', 'New criteria added.')
-          .during(5000).show();
+          .during(2000).show();
         } else {
           // this.vcwPhasesService.createCriteria(this.vcwId, this.projectId, this.criteriaDataForm.value)
           // .pipe(take(1))
@@ -392,13 +392,13 @@ export class PurificationPageComponent implements OnInit {
           // }, error => {
           //   this.isLoading = false;
           //   this.snackbarService.danger('Error', 'Unable to create new criteria. Try again later.')
-          //   .during(5000).show();
+          //   .during(2000).show();
           // });
         }
       } else {
         this.isLoading = false;
         this.snackbarService.danger('Error', 'Invalid data. Please review your form.')
-          .during(5000).show();
+          .during(2000).show();
       }
     } else {
       // send request to back-end. If successful, change the previous values in the form array.
@@ -409,7 +409,7 @@ export class PurificationPageComponent implements OnInit {
           this.isLoading = false;
           this.criteriaFormArray.at(this.editCriteriaIndex).patchValue(this.criteriaDataForm.value);
           this.snackbarService.success('Success!', 'Your changes were saved.')
-          .during(5000).show();
+          .during(2000).show();
         } else {
           // const id = this.criteriaDataForm.controls.id.value;
           // this.vcwPhasesService.editCriteria(this.vcwId, this.projectId, id, this.criteriaDataForm.value)
@@ -422,13 +422,13 @@ export class PurificationPageComponent implements OnInit {
           // }, error => {
           //   this.isLoading = false;
           //   this.snackbarService.danger('Error', 'Unable to save the requested changes. Try again later.')
-          //   .during(5000).show();
+          //   .during(2000).show();
           // });
         }
       } else {
         this.isLoading = false;
         this.snackbarService.danger('Error', 'Invalid data. Please review your form.')
-          .during(5000).show();
+          .during(2000).show();
       }
     }
   }
@@ -491,7 +491,7 @@ export class PurificationPageComponent implements OnInit {
         this.linkedIdeaIds = [];
         this.linkedCriteriaIds = [];
         this.snackbarService.success('Success!', 'The selected pair was deleted.')
-        .during(5000).show();
+        .during(2000).show();
       }
     });
   }
@@ -506,7 +506,7 @@ export class PurificationPageComponent implements OnInit {
       this.createPairDialogOpen = false;
       this.editPairMode = false;
       this.snackbarService.success('Success!', 'Your changes were saved.')
-      .during(5000).show();
+      .during(2000).show();
     } else {
       this.pairDataForm.controls.ideaId.enable({onlySelf: true});
       this.pairDataForm.controls.ideaId.setValue(this.ideaFormArray.at(this.selectedIdeaIndex).get('id').value);
@@ -515,7 +515,7 @@ export class PurificationPageComponent implements OnInit {
       this.pairFormArray.push(this.pairDataForm);
       this.createPairDialogOpen = false;
       this.snackbarService.success('Success!', 'New pair created.')
-      .during(5000).show();
+      .during(2000).show();
     }
     this.checkForExistingPair();
     this.checkForLinkedIdeas();
