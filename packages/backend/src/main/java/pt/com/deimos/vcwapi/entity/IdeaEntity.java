@@ -26,7 +26,7 @@ public class IdeaEntity extends BaseNamedEntity{
     @JsonIgnore
     private EntryTypeEntity entryType;
 
-    @OneToMany(mappedBy = "idea")
+    @OneToMany(mappedBy = "idea", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<IdeaAndCriteriaEntity> ideasAndCriterias;
 

@@ -1,6 +1,7 @@
 package pt.com.deimos.vcwapi.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,18 +14,12 @@ import java.time.LocalDateTime;
 @Table(name = "idea_and_criteria")
 public class IdeaAndCriteriaEntity extends BaseEntity{
 
-    @Column(name = "idea_id", nullable = false)
-    private Long ideaId;
-
-    @Column(name = "criteria_id", nullable = false)
-    private Long criteriaId;
-
     @Column
     private Float value;
 
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     @Column(name = "value_updated_at")
-    private LocalDateTime ValueUpdatedAt;
+    private LocalDateTime valueUpdatedAt;
 
     @Column(name="vcf_result")
     private Boolean vcfResult;
@@ -34,14 +29,14 @@ public class IdeaAndCriteriaEntity extends BaseEntity{
 
 
     @ManyToOne(optional = false)
-    @JoinColumn(name="idea_id", referencedColumnName = "id", insertable=false, updatable=false)
+    @JoinColumn(name="idea_id", referencedColumnName = "id")
     private IdeaEntity idea;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name="criteria_id", referencedColumnName = "id", insertable=false, updatable=false)
+    @JoinColumn(name="criteria_id", referencedColumnName = "id")
     private CriteriaEntity criteria;
 
-    @ManyToOne
-    @JoinColumn(name="source_id", referencedColumnName = "id", insertable=false, updatable=false)
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="source_id", referencedColumnName = "id")
     private SourceEntity source;
 }
