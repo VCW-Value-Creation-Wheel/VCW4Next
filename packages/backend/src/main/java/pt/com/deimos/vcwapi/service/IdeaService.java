@@ -77,7 +77,10 @@ public class IdeaService {
   }
 
   public IdeaEntity update(IdeaEntity oldIdea, IdeaDTO editedInfo) {
+
     BeanUtils.copyProperties(editedInfo, oldIdea);
+    SourceEntity oldSource = oldIdea.getSource();
+    BeanUtils.copyProperties(editedInfo.getSource(), oldSource);
     return this.ideaRepository.save(oldIdea);
   }
 

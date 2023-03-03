@@ -29,7 +29,7 @@ public class CriteriaEntity extends BaseNamedEntity{
     @JsonIgnore
     private EntryTypeEntity entryType;
 
-    @OneToMany(mappedBy = "criteria")
+    @OneToMany(mappedBy = "criteria", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<IdeaAndCriteriaEntity> ideasAndCriterias;
 

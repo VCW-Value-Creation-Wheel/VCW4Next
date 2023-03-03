@@ -79,6 +79,8 @@ public class CriteriaService {
 
   public CriteriaEntity update(CriteriaEntity oldCriteria, CriteriaDTO editedInfo) {
     BeanUtils.copyProperties(editedInfo, oldCriteria);
+    SourceEntity oldSource = oldCriteria.getSource();
+    BeanUtils.copyProperties(editedInfo.getSource(), oldSource);
     return this.criteriaRepository.save(oldCriteria);
   }
 
