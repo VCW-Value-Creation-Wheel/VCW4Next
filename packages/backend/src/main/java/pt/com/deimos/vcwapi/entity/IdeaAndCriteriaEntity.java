@@ -1,6 +1,7 @@
 package pt.com.deimos.vcwapi.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,13 +14,12 @@ import java.time.LocalDateTime;
 @Table(name = "idea_and_criteria")
 public class IdeaAndCriteriaEntity extends BaseEntity{
 
-
     @Column
     private Float value;
 
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     @Column(name = "value_updated_at")
-    private LocalDateTime ValueUpdatedAt;
+    private LocalDateTime valueUpdatedAt;
 
     @Column(name="vcf_result")
     private Boolean vcfResult;

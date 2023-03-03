@@ -72,7 +72,7 @@ public class IdeaAndCriteriaController {
     Optional<IdeaAndCriteriaEntity> criteriaEntityOptional = this.ideaAndCriteriaService.findById(id);
 
     if(criteriaEntityOptional.isEmpty()) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Criteria not found");
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Idea and Criteria pair not found");
     }
 
     return ResponseEntity.status(HttpStatus.OK).body(
@@ -94,7 +94,7 @@ public class IdeaAndCriteriaController {
             this.ideaAndCriteriaService.findById(id);
 
     if(ideaAndCriteriaEntityOptional.isEmpty()) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Criteria not found");
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Idea and Criteria pair not found");
     }
 
     this.ideaAndCriteriaService.delete(ideaAndCriteriaEntityOptional.get());

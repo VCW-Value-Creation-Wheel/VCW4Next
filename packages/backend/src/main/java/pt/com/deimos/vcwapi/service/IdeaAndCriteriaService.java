@@ -7,7 +7,10 @@ import pt.com.deimos.vcwapi.dto.CriteriaDTO;
 import pt.com.deimos.vcwapi.dto.IdeaAndCriteriaDTO;
 import pt.com.deimos.vcwapi.entity.*;
 import pt.com.deimos.vcwapi.exceptions.BadRequestException;
+import pt.com.deimos.vcwapi.exceptions.NotFoundException;
+import pt.com.deimos.vcwapi.repository.CriteriaRepository;
 import pt.com.deimos.vcwapi.repository.IdeaAndCriteriaRepository;
+import pt.com.deimos.vcwapi.repository.IdeaRepository;
 import pt.com.deimos.vcwapi.repository.ProjectRepository;
 
 import java.time.LocalDateTime;
@@ -20,10 +23,18 @@ public class IdeaAndCriteriaService {
   private final IdeaAndCriteriaRepository ideaAndCriteriaRepository;
   private final ProjectRepository projectRepository;
 
-  public IdeaAndCriteriaService(ProjectRepository projectRepository,
-                                IdeaAndCriteriaRepository ideaAndCriteriaRepository) {
+  private final IdeaRepository ideaRepository;
+
+  private final CriteriaRepository criteriaRepository;
+
+  public IdeaAndCriteriaService(IdeaAndCriteriaRepository ideaAndCriteriaRepository,
+                                ProjectRepository projectRepository,
+                                IdeaRepository ideaRepository,
+                                CriteriaRepository criteriaRepository) {
     this.ideaAndCriteriaRepository = ideaAndCriteriaRepository;
     this.projectRepository = projectRepository;
+    this.ideaRepository = ideaRepository;
+    this.criteriaRepository = criteriaRepository;
   }
 
   public Optional<ProjectEntity> findProjectByIdAndUser(Long project_id, String userId) {
@@ -41,21 +52,25 @@ public class IdeaAndCriteriaService {
 
   public IdeaAndCriteriaEntity save(String userId, IdeaAndCriteriaDTO ideaAndCriteriaDTO) {
 
+    //validate idea and criteria id
     IdeaAndCriteriaEntity newIaC = new IdeaAndCriteriaEntity();
     newIaC.setCreatedBy(userId);
     newIaC.setUpdatedBy(userId);
     newIaC.setValue(ideaAndCriteriaDTO.getValue());
-    newIaC.setValueUpdatedAt(LocalDateTime.now());
 
-    //link to idea
-    IdeaEntity i = new IdeaEntity();
-    i.setId(ideaAndCriteriaDTO.getIdeaId());
-    newIaC.setIdea(i);
+    //link to idea, I check first if it still exists in case
+    //we end up having people editing at the same time in the future
+    Optional<IdeaEntity> i = this.ideaRepository.findById(ideaAndCriteriaDTO.getIdeaId());
+    if (i.isEmpty())
+      throw new NotFoundException("Idea not found.");
+    newIaC.setIdea(i.get());
 
-    //link to criteria
-    CriteriaEntity c = new CriteriaEntity();
-    c.setId(ideaAndCriteriaDTO.getCriteriaId());
-    newIaC.setCriteria(c);
+    //link to idea, I check first if it still exists in case
+    //we end up having people editing at the same time in the future
+    Optional<CriteriaEntity> c = this.criteriaRepository.findById(ideaAndCriteriaDTO.getCriteriaId());
+    if (c.isEmpty())
+      throw new NotFoundException("Criteria not found.");
+    newIaC.setCriteria(c.get());
 
     // create/connect to source
     //NOTE: Currently we are creating a source everytime, which causes repeated sources
@@ -74,7 +89,10 @@ public class IdeaAndCriteriaService {
 
   public IdeaAndCriteriaEntity update(IdeaAndCriteriaEntity oldIdeaAndCriteria,
                                       IdeaAndCriteriaDTO editedInfo) {
+
     BeanUtils.copyProperties(editedInfo, oldIdeaAndCriteria);
+    SourceEntity oldSource = oldIdeaAndCriteria.getSource();
+    BeanUtils.copyProperties(editedInfo.getSource(), oldSource);
     return this.ideaAndCriteriaRepository.save(oldIdeaAndCriteria);
   }
 
