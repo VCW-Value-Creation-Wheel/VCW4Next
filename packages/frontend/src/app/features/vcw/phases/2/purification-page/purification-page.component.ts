@@ -290,14 +290,16 @@ export class PurificationPageComponent implements OnInit {
           this.snackbarService.success('Success!', 'The selected criteria was deleted.')
           .during(2000).show();
         } else {
-          // this.vcwPhasesService.deleteIdea(this.vcwId, this.projectId, criteriaIdControl.value)
-          // .pipe(take(1))
-          // .subscribe(response => {
-          //   this.criteriaFormArray.removeAt(index);
-          // }, error => {
-          //   this.snackbarService.danger('Error', 'Unable to delete criteria. Try again later.')
-          //   .during(2000).show();
-          // });
+          this.vcwPhasesService.deleteCriteria(this.vcwId, this.projectId, criteriaIdControl.value)
+          .pipe(take(1))
+          .subscribe(response => {
+            this.criteriaFormArray.removeAt(index);
+            this.snackbarService.success('Success!', 'The selected criteria was deleted.')
+            .during(2000).show();
+          }, error => {
+            this.snackbarService.danger('Error', 'Unable to delete criteria. Try again later.')
+            .during(2000).show();
+          });
         }
       }
     });
@@ -386,18 +388,20 @@ export class PurificationPageComponent implements OnInit {
           this.snackbarService.success('Success!', 'New criteria added.')
           .during(2000).show();
         } else {
-          // this.vcwPhasesService.createCriteria(this.vcwId, this.projectId, this.criteriaDataForm.value)
-          // .pipe(take(1))
-          // .subscribe(response => {
-          //   this.criteriaFormArray.push(this.criteriaDataForm);
-          //   this.criteriaItemDialogOpen = false;
-          //   this.simpleCriteriaInputOpen = false;
-          //   this.isLoading = false;
-          // }, error => {
-          //   this.isLoading = false;
-          //   this.snackbarService.danger('Error', 'Unable to create new criteria. Try again later.')
-          //   .during(2000).show();
-          // });
+          this.vcwPhasesService.createCriteria(this.vcwId, this.projectId, this.criteriaDataForm.value)
+          .pipe(take(1))
+          .subscribe(response => {
+            this.criteriaFormArray.push(this.criteriaDataForm);
+            this.criteriaItemDialogOpen = false;
+            this.simpleCriteriaInputOpen = false;
+            this.isLoading = false;
+            this.snackbarService.success('Success!', 'New criteria added.')
+            .during(2000).show();
+          }, error => {
+            this.isLoading = false;
+            this.snackbarService.danger('Error', 'Unable to create new criteria. Try again later.')
+            .during(2000).show();
+          });
         }
       } else {
         this.isLoading = false;
@@ -415,19 +419,21 @@ export class PurificationPageComponent implements OnInit {
           this.snackbarService.success('Success!', 'Your changes were saved.')
           .during(2000).show();
         } else {
-          // const id = this.criteriaDataForm.controls.id.value;
-          // this.vcwPhasesService.editCriteria(this.vcwId, this.projectId, id, this.criteriaDataForm.value)
-          // .pipe(take(1))
-          // .subscribe(response => {
-          //   this.editCriteriaMode = false;
-          //   this.criteriaItemDialogOpen = false;
-          //   this.isLoading = false;
-          //   this.criteriaFormArray.at(this.editCriteriaIndex).patchValue(this.criteriaDataForm.value);
-          // }, error => {
-          //   this.isLoading = false;
-          //   this.snackbarService.danger('Error', 'Unable to save the requested changes. Try again later.')
-          //   .during(2000).show();
-          // });
+          const id = this.criteriaDataForm.controls.id.value;
+          this.vcwPhasesService.editCriteria(this.vcwId, this.projectId, id, this.criteriaDataForm.value)
+          .pipe(take(1))
+          .subscribe(response => {
+            this.editCriteriaMode = false;
+            this.criteriaItemDialogOpen = false;
+            this.isLoading = false;
+            this.criteriaFormArray.at(this.editCriteriaIndex).patchValue(this.criteriaDataForm.value);
+            this.snackbarService.success('Success!', 'Your changes were saved.')
+            .during(2000).show();
+          }, error => {
+            this.isLoading = false;
+            this.snackbarService.danger('Error', 'Unable to save the requested changes. Try again later.')
+            .during(2000).show();
+          });
         }
       } else {
         this.isLoading = false;
