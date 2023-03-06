@@ -19,3 +19,12 @@ export const createIdeasConfig = {
     sourceUrl: [null],
     id: [null]
 };
+
+export const createCriteriasConfig = {
+    name: [null, Validators.required],
+    file: [null, Validators.required],
+    sourceName: [null],
+    sourceUrl: [null],
+    id: [null],
+    valueType: ['Number', Validators.required]
+};

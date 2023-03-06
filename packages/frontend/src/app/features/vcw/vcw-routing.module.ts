@@ -7,6 +7,7 @@ import { DefineDiagonosticsComponent } from './phases/1/define-diagonostics/defi
 import { SelectIdeasComponent } from './phases/3/select-ideas/select-ideas.component';
 import { CreateIdeasComponent } from './phases/2/create-ideas/create-ideas.component';
 import { VcwPageComponent } from './vcw-page/vcw-page.component';
+import { CriteriaPageComponent } from './phases/2/criteria-page/criteria-page.component';
 
 const routes: Routes = [
     {
@@ -24,6 +25,10 @@ const routes: Routes = [
     {
         path: ':vcw_id/phases/2a',
         component: CreateIdeasComponent
+    },
+    {
+        path: ':vcw_id/phases/2b',
+        component: CriteriaPageComponent
     },
     {
         path: ':vcw_id/phases/3a',
