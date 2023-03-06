@@ -100,12 +100,16 @@ export class CriteriaPageComponent implements OnInit{
       if (this.useMocks) {
         this.dataFormArray.push(this.dataForm);
         this.simpleInputOpen = false;
+        this.snackbarService.success('Success!', 'New criteria added.')
+        .during(2000).show();
       } else {
         this.vcwPhasesService.createDiagnostic(this.vcwId, this.projectId, this.dataForm.value)
         .pipe(take(1))
         .subscribe(response => {
           this.dataFormArray.push(this.dataForm);
           this.simpleInputOpen = false;
+          this.snackbarService.success('Success!', 'New criteria added.')
+          .during(2000).show();
         }, error => {
           this.dataForm.controls.swotField.disable({onlySelf: true});
           this.dataForm.controls.swotField.setValue(null);
@@ -137,6 +141,8 @@ export class CriteriaPageComponent implements OnInit{
           this.itemDialogOpen = false;
           this.simpleInputOpen = false;
           this.isLoading = false;
+          this.snackbarService.success('Success!', 'New criteria added.')
+          .during(2000).show();
         } else {
           this.vcwPhasesService.createCriteria(this.vcwId, this.projectId, this.dataForm.value)
           .pipe(take(1))
@@ -145,6 +151,8 @@ export class CriteriaPageComponent implements OnInit{
             this.itemDialogOpen = false;
             this.simpleInputOpen = false;
             this.isLoading = false;
+            this.snackbarService.success('Success!', 'New criteria added.')
+            .during(2000).show();
           }, error => {
             this.isLoading = false;
             this.snackbarService.danger('Error', 'Unable to create new Criteria. Try again later.')
@@ -164,6 +172,8 @@ export class CriteriaPageComponent implements OnInit{
           this.itemDialogOpen = false;
           this.isLoading = false;
           this.dataFormArray.at(this.editCriteriaIndex).patchValue(this.dataForm.value);
+          this.snackbarService.success('Success!', 'Your changes were saved.')
+          .during(2000).show();
         } else {
           const id = this.dataForm.controls.id.value;
           this.vcwPhasesService.editCriteria(this.vcwId, this.projectId, id, this.dataForm.value)
@@ -173,6 +183,8 @@ export class CriteriaPageComponent implements OnInit{
             this.itemDialogOpen = false;
             this.isLoading = false;
             this.dataFormArray.at(this.editCriteriaIndex).patchValue(this.dataForm.value);
+            this.snackbarService.success('Success!', 'Your changes were saved.')
+            .during(2000).show();
           }, error => {
             this.isLoading = false;
             this.dataForm.controls.swotField.disable({onlySelf: true});
@@ -206,11 +218,15 @@ export class CriteriaPageComponent implements OnInit{
       if (userConfirm) {
         if (this.useMocks) {
           this.dataFormArray.removeAt(index);
+          this.snackbarService.success('Success!', 'The selected criteria was deleted.')
+          .during(2000).show();
         } else {
           this.vcwPhasesService.deleteCriteria(this.vcwId, this.projectId, CriteriaIdControl.value)
           .pipe(take(1))
           .subscribe(response => {
             this.dataFormArray.removeAt(index);
+            this.snackbarService.success('Success!', 'The selected criteria was deleted.')
+            .during(2000).show();
           }, error => {
             this.snackbarService.danger('Error', 'Unable to delete Criteria. Try again later.')
             .during(5000).show();

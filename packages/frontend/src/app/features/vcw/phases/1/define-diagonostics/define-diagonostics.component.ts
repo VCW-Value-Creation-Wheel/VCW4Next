@@ -124,11 +124,15 @@ export class DefineDiagonosticsComponent implements OnInit {
       if (userConfirm) {
         if (this.useMocks) {
           this.dataFormArray.removeAt(index);
+          this.snackbarService.success('Success!', 'The selected row was deleted.')
+          .during(2000).show();
         } else {
           this.vcwPhasesService.deleteDiagnostic(this.vcwId, this.projectId, rowIdControl.value)
           .pipe(take(1))
           .subscribe(response => {
             this.dataFormArray.removeAt(index);
+            this.snackbarService.success('Success!', 'The selected row was deleted.')
+            .during(2000).show();
           }, error => {
             this.snackbarService.danger('Error', 'Unable to delete the requested row. Try again later.')
             .during(2000).show();
@@ -152,6 +156,8 @@ export class DefineDiagonosticsComponent implements OnInit {
           this.dataFormArray.push(this.dataForm);
           this.itemDialogOpen = false;
           this.simpleInputOpen = false;
+          this.snackbarService.success('Success!', 'New row added.')
+          .during(2000).show();
         } else {
           this.vcwPhasesService.createDiagnostic(this.vcwId, this.projectId, this.dataForm.value)
           .pipe(take(1))
@@ -159,6 +165,8 @@ export class DefineDiagonosticsComponent implements OnInit {
             this.dataFormArray.push(this.dataForm);
             this.itemDialogOpen = false;
             this.simpleInputOpen = false;
+            this.snackbarService.success('Success!', 'New row added.')
+            .during(2000).show();
           }, error => {
             this.dataForm.controls.swotField.disable({onlySelf: true});
             this.dataForm.controls.swotField.setValue(null);
@@ -178,6 +186,8 @@ export class DefineDiagonosticsComponent implements OnInit {
           this.editRowMode = false;
           this.itemDialogOpen = false;
           this.dataFormArray.at(this.editRowIndex).patchValue(this.dataForm.value);
+          this.snackbarService.success('Success!', 'Your changes were saved.')
+          .during(2000).show();
         } else {
           const id = this.dataForm.controls.id.value;
           this.vcwPhasesService.editDiagnostic(this.vcwId, this.projectId, id, this.dataForm.value)
@@ -186,6 +196,8 @@ export class DefineDiagonosticsComponent implements OnInit {
             this.editRowMode = false;
             this.itemDialogOpen = false;
             this.dataFormArray.at(this.editRowIndex).patchValue(this.dataForm.value);
+            this.snackbarService.success('Success!', 'Your changes were saved.')
+            .during(2000).show();
           }, error => {
             this.dataForm.controls.swotField.disable({onlySelf: true});
             this.snackbarService.danger('Error', 'Unable to save the requested changes. Try again later.')
@@ -220,12 +232,16 @@ export class DefineDiagonosticsComponent implements OnInit {
       if (this.useMocks) {
         this.dataFormArray.push(this.dataForm);
         this.simpleInputOpen = false;
+        this.snackbarService.success('Success!', 'New row added.')
+        .during(2000).show();
       } else {
         this.vcwPhasesService.createDiagnostic(this.vcwId, this.projectId, this.dataForm.value)
         .pipe(take(1))
         .subscribe(response => {
           this.dataFormArray.push(this.dataForm);
           this.simpleInputOpen = false;
+          this.snackbarService.success('Success!', 'New row added.')
+          .during(2000).show();
         }, error => {
           this.dataForm.controls.swotField.disable({onlySelf: true});
           this.dataForm.controls.swotField.setValue(null);
