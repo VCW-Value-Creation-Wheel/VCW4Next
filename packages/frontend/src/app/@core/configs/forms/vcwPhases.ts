@@ -34,6 +34,6 @@ export const createPairConfig = {
     ideaName: [null],
     criteriaId: [null, Validators.required],
     criteriaName: [null],
-    value: [null, Validators. required],
+    value: [null, Validators.required],
     id: [null]
 };
