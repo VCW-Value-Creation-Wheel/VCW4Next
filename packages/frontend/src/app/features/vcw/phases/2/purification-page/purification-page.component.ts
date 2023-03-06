@@ -147,6 +147,11 @@ export class PurificationPageComponent implements OnInit {
   onDirectIdeaAdd() {
     if (this.ideaDataForm.valid) {
       if (this.useMocks) {
+        if (this.ideaFormArray.length === 0) {
+          this.ideaDataForm.controls.id.setValue(1);
+        } else {
+          this.ideaDataForm.controls.id.setValue(this.ideaFormArray.at(this.ideaFormArray.length - 1).get('id').value + 1);
+        }
         this.ideaFormArray.push(this.ideaDataForm);
         this.simpleIdeaInputOpen = false;
         this.snackbarService.success('Success!', 'New idea added.')
@@ -242,6 +247,11 @@ export class PurificationPageComponent implements OnInit {
   onDirectCriteriaAdd() {
     if (this.criteriaDataForm.valid) {
       if (this.useMocks) {
+        if (this.ideaFormArray.length === 0) {
+          this.criteriaDataForm.controls.id.setValue(1);
+        } else {
+          this.criteriaDataForm.controls.id.setValue(this.criteriaFormArray.at(this.criteriaFormArray.length - 1).get('id').value + 1);
+        }
         this.criteriaFormArray.push(this.criteriaDataForm);
         this.simpleCriteriaInputOpen = false;
         this.snackbarService.success('Success!', 'New criteria added.')
@@ -312,6 +322,11 @@ export class PurificationPageComponent implements OnInit {
       // send request to back-end. On successful response, push to data form array.
       if (this.ideaDataForm.valid) {
         if (this.useMocks) {
+          if (this.ideaFormArray.length === 0) {
+            this.ideaDataForm.controls.id.setValue(1);
+          } else {
+            this.ideaDataForm.controls.id.setValue(this.ideaFormArray.at(this.ideaFormArray.length - 1).get('id').value + 1);
+          }
           this.ideaFormArray.push(this.ideaDataForm);
           this.ideaItemDialogOpen = false;
           this.simpleIdeaInputOpen = false;
@@ -381,6 +396,11 @@ export class PurificationPageComponent implements OnInit {
       // send request to back-end. On successful response, push to data form array.
       if (this.criteriaDataForm.valid) {
         if (this.useMocks) {
+          if (this.ideaFormArray.length === 0) {
+            this.criteriaDataForm.controls.id.setValue(1);
+          } else {
+            this.criteriaDataForm.controls.id.setValue(this.criteriaFormArray.at(this.criteriaFormArray.length - 1).get('id').value + 1);
+          }
           this.criteriaFormArray.push(this.criteriaDataForm);
           this.criteriaItemDialogOpen = false;
           this.simpleCriteriaInputOpen = false;
