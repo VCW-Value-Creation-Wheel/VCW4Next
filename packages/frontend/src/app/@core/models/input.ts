@@ -13,3 +13,7 @@ export interface Option {
 export interface InputEvent {
     target: HTMLInputElement;
 }
+
+export interface InputMap {
+    [key: string]: string;
+}

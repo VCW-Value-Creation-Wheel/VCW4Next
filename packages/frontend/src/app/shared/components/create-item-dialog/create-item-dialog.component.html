@@ -32,6 +32,7 @@
                     [formControlName]="field"
                     [placeholder]="formatFieldLabel(field) | titlecase"
                     *ngIf="!tabFormControlsToExclude[activeTab].includes(field)"
+                    [inputType]="getInputType(field)"
                 ></app-input>
             </ng-template>
             

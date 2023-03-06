@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, UntypedFormArray, UntypedFormGroup } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, UntypedFormArray, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { createCriteriasConfig,
   createIdeasConfig,
   createPairConfig,
+  InputMap,
   PhaseNavigationService,
   SnackbarService,
   VcwPhasesService
@@ -57,6 +58,9 @@ export class PurificationPageComponent implements OnInit {
   existingPairSelected = false;
 
   isLoading = false;
+
+  pairInputType: InputMap = {};
+  pairValueLabel: InputMap = {};
 
   actionConfirmText: string;
   actionConfirmTitle: string;
@@ -460,6 +464,7 @@ export class PurificationPageComponent implements OnInit {
         control.get('ideaId').value === selectedIdeaId
         && control.get('criteriaId').value === selectedCriteriaId) as FormGroup);
       this.editPairIndex = this.pairFormArray.controls.indexOf(this.pairDataForm);
+      this.setCriteriaValueValidators();
       this.createPairDialogOpen = true;
     } else {
       this.pairDataForm = this.formBuilder.group(createPairConfig);
@@ -467,6 +472,7 @@ export class PurificationPageComponent implements OnInit {
       this.pairDataForm.controls.ideaName.setValue(this.ideaFormArray.at(this.selectedIdeaIndex).get('name').value);
       this.pairDataForm.controls.criteriaId.setValue(this.criteriaFormArray.at(this.selectedCriteriaIndex).get('id').value);
       this.pairDataForm.controls.criteriaName.setValue(this.criteriaFormArray.at(this.selectedCriteriaIndex).get('name').value);
+      this.setCriteriaValueValidators();
       this.createPairDialogOpen = true;
     }
   }
@@ -516,6 +522,7 @@ export class PurificationPageComponent implements OnInit {
       this.createPairDialogOpen = false;
       this.snackbarService.success('Success!', 'New pair created.')
       .during(2000).show();
+      console.log(this.pairFormArray.value)
     }
     this.checkForExistingPair();
     this.checkForLinkedIdeas();
@@ -563,5 +570,17 @@ export class PurificationPageComponent implements OnInit {
     } else {
       return 'bg-blue-100';
     }
+  }
+
+  setCriteriaValueValidators() {
+    const inputType = this.criteriaFormArray.at(this.selectedCriteriaIndex).get('valueType').value === 'Number' ? 'number' : 'text';
+    if (inputType === 'number') {
+      this.pairDataForm.controls.value.setValidators([Validators.required, Validators.pattern(/[0-9]*/)]);
+      this.pairValueLabel = {value: 'Number'};
+    } else {
+      this.pairDataForm.controls.value.setValidators([Validators.required, Validators.pattern(/(\bYes\b)|(\bNo\b)/)]);
+      this.pairValueLabel = {value: 'Yes / No'};
+    }
+    this.pairInputType = {value: inputType};
   }
 }
