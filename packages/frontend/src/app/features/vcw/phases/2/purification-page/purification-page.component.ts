@@ -522,7 +522,6 @@ export class PurificationPageComponent implements OnInit {
       this.createPairDialogOpen = false;
       this.snackbarService.success('Success!', 'New pair created.')
       .during(2000).show();
-      console.log(this.pairFormArray.value)
     }
     this.checkForExistingPair();
     this.checkForLinkedIdeas();
