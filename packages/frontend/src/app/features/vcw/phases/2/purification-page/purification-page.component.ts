@@ -247,7 +247,7 @@ export class PurificationPageComponent implements OnInit {
   onDirectCriteriaAdd() {
     if (this.criteriaDataForm.valid) {
       if (this.useMocks) {
-        if (this.ideaFormArray.length === 0) {
+        if (this.criteriaFormArray.length === 0) {
           this.criteriaDataForm.controls.id.setValue(1);
         } else {
           this.criteriaDataForm.controls.id.setValue(this.criteriaFormArray.at(this.criteriaFormArray.length - 1).get('id').value + 1);
@@ -396,7 +396,7 @@ export class PurificationPageComponent implements OnInit {
       // send request to back-end. On successful response, push to data form array.
       if (this.criteriaDataForm.valid) {
         if (this.useMocks) {
-          if (this.ideaFormArray.length === 0) {
+          if (this.criteriaFormArray.length === 0) {
             this.criteriaDataForm.controls.id.setValue(1);
           } else {
             this.criteriaDataForm.controls.id.setValue(this.criteriaFormArray.at(this.criteriaFormArray.length - 1).get('id').value + 1);
