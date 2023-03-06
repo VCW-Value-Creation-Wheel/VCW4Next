@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -22,7 +23,7 @@ public class SourceEntity extends BaseNamedEntity{
 
     @OneToMany(mappedBy = "source")
     @JsonIgnore
-    private List<IdeaEntity> ideas;
+    private List<IdeaEntity> ideas = new ArrayList<>();
 
     @OneToMany(mappedBy = "source")
     @JsonIgnore
@@ -31,4 +32,7 @@ public class SourceEntity extends BaseNamedEntity{
     @OneToMany(mappedBy = "source")
     @JsonIgnore
     private List<IdeaAndCriteriaEntity> ideaAndCriteriaEntities;
+
+    public void addIdea(IdeaEntity idea){this.ideas.add(idea);
+    }
 }

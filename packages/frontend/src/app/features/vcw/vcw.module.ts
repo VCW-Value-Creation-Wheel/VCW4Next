@@ -12,6 +12,7 @@ import { VcwSprintComponent } from './vcw-page/vcw-sprint/vcw-sprint.component';
 import { SelectIdeasComponent } from './phases/3/select-ideas/select-ideas.component';
 import { CreateIdeasComponent } from './phases/2/create-ideas/create-ideas.component';
 import { PurificationPageComponent } from './phases/2/purification-page/purification-page.component';
+import { CriteriaPageComponent } from './phases/2/criteria-page/criteria-page.component';
 
 
 
@@ -26,7 +27,8 @@ import { PurificationPageComponent } from './phases/2/purification-page/purifica
     CreateIdeasComponent,
     PurificationPageComponent,
     CreateIdeasComponent,
-    SelectIdeasComponent
+    SelectIdeasComponent,
+    CriteriaPageComponent
   ],
   imports: [
     CommonModule,

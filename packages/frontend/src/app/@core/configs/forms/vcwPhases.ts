@@ -20,12 +20,13 @@ export const createIdeasConfig = {
     id: [null]
 };
 
-export const createCriteriaConfig = {
+export const createCriteriasConfig = {
     name: [null, Validators.required],
     file: [null, Validators.required],
     sourceName: [null],
     sourceUrl: [null],
-    id: [null]
+    id: [null],
+    valueType: ['Number', Validators.required]
 };
 
 export const createPairConfig = {
@@ -33,5 +34,6 @@ export const createPairConfig = {
     ideaName: [null],
     criteriaId: [null, Validators.required],
     criteriaName: [null],
-    value: [null, Validators. required]
+    value: [null, Validators. required],
+    id: [null]
 };

@@ -38,5 +38,7 @@ export type Criteria = {
     sourceName: string,
     sourceUrl: string,
     entryTypeId: number,
-    id?: number
+    id?: number,
+    isSelected: boolean,
+    valueType: string
 };

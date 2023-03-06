@@ -9,9 +9,6 @@ public class DiagnosticDTO {
 
     public enum SwotField {strength, weakness, opportunity, threat};
 
-    @NotNull
-    private Long vcwId;
-
     @ValueOfEnum(enumClass = SwotField.class)
     private String swotField;
 

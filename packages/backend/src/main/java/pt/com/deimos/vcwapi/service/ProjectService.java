@@ -3,7 +3,6 @@ package pt.com.deimos.vcwapi.service;
 import io.minio.errors.MinioException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -12,13 +11,19 @@ import pt.com.deimos.vcwapi.dto.ProjectHasUserRoleDTO;
 import pt.com.deimos.vcwapi.entity.FileEntity;
 import pt.com.deimos.vcwapi.entity.ProjectEntity;
 import pt.com.deimos.vcwapi.entity.ProjectHasUserRoleEntity;
+import pt.com.deimos.vcwapi.entity.RoleEntity;
+import pt.com.deimos.vcwapi.exceptions.BadRequestException;
+import pt.com.deimos.vcwapi.exceptions.InternalErrorException;
+import pt.com.deimos.vcwapi.exceptions.NotFoundException;
 import pt.com.deimos.vcwapi.repository.ProjectRepository;
+import pt.com.deimos.vcwapi.repository.RoleRepository;
 
 import java.io.InputStream;
-import java.net.ConnectException;
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+
 
 @Transactional
 @Service
@@ -26,184 +31,68 @@ public class ProjectService {
 
     private final ProjectRepository projectRepository;
 
-    @Autowired
-    private MinioService minioService;
-
     public ProjectService(ProjectRepository projectRepository) {
+
         this.projectRepository = projectRepository;
     }
 
-    public Pair<Iterable<ProjectEntity>,String> findAll() {
-
-        Iterable<ProjectEntity> resultList = this.projectRepository.findAll();
-
-        //generate image urls
-        List<ProjectEntity> returnList = new ArrayList<>();
-        try{
-
-            for  (ProjectEntity project : resultList) {
-                returnList.add(generateThumbnailUrl(project));
-            }
-        }catch (Exception e){
-            String message = "Failed to generate thumbnail url due to "+e.getMessage();
-            return Pair.of(returnList, message);
-        }
-
-        return Pair.of(returnList, "");
+    public Iterable<ProjectEntity> findAll() throws MinioException {
+        return this.projectRepository.findAll();
     }
 
-    public Pair<Optional<ProjectEntity>,String> findById(Long id) {
+    public Optional<ProjectEntity> findById(Long id) throws MinioException {
 
         Optional<ProjectEntity> result = this.projectRepository.findById(id);
 
-        //generate image url
-        try {
-            if (!result.isEmpty())
-                result = Optional.of(generateThumbnailUrl(result.get()));
-        }catch (Exception e){
-            String message = "Failed to generate thumbnail url due to "+e.getMessage();
-            return Pair.of(result, message);
-        }
+        if (result.isEmpty())
+            throw new NotFoundException("Project does not exist.");
 
-        return Pair.of(result, "");
+        return result;
     }
 
-    public Pair<Iterable<ProjectEntity>,String> findByUser(String userId) {
-
-        Iterable<ProjectEntity> resultList =
-                this.projectRepository.findByProjectHasUserRoleEntitiesUserInum(userId);
-
-        //generate image urls
-        List<ProjectEntity> returnList = new ArrayList<>();
-        try{
-
-            for  (ProjectEntity project : resultList) {
-                returnList.add(generateThumbnailUrl(project));
-            }
-        }catch (Exception e){
-            String message = "Failed to generate thumbnail url due to "+e.getMessage();
-            return Pair.of(returnList, message);
-        }
-
-        return Pair.of(returnList, "");
-
+    public Iterable<ProjectEntity> findByUser(String userId) throws MinioException {
+        return this.projectRepository.findByProjectHasUserRoleEntitiesUserInum(userId);
     }
 
-    public Pair<Optional<ProjectEntity>,String> findByIdAndUser(Long id, String userId) {
+    public Optional<ProjectEntity> findByIdAndUser(Long id, String userId) {
 
         Optional<ProjectEntity> result = this.projectRepository.findByIdAndProjectHasUserRoleEntitiesUserInum(id, userId);
-        String message = "";
 
-        //generate image url
-        try {
-            if (!result.isEmpty())
-                result = Optional.of(generateThumbnailUrl(result.get()));
-        }catch (Exception e){
-            message = "Failed to generate thumbnail url due to "+e;
-        }
+        if (result.isEmpty())
+            throw new NotFoundException("Project does not exist.");
 
-        return Pair.of(result, message);
+        return result;
     }
 
-    public Pair<ProjectEntity,String> save(ProjectDTO projectInfo, MultipartFile thumbnail, String userId) {
+    public ProjectEntity save(ProjectDTO projectInfo, String userId) {
 
         ProjectEntity newProject = new ProjectEntity(userId, userId,
                 projectInfo.getName(), projectInfo.getDescription(),
                 projectInfo.getLang());
 
-        // connect users and roles
-        for (ProjectHasUserRoleDTO user : projectInfo.getProjectUsers()) {
-            ProjectHasUserRoleEntity userRole = new ProjectHasUserRoleEntity(
-                    userId, userId, user.getRoleId(), user.getUserId());
-            userRole.setProject(newProject);
-            newProject.addProjectHasUserRole(userRole);
-        }
+        //save user as project coordinator
+        ProjectHasUserRoleEntity userRole = new ProjectHasUserRoleEntity();
+        userRole.setUserInum(userId);
+        userRole.setCreatedBy(userId);
+        userRole.setUpdatedBy(userId);
+        RoleEntity proxy = new RoleEntity();
+        proxy.setId(1L);
+        userRole.setRole(proxy);
+
+        userRole.setProject(newProject);
+        newProject.addProjectHasUserRole(userRole);
 
         newProject = this.projectRepository.save(newProject);
         if (newProject == null ) {
-            return Pair.of(newProject, "Failed to save project.");
+            throw new BadRequestException("Failed to save project.");
         }
 
-        // add thumbnail to project if it exists
-        if (thumbnail != null){
-            try{
-            FileEntity newThumbnail = processThumbnail(userId, thumbnail);
-            newProject.setFileThumbnail(newThumbnail);}
-            catch (Exception e){
-                return Pair.of(newProject, e.getMessage());
-            }
-        }
 
-        return Pair.of(newProject, "");
+        return newProject;
     }
 
     public void delete(ProjectEntity projectEntity) {
         this.projectRepository.delete(projectEntity);
     }
 
-    private FileEntity processThumbnail(String creatorId, MultipartFile thumbnail) throws IllegalArgumentException, MinioException, ConnectException {
-
-        String imageName, fileExtension, imgPath="";
-        InputStream imageContent = null;
-        int imageSize = 0;
-
-        try {
-            imageName = thumbnail.getOriginalFilename();
-            imageContent = thumbnail.getInputStream();
-            String[] splitName = imageName.toString().split("\\.", 2);
-            fileExtension = splitName[1];
-            imageName = splitName[0];
-            imageSize = imageContent.available();
-
-            // hash filename to avoid issues with files with same name
-            String finalName = this.minioService.getHashedFileName(imageName) + "." + fileExtension;
-            imgPath = "assets/img/" + finalName;
-        }
-        catch (Exception e){
-            throw new IllegalArgumentException("Failed to process thumbnail: invalid filename");
-        }
-
-
-        //check if thumbnail is valid
-        if (this.minioService.validateImageSize(imageSize) == false)
-            throw new IllegalArgumentException("Failed to process thumbnail: " +
-                    "image size is too big. Size should be under "+
-                    this.minioService.MAX_IMAGE_SIZE_MB+" MB");
-
-        if (this.minioService.validateImageFileExt(fileExtension) == false)
-            throw new IllegalArgumentException("Failed to process thumbnail: " +
-                    "invalid file extension. File should be "+
-                    java.util.Arrays.asList(MinioService.ValidImageTypes.values()));
-
-
-        // save thumbnail into minio
-        try {
-            this.minioService.uploadFile(imgPath, imageContent);
-        } catch (Exception e) {
-            throw new MinioException("Failed to save thumbnail image in Minio due to error: "+e);
-        }
-
-        // set file thumbnail
-        FileEntity newThumbnail = new FileEntity(creatorId, creatorId, imageName,
-                imgPath, "img/"+fileExtension);
-        return newThumbnail;
-    }
-
-    private ProjectEntity generateThumbnailUrl(ProjectEntity project) throws MinioException {
-
-        ProjectEntity tempProject = new ProjectEntity();
-        BeanUtils.copyProperties(project, tempProject);
-        FileEntity thumbnail = project.getFileThumbnail();
-
-
-        if (thumbnail != null) {
-            FileEntity tempThumbnail = new FileEntity();
-            BeanUtils.copyProperties(thumbnail, tempThumbnail);
-            String url = this.minioService.getDownloadUrl(tempThumbnail.getPath());
-            tempThumbnail.setPath(url);
-            tempProject.setFileThumbnail(tempThumbnail);
-        }
-
-        return tempProject;
-    }
 }

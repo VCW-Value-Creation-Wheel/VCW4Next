@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, UntypedFormArray, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { createCriteriaConfig,
+import { createCriteriasConfig,
   createIdeasConfig,
   createPairConfig,
   PhaseNavigationService,
@@ -97,7 +97,7 @@ export class PurificationPageComponent implements OnInit {
       });
       this.mockService.getCriteria().pipe(take(1)).subscribe((criteria) => {
         criteria.forEach(c => {
-          this.criteriaFormArray.push(this.formBuilder.group(createCriteriaConfig));
+          this.criteriaFormArray.push(this.formBuilder.group(createCriteriasConfig));
           this.criteriaFormArray.at(this.criteriaFormArray.length - 1).patchValue(c);
         });
       });
@@ -230,7 +230,7 @@ export class PurificationPageComponent implements OnInit {
   }
 
   onAddCriteria() {
-    this.criteriaDataForm = this.formBuilder.group(createCriteriaConfig);
+    this.criteriaDataForm = this.formBuilder.group(createCriteriasConfig);
     this.simpleCriteriaInputOpen = true;
     this.criteriaDataForm.controls.file.disable({onlySelf: true});
   }
@@ -265,7 +265,7 @@ export class PurificationPageComponent implements OnInit {
   editCriteria(index: number) {
     this.editCriteriaMode = true;
     this.criteriaItemDialogOpen = true;
-    this.criteriaDataForm = this.formBuilder.group(createCriteriaConfig);
+    this.criteriaDataForm = this.formBuilder.group(createCriteriasConfig);
     this.criteriaDataForm.patchValue(this.criteriaFormArray.at(index).value);
     this.editCriteriaIndex = index;
   }

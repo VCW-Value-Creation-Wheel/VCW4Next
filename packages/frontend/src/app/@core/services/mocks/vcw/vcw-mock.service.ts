@@ -7,6 +7,7 @@ import { filter, map } from 'rxjs/operators';
 const ServiceUrl = 'assets/mocks/vcws.json';
 
 const ideasUrl = 'assets/mocks/ideas.json';
+const criteriasUrl = 'assets/mocks/criterias.json';
 const swotUrl = 'assets/mocks/swot.json';
 const criteriaUrl = 'assets/mocks/criteria.json';
 
@@ -41,6 +42,10 @@ export class VcwMockService {
 
   public getIdeas(): Observable<Idea[]> {
     return this.http.get<Idea[]>(ideasUrl);
+  }
+
+  public getCriterias(): Observable<Criteria[]> {
+    return this.http.get<Criteria[]>(criteriasUrl);
   }
 
   getSwotFieldRows(): Observable<SwotFieldRow[]> {
