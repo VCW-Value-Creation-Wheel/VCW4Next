@@ -27,7 +27,6 @@ export class FilterService {
   }
 
   public onSearch( type: string, value?: string) {
-    // console.log(value)
     if (value){
       this.filters = {...this.filters, [type]: value};
       this.onFilterChange({id: type, value: this.filters[type]});

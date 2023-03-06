@@ -27,9 +27,15 @@ const vcwPhasesNavigation: VCWPhase = {
     },
     '2b': {
         id: '2b',
-        name: 'Criterias',
+        name: 'Criteria',
         previousPhaseId: '2a',
         nextPhaseId: '2c'
+    },
+    '2c': {
+        id: '2c',
+        name: 'Purification',
+        previousPhaseId: '2b',
+        nextPhaseId: '3a'
     },
     '3a': {
         id: '3a',

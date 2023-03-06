@@ -1,0 +1,135 @@
+<div class="flex flex-row gap-8 mx-4 pt-16 grid grid-cols-2 md:mx-64 lg:mx-80">
+    <div class="flex flex-col col-span-1 gap-4">
+        <span class="text-xl font-bold text-primary">Ideas</span>
+        <ng-container *ngFor="let idea of ideaFormArray.controls; index as idx">
+            <app-list-item
+                [isEditable]="true"
+                [isSelectable]="true"
+                [value]="idea.controls.name?.value"
+                [icon]="getIcon(idea.controls.sourceName)"
+                [isSelected]="selectedIdeaIndex === idx"
+                (selectChange)="onIdeaSelect(idx)"
+                (editClick)="editIdea(idx)"
+                (deleteClick)="deleteIdea(idx, idea.controls.name, idea.controls.id)"
+                [mainBgColor]="getIdeaMainColor(idea.controls.id)"
+            ></app-list-item>
+        </ng-container>
+        <app-simple-item-input
+            *ngIf="simpleIdeaInputOpen"
+            [simpleInterface]="true"
+            [dataForm]="ideaDataForm"
+            [placeholderText]="'Type an idea here...'"
+            (addClicked)="onDirectIdeaAdd()"
+            (cancelClicked)="onCancel()"
+            (openDialogClicked)="onOpenIdeaDialog()"
+            (keyPressed)="onKeyPress($event)"
+        ></app-simple-item-input>
+        <app-button
+            *ngIf="!simpleIdeaInputOpen"
+            (buttonClick)="onAddIdea()"
+            [label]="'New Idea'"
+            [leftIcon]="faPlus"
+            [isDisabled]="selectedIdeaIndex !== undefined && selectedCriteriaIndex !== undefined"
+        ></app-button>
+    </div>
+    <div class="flex flex-col col-span-1 gap-4">
+        <span class="text-xl font-bold text-primary">Criteria</span>
+        <ng-container *ngFor="let criteria of criteriaFormArray.controls; index as idx">
+            <app-list-item
+                [isEditable]="true"
+                [isSelectable]="true"
+                [value]="criteria.controls.name?.value"
+                [icon]="getIcon(criteria.controls.sourceName)"
+                [isSelected]="selectedCriteriaIndex === idx"
+                (selectChange)="onCriteriaSelect(idx)"
+                (editClick)="editCriteria(idx)"
+                (deleteClick)="deleteCriteria(idx, criteria.controls.name, criteria.controls.id)"
+                [mainBgColor]="getCriteriaMainColor(criteria.controls.id)"
+            ></app-list-item>
+        </ng-container>
+        <app-simple-item-input
+            *ngIf="simpleCriteriaInputOpen"
+            [simpleInterface]="true"
+            [dataForm]="criteriaDataForm"
+            [placeholderText]="'Type a criteria here...'"
+            (addClicked)="onDirectCriteriaAdd()"
+            (cancelClicked)="onCancel()"
+            (openDialogClicked)="onOpenCriteriaDialog()"
+            (keyPressed)="onKeyPress($event)"
+        ></app-simple-item-input>
+        <app-button
+            class="ml-auto"
+            *ngIf="!simpleCriteriaInputOpen"
+            (buttonClick)="onAddCriteria()"
+            [label]="'New Criteria'"
+            [leftIcon]="faPlus"
+            [isDisabled]="selectedIdeaIndex !== undefined && selectedCriteriaIndex !== undefined"
+        ></app-button>
+    </div>
+    <div class="flex justify-center col-span-2 gap-4">
+        <app-button
+            [isDisabled]="!(selectedIdeaIndex !== undefined && selectedCriteriaIndex !== undefined)"
+            (buttonClick)="createEditPair()"
+            [label]="(selectedIdeaIndex !== undefined
+                && selectedCriteriaIndex !== undefined
+                && existingPairSelected) ?  'Edit Pair' : 'Create Pair'"
+        ></app-button>
+        <app-button
+            [isDisabled]="!(selectedIdeaIndex !== undefined && selectedCriteriaIndex !== undefined) || !existingPairSelected"
+            (buttonClick)="deletePair()"
+            [label]="'Delete Pair'"
+            [isDangerous]="true"
+        ></app-button>
+    </div>
+    
+</div>
+
+<app-create-item-dialog
+    *ngIf="ideaItemDialogOpen"
+    [isEditing]="editIdeaMode"
+    [formGroup]="ideaDataForm"
+    [title]="editIdeaMode ? 'Edit Idea': 'New Idea'"
+    [tabs] = "['Manual', 'From File']"
+    [tabFormControlsToExclude]="{'0': ['file', 'id'], '1': ['name', 'id']}"
+    [fileFormFieldName]="'file'"
+    [isAwaitingAction]="isLoading"
+    (cancel)="onCancel()"
+    (confirm)="onIdeaConfirm()"
+></app-create-item-dialog>
+
+<app-create-item-dialog
+    *ngIf="criteriaItemDialogOpen"
+    [isEditing]="editCriteriaMode"
+    [formGroup]="criteriaDataForm"
+    [title]="editCriteriaMode ? 'Edit Criteria': 'New Criteria'"
+    [tabs] = "['Manual', 'From File']"
+    [tabFormControlsToExclude]="{'0': ['file', 'id'], '1': ['name', 'id']}"
+    [fileFormFieldName]="'file'"
+    [isAwaitingAction]="isLoading"
+    [checkboxes]="['Number', 'Yes/No']"
+    [checkboxFormControl]="'valueType'"
+    (cancel)="onCancel()"
+    (confirm)="onCriteriaConfirm()"
+></app-create-item-dialog>
+
+<app-create-item-dialog
+    *ngIf="createPairDialogOpen"
+    [isEditing]="editPairMode"
+    [formGroup]="pairDataForm"
+    [title]="editPairMode ? 'Edit Pair': 'New Pair'"
+    [tabFormControlsToExclude]="{'0': ['ideaId', 'criteriaId', 'id']}"
+    [isAwaitingAction]="isLoading"
+    [inputTypes]="pairInputType"
+    [inputHelperLabel]="pairValueLabel"
+    (cancel)="onCancel()"
+    (confirm)="onPairConfirm()"
+></app-create-item-dialog>
+
+<app-dialog
+    *ngIf="confirmDialogOpen"
+    [title]="actionConfirmTitle"
+    [confirmText]="'Yes'"
+    [cancelText]="'No'"
+    (cancel)="onActionCancel()"
+    (confirm)="onActionConfirm()"
+>{{ actionConfirmText }}</app-dialog>

@@ -28,3 +28,12 @@ export const createCriteriasConfig = {
     id: [null],
     valueType: ['Number', Validators.required]
 };
+
+export const createPairConfig = {
+    ideaId: [null, Validators.required],
+    ideaName: [null],
+    criteriaId: [null, Validators.required],
+    criteriaName: [null],
+    value: [null, Validators.required],
+    id: [null]
+};

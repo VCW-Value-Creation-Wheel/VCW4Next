@@ -53,7 +53,7 @@ export class ChallengeComponent implements OnInit {
         }
       }, error => {
         this.snackbarService.danger('Data Fetching Error', 'Unable to check and retrieve data from the server. Try again later.')
-          .during(5000).show();
+          .during(2000).show();
       });
     }
   }
@@ -64,20 +64,20 @@ export class ChallengeComponent implements OnInit {
         this.vcwPhasesService.editChallenge(this.vcwId, this.projectId, this.dataForm.controls.challenge.value)
         .pipe(take(1))
         .subscribe(response => {
-          this.snackbarService.success('Success!', 'Your changes were saved.').during(5000).show();
+          this.snackbarService.success('Success!', 'Your changes were saved.').during(2000).show();
         }, error => {
           this.snackbarService.danger('Error', 'Unable to save your changes. Please try again later.')
-          .during(5000).show();
+          .during(2000).show();
         });
       } else {
         this.vcwPhasesService.createChallenge(this.vcwId, this.projectId, this.dataForm.controls.challenge.value)
         .pipe(take(1))
         .subscribe(response => {
           this.isEditing = true;
-          this.snackbarService.success('Success!', 'Your changes were saved.').during(5000).show();
+          this.snackbarService.success('Success!', 'Your changes were saved.').during(2000).show();
         }, error => {
           this.snackbarService.danger('Error', 'Unable to save your changes. Please try again later.')
-          .during(5000).show();
+          .during(2000).show();
         });
       }
     }

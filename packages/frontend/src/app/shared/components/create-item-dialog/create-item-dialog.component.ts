@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, UntypedFormGroup } from '@angular/forms';
-import { Option } from '@core';
+import { InputMap, Option } from '@core';
 
 @Component({
   selector: 'app-create-item-dialog',
@@ -19,6 +19,8 @@ export class CreateItemDialogComponent implements OnInit {
   @Input() checkboxFormControl?: string;
   @Input() checkboxCategoryLabel?: string;
   @Input() isAwaitingAction = false;
+  @Input() inputTypes: InputMap = {};
+  @Input() inputHelperLabel: InputMap = {};
 
   @Output() cancel = new EventEmitter();
   @Output() confirm = new EventEmitter();
@@ -48,7 +50,11 @@ export class CreateItemDialogComponent implements OnInit {
   }
 
   formatFieldLabel(fieldName: string): string {
-    return fieldName.split(/(?=[A-Z])/).join(' ');
+    if (this.inputHelperLabel[fieldName]) {
+      return fieldName.split(/(?=[A-Z])/).join(' ') + ` (${this.inputHelperLabel[fieldName]})`;
+    } else {
+      return fieldName.split(/(?=[A-Z])/).join(' ');
+    }
   }
 
   isTabActive(index: number): boolean {
@@ -114,6 +120,14 @@ export class CreateItemDialogComponent implements OnInit {
     controls.forEach(control => {
       this.formGroup.controls[control].setValue(this.originalFormValues[control]);
     });
+  }
+
+  getInputType(fieldName: string): string {
+    if (this.inputTypes[fieldName]) {
+      return this.inputTypes[fieldName];
+    } else {
+      return 'text';
+    }
   }
 
 }
