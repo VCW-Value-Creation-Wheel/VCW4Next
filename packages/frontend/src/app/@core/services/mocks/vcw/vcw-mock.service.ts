@@ -9,7 +9,6 @@ const ServiceUrl = 'assets/mocks/vcws.json';
 const ideasUrl = 'assets/mocks/ideas.json';
 const criteriasUrl = 'assets/mocks/criterias.json';
 const swotUrl = 'assets/mocks/swot.json';
-const criteriaUrl = 'assets/mocks/criteria.json';
 
 @Injectable({
   providedIn: 'root'
@@ -50,9 +49,5 @@ export class VcwMockService {
 
   getSwotFieldRows(): Observable<SwotFieldRow[]> {
     return this.http.get<SwotFieldRow[]>(swotUrl);
-  }
-
-  public getCriteria(): Observable<Criteria[]> {
-    return this.http.get<Criteria[]>(criteriaUrl);
   }
 }

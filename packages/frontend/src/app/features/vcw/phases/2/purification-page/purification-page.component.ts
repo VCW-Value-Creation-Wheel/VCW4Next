@@ -95,7 +95,7 @@ export class PurificationPageComponent implements OnInit {
           this.ideaFormArray.at(this.ideaFormArray.length - 1).patchValue(i);
         });
       });
-      this.mockService.getCriteria().pipe(take(1)).subscribe((criteria) => {
+      this.mockService.getCriterias().pipe(take(1)).subscribe((criteria) => {
         criteria.forEach(c => {
           this.criteriaFormArray.push(this.formBuilder.group(createCriteriasConfig));
           this.criteriaFormArray.at(this.criteriaFormArray.length - 1).patchValue(c);

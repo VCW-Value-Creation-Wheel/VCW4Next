@@ -104,6 +104,8 @@
     [tabFormControlsToExclude]="{'0': ['file', 'id'], '1': ['name', 'id']}"
     [fileFormFieldName]="'file'"
     [isAwaitingAction]="isLoading"
+    [checkboxes]="['Number', 'Yes/No']"
+    [checkboxFormControl]="'valueType'"
     (cancel)="onCancel()"
     (confirm)="onCriteriaConfirm()"
 ></app-create-item-dialog>
@@ -113,7 +115,7 @@
     [isEditing]="editPairMode"
     [formGroup]="pairDataForm"
     [title]="editPairMode ? 'Edit Pair': 'New Pair'"
-    [tabFormControlsToExclude]="{'0': ['ideaId', 'criteriaId']}"
+    [tabFormControlsToExclude]="{'0': ['ideaId', 'criteriaId', 'id']}"
     [isAwaitingAction]="isLoading"
     (cancel)="onCancel()"
     (confirm)="onPairConfirm()"
