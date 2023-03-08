@@ -9,10 +9,15 @@ export interface VCW {
 }
 
 export interface SwotFieldRow {
-    categoryId: number;
-    title: string;
+    swotField: string;
+    name: string;
     description: string;
     id?: number;
+    createdAt: string;
+    updatedAt: string;
+    updatedBy: string;
+    createdBy: string;
+    vcwId: number;
 }
 
 export interface VCWPhase {

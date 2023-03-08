@@ -39,7 +39,7 @@ export class ProjectListComponent implements OnInit {
       this.projectsService.getProjects().pipe(take(1)).subscribe((projects) => {
         projects.forEach((proj) => {
           this.setProjectThumbnail(proj.id);
-        })
+        });
       });
     }
   }
