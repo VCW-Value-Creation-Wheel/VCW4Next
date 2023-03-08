@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Project } from '@core';
+import { Project, Thumbnail } from '@core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 
@@ -31,6 +31,11 @@ export class ProjectsService {
   getProjectById(projectId: number): Observable<Project> {
     const url = `${this.projectsBaseUrl}/${projectId}`;
     return this.http.get<Project>(url, this.httpOptions);
+  }
+
+  getProjectThumbnail(projectId: number): Observable<Thumbnail> {
+    const url = `${this.projectsBaseUrl}/${projectId}/thumbnails`;
+    return this.http.get<Thumbnail>(url, this.httpOptions);
   }
 
 }

@@ -18,6 +18,7 @@
         <app-project-card
             [project]="project"
             (clickEvent)="onProjectClick($event)"
+            [photoUrl]="getProjectThumbnail(project.id)"
         ></app-project-card>
     </div>
 </div>
