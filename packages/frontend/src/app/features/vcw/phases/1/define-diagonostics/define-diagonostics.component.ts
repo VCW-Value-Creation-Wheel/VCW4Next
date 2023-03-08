@@ -206,12 +206,18 @@ export class DefineDiagonosticsComponent implements OnInit {
           this.snackbarService.success('Success!', 'Your changes were saved.')
           .during(2000).show();
         } else {
-          const id = this.dataForm.controls.id.value;
+          this.dataForm.controls.id.enable({onlySelf: true});
+          this.dataForm.controls.swotField.setValue(
+            this.swotfieldNames[this.dataFormArray.at(this.editRowIndex).get('swotField').value]
+          );
+          const id = this.dataFormArray.at(this.editRowIndex).get('id').value;
+          this.dataForm.controls.id.setValue(id);
           this.vcwPhasesService.editDiagnostic(this.vcwId, this.projectId, id, this.dataForm.value)
           .pipe(take(1))
           .subscribe(response => {
             this.editRowMode = false;
             this.itemDialogOpen = false;
+            this.dataForm.controls.swotField.setValue(this.swotfieldTabNumbers[response.swotField]);
             this.dataFormArray.at(this.editRowIndex).patchValue(this.dataForm.value);
             this.snackbarService.success('Success!', 'Your changes were saved.')
             .during(2000).show();
