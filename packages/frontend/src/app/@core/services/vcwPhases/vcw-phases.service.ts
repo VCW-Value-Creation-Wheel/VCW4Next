@@ -26,9 +26,9 @@ export class VcwPhasesService {
     return this.http.get<SwotFieldRow[]>(url, this.httpOptions);
   }
 
-  createDiagnostic(vcwId: number, projectId: number, diagnosticData: SwotFieldRow): Observable<any> {
+  createDiagnostic(vcwId: number, projectId: number, diagnosticData: SwotFieldRow): Observable<SwotFieldRow> {
     const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/diagnostics`;
-    return this.http.post(url, diagnosticData, this.httpOptions);
+    return this.http.post<SwotFieldRow>(url, diagnosticData, this.httpOptions);
   }
 
   deleteDiagnostic(vcwId: number, projectId: number, diagnosticId: number): Observable<any> {
