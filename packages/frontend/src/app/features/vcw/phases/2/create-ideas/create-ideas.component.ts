@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, UntypedFormArray, UntypedFormGroup } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, UntypedFormArray, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   createIdeasConfig,
   PhaseNavigationService,
   SnackbarService,
+  sourceConfig,
   VcwPhasesService
 } from '@core';
 import { VcwMockService } from '@core/services/mocks/vcw/vcw-mock.service';
@@ -77,7 +78,9 @@ export class CreateIdeasComponent implements OnInit {
     if (!this.useMocks) {
       this.vcwPhasesService.getIdeas(this.vcwId, this.projectId).pipe(take(1)).subscribe(data => {
         data.forEach(dataItem => {
-          this.dataFormArray.push(this.formBuilder.group(createIdeasConfig));
+          const dataForm = this.formBuilder.group(createIdeasConfig);
+          dataForm.controls.source.setValue(this.formBuilder.group(sourceConfig));
+          this.dataFormArray.push(dataForm);
           this.dataFormArray.at(this.dataFormArray.length - 1).patchValue(dataItem);
         });
       }, error => {
@@ -115,7 +118,8 @@ export class CreateIdeasComponent implements OnInit {
         this.snackbarService.success('Success!', 'New idea added.')
         .during(2000).show();
       } else {
-        this.vcwPhasesService.createDiagnostic(this.vcwId, this.projectId, this.dataForm.value)
+        this.dataForm.controls.entryTypeId.setValue(1);
+        this.vcwPhasesService.createIdea(this.vcwId, this.projectId, this.dataForm.value)
         .pipe(take(1))
         .subscribe(response => {
           this.dataFormArray.push(this.dataForm);
@@ -131,6 +135,7 @@ export class CreateIdeasComponent implements OnInit {
   }
 
   onOpenDialog() {
+    this.dataForm.controls.source = this.formBuilder.group(sourceConfig);
     this.itemDialogOpen = true;
   }
 
@@ -245,11 +250,19 @@ export class CreateIdeasComponent implements OnInit {
     });
   }
 
-  getIcon(ideaSourceControl: AbstractControl): IconDefinition {
-    if (ideaSourceControl?.value) {
+  getIcon(ideaSourceControl: FormGroup): IconDefinition {
+    if (ideaSourceControl && ideaSourceControl.controls?.name.value) {
       return faGlobe;
     } else {
       return faUser;
+    }
+  }
+
+  getEntryTypeId(ideaSourceControl: FormGroup): number {
+    if (ideaSourceControl?.controls.name.value) {
+      return 3;
+    } else {
+      return 1;
     }
   }
 

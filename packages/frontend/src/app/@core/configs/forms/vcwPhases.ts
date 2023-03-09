@@ -15,8 +15,8 @@ export const challengeConfig = {
 export const createIdeasConfig = {
     name: [null, Validators.required],
     file: [null, Validators.required],
-    sourceName: [null],
-    sourceUrl: [null],
+    entryTypeId: [null],
+    source: [null],
     id: [null]
 };
 
@@ -27,6 +27,11 @@ export const createCriteriasConfig = {
     sourceUrl: [null],
     id: [null],
     valueType: ['Number', Validators.required]
+};
+
+export const sourceConfig = {
+    name: [null],
+    url: [null]
 };
 
 export const createPairConfig = {
