@@ -8,6 +8,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import pt.com.deimos.vcwapi.dto.DiagnosticDTO;
+import pt.com.deimos.vcwapi.dto.SelectedDTO;
 import pt.com.deimos.vcwapi.entity.VcwHasIdeaEntity;
 import pt.com.deimos.vcwapi.entity.ProjectEntity;
 import pt.com.deimos.vcwapi.exceptions.NotFoundException;
@@ -44,7 +45,7 @@ public class VcwHasIdeaController {
           @AuthenticationPrincipal Jwt principal,
           @PathVariable(value = "project_id") Long projectId,
           @PathVariable Long id,
-          @RequestBody @NotNull Boolean selected
+          @RequestBody @Valid SelectedDTO selected
   ) {
 
     Optional<ProjectEntity> project =
@@ -58,7 +59,7 @@ public class VcwHasIdeaController {
     }
 
     return ResponseEntity.status(HttpStatus.OK).body(
-            this.vcwHasIdeaService.update(vcwHasIdeaEntityOptional.get(), selected));
+            this.vcwHasIdeaService.update(vcwHasIdeaEntityOptional.get(), selected.getSelected()));
   }
       
 }

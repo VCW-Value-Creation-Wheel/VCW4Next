@@ -13,4 +13,6 @@ public class IdeaDTO {
     private Long entryTypeId;
 
     private SourceDTO source;
+
+    private Boolean selected;
 }
