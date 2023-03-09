@@ -1351,6 +1351,105 @@ paths:
           required: true
           schema:
             type: boolean
+  /projects/{project_id}/vcws/{vcw_id}/selectedCriterias:
+    get:
+      tags:
+        - 3b Select criterias page
+      summary: Shows vcw criterias 🟢
+      description: TODO
+      operationId: getAll
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                example: [{
+                  "id": 1,
+                  "vcwId": 1,
+                  "selected": false,
+                  "type": null,
+                  "ranking": null,
+                  "weight": null,
+                  "intervalMin": null,
+                  "intervalMax": null
+                },
+                  {
+                    "id": 3,
+                    "vcwId": 1,
+                    "selected": false,
+                    "type": null,
+                    "ranking": null,
+                    "weight": null,
+                    "intervalMin": null,
+                    "intervalMax": null
+                  }]
+        '404':
+          description: VcwHasCriteria not found
+          content:
+            'text/plain; charset=utf-8':
+              schema:
+                type: string
+                example: 'VcwHasCriteria not found'
+  /projects/{project_id}/vcws/{vcw_id}/selectedCriterias/{vcw_criteria_id}:
+    put:
+      tags:
+        - 3b Select criterias page
+      summary: Changes the selected status of the idea to true or false. 🟢
+      description: TODO
+      operationId: update
+      responses:
+        '201':
+          description: Edited VcwHasCriteria
+          content:
+            application/json:
+              schema:
+                type: string
+                example: {
+                  "id": 1,
+                  "vcwId": 1,
+                  "selected": true,
+                  "type": null,
+                  "ranking": null,
+                  "weight": null,
+                  "intervalMin": null,
+                  "intervalMax": null
+                }
+        '400':
+          description: Invalid arguments
+          content:
+            application/json:
+              example: {
+                "timestamp": "2023-01-31T12:03:11.417+00:00",
+                "status": 400,
+                "error": "Bad Request",
+                "trace": "...MethodArgumentNotValidException: Validation failed for..."}
+      parameters:
+        - name: project_id
+          in: path
+          description: "project id"
+          required: true
+          schema:
+            type: integer
+        - name: vcw_id
+          in: path
+          description: "vcw id"
+          required: true
+          schema:
+            type: integer
+        - name: vcw_criteria_id
+          in: path
+          description: "vcw criteria id"
+          required: true
+          schema:
+            type: integer
+        - name: selected
+          in: formData
+          description: True if criteria is selected, false if not.
+          required: true
+          schema:
+            type: boolean
 
 
 
