@@ -122,6 +122,7 @@ export class CreateIdeasComponent implements OnInit {
         this.vcwPhasesService.createIdea(this.vcwId, this.projectId, this.dataForm.value)
         .pipe(take(1))
         .subscribe(response => {
+          this.dataForm.controls.id.setValue(response.id);
           this.dataFormArray.push(this.dataForm);
           this.simpleInputOpen = false;
           this.snackbarService.success('Success!', 'New idea added.')
@@ -159,9 +160,13 @@ export class CreateIdeasComponent implements OnInit {
           this.snackbarService.success('Success!', 'New idea added.')
           .during(2000).show();
         } else {
+          this.dataForm.controls.entryTypeId.enable({onlySelf: true});
+          this.dataForm.controls.entryTypeId.setValue(this.getEntryTypeId(this.dataForm.controls.source as FormGroup));
+          this.checkNullSource();
           this.vcwPhasesService.createIdea(this.vcwId, this.projectId, this.dataForm.value)
           .pipe(take(1))
           .subscribe(response => {
+            this.dataForm.controls.id.setValue(response.id);
             this.dataFormArray.push(this.dataForm);
             this.itemDialogOpen = false;
             this.simpleInputOpen = false;
@@ -170,6 +175,7 @@ export class CreateIdeasComponent implements OnInit {
             .during(2000).show();
           }, error => {
             this.isLoading = false;
+            this.dataForm.controls.source = this.formBuilder.group(sourceConfig);
             this.snackbarService.danger('Error', 'Unable to create new idea. Try again later.')
             .during(2000).show();
           });
@@ -190,7 +196,11 @@ export class CreateIdeasComponent implements OnInit {
           this.snackbarService.success('Success!', 'Your changes were saved.')
           .during(2000).show();
         } else {
-          const id = this.dataForm.controls.id.value;
+          this.dataForm.controls.id.enable({onlySelf: true});
+          const id = this.dataFormArray.at(this.editIdeaIndex).get('id').value;
+          this.dataForm.controls.id.setValue(id);
+          this.dataForm.controls.entryTypeId.enable({onlySelf: true});
+          this.dataForm.controls.entryTypeId.setValue(this.getEntryTypeId(this.dataForm.controls.source as FormGroup));
           this.vcwPhasesService.editIdea(this.vcwId, this.projectId, id, this.dataForm.value)
           .pipe(take(1))
           .subscribe(response => {
@@ -218,6 +228,7 @@ export class CreateIdeasComponent implements OnInit {
     this.editIdeaMode = true;
     this.itemDialogOpen = true;
     this.dataForm = this.formBuilder.group(createIdeasConfig);
+    this.dataForm.controls.source = this.formBuilder.group(sourceConfig);
     this.dataForm.patchValue(this.dataFormArray.at(index).value);
     this.editIdeaIndex = index;
   }
@@ -259,7 +270,7 @@ export class CreateIdeasComponent implements OnInit {
   }
 
   getEntryTypeId(ideaSourceControl: FormGroup): number {
-    if (ideaSourceControl?.controls.name.value) {
+    if (ideaSourceControl && ideaSourceControl.controls?.name.value) {
       return 3;
     } else {
       return 1;
@@ -277,6 +288,13 @@ export class CreateIdeasComponent implements OnInit {
   onKeyPress(event: KeyboardEvent) {
     if (event.key === 'Enter') {
       this.onDirectAdd();
+    }
+  }
+
+  checkNullSource() {
+    if (this.dataForm.controls.source.value.name === null || this.dataForm.controls.source.value.name === '') {
+      this.dataForm.controls.source = this.formBuilder.control(null);
+      this.dataForm.updateValueAndValidity();
     }
   }
 }
