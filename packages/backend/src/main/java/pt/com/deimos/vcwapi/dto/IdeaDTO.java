@@ -14,5 +14,4 @@ public class IdeaDTO {
 
     private SourceDTO source;
 
-    private Boolean selected;
 }
