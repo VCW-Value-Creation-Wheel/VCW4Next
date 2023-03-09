@@ -27,13 +27,28 @@
                 ></app-input-file>
             </ng-container>
             <ng-template #normalInput>
-                <app-input
-                    [label]="formatFieldLabel(field) | titlecase"
-                    [formControlName]="field"
-                    [placeholder]="formatFieldLabel(field) | titlecase"
-                    *ngIf="!tabFormControlsToExclude[activeTab].includes(field)"
-                    [inputType]="getInputType(field)"
-                ></app-input>
+                <ng-container *ngIf="!hasNestedForm(field); else nestedInput">
+                    <app-input
+                        [label]="formatFieldLabel(field) | titlecase"
+                        [formControlName]="field"
+                        [placeholder]="formatFieldLabel(field) | titlecase"
+                        *ngIf="!tabFormControlsToExclude[activeTab].includes(field)"
+                        [inputType]="getInputType(field)"
+                    ></app-input>
+                </ng-container>
+                <ng-template #nestedInput>
+                    <div [formGroupName]="field">
+                        <ng-container *ngFor="let nestedField of getNestedFields(field)">
+                            <app-input
+                                [label]="formatFieldLabel(field + ' ' + nestedField) | titlecase"
+                                [formControlName]="nestedField"
+                                [placeholder]="formatFieldLabel(field + ' ' + nestedField) | titlecase"
+                                *ngIf="!tabFormControlsToExclude[activeTab].includes(nestedField)"
+                                [inputType]="getInputType(nestedField)"
+                            ></app-input>
+                        </ng-container>
+                    </div>
+                </ng-template>
             </ng-template>
             
         </ng-container>
