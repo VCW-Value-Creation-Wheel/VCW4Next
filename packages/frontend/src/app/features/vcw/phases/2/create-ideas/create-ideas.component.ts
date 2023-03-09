@@ -76,6 +76,7 @@ export class CreateIdeasComponent implements OnInit {
     this.projectId = parseInt(this.activatedRoute.snapshot.paramMap.get('project_id'), 10);
 
     if (!this.useMocks) {
+      this.isLoading = true;
       this.vcwPhasesService.getIdeas(this.vcwId, this.projectId).pipe(take(1)).subscribe(data => {
         data.forEach(dataItem => {
           const dataForm = this.formBuilder.group(createIdeasConfig);
@@ -83,6 +84,7 @@ export class CreateIdeasComponent implements OnInit {
           this.dataFormArray.push(dataForm);
           this.dataFormArray.at(this.dataFormArray.length - 1).patchValue(dataItem);
         });
+        this.isLoading = false;
       }, error => {
         this.snackbarService.danger('Data Fetching Error', 'Unable to check and retrieve data from the server. Try again later.')
         .during(2000).show();
@@ -196,11 +198,10 @@ export class CreateIdeasComponent implements OnInit {
           this.snackbarService.success('Success!', 'Your changes were saved.')
           .during(2000).show();
         } else {
-          this.dataForm.controls.id.enable({onlySelf: true});
           const id = this.dataFormArray.at(this.editIdeaIndex).get('id').value;
-          this.dataForm.controls.id.setValue(id);
           this.dataForm.controls.entryTypeId.enable({onlySelf: true});
           this.dataForm.controls.entryTypeId.setValue(this.getEntryTypeId(this.dataForm.controls.source as FormGroup));
+          this.checkNullSource();
           this.vcwPhasesService.editIdea(this.vcwId, this.projectId, id, this.dataForm.value)
           .pipe(take(1))
           .subscribe(response => {
@@ -212,6 +213,7 @@ export class CreateIdeasComponent implements OnInit {
             .during(2000).show();
           }, error => {
             this.isLoading = false;
+            this.dataForm.controls.source = this.formBuilder.group(sourceConfig);
             this.snackbarService.danger('Error', 'Unable to save the requested changes. Try again later.')
             .during(2000).show();
           });
@@ -261,8 +263,8 @@ export class CreateIdeasComponent implements OnInit {
     });
   }
 
-  getIcon(ideaSourceControl: FormGroup): IconDefinition {
-    if (ideaSourceControl && ideaSourceControl.controls?.name.value) {
+  getIcon(entryTypeId: number): IconDefinition {
+    if (entryTypeId === 3) {
       return faGlobe;
     } else {
       return faUser;

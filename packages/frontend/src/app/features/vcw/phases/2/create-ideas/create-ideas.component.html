@@ -14,7 +14,7 @@
             [value]="idea.controls.name?.value"
             (editClick)="editIdea(idx)"
             (deleteClick)="deleteIdea(idx, idea.controls.name, idea.controls.id)"
-            [icon]="getIcon(idea.controls.source)"
+            [icon]="getIcon(idea.controls.entryTypeId.value)"
         ></app-list-item>
     </ng-container>
     <app-simple-item-input
@@ -30,6 +30,7 @@
         (buttonClick)="onAddIdea()"
         [label]="'New Idea'"
         [leftIcon]="faPlus"
+        [isDisabled]="isLoading"
         *ngIf="!simpleInputOpen"
     ></app-button>
 </div>
