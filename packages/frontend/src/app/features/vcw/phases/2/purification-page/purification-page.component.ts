@@ -7,6 +7,7 @@ import { createCriteriasConfig,
   InputMap,
   PhaseNavigationService,
   SnackbarService,
+  sourceConfig,
   VcwPhasesService
 } from '@core';
 import { VcwMockService } from '@core/services/mocks/vcw/vcw-mock.service';
@@ -104,6 +105,33 @@ export class PurificationPageComponent implements OnInit {
           this.criteriaFormArray.push(this.formBuilder.group(createCriteriasConfig));
           this.criteriaFormArray.at(this.criteriaFormArray.length - 1).patchValue(c);
         });
+      });
+    } else {
+      this.isLoading = true;
+      this.vcwPhasesService.getIdeas(this.vcwId, this.projectId).pipe(take(1)).subscribe(data => {
+        data.forEach(dataItem => {
+          const dataForm = this.formBuilder.group(createIdeasConfig);
+          dataForm.controls.source.setValue(this.formBuilder.group(sourceConfig));
+          this.ideaFormArray.push(dataForm);
+          this.ideaFormArray.at(this.ideaFormArray.length - 1).patchValue(dataItem);
+        });
+        this.isLoading = false;
+      }, error => {
+        this.snackbarService.danger('Data Fetching Error', 'Unable to check and retrieve data from the server. Try again later.')
+        .during(2000).show();
+      });
+
+      this.vcwPhasesService.getCriterias(this.vcwId, this.projectId).pipe(take(1)).subscribe(data => {
+        data.forEach(dataItem => {
+          const dataForm = this.formBuilder.group(createCriteriasConfig);
+          dataForm.controls.source.setValue(this.formBuilder.group(sourceConfig));
+          this.criteriaFormArray.push(dataForm);
+          this.criteriaFormArray.at(this.criteriaFormArray.length - 1).patchValue(dataItem);
+        });
+        this.isLoading = false;
+      }, error => {
+        this.snackbarService.danger('Data Fetching Error', 'Unable to check and retrieve data from the server. Try again later.')
+        .during(2000).show();
       });
     }
   }
