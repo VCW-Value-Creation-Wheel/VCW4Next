@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, UntypedFormArray, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { createCriteriasConfig,
+import { CheckboxItemInput, createCriteriasConfig,
   createIdeasConfig,
   createPairConfig,
   InputMap,
@@ -62,6 +62,17 @@ export class PurificationPageComponent implements OnInit {
 
   pairInputType: InputMap = {};
   pairValueLabel: InputMap = {};
+
+  valueType: CheckboxItemInput[] = [
+    {
+      value: 'number',
+      label: 'Number'
+    },
+    {
+      value: 'yes_or_no',
+      label: 'Yes/No'
+    }
+  ];
 
   actionConfirmText: string;
   actionConfirmTitle: string;
@@ -136,8 +147,8 @@ export class PurificationPageComponent implements OnInit {
     }
   }
 
-  getIcon(ideaSourceControl: AbstractControl): IconDefinition {
-    if (ideaSourceControl?.value) {
+  getIcon(entryTypeId: number): IconDefinition {
+    if (entryTypeId === 3) {
       return faGlobe;
     } else {
       return faUser;
@@ -185,9 +196,10 @@ export class PurificationPageComponent implements OnInit {
         this.snackbarService.success('Success!', 'New idea added.')
         .during(2000).show();
       } else {
-        this.vcwPhasesService.createDiagnostic(this.vcwId, this.projectId, this.ideaDataForm.value)
+        this.vcwPhasesService.createIdea(this.vcwId, this.projectId, this.ideaDataForm.value)
         .pipe(take(1))
         .subscribe(response => {
+          this.ideaDataForm.controls.id.setValue(response.id);
           this.ideaFormArray.push(this.ideaDataForm);
           this.simpleIdeaInputOpen = false;
           this.snackbarService.success('Success!', 'New idea added.')
@@ -201,6 +213,7 @@ export class PurificationPageComponent implements OnInit {
   }
 
   onOpenIdeaDialog() {
+    this.ideaDataForm.controls.source = this.formBuilder.group(sourceConfig);
     this.ideaItemDialogOpen = true;
   }
 
@@ -228,6 +241,7 @@ export class PurificationPageComponent implements OnInit {
     this.editIdeaMode = true;
     this.ideaItemDialogOpen = true;
     this.ideaDataForm = this.formBuilder.group(createIdeasConfig);
+    this.ideaDataForm.controls.source = this.formBuilder.group(sourceConfig);
     this.ideaDataForm.patchValue(this.ideaFormArray.at(index).value);
     this.editIdeaIndex = index;
   }
@@ -288,6 +302,7 @@ export class PurificationPageComponent implements OnInit {
         this.vcwPhasesService.createDiagnostic(this.vcwId, this.projectId, this.criteriaDataForm.value)
         .pipe(take(1))
         .subscribe(response => {
+          this.criteriaDataForm.controls.id.setValue(response.id);
           this.criteriaFormArray.push(this.criteriaDataForm);
           this.simpleCriteriaInputOpen = false;
           this.snackbarService.success('Success!', 'New criteria added.')
@@ -301,6 +316,7 @@ export class PurificationPageComponent implements OnInit {
   }
 
   onOpenCriteriaDialog() {
+    this.criteriaDataForm.controls.source = this.formBuilder.group(sourceConfig);
     this.criteriaItemDialogOpen = true;
   }
 
@@ -308,6 +324,7 @@ export class PurificationPageComponent implements OnInit {
     this.editCriteriaMode = true;
     this.criteriaItemDialogOpen = true;
     this.criteriaDataForm = this.formBuilder.group(createCriteriasConfig);
+    this.criteriaDataForm.controls.source = this.formBuilder.group(sourceConfig);
     this.criteriaDataForm.patchValue(this.criteriaFormArray.at(index).value);
     this.editCriteriaIndex = index;
   }
@@ -362,9 +379,13 @@ export class PurificationPageComponent implements OnInit {
           this.snackbarService.success('Success!', 'New idea added.')
           .during(2000).show();
         } else {
+          this.ideaDataForm.controls.entryTypeId.enable({onlySelf: true});
+          this.ideaDataForm.controls.entryTypeId.setValue(this.getEntryTypeId(this.ideaDataForm.controls.source as FormGroup));
+          this.checkNullSource(this.ideaDataForm);
           this.vcwPhasesService.createIdea(this.vcwId, this.projectId, this.ideaDataForm.value)
           .pipe(take(1))
           .subscribe(response => {
+            this.ideaDataForm.controls.id.setValue(response.id);
             this.ideaFormArray.push(this.ideaDataForm);
             this.ideaItemDialogOpen = false;
             this.simpleIdeaInputOpen = false;
@@ -393,7 +414,10 @@ export class PurificationPageComponent implements OnInit {
           this.snackbarService.success('Success!', 'Your changes were saved.')
           .during(2000).show();
         } else {
-          const id = this.ideaDataForm.controls.id.value;
+          const id = this.ideaFormArray.at(this.editIdeaIndex).get('id').value;
+          this.ideaDataForm.controls.entryTypeId.enable({onlySelf: true});
+          this.ideaDataForm.controls.entryTypeId.setValue(this.getEntryTypeId(this.ideaDataForm.controls.source as FormGroup));
+          this.checkNullSource(this.ideaDataForm);
           this.vcwPhasesService.editIdea(this.vcwId, this.projectId, id, this.ideaDataForm.value)
           .pipe(take(1))
           .subscribe(response => {
@@ -436,9 +460,13 @@ export class PurificationPageComponent implements OnInit {
           this.snackbarService.success('Success!', 'New criteria added.')
           .during(2000).show();
         } else {
+          this.criteriaDataForm.controls.entryTypeId.enable({onlySelf: true});
+          this.criteriaDataForm.controls.entryTypeId.setValue(this.getEntryTypeId(this.criteriaDataForm.controls.source as FormGroup));
+          this.checkNullSource(this.criteriaDataForm);
           this.vcwPhasesService.createCriteria(this.vcwId, this.projectId, this.criteriaDataForm.value)
           .pipe(take(1))
           .subscribe(response => {
+            this.criteriaDataForm.controls.id.setValue(response.id);
             this.criteriaFormArray.push(this.criteriaDataForm);
             this.criteriaItemDialogOpen = false;
             this.simpleCriteriaInputOpen = false;
@@ -467,7 +495,10 @@ export class PurificationPageComponent implements OnInit {
           this.snackbarService.success('Success!', 'Your changes were saved.')
           .during(2000).show();
         } else {
-          const id = this.criteriaDataForm.controls.id.value;
+          const id = this.criteriaFormArray.at(this.editCriteriaIndex).get('id').value;
+          this.criteriaDataForm.controls.entryTypeId.enable({onlySelf: true});
+          this.criteriaDataForm.controls.entryTypeId.setValue(this.getEntryTypeId(this.criteriaDataForm.controls.source as FormGroup));
+          this.checkNullSource(this.criteriaDataForm);
           this.vcwPhasesService.editCriteria(this.vcwId, this.projectId, id, this.criteriaDataForm.value)
           .pipe(take(1))
           .subscribe(response => {
@@ -635,5 +666,20 @@ export class PurificationPageComponent implements OnInit {
       this.pairValueLabel = {value: 'Yes / No'};
     }
     this.pairInputType = {value: inputType};
+  }
+
+  checkNullSource(formGroup: UntypedFormGroup) {
+    if (formGroup.controls.source.value.name === null || formGroup.controls.source.value.name === '') {
+      formGroup.controls.source = this.formBuilder.control(null);
+      formGroup.updateValueAndValidity();
+    }
+  }
+
+  getEntryTypeId(sourceControl: FormGroup): number {
+    if (sourceControl && sourceControl.controls?.name.value) {
+      return 3;
+    } else {
+      return 1;
+    }
   }
 }
