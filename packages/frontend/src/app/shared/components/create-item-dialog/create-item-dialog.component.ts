@@ -45,7 +45,9 @@ export class CreateItemDialogComponent implements OnInit {
     if (this.isEditing) {
       controls.forEach((control) => {
         if (control === this.checkboxFormControl) {
-          this.checkedBox = this.checkboxes.indexOf(this.formGroup.controls[control].value);
+          const value = this.formGroup.controls[control].value as string;
+          const uppercaseValue = value.charAt(0).toUpperCase() + value.slice(1);
+          this.checkedBox = this.checkboxes.indexOf(uppercaseValue);
         }
         this.originalFormValues[control] = this.formGroup.controls[control].value;
       });
@@ -92,7 +94,7 @@ export class CreateItemDialogComponent implements OnInit {
 
   onCheckboxCheck(event: Option, index: number) {
     this.checkedBox = index;
-    this.formGroup.controls[this.checkboxFormControl].setValue(event.value);
+    this.formGroup.controls[this.checkboxFormControl].setValue(event.value.toLowerCase());
   }
 
   isBoxChecked(index: number): boolean {

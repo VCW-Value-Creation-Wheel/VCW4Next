@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormArray, UntypedFormGroup, FormBuilder, AbstractControl } from '@angular/forms';
+import { UntypedFormArray, UntypedFormGroup, FormBuilder, AbstractControl, FormGroup } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { PhaseNavigationService, VcwPhasesService, SnackbarService, createCriteriasConfig } from '@core';
+import { PhaseNavigationService, VcwPhasesService, SnackbarService, createCriteriasConfig, sourceConfig } from '@core';
 import { VcwMockService } from '@core/services/mocks/vcw/vcw-mock.service';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faFloppyDisk, faPlus, faTimes, faCheck, faWindowMaximize, faGlobe, faUser } from '@fortawesome/free-solid-svg-icons';
@@ -63,14 +63,18 @@ export class CriteriaPageComponent implements OnInit{
     this.projectId = parseInt(this.activatedRoute.snapshot.paramMap.get('project_id'), 10);
 
     if (!this.useMocks) {
+      this.isLoading = true;
       this.vcwPhasesService.getCriterias(this.vcwId, this.projectId).pipe(take(1)).subscribe(data => {
         data.forEach(dataItem => {
-          this.dataFormArray.push(this.formBuilder.group(createCriteriasConfig));
+          const dataForm = this.formBuilder.group(createCriteriasConfig);
+          dataForm.controls.source.setValue(this.formBuilder.group(sourceConfig));
+          this.dataFormArray.push(dataForm);
           this.dataFormArray.at(this.dataFormArray.length - 1).patchValue(dataItem);
         });
+        this.isLoading = false;
       }, error => {
         this.snackbarService.danger('Data Fetching Error', 'Unable to check and retrieve data from the server. Try again later.')
-        .during(5000).show();
+        .during(2000).show();
       });
     }
 
@@ -100,27 +104,28 @@ export class CriteriaPageComponent implements OnInit{
       if (this.useMocks) {
         this.dataFormArray.push(this.dataForm);
         this.simpleInputOpen = false;
-        this.snackbarService.success('Success!', 'New criteria added.')
+        this.snackbarService.success('Success!', 'New Criteria added.')
         .during(2000).show();
       } else {
-        this.vcwPhasesService.createDiagnostic(this.vcwId, this.projectId, this.dataForm.value)
+        this.dataForm.controls.entryTypeId.setValue(1);
+        this.vcwPhasesService.createCriteria(this.vcwId, this.projectId, this.dataForm.value)
         .pipe(take(1))
         .subscribe(response => {
+          this.dataForm.controls.id.setValue(response.id);
           this.dataFormArray.push(this.dataForm);
           this.simpleInputOpen = false;
-          this.snackbarService.success('Success!', 'New criteria added.')
+          this.snackbarService.success('Success!', 'New Criteria added.')
           .during(2000).show();
         }, error => {
-          this.dataForm.controls.swotField.disable({onlySelf: true});
-          this.dataForm.controls.swotField.setValue(null);
           this.snackbarService.danger('Error', 'Unable to create new Criteria. Try again later.')
-          .during(5000).show();
+          .during(2000).show();
         });
       }
     }
   }
 
   onOpenDialog() {
+    this.dataForm.controls.source = this.formBuilder.group(sourceConfig);
     this.itemDialogOpen = true;
   }
 
@@ -141,28 +146,33 @@ export class CriteriaPageComponent implements OnInit{
           this.itemDialogOpen = false;
           this.simpleInputOpen = false;
           this.isLoading = false;
-          this.snackbarService.success('Success!', 'New criteria added.')
+          this.snackbarService.success('Success!', 'New Criteria added.')
           .during(2000).show();
         } else {
+          this.dataForm.controls.entryTypeId.enable({onlySelf: true});
+          this.dataForm.controls.entryTypeId.setValue(this.getEntryTypeId(this.dataForm.controls.source as FormGroup));
+          this.checkNullSource();
           this.vcwPhasesService.createCriteria(this.vcwId, this.projectId, this.dataForm.value)
           .pipe(take(1))
           .subscribe(response => {
+            this.dataForm.controls.id.setValue(response.id);
             this.dataFormArray.push(this.dataForm);
             this.itemDialogOpen = false;
             this.simpleInputOpen = false;
             this.isLoading = false;
-            this.snackbarService.success('Success!', 'New criteria added.')
+            this.snackbarService.success('Success!', 'New Criteria added.')
             .during(2000).show();
           }, error => {
             this.isLoading = false;
+            this.dataForm.controls.source = this.formBuilder.group(sourceConfig);
             this.snackbarService.danger('Error', 'Unable to create new Criteria. Try again later.')
-            .during(5000).show();
+            .during(2000).show();
           });
         }
       } else {
         this.isLoading = false;
         this.snackbarService.danger('Error', 'Invalid data. Please review your form.')
-          .during(5000).show();
+          .during(2000).show();
       }
     } else {
       // send request to back-end. If successful, change the previous values in the form array.
@@ -175,7 +185,10 @@ export class CriteriaPageComponent implements OnInit{
           this.snackbarService.success('Success!', 'Your changes were saved.')
           .during(2000).show();
         } else {
-          const id = this.dataForm.controls.id.value;
+          const id = this.dataFormArray.at(this.editCriteriaIndex).get('id').value;
+          this.dataForm.controls.entryTypeId.enable({onlySelf: true});
+          this.dataForm.controls.entryTypeId.setValue(this.getEntryTypeId(this.dataForm.controls.source as FormGroup));
+          this.checkNullSource();
           this.vcwPhasesService.editCriteria(this.vcwId, this.projectId, id, this.dataForm.value)
           .pipe(take(1))
           .subscribe(response => {
@@ -187,15 +200,15 @@ export class CriteriaPageComponent implements OnInit{
             .during(2000).show();
           }, error => {
             this.isLoading = false;
-            this.dataForm.controls.swotField.disable({onlySelf: true});
+            this.dataForm.controls.source = this.formBuilder.group(sourceConfig);
             this.snackbarService.danger('Error', 'Unable to save the requested changes. Try again later.')
-            .during(5000).show();
+            .during(2000).show();
           });
         }
       } else {
         this.isLoading = false;
         this.snackbarService.danger('Error', 'Invalid data. Please review your form.')
-          .during(5000).show();
+          .during(2000).show();
       }
     }
   }
@@ -204,43 +217,52 @@ export class CriteriaPageComponent implements OnInit{
     this.editCriteriaMode = true;
     this.itemDialogOpen = true;
     this.dataForm = this.formBuilder.group(createCriteriasConfig);
+    this.dataForm.controls.source = this.formBuilder.group(sourceConfig);
     this.dataForm.patchValue(this.dataFormArray.at(index).value);
     this.editCriteriaIndex = index;
   }
 
-  deleteCriteria(index: number, CriteriaNameControl: AbstractControl, CriteriaIdControl: AbstractControl) {
+  deleteCriteria(index: number, criteriaNameControl: AbstractControl, criteriaIdControl: AbstractControl) {
     // call confirm dialog then delete Criteria
     this.actionConfirmTitle = 'Delete Criteria';
-    this.actionConfirmText = `Are you sure you want to delete the Criteria "${CriteriaNameControl.value}"?`;
+    this.actionConfirmText = `Are you sure you want to delete the Criteria "${criteriaNameControl.value}"?`;
     this.confirmDialogOpen = true;
     this.actionConfirm$.pipe(take(1)).subscribe(userConfirm => {
       this.confirmDialogOpen = false;
       if (userConfirm) {
         if (this.useMocks) {
           this.dataFormArray.removeAt(index);
-          this.snackbarService.success('Success!', 'The selected criteria was deleted.')
+          this.snackbarService.success('Success!', 'The selected Criteria was deleted.')
           .during(2000).show();
         } else {
-          this.vcwPhasesService.deleteCriteria(this.vcwId, this.projectId, CriteriaIdControl.value)
+          this.vcwPhasesService.deleteCriteria(this.vcwId, this.projectId, criteriaIdControl.value)
           .pipe(take(1))
           .subscribe(response => {
             this.dataFormArray.removeAt(index);
-            this.snackbarService.success('Success!', 'The selected criteria was deleted.')
+            this.snackbarService.success('Success!', 'The selected Criteria was deleted.')
             .during(2000).show();
           }, error => {
             this.snackbarService.danger('Error', 'Unable to delete Criteria. Try again later.')
-            .during(5000).show();
+            .during(2000).show();
           });
         }
       }
     });
   }
 
-  getIcon(CriteriaSourceControl: AbstractControl): IconDefinition {
-    if (CriteriaSourceControl?.value) {
+  getIcon(entryTypeId: number): IconDefinition {
+    if (entryTypeId === 3) {
       return faGlobe;
     } else {
       return faUser;
+    }
+  }
+
+  getEntryTypeId(criteriaSourceControl: FormGroup): number {
+    if (criteriaSourceControl && criteriaSourceControl.controls?.name.value) {
+      return 3;
+    } else {
+      return 1;
     }
   }
 
@@ -255,6 +277,13 @@ export class CriteriaPageComponent implements OnInit{
   onKeyPress(event: KeyboardEvent) {
     if (event.key === 'Enter') {
       this.onDirectAdd();
+    }
+  }
+
+  checkNullSource() {
+    if (this.dataForm.controls.source.value.name === null || this.dataForm.controls.source.value.name === '') {
+      this.dataForm.controls.source = this.formBuilder.control(null);
+      this.dataForm.updateValueAndValidity();
     }
   }
 }

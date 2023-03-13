@@ -23,10 +23,10 @@ export const createIdeasConfig = {
 export const createCriteriasConfig = {
     name: [null, Validators.required],
     file: [null, Validators.required],
-    sourceName: [null],
-    sourceUrl: [null],
+    source: [null],
     id: [null],
-    valueType: ['Number', Validators.required]
+    entryTypeId: [null],
+    valueType: ['number', Validators.required]
 };
 
 export const sourceConfig = {
