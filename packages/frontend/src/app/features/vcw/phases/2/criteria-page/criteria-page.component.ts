@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormArray, UntypedFormGroup, FormBuilder, AbstractControl, FormGroup } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { PhaseNavigationService, VcwPhasesService, SnackbarService, createCriteriasConfig, sourceConfig } from '@core';
+import { PhaseNavigationService, VcwPhasesService, SnackbarService, createCriteriasConfig, sourceConfig, CheckboxItemInput } from '@core';
 import { VcwMockService } from '@core/services/mocks/vcw/vcw-mock.service';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faFloppyDisk, faPlus, faTimes, faCheck, faWindowMaximize, faGlobe, faUser } from '@fortawesome/free-solid-svg-icons';
@@ -35,7 +35,16 @@ export class CriteriaPageComponent implements OnInit{
   projectId: number;
   isLoading = false;
 
-  valueType: string[] = ['Number', 'Yes/No'];
+  valueType: CheckboxItemInput[] = [
+    {
+      value: 'number',
+      label: 'Number'
+    },
+    {
+      value: 'yes_or_no',
+      label: 'Yes/No'
+    }
+  ];
 
   useMocks: boolean;
 

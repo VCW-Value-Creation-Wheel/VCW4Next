@@ -17,3 +17,8 @@ export interface InputEvent {
 export interface InputMap {
     [key: string]: string;
 }
+
+export interface CheckboxItemInput {
+    label: string;
+    value: string | number;
+}

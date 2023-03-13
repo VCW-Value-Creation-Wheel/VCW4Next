@@ -57,8 +57,8 @@
             <div class="flex flex-row gap-4">
                 <ng-container *ngFor="let checkbox of checkboxes; index as idx">
                     <app-checkbox-input
-                        [label]="checkbox"
-                        [value]="checkbox"
+                        [label]="checkbox.label"
+                        [value]="checkbox.value"
                         (propagate)="onCheckboxCheck($event, idx)"
                         [isChecked]="isBoxChecked(idx)"
                     ></app-checkbox-input>

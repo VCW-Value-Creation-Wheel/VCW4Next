@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormGroup, UntypedFormGroup } from '@angular/forms';
-import { InputMap, Option } from '@core';
+import { CheckboxItemInput, InputMap, Option } from '@core';
 
 @Component({
   selector: 'app-create-item-dialog',
@@ -15,7 +15,7 @@ export class CreateItemDialogComponent implements OnInit {
   @Input() tabs: string[] = [];
   @Input() tabFormControlsToExclude: {[key: number]: string[]} = {};
   @Input() fileFormFieldName = 'file';
-  @Input() checkboxes: string[] = [];
+  @Input() checkboxes: CheckboxItemInput[] = [];
   @Input() checkboxFormControl?: string;
   @Input() checkboxCategoryLabel?: string;
   @Input() isAwaitingAction = false;
@@ -45,9 +45,8 @@ export class CreateItemDialogComponent implements OnInit {
     if (this.isEditing) {
       controls.forEach((control) => {
         if (control === this.checkboxFormControl) {
-          const value = this.formGroup.controls[control].value as string;
-          const uppercaseValue = value.charAt(0).toUpperCase() + value.slice(1);
-          this.checkedBox = this.checkboxes.indexOf(uppercaseValue);
+          const value = this.formGroup.controls[control].value;
+          this.checkedBox = this.checkboxes.map(item => item.value).indexOf(value);
         }
         this.originalFormValues[control] = this.formGroup.controls[control].value;
       });
@@ -94,7 +93,7 @@ export class CreateItemDialogComponent implements OnInit {
 
   onCheckboxCheck(event: Option, index: number) {
     this.checkedBox = index;
-    this.formGroup.controls[this.checkboxFormControl].setValue(event.value.toLowerCase());
+    this.formGroup.controls[this.checkboxFormControl].setValue(event.value);
   }
 
   isBoxChecked(index: number): boolean {
