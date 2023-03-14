@@ -4,6 +4,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pt.com.deimos.vcwapi.dto.IdeaDTO;
+import pt.com.deimos.vcwapi.dto.SourceDTO;
 import pt.com.deimos.vcwapi.entity.IdeaEntity;
 import pt.com.deimos.vcwapi.entity.ProjectEntity;
 import pt.com.deimos.vcwapi.entity.SourceEntity;
@@ -11,7 +12,9 @@ import pt.com.deimos.vcwapi.entity.VcwHasIdeaEntity;
 import pt.com.deimos.vcwapi.exceptions.BadRequestException;
 import pt.com.deimos.vcwapi.repository.IdeaRepository;
 import pt.com.deimos.vcwapi.repository.ProjectRepository;
+import pt.com.deimos.vcwapi.repository.SourceRepository;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Transactional
@@ -20,11 +23,16 @@ public class IdeaService {
 
   private final IdeaRepository ideaRepository;
   private final ProjectRepository projectRepository;
-  
 
-  public IdeaService(IdeaRepository ideaRepository, ProjectRepository projectRepository) {
+
+  private final SourceRepository sourceRepository;
+
+
+  public IdeaService(IdeaRepository ideaRepository, ProjectRepository projectRepository,
+                     SourceRepository sourceRepository) {
     this.ideaRepository = ideaRepository;
     this.projectRepository = projectRepository;
+    this.sourceRepository = sourceRepository;
   }
 
   public Optional<ProjectEntity> findProjectByIdAndUser(Long project_id, String userId) {
@@ -76,11 +84,36 @@ public class IdeaService {
     return newIdea;
   }
 
-  public IdeaEntity update(IdeaEntity oldIdea, IdeaDTO editedInfo) {
+  public IdeaEntity update(String userId, IdeaEntity oldIdea, IdeaDTO editedInfo) {
 
+    //update idea attributes
     BeanUtils.copyProperties(editedInfo, oldIdea);
+    oldIdea.setUpdatedAt(LocalDateTime.now());
+    oldIdea.setUpdatedBy(userId);
+
+    //update source
     SourceEntity oldSource = oldIdea.getSource();
-    BeanUtils.copyProperties(editedInfo.getSource(), oldSource);
+    SourceDTO newSourceInfo = editedInfo.getSource();
+    SourceEntity newSource;
+    if (newSourceInfo == null) {
+      oldIdea.setSource(null);
+      oldSource.removeIdea(oldIdea);
+      sourceRepository.delete(oldSource);
+    }
+    else if (oldSource == null) {
+      newSource = new SourceEntity();
+      BeanUtils.copyProperties(newSourceInfo, newSource);
+      newSource.setCreatedBy(userId);
+      newSource.setUpdatedAt(LocalDateTime.now());
+      newSource.setUpdatedBy(userId);
+      oldIdea.setSource(newSource);
+    }
+    else {
+      BeanUtils.copyProperties(newSourceInfo, oldSource);
+      oldSource.setUpdatedAt(LocalDateTime.now());
+      oldSource.setUpdatedBy(userId);
+    }
+
     return this.ideaRepository.save(oldIdea);
   }
 
