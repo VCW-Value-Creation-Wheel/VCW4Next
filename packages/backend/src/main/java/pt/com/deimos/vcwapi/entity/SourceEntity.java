@@ -33,6 +33,10 @@ public class SourceEntity extends BaseNamedEntity{
     @JsonIgnore
     private List<IdeaAndCriteriaEntity> ideaAndCriteriaEntities;
 
-    public void addIdea(IdeaEntity idea){this.ideas.add(idea);
+    public void addIdea(IdeaEntity idea){this.ideas.add(idea);}
+
+
+    public void removeIdea(IdeaEntity idea){
+        this.ideas.remove(idea);
     }
 }
