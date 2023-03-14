@@ -12,6 +12,7 @@ import pt.com.deimos.vcwapi.entity.VcwHasIdeaEntity;
 import pt.com.deimos.vcwapi.exceptions.BadRequestException;
 import pt.com.deimos.vcwapi.repository.IdeaRepository;
 import pt.com.deimos.vcwapi.repository.ProjectRepository;
+import pt.com.deimos.vcwapi.repository.SourceRepository;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -22,11 +23,16 @@ public class IdeaService {
 
   private final IdeaRepository ideaRepository;
   private final ProjectRepository projectRepository;
-  
 
-  public IdeaService(IdeaRepository ideaRepository, ProjectRepository projectRepository) {
+
+  private final SourceRepository sourceRepository;
+
+
+  public IdeaService(IdeaRepository ideaRepository, ProjectRepository projectRepository,
+                     SourceRepository sourceRepository) {
     this.ideaRepository = ideaRepository;
     this.projectRepository = projectRepository;
+    this.sourceRepository = sourceRepository;
   }
 
   public Optional<ProjectEntity> findProjectByIdAndUser(Long project_id, String userId) {
@@ -90,8 +96,9 @@ public class IdeaService {
     SourceDTO newSourceInfo = editedInfo.getSource();
     SourceEntity newSource;
     if (newSourceInfo == null) {
-      oldSource.removeIdea(oldIdea);
       oldIdea.setSource(null);
+      oldSource.removeIdea(oldIdea);
+      sourceRepository.delete(oldSource);
     }
     else if (oldSource == null) {
       newSource = new SourceEntity();
