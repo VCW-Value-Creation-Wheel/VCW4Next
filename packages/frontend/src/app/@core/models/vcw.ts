@@ -49,8 +49,8 @@ export type Criteria = {
 };
 
 export type IdeaCriteriaPair = {
-    ideaId: number;
-    criteriaId: number;
+    idea: Idea;
+    criteria: Criteria;
     value: number | string;
     id?: number;
 };

@@ -144,6 +144,18 @@ export class PurificationPageComponent implements OnInit {
         this.snackbarService.danger('Data Fetching Error', 'Unable to check and retrieve data from the server. Try again later.')
         .during(2000).show();
       });
+
+      this.vcwPhasesService.getIdeaCriteriaPairs(this.vcwId, this.projectId).pipe(take(1)).subscribe(data => {
+        data.forEach((dataItem) => {
+          const dataForm = this.formBuilder.group(createPairConfig);
+          dataForm.controls.ideaId.setValue(dataItem.idea.id);
+          dataForm.controls.ideaName.setValue(dataItem.idea.name);
+          dataForm.controls.criteriaId.setValue(dataItem.criteria.id);
+          dataForm.controls.criteriaName.setValue(dataItem.criteria.name);
+          this.pairFormArray.push(dataForm);
+          this.pairFormArray.at(this.pairFormArray.length - 1).patchValue(dataItem);
+        });
+      });
     }
   }
 

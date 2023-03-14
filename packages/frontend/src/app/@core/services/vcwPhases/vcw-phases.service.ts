@@ -100,9 +100,9 @@ export class VcwPhasesService {
   }
 
   // Phase 2c
-  getIdeaCriteriaPairs(vcwId: number, projectId: number): Observable<IdeaCriteriaPair> {
+  getIdeaCriteriaPairs(vcwId: number, projectId: number): Observable<IdeaCriteriaPair[]> {
     const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/ideasAndCriterias`;
-    return this.http.get<IdeaCriteriaPair>(url, this.httpOptions);
+    return this.http.get<IdeaCriteriaPair[]>(url, this.httpOptions);
   }
 
   createIdeaCriteriaPair(vcwId: number, projectId: number, ideaCriteriaData: IdeaCriteriaPair): Observable<IdeaCriteriaPair> {
