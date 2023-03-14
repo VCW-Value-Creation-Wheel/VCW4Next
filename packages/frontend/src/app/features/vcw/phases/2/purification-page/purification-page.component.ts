@@ -196,6 +196,7 @@ export class PurificationPageComponent implements OnInit {
         this.snackbarService.success('Success!', 'New idea added.')
         .during(2000).show();
       } else {
+        this.ideaDataForm.controls.entryTypeId.setValue(1);
         this.vcwPhasesService.createIdea(this.vcwId, this.projectId, this.ideaDataForm.value)
         .pipe(take(1))
         .subscribe(response => {
@@ -299,7 +300,8 @@ export class PurificationPageComponent implements OnInit {
         this.snackbarService.success('Success!', 'New criteria added.')
         .during(2000).show();
       } else {
-        this.vcwPhasesService.createDiagnostic(this.vcwId, this.projectId, this.criteriaDataForm.value)
+        this.criteriaDataForm.controls.entryTypeId.setValue(1);
+        this.vcwPhasesService.createCriteria(this.vcwId, this.projectId, this.criteriaDataForm.value)
         .pipe(take(1))
         .subscribe(response => {
           this.criteriaDataForm.controls.id.setValue(response.id);
