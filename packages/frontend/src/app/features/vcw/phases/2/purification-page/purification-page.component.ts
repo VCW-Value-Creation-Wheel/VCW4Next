@@ -605,10 +605,27 @@ export class PurificationPageComponent implements OnInit {
       this.pairDataForm.controls.ideaId.setValue(this.ideaFormArray.at(this.selectedIdeaIndex).get('id').value);
       this.pairDataForm.controls.criteriaId.enable({onlySelf: true});
       this.pairDataForm.controls.criteriaId.setValue(this.criteriaFormArray.at(this.selectedCriteriaIndex).get('id').value);
-      this.pairFormArray.push(this.pairDataForm);
+      if (!this.useMocks) {
+        this.vcwPhasesService.createIdeaCriteriaPair(this.vcwId, this.projectId, this.pairDataForm.value)
+        .pipe(take(1)).subscribe(response => {
+          this.pairDataForm.controls.id.setValue(response.id);
+          this.pairDataForm.controls.ideaName.enable({onlySelf: true});
+          this.pairDataForm.controls.criteriaName.enable({onlySelf: true});
+
+          const ideaName = this.ideaFormArray.at(this.selectedIdeaIndex).get('name').value;
+          const criteriaName = this.criteriaFormArray.at(this.selectedCriteriaIndex).get('name').value;
+
+          this.pairDataForm.controls.ideaName.setValue(ideaName);
+          this.pairDataForm.controls.criteriaName.setValue(criteriaName);
+
+          this.pairFormArray.push(this.pairDataForm);
+          this.snackbarService.success('Success!', 'New pair created.')
+          .during(2000).show();
+        });
+      } else {
+        this.pairFormArray.push(this.pairDataForm);
+      }
       this.createPairDialogOpen = false;
-      this.snackbarService.success('Success!', 'New pair created.')
-      .during(2000).show();
     }
     this.checkForExistingPair();
     this.checkForLinkedIdeas();
@@ -659,13 +676,13 @@ export class PurificationPageComponent implements OnInit {
   }
 
   setCriteriaValueValidators() {
-    const inputType = this.criteriaFormArray.at(this.selectedCriteriaIndex).get('valueType').value === 'Number' ? 'number' : 'text';
+    const inputType = this.criteriaFormArray.at(this.selectedCriteriaIndex).get('valueType').value === 'number' ? 'number' : 'text';
     if (inputType === 'number') {
       this.pairDataForm.controls.value.setValidators([Validators.required, Validators.pattern(/[0-9]*/)]);
-      this.pairValueLabel = {value: 'Number'};
+      this.pairValueLabel = {value: 'number'};
     } else {
       this.pairDataForm.controls.value.setValidators([Validators.required, Validators.pattern(/(\bYes\b)|(\bNo\b)/)]);
-      this.pairValueLabel = {value: 'Yes / No'};
+      this.pairValueLabel = {value: 'yes_or_no'};
     }
     this.pairInputType = {value: inputType};
   }

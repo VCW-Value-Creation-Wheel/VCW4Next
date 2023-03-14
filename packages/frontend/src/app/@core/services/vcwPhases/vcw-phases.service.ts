@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Criteria, Idea, SwotFieldRow } from '@core/models';
+import { Criteria, Idea, IdeaCriteriaPair, SwotFieldRow } from '@core/models';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 
@@ -96,6 +96,30 @@ export class VcwPhasesService {
 
   deleteCriteria(vcwId: number, projectId: number, CriteriaId: number): Observable<any> {
     const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/criterias/${CriteriaId}`;
+    return this.http.delete(url, this.httpOptions);
+  }
+
+  // Phase 2c
+  getIdeaCriteriaPairs(vcwId: number, projectId: number): Observable<IdeaCriteriaPair> {
+    const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/ideasAndCriterias`;
+    return this.http.get<IdeaCriteriaPair>(url, this.httpOptions);
+  }
+
+  createIdeaCriteriaPair(vcwId: number, projectId: number, ideaCriteriaData: IdeaCriteriaPair): Observable<IdeaCriteriaPair> {
+    const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/ideasAndCriterias`;
+    return this.http.post<IdeaCriteriaPair>(url, ideaCriteriaData, this.httpOptions);
+  }
+
+  editIdeaCriteriaPair(vcwId: number,
+                       projectId: number,
+                       ideaCriteriaPairId: number,
+                       ideaCriteriaData: IdeaCriteriaPair): Observable<IdeaCriteriaPair> {
+    const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/ideasAndCriterias/${ideaCriteriaPairId}`;
+    return this.http.put<IdeaCriteriaPair>(url, ideaCriteriaData, this.httpOptions);
+  }
+
+  deleteIdeaCriteriaPair(vcwId: number, projectId: number, ideaCriteriaPairId: number): Observable<any> {
+    const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/ideasAndCriterias/${ideaCriteriaPairId}`;
     return this.http.delete(url, this.httpOptions);
   }
 }

@@ -47,3 +47,10 @@ export type Criteria = {
     isSelected: boolean,
     valueType: string
 };
+
+export type IdeaCriteriaPair = {
+    ideaId: number;
+    criteriaId: number;
+    value: number | string;
+    id?: number;
+};
