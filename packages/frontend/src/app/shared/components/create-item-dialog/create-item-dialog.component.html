@@ -34,6 +34,7 @@
                         [placeholder]="formatFieldLabel(field) | titlecase"
                         *ngIf="!tabFormControlsToExclude[activeTab].includes(field)"
                         [inputType]="getInputType(field)"
+                        [isDisabled]="isFieldEditDisabled(field)"
                     ></app-input>
                 </ng-container>
                 <ng-template #nestedInput>
@@ -45,6 +46,7 @@
                                 [placeholder]="formatFieldLabel(field + ' ' + nestedField) | titlecase"
                                 *ngIf="!tabFormControlsToExclude[activeTab].includes(nestedField)"
                                 [inputType]="getInputType(nestedField)"
+                                [isDisabled]="isFieldEditDisabled(nestedField)"
                             ></app-input>
                         </ng-container>
                     </div>

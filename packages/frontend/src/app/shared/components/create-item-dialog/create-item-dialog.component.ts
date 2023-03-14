@@ -21,6 +21,7 @@ export class CreateItemDialogComponent implements OnInit {
   @Input() isAwaitingAction = false;
   @Input() inputTypes: InputMap = {};
   @Input() inputHelperLabel: InputMap = {};
+  @Input() disableEditing: InputMap = {};
 
   @Output() cancel = new EventEmitter();
   @Output() confirm = new EventEmitter();
@@ -155,6 +156,14 @@ export class CreateItemDialogComponent implements OnInit {
       return this.nestedFormFields.get(fieldName);
     } else {
       return [];
+    }
+  }
+
+  isFieldEditDisabled(fieldName: string): boolean {
+    if (this.disableEditing[fieldName]) {
+      return this.disableEditing[fieldName];
+    } else {
+      return false;
     }
   }
 
