@@ -13,4 +13,5 @@ public class IdeaDTO {
     private Long entryTypeId;
 
     private SourceDTO source;
+
 }

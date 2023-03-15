@@ -75,7 +75,7 @@ public class IdeaController {
     }
 
     return ResponseEntity.status(HttpStatus.OK).body(
-            this.ideaService.update(ideaEntityOptional.get(), ideaDTO));
+            this.ideaService.update(principal.getSubject(), ideaEntityOptional.get(), ideaDTO));
   }
 
   @DeleteMapping("/{id}")

@@ -26,6 +26,7 @@ public class VcwHasIdeaEntity {
 
     @ManyToOne(optional = false)
     @JoinColumn(name="vcw_id", referencedColumnName = "id", insertable=false, updatable=false)
+    @JsonIgnore
     private VcwEntity vcw;
 
     @OneToOne(optional=false)
