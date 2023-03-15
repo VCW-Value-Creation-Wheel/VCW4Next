@@ -589,14 +589,21 @@ export class PurificationPageComponent implements OnInit {
     this.actionConfirm$.pipe(take(1)).subscribe((userConfirm) => {
       this.confirmDialogOpen = false;
       if (userConfirm) {
-        const pairIndex = this.pairFormArray.controls.indexOf(pairDataForm);
-        this.pairFormArray.removeAt(pairIndex);
-        this.selectedIdeaIndex = undefined;
-        this.selectedCriteriaIndex = undefined;
-        this.linkedIdeaIds = [];
-        this.linkedCriteriaIds = [];
-        this.snackbarService.success('Success!', 'The selected pair was deleted.')
-        .during(2000).show();
+        const id = pairDataForm.controls.id.value;
+        this.vcwPhasesService.deleteIdeaCriteriaPair(this.vcwId, this.projectId, id)
+        .pipe(take(1)).subscribe(response => {
+          const pairIndex = this.pairFormArray.controls.indexOf(pairDataForm);
+          this.pairFormArray.removeAt(pairIndex);
+          this.selectedIdeaIndex = undefined;
+          this.selectedCriteriaIndex = undefined;
+          this.linkedIdeaIds = [];
+          this.linkedCriteriaIds = [];
+          this.snackbarService.success('Success!', 'The selected pair was deleted.')
+          .during(2000).show();
+        }, (error) => {
+          this.snackbarService.danger('Error!', 'Unable to delete selected pair.')
+          .during(2000).show();
+        });
       }
     });
   }
@@ -631,6 +638,9 @@ export class PurificationPageComponent implements OnInit {
           this.pairDataForm.controls.criteriaName.setValue(criteriaName);
 
           this.pairFormArray.push(this.pairDataForm);
+          this.checkForExistingPair();
+          this.checkForLinkedIdeas();
+          this.checkForLinkedCriteria();
           this.snackbarService.success('Success!', 'New pair created.')
           .during(2000).show();
         });
@@ -639,9 +649,6 @@ export class PurificationPageComponent implements OnInit {
       }
       this.createPairDialogOpen = false;
     }
-    this.checkForExistingPair();
-    this.checkForLinkedIdeas();
-    this.checkForLinkedCriteria();
   }
 
   checkForExistingPair() {
