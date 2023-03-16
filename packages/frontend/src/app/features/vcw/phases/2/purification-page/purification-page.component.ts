@@ -458,6 +458,7 @@ export class PurificationPageComponent implements OnInit {
         && control.get('criteriaId').value === selectedCriteriaId).value);
       this.editPairIndex = this.pairFormArray.controls.indexOf(this.pairDataForm);
       this.setCriteriaValueValidators();
+      this.convertBetweenYesNoAndFloat();
       this.createPairDialogOpen = true;
     } else {
       this.pairDataForm = this.formBuilder.group(createPairConfig);
@@ -509,6 +510,7 @@ export class PurificationPageComponent implements OnInit {
       this.pairDataForm.controls.criteriaId.enable({onlySelf: true});
       this.pairDataForm.controls.criteriaId.setValue(this.criteriaFormArray.at(this.selectedCriteriaIndex).get('id').value);
       const id = this.pairFormArray.at(this.editPairIndex).get('id').value;
+      this.convertBetweenYesNoAndFloat();
       this.vcwPhasesService.editIdeaCriteriaPair(this.vcwId, this.projectId, id, this.pairDataForm.value)
       .pipe(take(1)).subscribe(response => {
         this.pairFormArray.at(this.editPairIndex).patchValue(this.pairDataForm.value);
@@ -525,7 +527,7 @@ export class PurificationPageComponent implements OnInit {
       this.pairDataForm.controls.ideaId.setValue(this.ideaFormArray.at(this.selectedIdeaIndex).get('id').value);
       this.pairDataForm.controls.criteriaId.enable({onlySelf: true});
       this.pairDataForm.controls.criteriaId.setValue(this.criteriaFormArray.at(this.selectedCriteriaIndex).get('id').value);
-
+      this.convertBetweenYesNoAndFloat();
       this.vcwPhasesService.createIdeaCriteriaPair(this.vcwId, this.projectId, this.pairDataForm.value)
       .pipe(take(1)).subscribe(response => {
         this.pairDataForm.controls.id.setValue(response.id);
@@ -596,10 +598,10 @@ export class PurificationPageComponent implements OnInit {
     const inputType = this.criteriaFormArray.at(this.selectedCriteriaIndex).get('valueType').value === 'number' ? 'number' : 'text';
     if (inputType === 'number') {
       this.pairDataForm.controls.value.setValidators([Validators.required, Validators.pattern(/[0-9]*/)]);
-      this.pairValueLabel = {value: 'number'};
+      this.pairValueLabel = {value: 'Number'};
     } else {
       this.pairDataForm.controls.value.setValidators([Validators.required, Validators.pattern(/(\bYes\b)|(\bNo\b)/)]);
-      this.pairValueLabel = {value: 'yes_or_no'};
+      this.pairValueLabel = {value: 'Yes or No'};
     }
     this.pairInputType = {value: inputType};
   }
@@ -616,6 +618,31 @@ export class PurificationPageComponent implements OnInit {
       return 3;
     } else {
       return 1;
+    }
+  }
+
+  convertBetweenYesNoAndFloat() {
+    const value = this.pairDataForm.controls.value.value;
+    if (this.selectedIdeaIndex !== undefined && this.selectedCriteriaIndex !== undefined) {
+      const type = this.criteriaFormArray.at(this.selectedCriteriaIndex).get('valueType').value;
+      if (type === 'yes_or_no') {
+        switch (value) {
+          case 'Yes':
+            this.pairDataForm.controls.value.setValue(1);
+            break;
+          case 'No':
+            this.pairDataForm.controls.value.setValue(0);
+            break;
+          case 0:
+            this.pairDataForm.controls.value.setValue('No');
+            break;
+          case 1:
+            this.pairDataForm.controls.value.setValue('Yes');
+            break;
+          default:
+            break;
+        }
+      }
     }
   }
 }
