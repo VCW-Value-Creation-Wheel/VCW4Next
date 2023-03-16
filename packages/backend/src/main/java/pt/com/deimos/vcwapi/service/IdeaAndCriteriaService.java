@@ -3,15 +3,10 @@ package pt.com.deimos.vcwapi.service;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pt.com.deimos.vcwapi.dto.CriteriaDTO;
 import pt.com.deimos.vcwapi.dto.IdeaAndCriteriaDTO;
 import pt.com.deimos.vcwapi.entity.*;
-import pt.com.deimos.vcwapi.exceptions.BadRequestException;
 import pt.com.deimos.vcwapi.exceptions.NotFoundException;
-import pt.com.deimos.vcwapi.repository.CriteriaRepository;
-import pt.com.deimos.vcwapi.repository.IdeaAndCriteriaRepository;
-import pt.com.deimos.vcwapi.repository.IdeaRepository;
-import pt.com.deimos.vcwapi.repository.ProjectRepository;
+import pt.com.deimos.vcwapi.repository.*;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -27,14 +22,19 @@ public class IdeaAndCriteriaService {
 
   private final CriteriaRepository criteriaRepository;
 
+  private final SourceRepository sourceRepository;
+
+
   public IdeaAndCriteriaService(IdeaAndCriteriaRepository ideaAndCriteriaRepository,
                                 ProjectRepository projectRepository,
                                 IdeaRepository ideaRepository,
-                                CriteriaRepository criteriaRepository) {
+                                CriteriaRepository criteriaRepository,
+                                SourceRepository sourceRepository) {
     this.ideaAndCriteriaRepository = ideaAndCriteriaRepository;
     this.projectRepository = projectRepository;
     this.ideaRepository = ideaRepository;
     this.criteriaRepository = criteriaRepository;
+    this.sourceRepository = sourceRepository;
   }
 
   public Optional<ProjectEntity> findProjectByIdAndUser(Long project_id, String userId) {
@@ -93,6 +93,42 @@ public class IdeaAndCriteriaService {
     BeanUtils.copyProperties(editedInfo, oldIdeaAndCriteria);
     SourceEntity oldSource = oldIdeaAndCriteria.getSource();
     BeanUtils.copyProperties(editedInfo.getSource(), oldSource);
+    return this.ideaAndCriteriaRepository.save(oldIdeaAndCriteria);
+  }
+
+  public IdeaAndCriteriaEntity update(String userId, IdeaAndCriteriaEntity oldIdeaAndCriteria,
+                           IdeaAndCriteriaDTO editedInfo) {
+
+    //update idea attributes
+    BeanUtils.copyProperties(editedInfo, oldIdeaAndCriteria);
+    oldIdeaAndCriteria.setUpdatedAt(LocalDateTime.now());
+    oldIdeaAndCriteria.setUpdatedBy(userId);
+
+    //update source
+    // FIXME: currently update source is disabled because it is not available in frontend
+    // uncomment when it is available
+    /*SourceEntity oldSource = oldIdeaAndCriteria.getSource();
+    SourceDTO newSourceInfo = editedInfo.getSource();
+    SourceEntity newSource;
+    if (newSourceInfo == null) {
+      oldIdeaAndCriteria.setSource(null);
+      oldSource.removeIdeaAndCriteria(oldIdeaAndCriteria);
+      this.sourceRepository.delete(oldSource);
+    }
+    else if (oldSource == null) {
+      newSource = new SourceEntity();
+      BeanUtils.copyProperties(newSourceInfo, newSource);
+      newSource.setCreatedBy(userId);
+      newSource.setUpdatedAt(LocalDateTime.now());
+      newSource.setUpdatedBy(userId);
+      oldIdeaAndCriteria.setSource(newSource);
+    }
+    else {
+      BeanUtils.copyProperties(newSourceInfo, oldSource);
+      oldSource.setUpdatedAt(LocalDateTime.now());
+      oldSource.setUpdatedBy(userId);
+    }*/
+
     return this.ideaAndCriteriaRepository.save(oldIdeaAndCriteria);
   }
 

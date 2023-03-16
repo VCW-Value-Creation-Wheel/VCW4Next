@@ -7,9 +7,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import pt.com.deimos.vcwapi.dto.IdeaAndCriteriaDTO;
-import pt.com.deimos.vcwapi.entity.CriteriaEntity;
 import pt.com.deimos.vcwapi.entity.IdeaAndCriteriaEntity;
 import pt.com.deimos.vcwapi.entity.ProjectEntity;
+import pt.com.deimos.vcwapi.exceptions.BadRequestException;
 import pt.com.deimos.vcwapi.exceptions.NotFoundException;
 import pt.com.deimos.vcwapi.service.IdeaAndCriteriaService;
 
@@ -64,6 +64,11 @@ public class IdeaAndCriteriaController {
           @RequestBody @Valid IdeaAndCriteriaDTO ideaAndCriteriaDTO
   ) {
 
+      // FIXME: currently update source is disabled because it is not available in frontend
+      // remove this restriction when it is available
+      if (ideaAndCriteriaDTO.getSource() != null)
+          throw new BadRequestException("Sources are not supported.");
+
     Optional<ProjectEntity> project =
             this.ideaAndCriteriaService.findProjectByIdAndUser(projectId, principal.getSubject());
     if (project.isEmpty())
@@ -76,7 +81,7 @@ public class IdeaAndCriteriaController {
     }
 
     return ResponseEntity.status(HttpStatus.OK).body(
-            this.ideaAndCriteriaService.update(criteriaEntityOptional.get(), ideaAndCriteriaDTO));
+            this.ideaAndCriteriaService.update(principal.getId(), criteriaEntityOptional.get(), ideaAndCriteriaDTO));
   }
 
   @DeleteMapping("/{id}")
