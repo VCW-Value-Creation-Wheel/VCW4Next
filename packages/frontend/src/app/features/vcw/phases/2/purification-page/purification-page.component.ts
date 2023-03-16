@@ -559,9 +559,12 @@ export class PurificationPageComponent implements OnInit {
       this.editPairMode = true;
       const selectedIdeaId = this.ideaFormArray.at(this.selectedIdeaIndex).get('id').value;
       const selectedCriteriaId = this.criteriaFormArray.at(this.selectedCriteriaIndex).get('id').value;
-      this.pairDataForm = (this.pairFormArray.controls.find(control =>
+
+      this.pairDataForm = this.formBuilder.group(createPairConfig);
+
+      this.pairDataForm.patchValue(this.pairFormArray.controls.find(control =>
         control.get('ideaId').value === selectedIdeaId
-        && control.get('criteriaId').value === selectedCriteriaId) as FormGroup);
+        && control.get('criteriaId').value === selectedCriteriaId).value);
       this.editPairIndex = this.pairFormArray.controls.indexOf(this.pairDataForm);
       this.setCriteriaValueValidators();
       this.createPairDialogOpen = true;
@@ -614,11 +617,18 @@ export class PurificationPageComponent implements OnInit {
       this.pairDataForm.controls.ideaId.setValue(this.ideaFormArray.at(this.selectedIdeaIndex).get('id').value);
       this.pairDataForm.controls.criteriaId.enable({onlySelf: true});
       this.pairDataForm.controls.criteriaId.setValue(this.criteriaFormArray.at(this.selectedCriteriaIndex).get('id').value);
-      this.pairFormArray.at(this.editPairIndex).patchValue(this.pairDataForm.value);
-      this.createPairDialogOpen = false;
-      this.editPairMode = false;
-      this.snackbarService.success('Success!', 'Your changes were saved.')
-      .during(2000).show();
+      const id = this.pairFormArray.at(this.editPairIndex).get('id').value;
+      this.vcwPhasesService.editIdeaCriteriaPair(this.vcwId, this.projectId, id, this.pairDataForm.value)
+      .pipe(take(1)).subscribe(response => {
+        this.pairFormArray.at(this.editPairIndex).patchValue(this.pairDataForm.value);
+        this.createPairDialogOpen = false;
+        this.editPairMode = false;
+        this.snackbarService.success('Success!', 'Your changes were saved.')
+        .during(2000).show();
+      }, (error) => {
+        this.snackbarService.danger('Error!', 'Unable to edit selected pair.')
+        .during(2000).show();
+      });
     } else {
       this.pairDataForm.controls.ideaId.enable({onlySelf: true});
       this.pairDataForm.controls.ideaId.setValue(this.ideaFormArray.at(this.selectedIdeaIndex).get('id').value);
