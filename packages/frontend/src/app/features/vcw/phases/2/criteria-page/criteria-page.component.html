@@ -14,7 +14,7 @@
             [value]="Criteria.controls.name?.value"
             (editClick)="editCriteria(idx)"
             (deleteClick)="deleteCriteria(idx, Criteria.controls.name, Criteria.controls.id)"
-            [icon]="getIcon(Criteria.controls.sourceName)"
+            [icon]="getIcon(Criteria.controls.entryTypeId.value)"
         ></app-list-item>
     </ng-container>
     <app-simple-item-input
