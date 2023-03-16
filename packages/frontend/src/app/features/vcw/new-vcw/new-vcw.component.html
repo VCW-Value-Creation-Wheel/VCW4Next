@@ -30,6 +30,7 @@
             <app-button
             [label]="'Submit'"
             (click)="onSubmit()"
+            [isDisabled]="!dataForm.valid"
             >
             </app-button>
         </div>
