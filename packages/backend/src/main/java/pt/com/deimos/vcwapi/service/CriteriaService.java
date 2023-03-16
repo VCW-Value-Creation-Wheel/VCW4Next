@@ -4,14 +4,14 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pt.com.deimos.vcwapi.dto.CriteriaDTO;
-import pt.com.deimos.vcwapi.entity.CriteriaEntity;
-import pt.com.deimos.vcwapi.entity.ProjectEntity;
-import pt.com.deimos.vcwapi.entity.SourceEntity;
-import pt.com.deimos.vcwapi.entity.VcwHasCriteriaEntity;
+import pt.com.deimos.vcwapi.dto.SourceDTO;
+import pt.com.deimos.vcwapi.entity.*;
 import pt.com.deimos.vcwapi.exceptions.BadRequestException;
 import pt.com.deimos.vcwapi.repository.CriteriaRepository;
 import pt.com.deimos.vcwapi.repository.ProjectRepository;
+import pt.com.deimos.vcwapi.repository.SourceRepository;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Transactional
@@ -20,10 +20,13 @@ public class CriteriaService {
 
   private final CriteriaRepository criteriaRepository;
   private final ProjectRepository projectRepository;
+  private final SourceRepository sourceRepository;
 
-  public CriteriaService(ProjectRepository projectRepository, CriteriaRepository criteriaRepository) {
+  public CriteriaService(ProjectRepository projectRepository, CriteriaRepository criteriaRepository,
+                         SourceRepository sourceRepository) {
     this.criteriaRepository = criteriaRepository;
     this.projectRepository = projectRepository;
+    this.sourceRepository = sourceRepository;
   }
 
   public Optional<ProjectEntity> findProjectByIdAndUser(Long project_id, String userId) {
@@ -81,6 +84,40 @@ public class CriteriaService {
     BeanUtils.copyProperties(editedInfo, oldCriteria);
     SourceEntity oldSource = oldCriteria.getSource();
     BeanUtils.copyProperties(editedInfo.getSource(), oldSource);
+    return this.criteriaRepository.save(oldCriteria);
+  }
+
+  public CriteriaEntity update(String userId, CriteriaEntity oldCriteria,
+                               CriteriaDTO editedInfo) {
+
+    //update idea attributes
+    BeanUtils.copyProperties(editedInfo, oldCriteria);
+    oldCriteria.setUpdatedAt(LocalDateTime.now());
+    oldCriteria.setUpdatedBy(userId);
+
+    //update source
+    SourceEntity oldSource = oldCriteria.getSource();
+    SourceDTO newSourceInfo = editedInfo.getSource();
+    SourceEntity newSource;
+    if (newSourceInfo == null) {
+      oldCriteria.setSource(null);
+      oldSource.removeCriteria(oldCriteria);
+      this.sourceRepository.delete(oldSource);
+    }
+    else if (oldSource == null) {
+      newSource = new SourceEntity();
+      BeanUtils.copyProperties(newSourceInfo, newSource);
+      newSource.setCreatedBy(userId);
+      newSource.setUpdatedAt(LocalDateTime.now());
+      newSource.setUpdatedBy(userId);
+      oldCriteria.setSource(newSource);
+    }
+    else {
+      BeanUtils.copyProperties(newSourceInfo, oldSource);
+      oldSource.setUpdatedAt(LocalDateTime.now());
+      oldSource.setUpdatedBy(userId);
+    }
+
     return this.criteriaRepository.save(oldCriteria);
   }
 
