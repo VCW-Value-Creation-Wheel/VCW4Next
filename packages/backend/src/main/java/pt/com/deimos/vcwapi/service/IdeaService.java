@@ -23,8 +23,6 @@ public class IdeaService {
 
   private final IdeaRepository ideaRepository;
   private final ProjectRepository projectRepository;
-
-
   private final SourceRepository sourceRepository;
 
 
@@ -98,7 +96,7 @@ public class IdeaService {
     if (newSourceInfo == null) {
       oldIdea.setSource(null);
       oldSource.removeIdea(oldIdea);
-      sourceRepository.delete(oldSource);
+      this.sourceRepository.delete(oldSource);
     }
     else if (oldSource == null) {
       newSource = new SourceEntity();
