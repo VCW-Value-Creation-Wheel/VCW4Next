@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pt.com.deimos.vcwapi.dto.IdeaAndCriteriaDTO;
 import pt.com.deimos.vcwapi.entity.*;
+import pt.com.deimos.vcwapi.exceptions.BadRequestException;
 import pt.com.deimos.vcwapi.exceptions.NotFoundException;
 import pt.com.deimos.vcwapi.repository.*;
 
@@ -65,11 +66,13 @@ public class IdeaAndCriteriaService {
       throw new NotFoundException("Idea not found.");
     newIaC.setIdea(i.get());
 
-    //link to idea, I check first if it still exists in case
+    //link to criteria, I check first if it still exists in case
     //we end up having people editing at the same time in the future
     Optional<CriteriaEntity> c = this.criteriaRepository.findById(ideaAndCriteriaDTO.getCriteriaId());
     if (c.isEmpty())
       throw new NotFoundException("Criteria not found.");
+    if(c.get().getValueType().equals("yes_or_no") && ideaAndCriteriaDTO.getValue() < 0.0f)
+      throw new BadRequestException("Value field is invalid. Use 0.0 for no and > 0.0 for yes.");
     newIaC.setCriteria(c.get());
 
     // create/connect to source
@@ -85,15 +88,6 @@ public class IdeaAndCriteriaService {
     }
 
     return this.ideaAndCriteriaRepository.save(newIaC);
-  }
-
-  public IdeaAndCriteriaEntity update(IdeaAndCriteriaEntity oldIdeaAndCriteria,
-                                      IdeaAndCriteriaDTO editedInfo) {
-
-    BeanUtils.copyProperties(editedInfo, oldIdeaAndCriteria);
-    SourceEntity oldSource = oldIdeaAndCriteria.getSource();
-    BeanUtils.copyProperties(editedInfo.getSource(), oldSource);
-    return this.ideaAndCriteriaRepository.save(oldIdeaAndCriteria);
   }
 
   public IdeaAndCriteriaEntity update(String userId, IdeaAndCriteriaEntity oldIdeaAndCriteria,
@@ -128,6 +122,10 @@ public class IdeaAndCriteriaService {
       oldSource.setUpdatedAt(LocalDateTime.now());
       oldSource.setUpdatedBy(userId);
     }*/
+
+    Optional<CriteriaEntity> c = this.criteriaRepository.findById(editedInfo.getCriteriaId());
+    if(c.get().getValueType().equals("yes_or_no") && editedInfo.getValue() < 0.0f)
+      throw new BadRequestException("Value field is invalid. Use 0.0 for no and > 0.0 for yes.");
 
     return this.ideaAndCriteriaRepository.save(oldIdeaAndCriteria);
   }
