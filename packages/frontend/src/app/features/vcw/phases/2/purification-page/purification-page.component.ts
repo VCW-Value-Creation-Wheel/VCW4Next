@@ -10,11 +10,9 @@ import { CheckboxItemInput, createCriteriasConfig,
   sourceConfig,
   VcwPhasesService
 } from '@core';
-import { VcwMockService } from '@core/services/mocks/vcw/vcw-mock.service';
 import { faGlobe, faPlus, faUser, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import { Subject } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { environment } from '../../../../../../environments/environment';
 
 @Component({
   selector: 'app-purification-page',
@@ -27,7 +25,6 @@ export class PurificationPageComponent implements OnInit {
   faUser = faUser;
   faPlus = faPlus;
 
-  useMocks: boolean;
   vcwId: number;
   projectId: number;
 
@@ -82,13 +79,10 @@ export class PurificationPageComponent implements OnInit {
               private router: Router,
               private activatedRoute: ActivatedRoute,
               private vcwPhasesService: VcwPhasesService,
-              private mockService: VcwMockService,
               private formBuilder: FormBuilder,
               private snackbarService: SnackbarService) {}
 
   ngOnInit(): void {
-    this.useMocks = environment.activateMocks;
-
     this.ideaFormArray = this.formBuilder.array([]);
     this.criteriaFormArray = this.formBuilder.array([]);
     this.pairFormArray = this.formBuilder.array([]);
@@ -104,59 +98,44 @@ export class PurificationPageComponent implements OnInit {
       Here should be performed a request to the back-end, to check and fetch existing data.
       The code below is using mocks.
     */
-    if (this.useMocks) {
-      this.mockService.getIdeas().pipe(take(1)).subscribe((ideas) => {
-        ideas.forEach(i => {
-          this.ideaFormArray.push(this.formBuilder.group(createIdeasConfig));
-          this.ideaFormArray.at(this.ideaFormArray.length - 1).patchValue(i);
-        });
+    this.isLoading = true;
+    this.vcwPhasesService.getIdeas(this.vcwId, this.projectId).pipe(take(1)).subscribe(data => {
+      data.forEach(dataItem => {
+        const dataForm = this.formBuilder.group(createIdeasConfig);
+        dataForm.controls.source.setValue(this.formBuilder.group(sourceConfig));
+        this.ideaFormArray.push(dataForm);
+        this.ideaFormArray.at(this.ideaFormArray.length - 1).patchValue(dataItem);
       });
-      this.mockService.getCriterias().pipe(take(1)).subscribe((criteria) => {
-        criteria.forEach(c => {
-          this.criteriaFormArray.push(this.formBuilder.group(createCriteriasConfig));
-          this.criteriaFormArray.at(this.criteriaFormArray.length - 1).patchValue(c);
-        });
-      });
-    } else {
-      this.isLoading = true;
-      this.vcwPhasesService.getIdeas(this.vcwId, this.projectId).pipe(take(1)).subscribe(data => {
-        data.forEach(dataItem => {
-          const dataForm = this.formBuilder.group(createIdeasConfig);
-          dataForm.controls.source.setValue(this.formBuilder.group(sourceConfig));
-          this.ideaFormArray.push(dataForm);
-          this.ideaFormArray.at(this.ideaFormArray.length - 1).patchValue(dataItem);
-        });
-        this.isLoading = false;
-      }, error => {
-        this.snackbarService.danger('Data Fetching Error', 'Unable to check and retrieve data from the server. Try again later.')
-        .during(2000).show();
-      });
+      this.isLoading = false;
+    }, error => {
+      this.snackbarService.danger('Data Fetching Error', 'Unable to check and retrieve data from the server. Try again later.')
+      .during(2000).show();
+    });
 
-      this.vcwPhasesService.getCriterias(this.vcwId, this.projectId).pipe(take(1)).subscribe(data => {
-        data.forEach(dataItem => {
-          const dataForm = this.formBuilder.group(createCriteriasConfig);
-          dataForm.controls.source.setValue(this.formBuilder.group(sourceConfig));
-          this.criteriaFormArray.push(dataForm);
-          this.criteriaFormArray.at(this.criteriaFormArray.length - 1).patchValue(dataItem);
-        });
-        this.isLoading = false;
-      }, error => {
-        this.snackbarService.danger('Data Fetching Error', 'Unable to check and retrieve data from the server. Try again later.')
-        .during(2000).show();
+    this.vcwPhasesService.getCriterias(this.vcwId, this.projectId).pipe(take(1)).subscribe(data => {
+      data.forEach(dataItem => {
+        const dataForm = this.formBuilder.group(createCriteriasConfig);
+        dataForm.controls.source.setValue(this.formBuilder.group(sourceConfig));
+        this.criteriaFormArray.push(dataForm);
+        this.criteriaFormArray.at(this.criteriaFormArray.length - 1).patchValue(dataItem);
       });
+      this.isLoading = false;
+    }, error => {
+      this.snackbarService.danger('Data Fetching Error', 'Unable to check and retrieve data from the server. Try again later.')
+      .during(2000).show();
+    });
 
-      this.vcwPhasesService.getIdeaCriteriaPairs(this.vcwId, this.projectId).pipe(take(1)).subscribe(data => {
-        data.forEach((dataItem) => {
-          const dataForm = this.formBuilder.group(createPairConfig);
-          dataForm.controls.ideaId.setValue(dataItem.idea.id);
-          dataForm.controls.ideaName.setValue(dataItem.idea.name);
-          dataForm.controls.criteriaId.setValue(dataItem.criteria.id);
-          dataForm.controls.criteriaName.setValue(dataItem.criteria.name);
-          this.pairFormArray.push(dataForm);
-          this.pairFormArray.at(this.pairFormArray.length - 1).patchValue(dataItem);
-        });
+    this.vcwPhasesService.getIdeaCriteriaPairs(this.vcwId, this.projectId).pipe(take(1)).subscribe(data => {
+      data.forEach((dataItem) => {
+        const dataForm = this.formBuilder.group(createPairConfig);
+        dataForm.controls.ideaId.setValue(dataItem.idea.id);
+        dataForm.controls.ideaName.setValue(dataItem.idea.name);
+        dataForm.controls.criteriaId.setValue(dataItem.criteria.id);
+        dataForm.controls.criteriaName.setValue(dataItem.criteria.name);
+        this.pairFormArray.push(dataForm);
+        this.pairFormArray.at(this.pairFormArray.length - 1).patchValue(dataItem);
       });
-    }
+    });
   }
 
   getIcon(entryTypeId: number): IconDefinition {
@@ -197,31 +176,19 @@ export class PurificationPageComponent implements OnInit {
 
   onDirectIdeaAdd() {
     if (this.ideaDataForm.valid) {
-      if (this.useMocks) {
-        if (this.ideaFormArray.length === 0) {
-          this.ideaDataForm.controls.id.setValue(1);
-        } else {
-          this.ideaDataForm.controls.id.setValue(this.ideaFormArray.at(this.ideaFormArray.length - 1).get('id').value + 1);
-        }
+      this.ideaDataForm.controls.entryTypeId.setValue(1);
+      this.vcwPhasesService.createIdea(this.vcwId, this.projectId, this.ideaDataForm.value)
+      .pipe(take(1))
+      .subscribe(response => {
+        this.ideaDataForm.controls.id.setValue(response.id);
         this.ideaFormArray.push(this.ideaDataForm);
         this.simpleIdeaInputOpen = false;
         this.snackbarService.success('Success!', 'New idea added.')
         .during(2000).show();
-      } else {
-        this.ideaDataForm.controls.entryTypeId.setValue(1);
-        this.vcwPhasesService.createIdea(this.vcwId, this.projectId, this.ideaDataForm.value)
-        .pipe(take(1))
-        .subscribe(response => {
-          this.ideaDataForm.controls.id.setValue(response.id);
-          this.ideaFormArray.push(this.ideaDataForm);
-          this.simpleIdeaInputOpen = false;
-          this.snackbarService.success('Success!', 'New idea added.')
-          .during(2000).show();
-        }, error => {
-          this.snackbarService.danger('Error', 'Unable to create new idea. Try again later.')
-          .during(2000).show();
-        });
-      }
+      }, error => {
+        this.snackbarService.danger('Error', 'Unable to create new idea. Try again later.')
+        .during(2000).show();
+      });
     }
   }
 
@@ -267,28 +234,19 @@ export class PurificationPageComponent implements OnInit {
     this.actionConfirm$.pipe(take(1)).subscribe(userConfirm => {
       this.confirmDialogOpen = false;
       if (userConfirm) {
-        if (this.useMocks) {
+        this.vcwPhasesService.deleteIdea(this.vcwId, this.projectId, ideaIdControl.value)
+        .pipe(take(1))
+        .subscribe(response => {
           this.ideaFormArray.removeAt(index);
           this.selectedIdeaIndex = undefined;
           this.checkForExistingPair();
           this.linkedCriteriaIds = [];
           this.snackbarService.success('Success!', 'The selected idea was deleted.')
           .during(2000).show();
-        } else {
-          this.vcwPhasesService.deleteIdea(this.vcwId, this.projectId, ideaIdControl.value)
-          .pipe(take(1))
-          .subscribe(response => {
-            this.ideaFormArray.removeAt(index);
-            this.selectedIdeaIndex = undefined;
-            this.checkForExistingPair();
-            this.linkedCriteriaIds = [];
-            this.snackbarService.success('Success!', 'The selected idea was deleted.')
-            .during(2000).show();
-          }, error => {
-            this.snackbarService.danger('Error', 'Unable to delete idea. Try again later.')
-            .during(2000).show();
-          });
-        }
+        }, error => {
+          this.snackbarService.danger('Error', 'Unable to delete idea. Try again later.')
+          .during(2000).show();
+        });
       }
     });
   }
@@ -301,31 +259,19 @@ export class PurificationPageComponent implements OnInit {
 
   onDirectCriteriaAdd() {
     if (this.criteriaDataForm.valid) {
-      if (this.useMocks) {
-        if (this.criteriaFormArray.length === 0) {
-          this.criteriaDataForm.controls.id.setValue(1);
-        } else {
-          this.criteriaDataForm.controls.id.setValue(this.criteriaFormArray.at(this.criteriaFormArray.length - 1).get('id').value + 1);
-        }
+      this.criteriaDataForm.controls.entryTypeId.setValue(1);
+      this.vcwPhasesService.createCriteria(this.vcwId, this.projectId, this.criteriaDataForm.value)
+      .pipe(take(1))
+      .subscribe(response => {
+        this.criteriaDataForm.controls.id.setValue(response.id);
         this.criteriaFormArray.push(this.criteriaDataForm);
         this.simpleCriteriaInputOpen = false;
         this.snackbarService.success('Success!', 'New criteria added.')
         .during(2000).show();
-      } else {
-        this.criteriaDataForm.controls.entryTypeId.setValue(1);
-        this.vcwPhasesService.createCriteria(this.vcwId, this.projectId, this.criteriaDataForm.value)
-        .pipe(take(1))
-        .subscribe(response => {
-          this.criteriaDataForm.controls.id.setValue(response.id);
-          this.criteriaFormArray.push(this.criteriaDataForm);
-          this.simpleCriteriaInputOpen = false;
-          this.snackbarService.success('Success!', 'New criteria added.')
-          .during(2000).show();
-        }, error => {
-          this.snackbarService.danger('Error', 'Unable to create new criteria. Try again later.')
-          .during(2000).show();
-        });
-      }
+      }, error => {
+        this.snackbarService.danger('Error', 'Unable to create new criteria. Try again later.')
+        .during(2000).show();
+      });
     }
   }
 
@@ -351,25 +297,16 @@ export class PurificationPageComponent implements OnInit {
     this.actionConfirm$.pipe(take(1)).subscribe(userConfirm => {
       this.confirmDialogOpen = false;
       if (userConfirm) {
-        if (this.useMocks) {
+        this.vcwPhasesService.deleteCriteria(this.vcwId, this.projectId, criteriaIdControl.value)
+        .pipe(take(1))
+        .subscribe(response => {
           this.criteriaFormArray.removeAt(index);
-          this.selectedCriteriaIndex = undefined;
-          this.checkForExistingPair();
-          this.linkedIdeaIds = [];
           this.snackbarService.success('Success!', 'The selected criteria was deleted.')
           .during(2000).show();
-        } else {
-          this.vcwPhasesService.deleteCriteria(this.vcwId, this.projectId, criteriaIdControl.value)
-          .pipe(take(1))
-          .subscribe(response => {
-            this.criteriaFormArray.removeAt(index);
-            this.snackbarService.success('Success!', 'The selected criteria was deleted.')
-            .during(2000).show();
-          }, error => {
-            this.snackbarService.danger('Error', 'Unable to delete criteria. Try again later.')
-            .during(2000).show();
-          });
-        }
+        }, error => {
+          this.snackbarService.danger('Error', 'Unable to delete criteria. Try again later.')
+          .during(2000).show();
+        });
       }
     });
   }
@@ -380,38 +317,24 @@ export class PurificationPageComponent implements OnInit {
     if (!this.editIdeaMode) {
       // send request to back-end. On successful response, push to data form array.
       if (this.ideaDataForm.valid) {
-        if (this.useMocks) {
-          if (this.ideaFormArray.length === 0) {
-            this.ideaDataForm.controls.id.setValue(1);
-          } else {
-            this.ideaDataForm.controls.id.setValue(this.ideaFormArray.at(this.ideaFormArray.length - 1).get('id').value + 1);
-          }
+        this.ideaDataForm.controls.entryTypeId.enable({onlySelf: true});
+        this.ideaDataForm.controls.entryTypeId.setValue(this.getEntryTypeId(this.ideaDataForm.controls.source as FormGroup));
+        this.checkNullSource(this.ideaDataForm);
+        this.vcwPhasesService.createIdea(this.vcwId, this.projectId, this.ideaDataForm.value)
+        .pipe(take(1))
+        .subscribe(response => {
+          this.ideaDataForm.controls.id.setValue(response.id);
           this.ideaFormArray.push(this.ideaDataForm);
           this.ideaItemDialogOpen = false;
           this.simpleIdeaInputOpen = false;
           this.isLoading = false;
           this.snackbarService.success('Success!', 'New idea added.')
           .during(2000).show();
-        } else {
-          this.ideaDataForm.controls.entryTypeId.enable({onlySelf: true});
-          this.ideaDataForm.controls.entryTypeId.setValue(this.getEntryTypeId(this.ideaDataForm.controls.source as FormGroup));
-          this.checkNullSource(this.ideaDataForm);
-          this.vcwPhasesService.createIdea(this.vcwId, this.projectId, this.ideaDataForm.value)
-          .pipe(take(1))
-          .subscribe(response => {
-            this.ideaDataForm.controls.id.setValue(response.id);
-            this.ideaFormArray.push(this.ideaDataForm);
-            this.ideaItemDialogOpen = false;
-            this.simpleIdeaInputOpen = false;
-            this.isLoading = false;
-            this.snackbarService.success('Success!', 'New idea added.')
-            .during(2000).show();
-          }, error => {
-            this.isLoading = false;
-            this.snackbarService.danger('Error', 'Unable to create new idea. Try again later.')
-            .during(2000).show();
-          });
-        }
+        }, error => {
+          this.isLoading = false;
+          this.snackbarService.danger('Error', 'Unable to create new idea. Try again later.')
+          .during(2000).show();
+        });
       } else {
         this.isLoading = false;
         this.snackbarService.danger('Error', 'Invalid data. Please review your form.')
@@ -420,33 +343,24 @@ export class PurificationPageComponent implements OnInit {
     } else {
       // send request to back-end. If successful, change the previous values in the form array.
       if (this.ideaDataForm.valid) {
-        if (this.useMocks) {
+        const id = this.ideaFormArray.at(this.editIdeaIndex).get('id').value;
+        this.ideaDataForm.controls.entryTypeId.enable({onlySelf: true});
+        this.ideaDataForm.controls.entryTypeId.setValue(this.getEntryTypeId(this.ideaDataForm.controls.source as FormGroup));
+        this.checkNullSource(this.ideaDataForm);
+        this.vcwPhasesService.editIdea(this.vcwId, this.projectId, id, this.ideaDataForm.value)
+        .pipe(take(1))
+        .subscribe(response => {
           this.editIdeaMode = false;
           this.ideaItemDialogOpen = false;
           this.isLoading = false;
           this.ideaFormArray.at(this.editIdeaIndex).patchValue(this.ideaDataForm.value);
           this.snackbarService.success('Success!', 'Your changes were saved.')
           .during(2000).show();
-        } else {
-          const id = this.ideaFormArray.at(this.editIdeaIndex).get('id').value;
-          this.ideaDataForm.controls.entryTypeId.enable({onlySelf: true});
-          this.ideaDataForm.controls.entryTypeId.setValue(this.getEntryTypeId(this.ideaDataForm.controls.source as FormGroup));
-          this.checkNullSource(this.ideaDataForm);
-          this.vcwPhasesService.editIdea(this.vcwId, this.projectId, id, this.ideaDataForm.value)
-          .pipe(take(1))
-          .subscribe(response => {
-            this.editIdeaMode = false;
-            this.ideaItemDialogOpen = false;
-            this.isLoading = false;
-            this.ideaFormArray.at(this.editIdeaIndex).patchValue(this.ideaDataForm.value);
-            this.snackbarService.success('Success!', 'Your changes were saved.')
-            .during(2000).show();
-          }, error => {
-            this.isLoading = false;
-            this.snackbarService.danger('Error', 'Unable to save the requested changes. Try again later.')
-            .during(2000).show();
-          });
-        }
+        }, error => {
+          this.isLoading = false;
+          this.snackbarService.danger('Error', 'Unable to save the requested changes. Try again later.')
+          .during(2000).show();
+        });
       } else {
         this.isLoading = false;
         this.snackbarService.danger('Error', 'Invalid data. Please review your form.')
@@ -461,38 +375,24 @@ export class PurificationPageComponent implements OnInit {
     if (!this.editCriteriaMode) {
       // send request to back-end. On successful response, push to data form array.
       if (this.criteriaDataForm.valid) {
-        if (this.useMocks) {
-          if (this.criteriaFormArray.length === 0) {
-            this.criteriaDataForm.controls.id.setValue(1);
-          } else {
-            this.criteriaDataForm.controls.id.setValue(this.criteriaFormArray.at(this.criteriaFormArray.length - 1).get('id').value + 1);
-          }
+        this.criteriaDataForm.controls.entryTypeId.enable({onlySelf: true});
+        this.criteriaDataForm.controls.entryTypeId.setValue(this.getEntryTypeId(this.criteriaDataForm.controls.source as FormGroup));
+        this.checkNullSource(this.criteriaDataForm);
+        this.vcwPhasesService.createCriteria(this.vcwId, this.projectId, this.criteriaDataForm.value)
+        .pipe(take(1))
+        .subscribe(response => {
+          this.criteriaDataForm.controls.id.setValue(response.id);
           this.criteriaFormArray.push(this.criteriaDataForm);
           this.criteriaItemDialogOpen = false;
           this.simpleCriteriaInputOpen = false;
           this.isLoading = false;
           this.snackbarService.success('Success!', 'New criteria added.')
           .during(2000).show();
-        } else {
-          this.criteriaDataForm.controls.entryTypeId.enable({onlySelf: true});
-          this.criteriaDataForm.controls.entryTypeId.setValue(this.getEntryTypeId(this.criteriaDataForm.controls.source as FormGroup));
-          this.checkNullSource(this.criteriaDataForm);
-          this.vcwPhasesService.createCriteria(this.vcwId, this.projectId, this.criteriaDataForm.value)
-          .pipe(take(1))
-          .subscribe(response => {
-            this.criteriaDataForm.controls.id.setValue(response.id);
-            this.criteriaFormArray.push(this.criteriaDataForm);
-            this.criteriaItemDialogOpen = false;
-            this.simpleCriteriaInputOpen = false;
-            this.isLoading = false;
-            this.snackbarService.success('Success!', 'New criteria added.')
-            .during(2000).show();
-          }, error => {
-            this.isLoading = false;
-            this.snackbarService.danger('Error', 'Unable to create new criteria. Try again later.')
-            .during(2000).show();
-          });
-        }
+        }, error => {
+          this.isLoading = false;
+          this.snackbarService.danger('Error', 'Unable to create new criteria. Try again later.')
+          .during(2000).show();
+        });
       } else {
         this.isLoading = false;
         this.snackbarService.danger('Error', 'Invalid data. Please review your form.')
@@ -501,33 +401,24 @@ export class PurificationPageComponent implements OnInit {
     } else {
       // send request to back-end. If successful, change the previous values in the form array.
       if (this.criteriaDataForm.valid) {
-        if (this.useMocks) {
+        const id = this.criteriaFormArray.at(this.editCriteriaIndex).get('id').value;
+        this.criteriaDataForm.controls.entryTypeId.enable({onlySelf: true});
+        this.criteriaDataForm.controls.entryTypeId.setValue(this.getEntryTypeId(this.criteriaDataForm.controls.source as FormGroup));
+        this.checkNullSource(this.criteriaDataForm);
+        this.vcwPhasesService.editCriteria(this.vcwId, this.projectId, id, this.criteriaDataForm.value)
+        .pipe(take(1))
+        .subscribe(response => {
           this.editCriteriaMode = false;
           this.criteriaItemDialogOpen = false;
           this.isLoading = false;
           this.criteriaFormArray.at(this.editCriteriaIndex).patchValue(this.criteriaDataForm.value);
           this.snackbarService.success('Success!', 'Your changes were saved.')
           .during(2000).show();
-        } else {
-          const id = this.criteriaFormArray.at(this.editCriteriaIndex).get('id').value;
-          this.criteriaDataForm.controls.entryTypeId.enable({onlySelf: true});
-          this.criteriaDataForm.controls.entryTypeId.setValue(this.getEntryTypeId(this.criteriaDataForm.controls.source as FormGroup));
-          this.checkNullSource(this.criteriaDataForm);
-          this.vcwPhasesService.editCriteria(this.vcwId, this.projectId, id, this.criteriaDataForm.value)
-          .pipe(take(1))
-          .subscribe(response => {
-            this.editCriteriaMode = false;
-            this.criteriaItemDialogOpen = false;
-            this.isLoading = false;
-            this.criteriaFormArray.at(this.editCriteriaIndex).patchValue(this.criteriaDataForm.value);
-            this.snackbarService.success('Success!', 'Your changes were saved.')
-            .during(2000).show();
-          }, error => {
-            this.isLoading = false;
-            this.snackbarService.danger('Error', 'Unable to save the requested changes. Try again later.')
-            .during(2000).show();
-          });
-        }
+        }, error => {
+          this.isLoading = false;
+          this.snackbarService.danger('Error', 'Unable to save the requested changes. Try again later.')
+          .during(2000).show();
+        });
       } else {
         this.isLoading = false;
         this.snackbarService.danger('Error', 'Invalid data. Please review your form.')
@@ -634,29 +525,26 @@ export class PurificationPageComponent implements OnInit {
       this.pairDataForm.controls.ideaId.setValue(this.ideaFormArray.at(this.selectedIdeaIndex).get('id').value);
       this.pairDataForm.controls.criteriaId.enable({onlySelf: true});
       this.pairDataForm.controls.criteriaId.setValue(this.criteriaFormArray.at(this.selectedCriteriaIndex).get('id').value);
-      if (!this.useMocks) {
-        this.vcwPhasesService.createIdeaCriteriaPair(this.vcwId, this.projectId, this.pairDataForm.value)
-        .pipe(take(1)).subscribe(response => {
-          this.pairDataForm.controls.id.setValue(response.id);
-          this.pairDataForm.controls.ideaName.enable({onlySelf: true});
-          this.pairDataForm.controls.criteriaName.enable({onlySelf: true});
 
-          const ideaName = this.ideaFormArray.at(this.selectedIdeaIndex).get('name').value;
-          const criteriaName = this.criteriaFormArray.at(this.selectedCriteriaIndex).get('name').value;
+      this.vcwPhasesService.createIdeaCriteriaPair(this.vcwId, this.projectId, this.pairDataForm.value)
+      .pipe(take(1)).subscribe(response => {
+        this.pairDataForm.controls.id.setValue(response.id);
+        this.pairDataForm.controls.ideaName.enable({onlySelf: true});
+        this.pairDataForm.controls.criteriaName.enable({onlySelf: true});
 
-          this.pairDataForm.controls.ideaName.setValue(ideaName);
-          this.pairDataForm.controls.criteriaName.setValue(criteriaName);
+        const ideaName = this.ideaFormArray.at(this.selectedIdeaIndex).get('name').value;
+        const criteriaName = this.criteriaFormArray.at(this.selectedCriteriaIndex).get('name').value;
 
-          this.pairFormArray.push(this.pairDataForm);
-          this.checkForExistingPair();
-          this.checkForLinkedIdeas();
-          this.checkForLinkedCriteria();
-          this.snackbarService.success('Success!', 'New pair created.')
-          .during(2000).show();
-        });
-      } else {
+        this.pairDataForm.controls.ideaName.setValue(ideaName);
+        this.pairDataForm.controls.criteriaName.setValue(criteriaName);
+
         this.pairFormArray.push(this.pairDataForm);
-      }
+        this.checkForExistingPair();
+        this.checkForLinkedIdeas();
+        this.checkForLinkedCriteria();
+        this.snackbarService.success('Success!', 'New pair created.')
+        .during(2000).show();
+      });
       this.createPairDialogOpen = false;
     }
   }
