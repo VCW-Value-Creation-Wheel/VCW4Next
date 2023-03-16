@@ -35,8 +35,13 @@ public class SourceEntity extends BaseNamedEntity{
 
     public void addIdea(IdeaEntity idea){this.ideas.add(idea);}
 
-
     public void removeIdea(IdeaEntity idea){
         this.ideas.remove(idea);
+    }
+
+    public void addCriteria(CriteriaEntity criteria){this.criterias.add(criteria);}
+
+    public void removeCriteria(CriteriaEntity criteria){
+        this.criterias.remove(criteria);
     }
 }

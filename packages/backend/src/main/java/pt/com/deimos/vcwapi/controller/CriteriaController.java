@@ -75,7 +75,7 @@ public class CriteriaController {
     }
 
     return ResponseEntity.status(HttpStatus.OK).body(
-            this.criteriaService.update(criteriaEntityOptional.get(), criteriaDTO));
+            this.criteriaService.update(principal.getSubject(), criteriaEntityOptional.get(), criteriaDTO));
   }
 
   @DeleteMapping("/{id}")
