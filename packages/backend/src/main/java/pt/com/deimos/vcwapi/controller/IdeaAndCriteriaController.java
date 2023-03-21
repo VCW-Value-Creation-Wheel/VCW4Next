@@ -74,14 +74,21 @@ public class IdeaAndCriteriaController {
     if (project.isEmpty())
       throw new NotFoundException("Project not found.");
 
-    Optional<IdeaAndCriteriaEntity> criteriaEntityOptional = this.ideaAndCriteriaService.findById(id);
 
-    if(criteriaEntityOptional.isEmpty()) {
+    Optional<IdeaAndCriteriaEntity> ideaAndCriteria = this.ideaAndCriteriaService.findById(id);
+    if(ideaAndCriteria.isEmpty()) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Idea and Criteria pair not found");
     }
 
+    // check if url id matches the pair that has the idea and criteria given in the body
+    IdeaAndCriteriaEntity pair = ideaAndCriteria.get();
+    if ((ideaAndCriteriaDTO.getCriteriaId() != pair.getCriteria().getId())
+      || (ideaAndCriteriaDTO.getIdeaId() != pair.getIdea().getId()))
+      throw new BadRequestException("The ids given in the request body do not match the pair with id "+id);
+
+
     return ResponseEntity.status(HttpStatus.OK).body(
-            this.ideaAndCriteriaService.update(principal.getId(), criteriaEntityOptional.get(), ideaAndCriteriaDTO));
+            this.ideaAndCriteriaService.update(principal.getId(), pair, ideaAndCriteriaDTO));
   }
 
   @DeleteMapping("/{id}")
