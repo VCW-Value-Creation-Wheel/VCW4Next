@@ -1,7 +1,9 @@
 package pt.com.deimos.vcwapi.service;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pt.com.deimos.vcwapi.dto.RankedDTO;
 import pt.com.deimos.vcwapi.entity.ProjectEntity;
 import pt.com.deimos.vcwapi.entity.VcwHasCriteriaEntity;
 import pt.com.deimos.vcwapi.repository.ProjectRepository;
@@ -33,8 +35,15 @@ public class VcwHasCriteriaService {
     return this.vcwHasCriteriaRepository.findById(vcwHasCriteriaId);
   }
 
-  public VcwHasCriteriaEntity update(VcwHasCriteriaEntity oldVcwHasCriteria, Boolean selected) {
+  public VcwHasCriteriaEntity updateSelected(VcwHasCriteriaEntity oldVcwHasCriteria, Boolean selected) {
     oldVcwHasCriteria.setSelected(selected);
+    return this.vcwHasCriteriaRepository.save(oldVcwHasCriteria);
+  }
+
+  public VcwHasCriteriaEntity updateRank(VcwHasCriteriaEntity oldVcwHasCriteria, RankedDTO rank) {
+    BeanUtils.copyProperties(rank, oldVcwHasCriteria);
+    oldVcwHasCriteria.setIntervalMax(rank.getIntervalMax());
+    oldVcwHasCriteria.setIntervalMin(rank.getIntervalMin());
     return this.vcwHasCriteriaRepository.save(oldVcwHasCriteria);
   }
 

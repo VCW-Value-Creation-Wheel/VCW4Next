@@ -1355,7 +1355,7 @@ paths:
     get:
       tags:
         - 3b Select criterias page
-      summary: Shows vcw criterias 🟢
+      summary: Shows vcw criterias 🚧
       description: TODO
       operationId: getAll
       responses:
@@ -1396,9 +1396,9 @@ paths:
     put:
       tags:
         - 3b Select criterias page
-      summary: Changes the selected status of the idea to true or false. 🟢
+      summary: Changes the selected status of the criteria to true or false. 🚧
       description: TODO
-      operationId: update
+      operationId: updateSelected
       responses:
         '201':
           description: Edited VcwHasCriteria
@@ -1452,7 +1452,88 @@ paths:
             type: boolean
 
 
-
+  /projects/{project_id}/vcws/{vcw_id}/selectedCriterias/rank/{vcw_criteria_id}:
+    put:
+      tags:
+        - 3c Rank & Weight Criteria
+      summary: Sets the criteria as must have or not and also updates its ranking, weight and max/min thresh olds 🚧
+      description: TODO
+      operationId: updateRank
+      responses:
+        '201':
+          description: Edited VcwHasCriteria
+          content:
+            application/json:
+              schema:
+                type: string
+                example: {
+                  "id": 1,
+                  "vcwId": 1,
+                  "selected": false,
+                  "type": "must_have",
+                  "ranking": 1,
+                  "weight": 5.0,
+                  "intervalMax": 10.0,
+                  "intervalMin": 1.0
+                }
+        '400':
+          description: Invalid arguments
+          content:
+            application/json:
+              example: {
+                "timestamp": "2023-01-31T12:03:11.417+00:00",
+                "status": 400,
+                "error": "Bad Request",
+                "trace": "...MethodArgumentNotValidException: Validation failed for..."}
+      parameters:
+        - name: project_id
+          in: path
+          description: "project id"
+          required: true
+          schema:
+            type: integer
+        - name: vcw_id
+          in: path
+          description: "vcw id"
+          required: true
+          schema:
+            type: integer
+        - name: vcw_criteria_id
+          in: path
+          description: "vcw criteria id"
+          required: true
+          schema:
+            type: integer
+        - name: type
+          in: formData
+          description: must_have or nice_to_have
+          required: true
+          schema:
+            type: string
+        - name: ranking
+          in: formData
+          description:
+          required: true
+          schema:
+            type: integer
+        - name: weight
+          in: formData
+          description:
+          required: true
+          schema:
+            type: float
+        - name: interval_min
+          in: formData
+          description:
+          required: true
+          schema:
+            type: float
+        - name: interval_max
+          in: formData
+          description:
+          required: true
+          schema:
+            type: float
 components:
   schemas:
     Vcw:

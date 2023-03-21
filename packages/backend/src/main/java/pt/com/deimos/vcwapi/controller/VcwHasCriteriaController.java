@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
+import pt.com.deimos.vcwapi.dto.RankedDTO;
 import pt.com.deimos.vcwapi.dto.SelectedDTO;
 import pt.com.deimos.vcwapi.entity.ProjectEntity;
 import pt.com.deimos.vcwapi.entity.VcwHasCriteriaEntity;
@@ -39,7 +40,7 @@ public class VcwHasCriteriaController {
     }
 
   @PutMapping("/{id}")
-  public ResponseEntity<Object> update(
+  public ResponseEntity<Object> updateSelected(
           @AuthenticationPrincipal Jwt principal,
           @PathVariable(value = "project_id") Long projectId,
           @PathVariable Long id,
@@ -57,7 +58,30 @@ public class VcwHasCriteriaController {
     }
 
     return ResponseEntity.status(HttpStatus.OK).body(
-            this.vcwHasCriteriaService.update(vcwHasCriteriaEntityOptional.get(), selected.getSelected()));
+            this.vcwHasCriteriaService.updateSelected(vcwHasCriteriaEntityOptional.get(), selected.getSelected()));
   }
+
+
+    @PutMapping("/rank/{id}")
+    public ResponseEntity<Object> updateRank(
+            @AuthenticationPrincipal Jwt principal,
+            @PathVariable(value = "project_id") Long projectId,
+            @PathVariable Long id,
+            @RequestBody @Valid RankedDTO ranked
+    ) {
+
+        Optional<ProjectEntity> project =
+                this.vcwHasCriteriaService.findProjectByIdAndUser(projectId, principal.getSubject());
+        if (project.isEmpty())
+            throw new NotFoundException("Project not found.");
+
+        Optional<VcwHasCriteriaEntity> vcwHasCriteriaEntityOptional = this.vcwHasCriteriaService.findById(id);
+        if(vcwHasCriteriaEntityOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Vcw Criteria not found");
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(
+                this.vcwHasCriteriaService.updateRank(vcwHasCriteriaEntityOptional.get(), ranked));
+    }
       
 }
