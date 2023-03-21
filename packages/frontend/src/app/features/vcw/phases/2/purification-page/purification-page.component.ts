@@ -51,7 +51,6 @@ export class PurificationPageComponent implements OnInit {
   confirmDialogOpen = false;
   createPairDialogOpen = false;
   editPairMode = false;
-  editPairIndex: number;
 
   existingPairSelected = false;
 
@@ -456,7 +455,6 @@ export class PurificationPageComponent implements OnInit {
       this.pairDataForm.patchValue(this.pairFormArray.controls.find(control =>
         control.get('ideaId').value === selectedIdeaId
         && control.get('criteriaId').value === selectedCriteriaId).value);
-      this.editPairIndex = this.pairFormArray.controls.indexOf(this.pairDataForm);
       this.setCriteriaValueValidators();
       this.convertBetweenYesNoAndFloat();
       this.createPairDialogOpen = true;
@@ -509,11 +507,21 @@ export class PurificationPageComponent implements OnInit {
       this.pairDataForm.controls.ideaId.setValue(this.ideaFormArray.at(this.selectedIdeaIndex).get('id').value);
       this.pairDataForm.controls.criteriaId.enable({onlySelf: true});
       this.pairDataForm.controls.criteriaId.setValue(this.criteriaFormArray.at(this.selectedCriteriaIndex).get('id').value);
-      const id = this.pairFormArray.at(this.editPairIndex).get('id').value;
+
+      const id = this.pairFormArray.controls
+        .find(control => (control.get('ideaId').value === this.pairDataForm.get('ideaId').value)
+        && (control.get('criteriaId').value === this.pairDataForm.get('criteriaId').value))
+        .get('id').value;
+
       this.convertBetweenYesNoAndFloat();
       this.vcwPhasesService.editIdeaCriteriaPair(this.vcwId, this.projectId, id, this.pairDataForm.value)
       .pipe(take(1)).subscribe(response => {
-        this.pairFormArray.at(this.editPairIndex).patchValue(this.pairDataForm.value);
+
+        this.pairFormArray.controls
+        .find(control => (control.get('ideaId').value === this.pairDataForm.get('ideaId').value)
+        && (control.get('criteriaId').value === this.pairDataForm.get('criteriaId').value))
+        .patchValue(this.pairDataForm.value);
+
         this.createPairDialogOpen = false;
         this.editPairMode = false;
         this.snackbarService.success('Success!', 'Your changes were saved.')
