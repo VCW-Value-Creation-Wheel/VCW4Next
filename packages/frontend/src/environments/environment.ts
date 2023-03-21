@@ -2,10 +2,10 @@ export const environment = {
   production: false,
   staging: false,
   identity: {
-    url: 'https://identity.staging.services4eo.com/',
-    realm: 'vcw-integration',
+    url: 'http://localhost:8080',
+    realm: 'vcw',
     clientId: 'vcw-web'
   },
-  api: 'https://vcw-api.develop.s4eo.com',
-  activateMocks: true
+  api: 'http://localhost:8081/v1',
+  activateMocks: false
 };

@@ -6,6 +6,6 @@ export const environment = {
     realm: 'vcw-integration',
     clientId: 'vcw-web'
   },
-  api: 'https://vcw-api.develop.s4eo.com',
-  activateMocks: true
+  api: 'https://vcw-api.develop.s4eo.com/v1',
+  activateMocks: false
 };
