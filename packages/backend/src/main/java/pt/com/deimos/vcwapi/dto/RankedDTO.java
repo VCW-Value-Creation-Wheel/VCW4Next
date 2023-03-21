@@ -18,8 +18,8 @@ public class RankedDTO {
     private Float weight;
 
     @NotNull
-    private Float threshold_min;
+    private Float intervalMin;
 
     @NotNull
-    private Float threshold_max;
+    private Float intervalMax;
 }
