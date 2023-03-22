@@ -1,4 +1,4 @@
-<div [formGroup]="form" (ngSubmit)="onSubmit()">
+<div [formGroup]="dataForm" (ngSubmit)="onSubmit()">
     <div class="grid grid-cols-10 gap-2 p-4 m-4 bg-gray-200 rounded-lg">
         <div class="col-span-9 text-3xl">Create New VCW</div>
         <div class="col-span-9 md:col-span-6 lg:col-span-2 m-2 p-2">
@@ -6,7 +6,7 @@
                 id="title"
                 [label]="'Title'"
                 [placeholder]="''"
-                formControlName="title"
+                formControlName="name"
             >
             </app-input>
         </div>
@@ -30,6 +30,7 @@
             <app-button
             [label]="'Submit'"
             (click)="onSubmit()"
+            [isDisabled]="!dataForm.valid"
             >
             </app-button>
         </div>

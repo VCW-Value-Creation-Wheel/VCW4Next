@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, UntypedFormArray, UntypedFormGroup } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, UntypedFormArray, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   createIdeasConfig,
   PhaseNavigationService,
   SnackbarService,
+  sourceConfig,
   VcwPhasesService
 } from '@core';
 import { VcwMockService } from '@core/services/mocks/vcw/vcw-mock.service';
@@ -75,11 +76,15 @@ export class CreateIdeasComponent implements OnInit {
     this.projectId = parseInt(this.activatedRoute.snapshot.paramMap.get('project_id'), 10);
 
     if (!this.useMocks) {
+      this.isLoading = true;
       this.vcwPhasesService.getIdeas(this.vcwId, this.projectId).pipe(take(1)).subscribe(data => {
         data.forEach(dataItem => {
-          this.dataFormArray.push(this.formBuilder.group(createIdeasConfig));
+          const dataForm = this.formBuilder.group(createIdeasConfig);
+          dataForm.controls.source.setValue(this.formBuilder.group(sourceConfig));
+          this.dataFormArray.push(dataForm);
           this.dataFormArray.at(this.dataFormArray.length - 1).patchValue(dataItem);
         });
+        this.isLoading = false;
       }, error => {
         this.snackbarService.danger('Data Fetching Error', 'Unable to check and retrieve data from the server. Try again later.')
         .during(2000).show();
@@ -115,9 +120,11 @@ export class CreateIdeasComponent implements OnInit {
         this.snackbarService.success('Success!', 'New idea added.')
         .during(2000).show();
       } else {
-        this.vcwPhasesService.createDiagnostic(this.vcwId, this.projectId, this.dataForm.value)
+        this.dataForm.controls.entryTypeId.setValue(1);
+        this.vcwPhasesService.createIdea(this.vcwId, this.projectId, this.dataForm.value)
         .pipe(take(1))
         .subscribe(response => {
+          this.dataForm.controls.id.setValue(response.id);
           this.dataFormArray.push(this.dataForm);
           this.simpleInputOpen = false;
           this.snackbarService.success('Success!', 'New idea added.')
@@ -131,6 +138,7 @@ export class CreateIdeasComponent implements OnInit {
   }
 
   onOpenDialog() {
+    this.dataForm.controls.source = this.formBuilder.group(sourceConfig);
     this.itemDialogOpen = true;
   }
 
@@ -154,9 +162,13 @@ export class CreateIdeasComponent implements OnInit {
           this.snackbarService.success('Success!', 'New idea added.')
           .during(2000).show();
         } else {
+          this.dataForm.controls.entryTypeId.enable({onlySelf: true});
+          this.dataForm.controls.entryTypeId.setValue(this.getEntryTypeId(this.dataForm.controls.source as FormGroup));
+          this.checkNullSource();
           this.vcwPhasesService.createIdea(this.vcwId, this.projectId, this.dataForm.value)
           .pipe(take(1))
           .subscribe(response => {
+            this.dataForm.controls.id.setValue(response.id);
             this.dataFormArray.push(this.dataForm);
             this.itemDialogOpen = false;
             this.simpleInputOpen = false;
@@ -165,6 +177,7 @@ export class CreateIdeasComponent implements OnInit {
             .during(2000).show();
           }, error => {
             this.isLoading = false;
+            this.dataForm.controls.source = this.formBuilder.group(sourceConfig);
             this.snackbarService.danger('Error', 'Unable to create new idea. Try again later.')
             .during(2000).show();
           });
@@ -185,7 +198,10 @@ export class CreateIdeasComponent implements OnInit {
           this.snackbarService.success('Success!', 'Your changes were saved.')
           .during(2000).show();
         } else {
-          const id = this.dataForm.controls.id.value;
+          const id = this.dataFormArray.at(this.editIdeaIndex).get('id').value;
+          this.dataForm.controls.entryTypeId.enable({onlySelf: true});
+          this.dataForm.controls.entryTypeId.setValue(this.getEntryTypeId(this.dataForm.controls.source as FormGroup));
+          this.checkNullSource();
           this.vcwPhasesService.editIdea(this.vcwId, this.projectId, id, this.dataForm.value)
           .pipe(take(1))
           .subscribe(response => {
@@ -197,6 +213,7 @@ export class CreateIdeasComponent implements OnInit {
             .during(2000).show();
           }, error => {
             this.isLoading = false;
+            this.dataForm.controls.source = this.formBuilder.group(sourceConfig);
             this.snackbarService.danger('Error', 'Unable to save the requested changes. Try again later.')
             .during(2000).show();
           });
@@ -213,6 +230,7 @@ export class CreateIdeasComponent implements OnInit {
     this.editIdeaMode = true;
     this.itemDialogOpen = true;
     this.dataForm = this.formBuilder.group(createIdeasConfig);
+    this.dataForm.controls.source = this.formBuilder.group(sourceConfig);
     this.dataForm.patchValue(this.dataFormArray.at(index).value);
     this.editIdeaIndex = index;
   }
@@ -245,11 +263,19 @@ export class CreateIdeasComponent implements OnInit {
     });
   }
 
-  getIcon(ideaSourceControl: AbstractControl): IconDefinition {
-    if (ideaSourceControl?.value) {
+  getIcon(entryTypeId: number): IconDefinition {
+    if (entryTypeId === 3) {
       return faGlobe;
     } else {
       return faUser;
+    }
+  }
+
+  getEntryTypeId(ideaSourceControl: FormGroup): number {
+    if (ideaSourceControl && ideaSourceControl.controls?.name.value) {
+      return 3;
+    } else {
+      return 1;
     }
   }
 
@@ -264,6 +290,13 @@ export class CreateIdeasComponent implements OnInit {
   onKeyPress(event: KeyboardEvent) {
     if (event.key === 'Enter') {
       this.onDirectAdd();
+    }
+  }
+
+  checkNullSource() {
+    if (this.dataForm.controls.source.value.name === null || this.dataForm.controls.source.value.name === '') {
+      this.dataForm.controls.source = this.formBuilder.control(null);
+      this.dataForm.updateValueAndValidity();
     }
   }
 }

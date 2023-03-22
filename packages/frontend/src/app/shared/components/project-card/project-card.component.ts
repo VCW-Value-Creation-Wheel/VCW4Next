@@ -7,16 +7,29 @@ import { Project } from '@core';
   styleUrls: ['./project-card.component.scss'],
 })
 export class ProjectCardComponent implements OnInit {
-  @Input() project: Project;
+
   @Output() clickEvent = new EventEmitter<number>();
+  @Input() project: Project;
+  @Input()
+  set photoUrl(value: string) {
+    this.photo = value;
+    if (!this.photo) {
+      this.photo = 'https://res.cloudinary.com/deimospt/image/upload/v1659628047/backgrounds/services_pvcsuf.jpg';
+    }
+  }
+
+  get photoUrl() {
+    return this.photo;
+  }
 
   photo: string;
 
   constructor() {}
 
+
+
   ngOnInit(): void {
-    this.photo = this.project.thumbnailURL ??
-                'https://res.cloudinary.com/deimospt/image/upload/v1659628047/backgrounds/services_pvcsuf.jpg';
+
   }
 
   onClickEvent() {

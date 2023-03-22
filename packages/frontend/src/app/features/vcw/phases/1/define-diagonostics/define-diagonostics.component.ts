@@ -53,6 +53,20 @@ export class DefineDiagonosticsComponent implements OnInit {
     'Threats'
   ];
 
+  swotfieldNames = {
+    0: 'strength',
+    1: 'weakness',
+    2: 'opportunity',
+    3: 'threat'
+  };
+
+  swotfieldTabNumbers = {
+    strength: 0,
+    weakness: 1,
+    opportunity: 2,
+    threat: 3
+  };
+
   constructor(private formBuilder: FormBuilder,
               private phaseNavService: PhaseNavigationService,
               private router: Router,
@@ -77,6 +91,7 @@ export class DefineDiagonosticsComponent implements OnInit {
     if (!this.useMocks) {
       this.vcwPhasesService.getDiagnostics(this.vcwId, this.projectId).pipe(take(1)).subscribe(data => {
         data.forEach(dataItem => {
+          dataItem.swotField = this.swotfieldTabNumbers[dataItem.swotField];
           this.dataFormArray.push(this.formBuilder.group(swotFieldRowConfig));
           this.dataFormArray.at(this.dataFormArray.length - 1).patchValue(dataItem);
         });
@@ -150,7 +165,7 @@ export class DefineDiagonosticsComponent implements OnInit {
   onConfirm() {
     if (!this.editRowMode) {
       this.dataForm.controls.swotField.enable({onlySelf: true});
-      this.dataForm.controls.swotField.setValue(this.activeTab);
+      this.dataForm.controls.swotField.setValue(this.swotfieldNames[this.activeTab]);
       if (this.dataForm.valid) {
         if (this.useMocks) {
           this.dataFormArray.push(this.dataForm);
@@ -162,6 +177,8 @@ export class DefineDiagonosticsComponent implements OnInit {
           this.vcwPhasesService.createDiagnostic(this.vcwId, this.projectId, this.dataForm.value)
           .pipe(take(1))
           .subscribe(response => {
+            this.dataForm.controls.id.setValue(response.id);
+            this.dataForm.controls.swotField.setValue(this.swotfieldTabNumbers[response.swotField]);
             this.dataFormArray.push(this.dataForm);
             this.itemDialogOpen = false;
             this.simpleInputOpen = false;
@@ -189,12 +206,18 @@ export class DefineDiagonosticsComponent implements OnInit {
           this.snackbarService.success('Success!', 'Your changes were saved.')
           .during(2000).show();
         } else {
-          const id = this.dataForm.controls.id.value;
+          this.dataForm.controls.id.enable({onlySelf: true});
+          this.dataForm.controls.swotField.setValue(
+            this.swotfieldNames[this.dataFormArray.at(this.editRowIndex).get('swotField').value]
+          );
+          const id = this.dataFormArray.at(this.editRowIndex).get('id').value;
+          this.dataForm.controls.id.setValue(id);
           this.vcwPhasesService.editDiagnostic(this.vcwId, this.projectId, id, this.dataForm.value)
           .pipe(take(1))
           .subscribe(response => {
             this.editRowMode = false;
             this.itemDialogOpen = false;
+            this.dataForm.controls.swotField.setValue(this.swotfieldTabNumbers[response.swotField]);
             this.dataFormArray.at(this.editRowIndex).patchValue(this.dataForm.value);
             this.snackbarService.success('Success!', 'Your changes were saved.')
             .during(2000).show();
@@ -227,7 +250,7 @@ export class DefineDiagonosticsComponent implements OnInit {
 
   onDirectAdd() {
     this.dataForm.controls.swotField.enable({onlySelf: true});
-    this.dataForm.controls.swotField.setValue(this.activeTab);
+    this.dataForm.controls.swotField.setValue(this.swotfieldNames[this.activeTab]);
     if (this.dataForm.valid) {
       if (this.useMocks) {
         this.dataFormArray.push(this.dataForm);
@@ -237,7 +260,9 @@ export class DefineDiagonosticsComponent implements OnInit {
       } else {
         this.vcwPhasesService.createDiagnostic(this.vcwId, this.projectId, this.dataForm.value)
         .pipe(take(1))
-        .subscribe(response => {
+        .subscribe((response) => {
+          this.dataForm.controls.id.setValue(response.id);
+          this.dataForm.controls.swotField.setValue(this.swotfieldTabNumbers[response.swotField]);
           this.dataFormArray.push(this.dataForm);
           this.simpleInputOpen = false;
           this.snackbarService.success('Success!', 'New row added.')

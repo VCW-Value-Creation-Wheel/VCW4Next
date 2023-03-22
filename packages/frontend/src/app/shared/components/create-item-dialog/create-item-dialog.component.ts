@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import { FormBuilder, UntypedFormGroup } from '@angular/forms';
-import { InputMap, Option } from '@core';
+import { FormGroup, UntypedFormGroup } from '@angular/forms';
+import { CheckboxItemInput, InputMap, Option } from '@core';
 
 @Component({
   selector: 'app-create-item-dialog',
@@ -15,12 +15,13 @@ export class CreateItemDialogComponent implements OnInit {
   @Input() tabs: string[] = [];
   @Input() tabFormControlsToExclude: {[key: number]: string[]} = {};
   @Input() fileFormFieldName = 'file';
-  @Input() checkboxes: string[] = [];
+  @Input() checkboxes: CheckboxItemInput[] = [];
   @Input() checkboxFormControl?: string;
   @Input() checkboxCategoryLabel?: string;
   @Input() isAwaitingAction = false;
   @Input() inputTypes: InputMap = {};
   @Input() inputHelperLabel: InputMap = {};
+  @Input() disableEditing: InputMap = {};
 
   @Output() cancel = new EventEmitter();
   @Output() confirm = new EventEmitter();
@@ -29,15 +30,24 @@ export class CreateItemDialogComponent implements OnInit {
   checkedBox: number;
   originalFormValues: {[key: string]: any} = {};
 
-  constructor(private formBuilder: FormBuilder) {}
+  nestedFormFields: Map<string, string[]> = new Map();
+
+  constructor() {}
 
   ngOnInit(): void {
     this.changeActiveTab(0);
+    const controls: string[] = Object.keys(this.formGroup.controls);
+    controls.forEach(control => {
+      if (this.hasNestedForm(control)) {
+        const fields = Object.keys((this.formGroup.controls[control] as FormGroup).controls);
+        this.nestedFormFields.set(control, fields);
+      }
+    });
     if (this.isEditing) {
-      const controls: string[] = Object.keys(this.formGroup.controls);
       controls.forEach((control) => {
         if (control === this.checkboxFormControl) {
-          this.checkedBox = this.checkboxes.indexOf(this.formGroup.controls[control].value);
+          const value = this.formGroup.controls[control].value;
+          this.checkedBox = this.checkboxes.map(item => item.value).indexOf(value);
         }
         this.originalFormValues[control] = this.formGroup.controls[control].value;
       });
@@ -95,6 +105,10 @@ export class CreateItemDialogComponent implements OnInit {
    return this.formGroup.controls[control].disabled;
   }
 
+  hasNestedForm(control: string): boolean {
+    return this.formGroup.controls[control].value instanceof Object;
+  }
+
   onCancel() {
     if (!this.isEditing) {
       this.clearFormFields();
@@ -105,13 +119,20 @@ export class CreateItemDialogComponent implements OnInit {
   }
 
   onConfirm() {
+    this.formGroup.updateValueAndValidity();
     this.confirm.emit();
   }
 
   clearFormFields() {
     const controls: string[] = Object.keys(this.formGroup.controls);
     controls.forEach(control => {
-      this.formGroup.controls[control].setValue(null);
+      if (this.hasNestedForm(control)) {
+        this.nestedFormFields.get(control).forEach(field => {
+          (this.formGroup.controls[control] as FormGroup).controls[field].setValue(null);
+        });
+      } else {
+        this.formGroup.controls[control].setValue(null);
+      }
     });
   }
 
@@ -127,6 +148,22 @@ export class CreateItemDialogComponent implements OnInit {
       return this.inputTypes[fieldName];
     } else {
       return 'text';
+    }
+  }
+
+  getNestedFields(fieldName: string): string[] {
+    if (this.nestedFormFields.has(fieldName)) {
+      return this.nestedFormFields.get(fieldName);
+    } else {
+      return [];
+    }
+  }
+
+  isFieldEditDisabled(fieldName: string): boolean {
+    if (this.disableEditing[fieldName]) {
+      return this.disableEditing[fieldName];
+    } else {
+      return false;
     }
   }
 

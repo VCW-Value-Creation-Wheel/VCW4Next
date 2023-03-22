@@ -13,7 +13,7 @@
                 id="project-title"
                 [label]="'Project Title'"
                 [placeholder]="''"
-                formControlName="project-title"
+                formControlName="name"
             >
             </app-input>
         </div>
@@ -22,14 +22,13 @@
                 id="project-description"   
                 [label]="'Project Description'"
                 [placeholder]="''"
-                formControlName="project-description"
+                formControlName="description"
             >
             </app-text-area>
         </div>
         <div class="col-span-3 md:col-span-1 m-2 p-2">
             <app-input-file
                 [label]="'Thumbnail'"
-                formControlName="project-thumbnail"
                 id="project-thumbnail"
                 ngDefaultControl
             >
@@ -39,13 +38,13 @@
             <app-select-input
                 [label] = "'Language'"
                 [options]="langOptions"
-                formControlName="project-language"
+                formControlName="lang"
                 id="project-language"
             >
             </app-select-input>
         </div>
         <div class="col-span-4 text-xl font-bold ">Users and Roles</div>
-        <div class="grid grid-cols-4 col-span-4 px-2" formArrayName = "userArray">
+        <div class="grid grid-cols-4 col-span-4 px-2">
             <div *ngFor="let userEntry of userRole; index as ind" class="col-span-3 flex justify-between m-2 p-2 bg-gray-200 rounded-md">
                     <div class="m-2">{{userEntry.user}} - {{userEntry.role}}</div>
                     <div class="">
@@ -115,7 +114,8 @@
             <div class="col-span-4 my-2" *ngIf="!isAddUserActive && !isEditing">
                 <app-button
                 [label]="'Add User'"
-                (click)="addUser()">
+                (click)="addUser()"
+                [isDisabled]="true">
                 </app-button>
             </div>
         </div>
@@ -123,6 +123,7 @@
             <app-button
             [label]="'Submit'"
             (click)="onSubmit($event)"
+            [isDisabled]="!form.valid"
             >
             </app-button>
         </div>

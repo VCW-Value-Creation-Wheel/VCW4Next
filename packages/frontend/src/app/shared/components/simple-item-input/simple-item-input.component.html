@@ -29,6 +29,7 @@
         <app-icon-button
             [icon]="faCheck"
             (btnClick)="onAdd()"
+            [disabled]="!dataForm.valid"
         ></app-icon-button>
         <app-icon-button
             [icon]="faTimes"

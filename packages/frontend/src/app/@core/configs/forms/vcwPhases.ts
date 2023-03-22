@@ -15,24 +15,29 @@ export const challengeConfig = {
 export const createIdeasConfig = {
     name: [null, Validators.required],
     file: [null, Validators.required],
-    sourceName: [null],
-    sourceUrl: [null],
+    entryTypeId: [null],
+    source: [null],
     id: [null]
 };
 
 export const createCriteriasConfig = {
     name: [null, Validators.required],
     file: [null, Validators.required],
-    sourceName: [null],
-    sourceUrl: [null],
+    source: [null],
     id: [null],
-    valueType: ['Number', Validators.required]
+    entryTypeId: [null],
+    valueType: ['number', Validators.required]
+};
+
+export const sourceConfig = {
+    name: [null],
+    url: [null]
 };
 
 export const createPairConfig = {
-    ideaId: [null, Validators.required],
+    ideaId: [0, Validators.required],
     ideaName: [null],
-    criteriaId: [null, Validators.required],
+    criteriaId: [0, Validators.required],
     criteriaName: [null],
     value: [null, Validators.required],
     id: [null]

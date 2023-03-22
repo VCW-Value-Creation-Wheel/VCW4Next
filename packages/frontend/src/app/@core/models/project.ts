@@ -4,3 +4,14 @@ export interface Project {
     description: string;
     thumbnailURL?: string;
 }
+
+export interface Thumbnail {
+    id: number;
+    createdAt: string;
+    updatedAt: string;
+    updatedBy: string;
+    createdBy: string;
+    name: string;
+    path: string;
+    fileType: string;
+}

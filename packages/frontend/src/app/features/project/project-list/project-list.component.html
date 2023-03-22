@@ -1,10 +1,10 @@
 <div class="pl-4 py-4">
     <h1 class="text-2xl font-bold text-primary">Project List</h1>
 </div>
-<div class="justify-between gap-4 pl-4 py-4 w-full flex flex-wrap">
-    <app-search-bar>
+<div class="justify-between gap-4 pl-2 py-4 w-full flex flex-wrap">
+    <!-- <app-search-bar>
 
-    </app-search-bar>
+    </app-search-bar> -->
     <app-button
         [leftIcon]="faPlus"
         [label]="'New Project'"
@@ -18,6 +18,7 @@
         <app-project-card
             [project]="project"
             (clickEvent)="onProjectClick($event)"
+            [photoUrl]="getProjectThumbnail(project.id)"
         ></app-project-card>
     </div>
 </div>

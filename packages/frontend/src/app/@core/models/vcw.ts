@@ -9,10 +9,15 @@ export interface VCW {
 }
 
 export interface SwotFieldRow {
-    categoryId: number;
-    title: string;
+    swotField: string;
+    name: string;
     description: string;
     id?: number;
+    createdAt: string;
+    updatedAt: string;
+    updatedBy: string;
+    createdBy: string;
+    vcwId: number;
 }
 
 export interface VCWPhase {
@@ -41,4 +46,11 @@ export type Criteria = {
     id?: number,
     isSelected: boolean,
     valueType: string
+};
+
+export type IdeaCriteriaPair = {
+    idea: Idea;
+    criteria: Criteria;
+    value: number | string;
+    id?: number;
 };

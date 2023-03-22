@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Project, MockProjectService, ProjectsService } from '@core';
+import { Project, MockProjectService, ProjectsService, Thumbnail } from '@core';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { Observable } from 'rxjs';
+import { map, take } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
 
 
@@ -15,6 +16,8 @@ export class ProjectListComponent implements OnInit {
   faPlus = faPlus;
   // projects: Project[] = [];
   projects$: Observable<Project[]>;
+
+  projectThumbnails: Map<number, string> = new Map();
 
   useMocks: boolean;
 
@@ -33,6 +36,11 @@ export class ProjectListComponent implements OnInit {
       this.projects$ = this.projectMock.projects();
     } else {
       this.projects$ = this.projectsService.getProjects();
+      this.projectsService.getProjects().pipe(take(1)).subscribe((projects) => {
+        projects.forEach((proj) => {
+          this.setProjectThumbnail(proj.id);
+        });
+      });
     }
   }
 
@@ -43,5 +51,20 @@ export class ProjectListComponent implements OnInit {
   addNewProject() {
     this.router.navigate(['new-project'],
                         {relativeTo: this.route});
+  }
+
+  getProjectThumbnail(projectId: number): string {
+    if (this.projectThumbnails.has(projectId)) {
+      return this.projectThumbnails.get(projectId);
+    } else {
+      return undefined;
+    }
+  }
+
+  setProjectThumbnail(projectId: number) {
+    this.projectsService.getProjectThumbnail(projectId).pipe(take(1), map(thumbnail => thumbnail.path))
+    .subscribe((path) => {
+      this.projectThumbnails.set(projectId, path);
+    });
   }
 }

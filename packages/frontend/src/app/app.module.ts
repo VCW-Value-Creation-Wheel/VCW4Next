@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, APP_INITIALIZER } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { AngularSvgIconModule } from 'angular-svg-icon';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -18,6 +18,7 @@ import { MainLayoutComponent } from './features/main-layout/main-layout.componen
 import { HomeComponent } from './features/home/home.component';
 import { ProjectListComponent } from 'features/project/project-list/project-list.component';
 import { NewProjectComponent } from 'features/project/new-project/new-project.component';
+import { AuthInterceptor } from '@core/interceptors/auth.interceptor';
 
 
 @NgModule({
@@ -48,6 +49,11 @@ import { NewProjectComponent } from 'features/project/new-project/new-project.co
       multi: true,
       deps: [KeycloakService],
     },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent],
 })

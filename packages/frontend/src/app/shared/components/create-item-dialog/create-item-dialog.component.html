@@ -27,13 +27,30 @@
                 ></app-input-file>
             </ng-container>
             <ng-template #normalInput>
-                <app-input
-                    [label]="formatFieldLabel(field) | titlecase"
-                    [formControlName]="field"
-                    [placeholder]="formatFieldLabel(field) | titlecase"
-                    *ngIf="!tabFormControlsToExclude[activeTab].includes(field)"
-                    [inputType]="getInputType(field)"
-                ></app-input>
+                <ng-container *ngIf="!hasNestedForm(field); else nestedInput">
+                    <app-input
+                        [label]="formatFieldLabel(field) | titlecase"
+                        [formControlName]="field"
+                        [placeholder]="formatFieldLabel(field) | titlecase"
+                        *ngIf="!tabFormControlsToExclude[activeTab].includes(field)"
+                        [inputType]="getInputType(field)"
+                        [isDisabled]="isFieldEditDisabled(field)"
+                    ></app-input>
+                </ng-container>
+                <ng-template #nestedInput>
+                    <div [formGroupName]="field">
+                        <ng-container *ngFor="let nestedField of getNestedFields(field)">
+                            <app-input
+                                [label]="formatFieldLabel(field + ' ' + nestedField) | titlecase"
+                                [formControlName]="nestedField"
+                                [placeholder]="formatFieldLabel(field + ' ' + nestedField) | titlecase"
+                                *ngIf="!tabFormControlsToExclude[activeTab].includes(nestedField)"
+                                [inputType]="getInputType(nestedField)"
+                                [isDisabled]="isFieldEditDisabled(nestedField)"
+                            ></app-input>
+                        </ng-container>
+                    </div>
+                </ng-template>
             </ng-template>
             
         </ng-container>
@@ -42,8 +59,8 @@
             <div class="flex flex-row gap-4">
                 <ng-container *ngFor="let checkbox of checkboxes; index as idx">
                     <app-checkbox-input
-                        [label]="checkbox"
-                        [value]="checkbox"
+                        [label]="checkbox.label"
+                        [value]="checkbox.value"
                         (propagate)="onCheckboxCheck($event, idx)"
                         [isChecked]="isBoxChecked(idx)"
                     ></app-checkbox-input>
