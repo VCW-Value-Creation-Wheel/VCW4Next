@@ -1,9 +1,18 @@
 <footer
   class="flex h-12 bg-secondary-500 justify-between items-center px-8 overflow-hidden overflow-x-scroll sm:overflow-hidden no-scrollbar"
 >
-  <div class="flex gap-8 items-center h-12">
+  <div class="flex flex-row gap-8 items-center h-12">
     <svg-icon src="assets/img/vcw_lab.svg" svgClass="h-10 w-20"></svg-icon>
     <svg-icon src="assets/img/nova_logo.svg" svgClass="h-10 w-20"></svg-icon>
     <svg-icon src="assets/img/deimos.svg" svgClass="h-10 w-20"></svg-icon>
+  </div>
+  <div class="flex flex-row gap-4 justify-end items-center">
+    <img src="assets/img/eu-flag.png">
+    <!--TODO: on small screens, the message should appear as a popup (?) -->
+    <div class="hidden md:flex flex-col gap-2 items-center w-1/2 text-white text-sm">
+      <span>This project has received funding from the European Union’s 
+        Horizon 2020 research and innovation programme under grant agreement No.101004362
+      </span>
+    </div>
   </div>
 </footer>
