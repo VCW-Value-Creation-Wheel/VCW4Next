@@ -104,23 +104,23 @@ public class IdeaAndCriteriaService {
     /*SourceEntity oldSource = oldIdeaAndCriteria.getSource();
     SourceDTO newSourceInfo = editedInfo.getSource();
     SourceEntity newSource;
-    if (newSourceInfo == null) {
-      oldIdeaAndCriteria.setSource(null);
-      oldSource.removeIdeaAndCriteria(oldIdeaAndCriteria);
+    if (newSourceInfo != null && oldSource != null){
+      BeanUtils.copyProperties(newSourceInfo, oldSource);
+      oldSource.setUpdatedAt(LocalDateTime.now());
+      oldSource.setUpdatedBy(userId);
+    }
+    if (newSourceInfo == null && oldSource != null) {
+      oldCriteria.setSource(null);
+      oldSource.removeCriteria(oldCriteria);
       this.sourceRepository.delete(oldSource);
     }
-    else if (oldSource == null) {
+    else if (oldSource == null && newSourceInfo != null) {
       newSource = new SourceEntity();
       BeanUtils.copyProperties(newSourceInfo, newSource);
       newSource.setCreatedBy(userId);
       newSource.setUpdatedAt(LocalDateTime.now());
       newSource.setUpdatedBy(userId);
-      oldIdeaAndCriteria.setSource(newSource);
-    }
-    else {
-      BeanUtils.copyProperties(newSourceInfo, oldSource);
-      oldSource.setUpdatedAt(LocalDateTime.now());
-      oldSource.setUpdatedBy(userId);
+      oldCriteria.setSource(newSource);
     }*/
 
     Optional<CriteriaEntity> c = this.criteriaRepository.findById(editedInfo.getCriteriaId());

@@ -93,23 +93,23 @@ public class IdeaService {
     SourceEntity oldSource = oldIdea.getSource();
     SourceDTO newSourceInfo = editedInfo.getSource();
     SourceEntity newSource;
-    if (newSourceInfo == null) {
+    if (newSourceInfo != null && oldSource != null){
+      BeanUtils.copyProperties(newSourceInfo, oldSource);
+      oldSource.setUpdatedAt(LocalDateTime.now());
+      oldSource.setUpdatedBy(userId);
+    }
+    if (newSourceInfo == null && oldSource != null) {
       oldIdea.setSource(null);
       oldSource.removeIdea(oldIdea);
       this.sourceRepository.delete(oldSource);
     }
-    else if (oldSource == null) {
+    else if (oldSource == null & newSourceInfo != null) {
       newSource = new SourceEntity();
       BeanUtils.copyProperties(newSourceInfo, newSource);
       newSource.setCreatedBy(userId);
       newSource.setUpdatedAt(LocalDateTime.now());
       newSource.setUpdatedBy(userId);
       oldIdea.setSource(newSource);
-    }
-    else {
-      BeanUtils.copyProperties(newSourceInfo, oldSource);
-      oldSource.setUpdatedAt(LocalDateTime.now());
-      oldSource.setUpdatedBy(userId);
     }
 
     return this.ideaRepository.save(oldIdea);
