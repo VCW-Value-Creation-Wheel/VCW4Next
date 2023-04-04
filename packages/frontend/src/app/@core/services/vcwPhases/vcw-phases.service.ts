@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Criteria, Idea, IdeaCriteriaPair, SwotFieldRow } from '@core/models';
+import { Criteria, Idea, IdeaCriteriaPair, SwotFieldRow, VCWChallenge} from '@core/models';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 
@@ -42,17 +42,17 @@ export class VcwPhasesService {
   }
 
   // Phase 1b
-  getChallenge(vcwId: number, projectId: number): Observable<string> {
+  getChallenge(vcwId: number, projectId: number): Observable<VCWChallenge> {
     const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/challenges`;
-    return this.http.get<string>(url, this.httpOptions);
+    return this.http.get<VCWChallenge>(url, this.httpOptions);
   }
 
-  createChallenge(vcwId: number, projectId: number, data: string): Observable<any> {
+  createChallenge(vcwId: number, projectId: number, data: VCWChallenge): Observable<any> {
     const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/challenges`;
     return this.http.post(url, data, this.httpOptions);
   }
 
-  editChallenge(vcwId: number, projectId: number, data: string): Observable<string> {
+  editChallenge(vcwId: number, projectId: number, data: VCWChallenge): Observable<string> {
     const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/challenges`;
     return this.http.put<string>(url, data, this.httpOptions);
   }
