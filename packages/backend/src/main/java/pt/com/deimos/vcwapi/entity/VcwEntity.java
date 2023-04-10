@@ -49,13 +49,15 @@ public class VcwEntity extends BaseNamedEntity{
     @Column(name = "closed_at")
     private LocalDateTime closedAt;
 
-    @OneToMany(mappedBy = "vcw")
-    @JsonIgnore
-    private List<DiagnosticEntity> diagnostics;
+    @Column(columnDefinition = "TEXT", name="kpis")
+    private String kpis;
+
+    @Column(columnDefinition = "TEXT", name="test_and_kpis_evaluation")
+    private String testAndKpisEvaluation;
 
     @OneToMany(mappedBy = "vcw")
     @JsonIgnore
-    private List<KpiEntity> kpis;
+    private List<DiagnosticEntity> diagnostics;
 
     @OneToOne
     @JoinColumn(name="business_model_canvas_id", referencedColumnName = "id", insertable=false, updatable=false)
