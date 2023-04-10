@@ -112,7 +112,7 @@ public class VcwController {
   }
 
   @PutMapping("/{id}/challenges")
-  public ResponseEntity<String> saveChallenges(
+  public ResponseEntity<Object> saveChallenges(
           @PathVariable(value = "id") Long vcwId,
           @RequestBody ChallengeDTO challenge,
           @PathVariable(value = "project_id") Long projectId,
@@ -132,7 +132,7 @@ public class VcwController {
     editedVcw.setChallenge(challenge.getChallenge());
 
     return ResponseEntity.status(HttpStatus.OK).body(
-            this.vcwService.update(editedVcw).getChallenge());
+            this.vcwService.update(editedVcw));
 
   }
 }
