@@ -70,14 +70,13 @@ export class ChallengeComponent implements OnInit {
       this.vcwChallenge.challenge = this.dataForm.controls.challenge.value;
 
       if (this.isEditing) {
-        console.log(this.dataForm);
         this.vcwPhasesService.editChallenge(this.vcwId, this.projectId, this.vcwChallenge)
         .pipe(take(1))
         .subscribe(response => {
           this.snackbarService.success('Success!', 'Your changes were saved.').during(2000).show();
         }, error => {
           this.snackbarService.danger('Error', 'Unable to save your changes. Please try again later.')
-          .during(200).show();
+          .during(2000).show();
         });
       } else {
         this.vcwPhasesService.createChallenge(this.vcwId, this.projectId, this.vcwChallenge)
@@ -87,7 +86,7 @@ export class ChallengeComponent implements OnInit {
           this.snackbarService.success('Success!', 'Your changes were saved.').during(2000).show();
         }, error => {
           this.snackbarService.danger('Error', 'Unable to save your changes. Please try again later.')
-          .during(200).show();
+          .during(2000).show();
         });
       }
     }
