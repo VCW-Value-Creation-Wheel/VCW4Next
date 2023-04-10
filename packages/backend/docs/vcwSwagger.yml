@@ -688,7 +688,7 @@ paths:
         - Vcw challenge page
       summary: Shows the vcw challenge. 🟢
       description: TODO
-      operationId: getChallenge
+      operationId: getChallenges
       responses:
         '200':
           description: successful operation
@@ -710,7 +710,7 @@ paths:
         - Vcw challenge page
       summary: Edits the vcw challenge. 🟢
       description: TODO
-      operationId: editChallenge
+      operationId: saveChallenges
       responses:
         '201':
           description: Edited challenge
@@ -738,6 +738,65 @@ paths:
         - name: challenge
           in: formData
           description: "block of text describing the challenge"
+          required: true
+          schema:
+            type: string
+
+  /projects/{project_id}/vcws/{vcw_id}/kpis:
+    get:
+      tags:
+        - 1c Expected kpis page
+      summary: Shows the vcw kpis. 🟢
+      description: TODO
+      operationId: getKpis
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                example: { "kpis": "Manpower: low, Money: lower" }
+        '404':
+          description: Kpis not found
+          content:
+            'text/plain; charset=utf-8':
+              schema:
+                type: string
+                example: 'Kpis not found'
+    put:
+      tags:
+        - 1c Expected kpis page
+      summary: Edits the vcw kpis. 🟢
+      description: TODO
+      operationId: saveKpis
+      responses:
+        '201':
+          description: Edited kpis
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "The FitnessGram™ Pacer Test is a multistage aerobic capacity test that progressively gets more difficult as it continues. The 20 meter pacer test will begin in 30 seconds. Line up at the start. The running speed starts slowly, but gets faster each minute after you hear this signal. [beep] A single lap should be completed each time you hear this sound. [ding] Remember to run in a straight line, and run as long as possible. The second time you fail to complete a lap before the sound, your test is over. The test will begin on the word start. On your mark, get ready, start."
+        '400':
+          description: Invalid arguments
+          content:
+            application/json:
+              example: {
+                "timestamp": "2023-01-31T12:03:11.417+00:00",
+                "status": 400,
+                "error": "Bad Request",
+                "trace": "...MethodArgumentNotValidException: Validation failed for..." }
+      parameters:
+        - name: vcw_id
+          in: path
+          description: "vcw id"
+          required: true
+          schema:
+            type: integer
+        - name: kpis
+          in: formData
+          description: "block of text describing the kpis"
           required: true
           schema:
             type: string
