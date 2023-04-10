@@ -52,9 +52,9 @@ export class VcwPhasesService {
     return this.http.post(url, data, this.httpOptions);
   }
 
-  editChallenge(vcwId: number, projectId: number, data: VCWChallenge): Observable<string> {
+  editChallenge(vcwId: number, projectId: number, data: VCWChallenge): Observable<any> {
     const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/challenges`;
-    return this.http.put<string>(url, data, this.httpOptions);
+    return this.http.put<any>(url, data, this.httpOptions);
   }
 
   // Phase 2a
