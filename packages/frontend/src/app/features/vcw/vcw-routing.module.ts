@@ -38,6 +38,10 @@ const routes: Routes = [
     {
         path: ':vcw_id/phases/3a',
         component: SelectIdeasComponent
+    },
+    {
+        path: ':vcw_id/phases/3b',
+        component: SelectIdeasComponent
     }
 ];
 

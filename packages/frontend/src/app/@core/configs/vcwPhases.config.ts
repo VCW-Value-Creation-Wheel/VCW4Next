@@ -42,6 +42,12 @@ const vcwPhasesNavigation: VCWPhase = {
         name: 'Select Ideas',
         previousPhaseId: '2c',
         nextPhaseId: '3b'
+    },
+    '3b': {
+        id: '3b',
+        name: 'Select Criteria',
+        previousPhaseId: '3a',
+        nextPhaseId: '3c'
     }
 };
 
