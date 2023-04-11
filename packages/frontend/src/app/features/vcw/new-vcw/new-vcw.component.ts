@@ -13,9 +13,9 @@ export class NewVcwComponent implements OnInit {
   dataForm: UntypedFormGroup;
 
   vcwTypes = {
-    1: 'vcw',
-    2: 'journey',
-    3: 'method'
+    1: 'sprint',
+    2: 'method',
+    3: 'meta-framework'
   };
 
   isSelected = 0;
