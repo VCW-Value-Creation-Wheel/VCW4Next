@@ -520,7 +520,7 @@ paths:
   /projects/{project_id}/vcws/{vcw_id}/diagnostics:
     get:
       tags:
-        - Diagnostics page (swot fields)
+        - 1a - Diagnostic page (swot fields)
       summary: Shows all diagnostics of the given vcw. 🟢
       description: TODO
       operationId: getByVcw
@@ -555,7 +555,7 @@ paths:
             type: integer
     post:
       tags:
-        - Diagnostics page (swot fields)
+        - 1a - Diagnostic page (swot fields)
       summary: Creates a single diagnostic. 🟢
       description: TODO
       operationId: save
@@ -605,7 +605,7 @@ paths:
   /projects/{project_id}/vcws/{vcw_id}/diagnostics/{diagnostic_id}:
     put:
       tags:
-        - Diagnostics page (swot fields)
+        - 1a - Diagnostic page (swot fields)
       summary: Edits the given diagnostic. 🟢
       description: TODO
       operationId: update
@@ -660,7 +660,7 @@ paths:
 
     delete:
       tags:
-        - Diagnostics page (swot fields)
+        - 1a - Diagnostic page (swot fields)
       summary: Deletes the given diagnostic. 🟢
       description: TODO
       operationId: delete
@@ -685,10 +685,10 @@ paths:
   /projects/{project_id}/vcws/{vcw_id}/challenges:
     get:
       tags:
-        - Vcw challenge page
+        - 1b - Challenge page
       summary: Shows the vcw challenge. 🟢
       description: TODO
-      operationId: getChallenge
+      operationId: getChallenges
       responses:
         '200':
           description: successful operation
@@ -707,10 +707,10 @@ paths:
                 example: 'Challenge not found'
     put:
       tags:
-        - Vcw challenge page
+        - 1b - Challenge page
       summary: Edits the vcw challenge. 🟢
       description: TODO
-      operationId: editChallenge
+      operationId: saveChallenges
       responses:
         '201':
           description: Edited challenge
@@ -742,10 +742,69 @@ paths:
           schema:
             type: string
 
+  /projects/{project_id}/vcws/{vcw_id}/kpis:
+    get:
+      tags:
+        - 1c - Expected KPIs page
+      summary: Shows the vcw kpis. 🟢
+      description: TODO
+      operationId: getKpis
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                example: { "kpis": "Manpower: low, Money: lower" }
+        '404':
+          description: Kpis not found
+          content:
+            'text/plain; charset=utf-8':
+              schema:
+                type: string
+                example: 'Kpis not found'
+    put:
+      tags:
+        - 1c - Expected KPIs page
+      summary: Edits the vcw kpis. 🟢
+      description: TODO
+      operationId: saveKpis
+      responses:
+        '201':
+          description: Edited kpis
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "The FitnessGram™ Pacer Test is a multistage aerobic capacity test that progressively gets more difficult as it continues. The 20 meter pacer test will begin in 30 seconds. Line up at the start. The running speed starts slowly, but gets faster each minute after you hear this signal. [beep] A single lap should be completed each time you hear this sound. [ding] Remember to run in a straight line, and run as long as possible. The second time you fail to complete a lap before the sound, your test is over. The test will begin on the word start. On your mark, get ready, start."
+        '400':
+          description: Invalid arguments
+          content:
+            application/json:
+              example: {
+                "timestamp": "2023-01-31T12:03:11.417+00:00",
+                "status": 400,
+                "error": "Bad Request",
+                "trace": "...MethodArgumentNotValidException: Validation failed for..." }
+      parameters:
+        - name: vcw_id
+          in: path
+          description: "vcw id"
+          required: true
+          schema:
+            type: integer
+        - name: kpis
+          in: formData
+          description: "block of text describing the kpis"
+          required: true
+          schema:
+            type: string
+
   /projects/{project_id}/vcws/{vcw_id}/ideas/:
     get:
       tags:
-        - Ideas page
+        - 2a - Ideas page
       summary: Gets all ideas of the vcw. 🟢
       description: TODO
       operationId: getIdeas
@@ -776,7 +835,7 @@ paths:
             type: integer
     post:
       tags:
-        - Ideas page
+        - 2a - Ideas page
       summary: Adds new idea 🟢
       description: TODO
       operationId: save
@@ -825,7 +884,7 @@ paths:
   /projects/{project_id}/vcws/{vcw_id}/ideas/{idea_id}:
     put:
       tags:
-        - Ideas page
+        - 2a - Ideas page
       summary: Edits given idea 🟢
       description: TODO
       operationId: update
@@ -878,7 +937,7 @@ paths:
                 url: string
     delete:
       tags:
-        - Ideas page
+        - 2a - Ideas page
       summary: Deletes given idea 🟢
       description: TODO
       operationId: delete
@@ -902,8 +961,8 @@ paths:
   /projects/{project_id}/vcws/{vcw_id}/criterias/:
     get:
       tags:
-        - Criterias page
-      summary: Gets all criterias of the vcw. 🚧
+        - 2b - Criterias page
+      summary: Gets all criterias of the vcw. 🟢
       description: TODO
       operationId: getCriterias
       responses:
@@ -932,8 +991,8 @@ paths:
             type: integer
     post:
       tags:
-        - Criterias page
-      summary: Adds new criteria 🚧
+        - 2b - Criterias page
+      summary: Adds new criteria 🟢
       description: TODO
       operationId: save
       responses:
@@ -988,8 +1047,8 @@ paths:
   /projects/{project_id}/vcws/{vcw_id}/criterias/{criteria_id}:
     put:
       tags:
-        - Criterias page
-      summary: Updates given criteria 🚧
+        - 2b - Criterias page
+      summary: Updates given criteria 🟢
       description: TODO
       operationId: update
       responses:
@@ -1048,8 +1107,8 @@ paths:
                 url: string
     delete:
       tags:
-        - Criterias page
-      summary: Deletes given criteria 🚧
+        - 2b - Criterias page
+      summary: Deletes given criteria 🟢
       description: TODO
       operationId: delete
       responses:
@@ -1073,8 +1132,8 @@ paths:
   /projects/{project_id}/vcws/{vcw_id}/ideasAndCriterias:
     get:
       tags:
-        - Purification and population page
-      summary: Gets all ideaAndCriteria pairs available for the current vcw 🚧
+        - 2c - Purification and population page
+      summary: Gets all ideaAndCriteria pairs available for the current vcw 🟢
       description: TODO
       operationId: getByVcw
       responses:
@@ -1109,8 +1168,8 @@ paths:
             type: integer
     post:
       tags:
-        - Purification and population page
-      summary: Adds new ideaAndCriteria pair to vcw 🚧
+        - 2c - Purification and population page
+      summary: Adds new ideaAndCriteria pair to vcw 🟢
       description: TODO
       operationId: save
       responses:
@@ -1178,8 +1237,8 @@ paths:
   /projects/{project_id}/vcws/{vcw_id}/ideasAndCriterias/{ideaAndCriteria_id}:
     put:
       tags:
-        - Purification and population page
-      summary: Updates given idea and criteria pair 🚧
+        - 2c - Purification and population page
+      summary: Updates given idea and criteria pair 🟢
       description: TODO
       operationId: update
       responses:
@@ -1245,8 +1304,8 @@ paths:
                 url: string
     delete:
       tags:
-        - Purification and population page
-      summary: Deletes given idea and criteria pair 🚧
+        - 2c - Purification and population page
+      summary: Deletes given idea and criteria pair 🟢
       description: TODO
       operationId: delete
       responses:
@@ -1268,7 +1327,7 @@ paths:
   /projects/{project_id}/vcws/{vcw_id}/selectedIdeas:
     get:
       tags:
-        - 3a Select ideas page
+        - 3a - Select ideas page
       summary: Shows vcw ideas 🟢
       description: TODO
       operationId: getAll
@@ -1301,7 +1360,7 @@ paths:
   /projects/{project_id}/vcws/{vcw_id}/selectedIdeas/{vcw_idea_id}:
     put:
       tags:
-        - 3a Select ideas page
+        - 3a - Select ideas page
       summary: Changes the selected status of the idea to true or false. 🟢
       description: TODO
       operationId: update
@@ -1354,8 +1413,8 @@ paths:
   /projects/{project_id}/vcws/{vcw_id}/selectedCriterias:
     get:
       tags:
-        - 3b Select criterias page
-      summary: Shows vcw criterias 🚧
+        - 3b - Select criterias page
+      summary: Shows vcw criterias 🟢
       description: TODO
       operationId: getAll
       responses:
@@ -1395,8 +1454,8 @@ paths:
   /projects/{project_id}/vcws/{vcw_id}/selectedCriterias/{vcw_criteria_id}:
     put:
       tags:
-        - 3b Select criterias page
-      summary: Changes the selected status of the criteria to true or false. 🚧
+        - 3b - Select criterias page
+      summary: Changes the selected status of the criteria to true or false. 🟢
       description: TODO
       operationId: updateSelected
       responses:
@@ -1455,8 +1514,8 @@ paths:
   /projects/{project_id}/vcws/{vcw_id}/selectedCriterias/rank/{vcw_criteria_id}:
     put:
       tags:
-        - 3c Rank & Weight Criteria
-      summary: Sets the criteria as must have or not and also updates its ranking, weight and max/min thresh olds 🚧
+        - 3c - Rank & Weight Criteria page
+      summary: Sets the criteria as must have or not and also updates its ranking, weight and max/min thresh olds 🟢
       description: TODO
       operationId: updateRank
       responses:
