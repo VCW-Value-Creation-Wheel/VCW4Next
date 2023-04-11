@@ -8,6 +8,10 @@ export interface VCW {
     thumbnailUrl?: string;
 }
 
+export interface VCWChallenge {
+    challenge: string;
+}
+
 export interface SwotFieldRow {
     swotField: string;
     name: string;

@@ -5,6 +5,7 @@ import { challengeConfig, PhaseNavigationService, SnackbarService, VcwPhasesServ
 import { faFloppyDisk } from '@fortawesome/free-solid-svg-icons';
 import { take } from 'rxjs/operators';
 import { environment } from '../../../../../../environments/environment';
+import { VCWChallenge } from '@core/models';
 
 @Component({
   selector: 'app-challenge',
@@ -23,6 +24,8 @@ export class ChallengeComponent implements OnInit {
 
   useMocks: boolean;
 
+  vcwChallenge: VCWChallenge;
+
   constructor(
     private phaseNavService: PhaseNavigationService,
     private router: Router,
@@ -34,6 +37,7 @@ export class ChallengeComponent implements OnInit {
     this.dataForm = this.formBuilder.group(challengeConfig);
   }
   ngOnInit(): void {
+
     this.useMocks = environment.activateMocks;
 
     this.phaseNavService.nextPhase$.subscribe((nextPhase) => {
@@ -48,8 +52,10 @@ export class ChallengeComponent implements OnInit {
       .pipe(take(1))
       .subscribe(data => {
         if (data) {
+
+          this.vcwChallenge = data;
           this.isEditing = true;
-          this.dataForm.controls.challenge.patchValue(data);
+          this.dataForm.controls.challenge.patchValue(this.vcwChallenge.challenge);
         }
       }, error => {
         this.snackbarService.danger('Data Fetching Error', 'Unable to check and retrieve data from the server. Try again later.')
@@ -60,8 +66,11 @@ export class ChallengeComponent implements OnInit {
 
   onSave() {
     if (this.isFormValid('challenge')) {
+
+      this.vcwChallenge.challenge = this.dataForm.controls.challenge.value;
+
       if (this.isEditing) {
-        this.vcwPhasesService.editChallenge(this.vcwId, this.projectId, this.dataForm.controls.challenge.value)
+        this.vcwPhasesService.editChallenge(this.vcwId, this.projectId, this.vcwChallenge)
         .pipe(take(1))
         .subscribe(response => {
           this.snackbarService.success('Success!', 'Your changes were saved.').during(2000).show();
@@ -70,7 +79,7 @@ export class ChallengeComponent implements OnInit {
           .during(2000).show();
         });
       } else {
-        this.vcwPhasesService.createChallenge(this.vcwId, this.projectId, this.dataForm.controls.challenge.value)
+        this.vcwPhasesService.createChallenge(this.vcwId, this.projectId, this.vcwChallenge)
         .pipe(take(1))
         .subscribe(response => {
           this.isEditing = true;
