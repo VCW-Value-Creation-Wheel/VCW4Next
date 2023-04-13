@@ -11,6 +11,11 @@ export const challengeConfig = {
     challenge: [null, Validators.required]
 };
 
+export const expectedKPIsConfig = {
+    kpis: [null, Validators.required]
+};
+
+
 
 export const createIdeasConfig = {
     name: [null, Validators.required],

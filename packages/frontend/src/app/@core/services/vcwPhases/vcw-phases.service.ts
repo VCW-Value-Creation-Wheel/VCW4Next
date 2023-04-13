@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Criteria, Idea, IdeaCriteriaPair, SwotFieldRow, VCWChallenge} from '@core/models';
+import { Criteria, ExpectedKPIs, Idea, IdeaCriteriaPair, SwotFieldRow, VCWChallenge} from '@core/models';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 
@@ -54,6 +54,22 @@ export class VcwPhasesService {
 
   editChallenge(vcwId: number, projectId: number, data: VCWChallenge): Observable<any> {
     const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/challenges`;
+    return this.http.put<any>(url, data, this.httpOptions);
+  }
+
+  //Phase 1c
+  getExpectedKPIs(vcwId: number, projectId: number): Observable<ExpectedKPIs> {
+    const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/kpis`;
+    return this.http.get<ExpectedKPIs>(url, this.httpOptions);
+  }
+
+  createExpectedKPIs(vcwId: number, projectId: number, data: ExpectedKPIs): Observable<any> {
+    const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/kpis`;
+    return this.http.post(url, data, this.httpOptions);
+  }
+
+  editExpectedKPIs(vcwId: number, projectId: number, data: ExpectedKPIs): Observable<any> {
+    const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/kpis`;
     return this.http.put<any>(url, data, this.httpOptions);
   }
 

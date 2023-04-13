@@ -12,6 +12,10 @@ export interface VCWChallenge {
     challenge: string;
 }
 
+export interface ExpectedKPIs {
+    kpis: string;
+}
+
 export interface SwotFieldRow {
     swotField: string;
     name: string;
