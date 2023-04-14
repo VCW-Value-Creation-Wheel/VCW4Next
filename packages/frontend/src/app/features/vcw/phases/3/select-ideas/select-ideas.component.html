@@ -9,8 +9,8 @@
                 [value]="idea.name"
                 [isSelectable]="true"
                 [isEditable]="false"
-                (selectChange)="toggleSelected(idea.id)"
-                [icon]="getIcon(idea.sourceName)"
+                (selectChange)="toggleSelected(idea)"
+                [icon]="getIcon(idea.source)"
                 [isSelected]="idea.isSelected"
             ></app-list-item>
         </div>
