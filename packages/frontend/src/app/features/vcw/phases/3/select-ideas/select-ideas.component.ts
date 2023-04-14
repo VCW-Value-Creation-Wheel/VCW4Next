@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Idea, PhaseNavigationService, SnackbarService, VCWHasIdea, VcwPhasesService } from '@core';
-import { VcwMockService } from '@core/services/mocks/vcw/vcw-mock.service';
-import { faFloppyDisk, faGlobe, faUser, IconDefinition } from '@fortawesome/free-solid-svg-icons';
-import { environment } from '../../../../../../environments/environment';
+import { faGlobe, faUser, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import { take } from 'rxjs/operators';
 
 @Component({
@@ -12,8 +10,6 @@ import { take } from 'rxjs/operators';
   styleUrls: ['./select-ideas.component.scss']
 })
 export class SelectIdeasComponent implements OnInit{
-
-  faFloppyDisk = faFloppyDisk;
 
   vcwId: number;
   projectId: number;
