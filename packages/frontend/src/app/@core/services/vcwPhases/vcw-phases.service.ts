@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Criteria, ExpectedKPIs, Idea, IdeaCriteriaPair, SwotFieldRow, VCWChallenge} from '@core/models';
+import { Criteria, ExpectedKPIs, Idea, IdeaCriteriaPair, SwotFieldRow, VCWChallenge, VCWHasIdea} from '@core/models';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 
@@ -137,5 +137,16 @@ export class VcwPhasesService {
   deleteIdeaCriteriaPair(vcwId: number, projectId: number, ideaCriteriaPairId: number): Observable<any> {
     const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/ideasAndCriterias/${ideaCriteriaPairId}`;
     return this.http.delete(url, this.httpOptions);
+  }
+
+  //Phase 3a
+  getSelectedIdeas(vcwId: number, projectId: number): Observable<VCWHasIdea[]> {
+    const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/selectedIdeas`;
+    return this.http.get<VCWHasIdea[]>(url, this.httpOptions);
+  }
+
+  selectIdea(vcwId: number, projectId: number, ideaId: number, ideaSelectedData: VCWHasIdea): Observable<VCWHasIdea> {
+    const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/selectedIdeas/${ideaId}`;
+    return this.http.put<VCWHasIdea>(url, ideaSelectedData, this.httpOptions);
   }
 }
