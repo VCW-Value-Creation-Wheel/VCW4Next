@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Criteria, PhaseNavigationService, VcwPhasesService } from '@core';
+import { Criteria, PhaseNavigationService, SnackbarService, VCWHasCriteria, VcwPhasesService } from '@core';
 import { VcwMockService } from '@core/services/mocks/vcw/vcw-mock.service';
 import { faFloppyDisk, faGlobe, faUser, IconDefinition } from '@fortawesome/free-solid-svg-icons';
+import { take } from 'rxjs/operators';
 import { environment } from '../../../../../../environments/environment';
 
 @Component({
@@ -11,7 +12,6 @@ import { environment } from '../../../../../../environments/environment';
   styleUrls: ['./select-criteria.component.scss']
 })
 export class SelectCriteriaComponent implements OnInit {
-  faFloppyDisk = faFloppyDisk;
 
   vcwId: number;
   projectId: number;
@@ -26,47 +26,46 @@ export class SelectCriteriaComponent implements OnInit {
       private router: Router,
       private activatedRoute: ActivatedRoute,
       private vcwPhasesService: VcwPhasesService,
-      private vcwMockService: VcwMockService,
+      private snackbarService: SnackbarService,
     ){}
 
   ngOnInit(): void {
-    this.useMocks = environment.activateMocks;
-
     this.vcwId = parseInt(this.activatedRoute.snapshot.paramMap.get('vcw_id'), 10);
     this.projectId = parseInt(this.activatedRoute.snapshot.paramMap.get('project_id'), 10);
     this.phaseNavService.nextPhase$.subscribe((nextPhase) => {
       this.router.navigate(['../' + nextPhase], {relativeTo: this.activatedRoute});
     });
-
-    if (this.useMocks){
-      this.vcwMockService.getCriterias().subscribe(
-      data => this.criterias = data);
-    } else{
-      this.vcwPhasesService.getCriterias(this.vcwId, this.projectId).subscribe(
-        data => this.criterias = data);
-    }
-
-  }
-
-  onSave() {
-  }
-
-
-  toggleSelected(id: number): void {
-    if (!this.useMocks){
-      const criteriaData = JSON.parse(JSON.stringify(this.criterias.find(criteria => criteria.id === id)));
-      criteriaData.isSelected = !criteriaData.isSelected;
-      this.vcwPhasesService.editCriteria(this.vcwId, this.projectId, id, criteriaData)
-      .subscribe(data =>{
-        this.criterias.find(criteria => criteria.id === id).isSelected = !this.criterias.find(criteria => criteria.id === id).isSelected;
+    this.vcwPhasesService.getCriterias(this.vcwId, this.projectId).pipe(take(1)).subscribe(
+      data => {
+        this.criterias = data;
+        if (this.criterias && this.criterias.length > 0) {
+          this.vcwPhasesService.getSelectedCriterias(this.vcwId, this.projectId)
+          .pipe((take(1))).subscribe((vcwCriterias) => {
+            this.criterias.forEach((criteria) => {
+              criteria.isSelected = vcwCriterias.find(vi => vi.id === criteria.id).selected ?? false;
+            })
+          });
+        }
       });
-    } else {
-      this.criterias.find(criteria => criteria.id === id).isSelected = !this.criterias.find(criteria => criteria.id === id).isSelected;
-    }
   }
 
-  getIcon(value: string): IconDefinition {
-    if (value) {
+  toggleSelected(criteria: Criteria): void {
+    const criteriaSelectedData: VCWHasCriteria = {
+      id: criteria.id,
+      vcwId: this.vcwId,
+      selected: !criteria.isSelected
+    };
+    this.vcwPhasesService.selectCriteria(this.vcwId, this.projectId, criteria.id, criteriaSelectedData)
+    .pipe(take(1)).subscribe((response) => {
+      criteria.isSelected = response.selected;
+    }, (error) => {
+      this.snackbarService.danger('Error!', 'Could not process your request. Please try again later.')
+      .during(2000).show();
+    });
+  }
+
+  getIcon(source: any): IconDefinition {
+    if (source) {
       return faGlobe;
     } else {
       return faUser;

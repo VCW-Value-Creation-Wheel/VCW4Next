@@ -8,8 +8,8 @@
                 [value]="criteria.name"
                 [isSelectable]="true"
                 [isEditable]="false"
-                (selectChange)="toggleSelected(criteria.id)"
-                [icon]="getIcon(criteria.sourceName)"
+                (selectChange)="toggleSelected(criteria)"
+                [icon]="getIcon(criteria.source)"
                 [isSelected]="criteria.isSelected"
             ></app-list-item>
         </div>
