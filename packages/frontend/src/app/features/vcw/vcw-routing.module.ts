@@ -10,6 +10,7 @@ import { PurificationPageComponent } from './phases/2/purification-page/purifica
 import { VcwPageComponent } from './vcw-page/vcw-page.component';
 import { CriteriaPageComponent } from './phases/2/criteria-page/criteria-page.component';
 import { SelectCriteriaComponent } from './phases/3/select-criteria/select-criteria.component';
+import { ExpectedKpisComponent } from './phases/1/expected-kpis/expected-kpis.component';
 
 const routes: Routes = [
     {
@@ -23,6 +24,10 @@ const routes: Routes = [
     {
         path: ':vcw_id/phases/1b',
         component: ChallengeComponent
+    },
+    {
+        path: ':vcw_id/phases/1c',
+        component: ExpectedKpisComponent
     },
     {
         path: ':vcw_id/phases/2a',

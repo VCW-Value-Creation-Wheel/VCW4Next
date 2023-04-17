@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Criteria, Idea, IdeaCriteriaPair, SwotFieldRow } from '@core/models';
+import { Criteria, ExpectedKPIs, Idea, IdeaCriteriaPair, SwotFieldRow, VCWChallenge, VCWHasIdea} from '@core/models';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 
@@ -42,19 +42,35 @@ export class VcwPhasesService {
   }
 
   // Phase 1b
-  getChallenge(vcwId: number, projectId: number): Observable<string> {
+  getChallenge(vcwId: number, projectId: number): Observable<VCWChallenge> {
     const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/challenges`;
-    return this.http.get<string>(url, this.httpOptions);
+    return this.http.get<VCWChallenge>(url, this.httpOptions);
   }
 
-  createChallenge(vcwId: number, projectId: number, data: string): Observable<any> {
+  createChallenge(vcwId: number, projectId: number, data: VCWChallenge): Observable<any> {
     const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/challenges`;
     return this.http.post(url, data, this.httpOptions);
   }
 
-  editChallenge(vcwId: number, projectId: number, data: string): Observable<string> {
+  editChallenge(vcwId: number, projectId: number, data: VCWChallenge): Observable<any> {
     const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/challenges`;
-    return this.http.put<string>(url, data, this.httpOptions);
+    return this.http.put<any>(url, data, this.httpOptions);
+  }
+
+  //Phase 1c
+  getExpectedKPIs(vcwId: number, projectId: number): Observable<ExpectedKPIs> {
+    const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/kpis`;
+    return this.http.get<ExpectedKPIs>(url, this.httpOptions);
+  }
+
+  createExpectedKPIs(vcwId: number, projectId: number, data: ExpectedKPIs): Observable<any> {
+    const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/kpis`;
+    return this.http.post(url, data, this.httpOptions);
+  }
+
+  editExpectedKPIs(vcwId: number, projectId: number, data: ExpectedKPIs): Observable<any> {
+    const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/kpis`;
+    return this.http.put<any>(url, data, this.httpOptions);
   }
 
   // Phase 2a
@@ -121,5 +137,16 @@ export class VcwPhasesService {
   deleteIdeaCriteriaPair(vcwId: number, projectId: number, ideaCriteriaPairId: number): Observable<any> {
     const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/ideasAndCriterias/${ideaCriteriaPairId}`;
     return this.http.delete(url, this.httpOptions);
+  }
+
+  //Phase 3a
+  getSelectedIdeas(vcwId: number, projectId: number): Observable<VCWHasIdea[]> {
+    const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/selectedIdeas`;
+    return this.http.get<VCWHasIdea[]>(url, this.httpOptions);
+  }
+
+  selectIdea(vcwId: number, projectId: number, ideaId: number, ideaSelectedData: VCWHasIdea): Observable<VCWHasIdea> {
+    const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/selectedIdeas/${ideaId}`;
+    return this.http.put<VCWHasIdea>(url, ideaSelectedData, this.httpOptions);
   }
 }

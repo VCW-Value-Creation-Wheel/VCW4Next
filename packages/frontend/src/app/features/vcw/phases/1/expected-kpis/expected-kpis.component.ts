@@ -1,19 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, UntypedFormGroup } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { challengeConfig, PhaseNavigationService, SnackbarService, VcwPhasesService } from '@core';
+import { Router, ActivatedRoute } from '@angular/router';
+import { ExpectedKPIs, expectedKPIsConfig, PhaseNavigationService, SnackbarService, VcwPhasesService } from '@core';
 import { faFloppyDisk } from '@fortawesome/free-solid-svg-icons';
 import { take } from 'rxjs/operators';
 import { environment } from '../../../../../../environments/environment';
-import { VCWChallenge } from '@core/models';
 
 @Component({
-  selector: 'app-challenge',
-  templateUrl: './challenge.component.html',
-  styleUrls: ['./challenge.component.scss']
+  selector: 'app-expected-kpis',
+  templateUrl: './expected-kpis.component.html',
+  styleUrls: ['./expected-kpis.component.scss']
 })
-export class ChallengeComponent implements OnInit {
-
+export class ExpectedKpisComponent implements OnInit{
   faFloppyDisk = faFloppyDisk;
 
   dataForm: UntypedFormGroup;
@@ -24,7 +22,7 @@ export class ChallengeComponent implements OnInit {
 
   useMocks: boolean;
 
-  vcwChallenge: VCWChallenge;
+  expectedKPIs: ExpectedKPIs;
 
   constructor(
     private phaseNavService: PhaseNavigationService,
@@ -34,7 +32,7 @@ export class ChallengeComponent implements OnInit {
     private vcwPhasesService: VcwPhasesService,
     private snackbarService: SnackbarService
   ){
-    this.dataForm = this.formBuilder.group(challengeConfig);
+    this.dataForm = this.formBuilder.group(expectedKPIsConfig);
   }
   ngOnInit(): void {
 
@@ -48,14 +46,13 @@ export class ChallengeComponent implements OnInit {
     this.vcwId = parseInt(this.activatedRoute.snapshot.paramMap.get('vcw_id'), 10);
 
     if (!this.useMocks) {
-      this.vcwPhasesService.getChallenge(this.vcwId, this.projectId)
+      this.vcwPhasesService.getExpectedKPIs(this.vcwId, this.projectId)
       .pipe(take(1))
       .subscribe(data => {
         if (data) {
-
-          this.vcwChallenge = data;
+          this.expectedKPIs = data;
           this.isEditing = true;
-          this.dataForm.controls.challenge.patchValue(this.vcwChallenge.challenge);
+          this.dataForm.controls.kpis.patchValue(this.expectedKPIs.kpis);
         }
       }, error => {
         this.snackbarService.danger('Data Fetching Error', 'Unable to check and retrieve data from the server. Try again later.')
@@ -65,12 +62,12 @@ export class ChallengeComponent implements OnInit {
   }
 
   onSave() {
-    if (this.isFormValid('challenge')) {
+    if (this.isFormValid('kpis')) {
 
-      this.vcwChallenge.challenge = this.dataForm.controls.challenge.value;
+      this.expectedKPIs.kpis = this.dataForm.controls.kpis.value;
 
       if (this.isEditing) {
-        this.vcwPhasesService.editChallenge(this.vcwId, this.projectId, this.vcwChallenge)
+        this.vcwPhasesService.editExpectedKPIs(this.vcwId, this.projectId, this.expectedKPIs)
         .pipe(take(1))
         .subscribe(response => {
           this.snackbarService.success('Success!', 'Your changes were saved.').during(2000).show();
@@ -79,7 +76,7 @@ export class ChallengeComponent implements OnInit {
           .during(2000).show();
         });
       } else {
-        this.vcwPhasesService.createChallenge(this.vcwId, this.projectId, this.vcwChallenge)
+        this.vcwPhasesService.createExpectedKPIs(this.vcwId, this.projectId, this.expectedKPIs)
         .pipe(take(1))
         .subscribe(response => {
           this.isEditing = true;

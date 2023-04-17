@@ -8,6 +8,14 @@ export interface VCW {
     thumbnailUrl?: string;
 }
 
+export interface VCWChallenge {
+    challenge: string;
+}
+
+export interface ExpectedKPIs {
+    kpis: string;
+}
+
 export interface SwotFieldRow {
     swotField: string;
     name: string;
@@ -31,8 +39,7 @@ export interface VCWPhase {
 
 export type Idea = {
     name: string,
-    sourceName: string,
-    sourceUrl: string,
+    source: any,
     entryTypeId: number,
     id?: number,
     isSelected: boolean,
@@ -40,8 +47,7 @@ export type Idea = {
 
 export type Criteria = {
     name: string,
-    sourceName: string,
-    sourceUrl: string,
+    source: any,
     entryTypeId: number,
     id?: number,
     isSelected: boolean,
@@ -54,3 +60,9 @@ export type IdeaCriteriaPair = {
     value: number | string;
     id?: number;
 };
+
+export interface VCWHasIdea {
+    vcwId: number;
+    selected: boolean;
+    id: number;
+}

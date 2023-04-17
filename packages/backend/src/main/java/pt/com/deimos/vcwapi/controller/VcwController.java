@@ -1,6 +1,7 @@
 package pt.com.deimos.vcwapi.controller;
 
 import jakarta.validation.Valid;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -8,6 +9,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import pt.com.deimos.vcwapi.dto.ChallengeDTO;
+import pt.com.deimos.vcwapi.dto.KpiDTO;
 import pt.com.deimos.vcwapi.dto.VcwDTO;
 import pt.com.deimos.vcwapi.entity.ProjectEntity;
 import pt.com.deimos.vcwapi.entity.VcwEntity;
@@ -112,7 +114,7 @@ public class VcwController {
   }
 
   @PutMapping("/{id}/challenges")
-  public ResponseEntity<String> saveChallenges(
+  public ResponseEntity<Object> saveChallenges(
           @PathVariable(value = "id") Long vcwId,
           @RequestBody ChallengeDTO challenge,
           @PathVariable(value = "project_id") Long projectId,
@@ -132,7 +134,60 @@ public class VcwController {
     editedVcw.setChallenge(challenge.getChallenge());
 
     return ResponseEntity.status(HttpStatus.OK).body(
-            this.vcwService.update(editedVcw).getChallenge());
+            this.vcwService.update(editedVcw));
 
   }
+
+  // ExpectedKpis
+
+  @GetMapping("/{id}/kpis")
+  public ResponseEntity<Object> getKpis(
+          @PathVariable(value = "id") Long id,
+          @PathVariable(value = "project_id") Long projectId,
+          @AuthenticationPrincipal Jwt principal) {
+
+    Optional<ProjectEntity> project = this.vcwService.findProjectByIdAndUser(
+            projectId, principal.getSubject());
+    if (project.isEmpty())
+      throw new NotFoundException("Project not found.");
+
+    Optional<VcwEntity> vcwEntityOptional =
+            this.vcwService.findById(id);
+
+    if(vcwEntityOptional.isEmpty()) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Vcw not found");
+    }
+
+    //find kpis
+    String kpis = vcwEntityOptional.get().getKpis();
+    return ResponseEntity.ok(Collections.singletonMap("kpis", kpis));
+  }
+
+  @PutMapping("/{id}/kpis")
+  public ResponseEntity<Object> saveKpis(
+          @PathVariable(value = "id") Long vcwId,
+          @RequestBody KpiDTO kpis,
+          @PathVariable(value = "project_id") Long projectId,
+          @AuthenticationPrincipal Jwt principal
+  ) {
+
+    Optional<ProjectEntity> project = this.vcwService.findProjectByIdAndUser(
+            projectId, principal.getSubject());
+    if (project.isEmpty())
+      throw new NotFoundException("Project not found.");
+
+    Optional<VcwEntity> vcwEntityOptional = this.vcwService.findById(vcwId);
+    if(vcwEntityOptional.isEmpty()) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Vcw not found");
+    }
+    VcwEntity editedVcw = vcwEntityOptional.get();
+    editedVcw.setKpis(kpis.getKpis());
+
+    return ResponseEntity.status(HttpStatus.OK).body(
+            this.vcwService.update(editedVcw));
+
+  }
+
+
+
 }
