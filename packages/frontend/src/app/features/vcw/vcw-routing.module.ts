@@ -11,6 +11,7 @@ import { VcwPageComponent } from './vcw-page/vcw-page.component';
 import { CriteriaPageComponent } from './phases/2/criteria-page/criteria-page.component';
 import { SelectCriteriaComponent } from './phases/3/select-criteria/select-criteria.component';
 import { ExpectedKpisComponent } from './phases/1/expected-kpis/expected-kpis.component';
+import { RankWeightCriteriaComponent } from './phases/3/rank-weight-criteria/rank-weight-criteria.component';
 
 const routes: Routes = [
     {
@@ -48,6 +49,10 @@ const routes: Routes = [
     {
         path: ':vcw_id/phases/3b',
         component: SelectCriteriaComponent
+    },
+    {
+        path: ':vcw_id/phases/3c',
+        component: RankWeightCriteriaComponent
     }
 ];
 

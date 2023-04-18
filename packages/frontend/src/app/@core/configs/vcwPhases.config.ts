@@ -49,6 +49,12 @@ const vcwPhasesNavigation: VCWPhase = {
         name: 'Select Criteria',
         previousPhaseId: '3a',
         nextPhaseId: '3c'
+    },
+    '3c': {
+        id: '3c',
+        name: 'Rank/Weight Criteria',
+        previousPhaseId: '3b',
+        nextPhaseId: '4a'
     }
 };
 
