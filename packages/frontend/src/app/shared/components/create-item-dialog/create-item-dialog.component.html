@@ -45,6 +45,8 @@
                         [placeholder]="formatFieldLabel(field) | titlecase"
                         *ngIf="!tabFormControlsToExclude[activeTab].includes(field)"
                         [inputType]="getInputType(field)"
+                        [numberMin]="getMinValue(field)"
+                        [numberMax]="getMaxValue(field)"
                         [isDisabled]="isFieldEditDisabled(field)"
                     ></app-input>
                 </ng-container>
@@ -57,6 +59,8 @@
                                 [placeholder]="formatFieldLabel(field + ' ' + nestedField) | titlecase"
                                 *ngIf="!tabFormControlsToExclude[activeTab].includes(nestedField)"
                                 [inputType]="getInputType(nestedField)"
+                                [numberMin]="getMinValue(nestedField)"
+                                [numberMax]="getMaxValue(nestedField)"
                                 [isDisabled]="isFieldEditDisabled(nestedField)"
                             ></app-input>
                         </ng-container>

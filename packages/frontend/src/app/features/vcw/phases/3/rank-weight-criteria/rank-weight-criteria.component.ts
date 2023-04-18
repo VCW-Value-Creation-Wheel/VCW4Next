@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, UntypedFormArray, UntypedFormGroup } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { PhaseNavigationService, VcwPhasesService, SnackbarService, Criteria, createRankCriteriaConfig, CheckboxItemInput, InputMap } from '@core';
+import { PhaseNavigationService, VcwPhasesService, SnackbarService, Criteria, createRankCriteriaConfig, CheckboxItemInput, InputMap, MinMaxMap } from '@core';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faGlobe, faUser } from '@fortawesome/free-solid-svg-icons';
 import { map, take } from 'rxjs/operators';
@@ -25,6 +25,7 @@ export class RankWeightCriteriaComponent implements OnInit {
   itemDialogOpen = false;
   isLoading = false;
   inputTypes: InputMap = {};
+  minMaxValues: MinMaxMap = {};
   checkboxes: CheckboxItemInput[] = [
     {
       label: 'Must have',
@@ -83,6 +84,24 @@ export class RankWeightCriteriaComponent implements OnInit {
     Object.keys(this.rankCriteriaForm.controls).forEach((key) => {
       if (key !== 'type') {
         this.inputTypes[key] = 'number';
+      }
+      if (key === 'intervalMin' || key === 'intervalMax') {
+        if (criteria.valueType === 'yes_or_no') {
+          this.minMaxValues[key] = {
+            min: 0,
+            max: 1
+          };
+        } else {
+          this.minMaxValues[key] = {
+            min: undefined,
+            max: undefined
+          };
+        } 
+      } else {
+        this.minMaxValues[key] = {
+          min: 0,
+          max: undefined
+        }
       }
     });
     this.rankCriteriaForm.patchValue(

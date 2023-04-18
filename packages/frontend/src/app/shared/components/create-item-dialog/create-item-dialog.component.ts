@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormGroup, UntypedFormGroup } from '@angular/forms';
-import { CheckboxItemInput, InputMap, Option } from '@core';
+import { CheckboxItemInput, InputMap, MinMaxMap, Option } from '@core';
 
 @Component({
   selector: 'app-create-item-dialog',
@@ -22,6 +22,7 @@ export class CreateItemDialogComponent implements OnInit {
   @Input() inputTypes: InputMap = {};
   @Input() inputHelperLabel: InputMap = {};
   @Input() disableEditing: InputMap = {};
+  @Input() inputMinMaxValues: MinMaxMap = {}
 
   @Output() cancel = new EventEmitter();
   @Output() confirm = new EventEmitter();
@@ -164,6 +165,22 @@ export class CreateItemDialogComponent implements OnInit {
       return this.disableEditing[fieldName];
     } else {
       return false;
+    }
+  }
+
+  getMinValue(fieldName: string): number {
+    if (this.inputMinMaxValues[fieldName]) {
+      return this.inputMinMaxValues[fieldName].min;
+    } else {
+      return undefined;
+    }
+  }
+
+  getMaxValue(fieldName: string): number {
+    if (this.inputMinMaxValues[fieldName]) {
+      return this.inputMinMaxValues[fieldName].max;
+    } else {
+      return undefined;
     }
   }
 
