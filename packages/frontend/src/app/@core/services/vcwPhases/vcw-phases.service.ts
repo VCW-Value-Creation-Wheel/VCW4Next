@@ -153,11 +153,11 @@ export class VcwPhasesService {
   //Phase 3b
   getSelectedCriterias(vcwId: number, projectId: number): Observable<VCWHasIdea[]> {
     const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/selectedCriterias`;
-    return this.http.get<VCWHasIdea[]>(url, this.httpOptions);
+    return this.http.get<VCWHasCriteria[]>(url, this.httpOptions);
   }
 
   selectCriteria(vcwId: number, projectId: number, criteriaId: number, criteriaSelectedData: VCWHasCriteria): Observable<VCWHasCriteria> {
     const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/selectedCriterias/${criteriaId}`;
-    return this.http.put<VCWHasIdea>(url, criteriaSelectedData, this.httpOptions);
+    return this.http.put<VCWHasCriteria>(url, criteriaSelectedData, this.httpOptions);
   }
 }

@@ -42,7 +42,7 @@ export class SelectCriteriaComponent implements OnInit {
           this.vcwPhasesService.getSelectedCriterias(this.vcwId, this.projectId)
           .pipe((take(1))).subscribe((vcwCriterias) => {
             this.criterias.forEach((criteria) => {
-              criteria.isSelected = vcwCriterias.find(vi => vi.id === criteria.id).selected ?? false;
+              criteria.isSelected = vcwCriterias.find(vc => vc.id === criteria.id).selected ?? false;
             })
           });
         }
