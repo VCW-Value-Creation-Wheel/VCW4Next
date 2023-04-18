@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { PhaseNavigationService, VcwPhasesService, SnackbarService } from '@core';
+import { PhaseNavigationService, VcwPhasesService, SnackbarService, Criteria } from '@core';
+import { IconDefinition } from '@fortawesome/fontawesome-common-types';
+import { faGlobe, faUser } from '@fortawesome/free-solid-svg-icons';
+import { map, take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-rank-weight-criteria',
@@ -11,6 +14,8 @@ export class RankWeightCriteriaComponent implements OnInit {
 
   vcwId: number;
   projectId: number;
+
+  selectedCriteria: Criteria[];
 
   constructor(private phaseNavService: PhaseNavigationService,
     private router: Router,
@@ -24,5 +29,28 @@ export class RankWeightCriteriaComponent implements OnInit {
     this.phaseNavService.nextPhase$.subscribe((nextPhase) => {
       this.router.navigate(['../' + nextPhase], {relativeTo: this.activatedRoute});
     });
+
+    this.vcwPhasesService.getSelectedCriterias(this.vcwId, this.projectId)
+    .pipe((take(1), map(response => response.filter(vc => vc.selected))))
+    .subscribe((selectedCriteria) => {
+      const selectedIds = selectedCriteria.map((vc) =>  vc.id);
+      this.vcwPhasesService.getCriterias(this.vcwId, this.projectId)
+      .pipe(take(1), map((criteria) => criteria.filter((c) => selectedIds.includes(c.id))))
+      .subscribe((criteria) => {
+        this.selectedCriteria = criteria;
+      });
+    });
+  }
+
+  getIcon(source: any): IconDefinition {
+    if (source) {
+      return faGlobe;
+    } else {
+      return faUser;
+    }
+  }
+
+  editCriteriaRank(criteriaId: number) {
+    
   }
 }
