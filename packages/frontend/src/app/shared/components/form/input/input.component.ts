@@ -89,6 +89,9 @@ export class InputComponent implements OnInit, OnChanges {
   }
 
   handleInputChange(value: EventOption['value']) {
+    if (value === '') {
+      value = null;
+    }
     this.emitInputChange.emit({ value, id: this.id });
   }
 

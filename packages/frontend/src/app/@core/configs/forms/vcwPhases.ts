@@ -52,7 +52,7 @@ export const createRankCriteriaConfig = {
     type: [null, Validators.required],
     ranking: [null, Validators.required],
     weight: [null],
-    intervalMin: [null, Validators.required],
-    intervalMax: [null, Validators.required],
+    intervalMin: [null],
+    intervalMax: [null],
     id: [null]
 }

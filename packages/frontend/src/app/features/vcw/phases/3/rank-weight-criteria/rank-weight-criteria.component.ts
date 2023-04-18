@@ -116,7 +116,7 @@ export class RankWeightCriteriaComponent implements OnInit {
   }
 
   onConfirm() {
-    if (this.rankCriteriaForm.valid) {
+    if (this.rankCriteriaForm.valid && this.intervalsValid()) {
       this.isLoading = true;
       const criteriaId = this.rankingCriteria.id;
       if (criteriaId) {
@@ -151,5 +151,15 @@ export class RankWeightCriteriaComponent implements OnInit {
     } else {
       return 'bg-blue-100';
     }
+  }
+
+  intervalsValid(): boolean {
+      if (this.rankCriteriaForm.controls.intervalMin.value
+        && this.rankCriteriaForm.controls.intervalMax.value
+        && this.rankCriteriaForm.controls.intervalMax.value > this.rankCriteriaForm.controls.intervalMin.value) {
+          return true;
+      } else {
+        return (this.rankCriteriaForm.controls.intervalMin.value || this.rankCriteriaForm.controls.intervalMax.value)
+      }
   }
 }
