@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, UntypedFormArray, UntypedFormGroup } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { PhaseNavigationService, VcwPhasesService, SnackbarService, Criteria, createRankCriteriaConfig, CheckboxItemInput } from '@core';
+import { PhaseNavigationService, VcwPhasesService, SnackbarService, Criteria, createRankCriteriaConfig, CheckboxItemInput, InputMap } from '@core';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faGlobe, faUser } from '@fortawesome/free-solid-svg-icons';
 import { map, take } from 'rxjs/operators';
@@ -24,6 +24,7 @@ export class RankWeightCriteriaComponent implements OnInit {
 
   itemDialogOpen = false;
   isLoading = false;
+  inputTypes: InputMap = {};
   checkboxes: CheckboxItemInput[] = [
     {
       label: 'Must have',
@@ -79,6 +80,11 @@ export class RankWeightCriteriaComponent implements OnInit {
   editCriteriaRank(criteria: Criteria) {
     this.rankingCriteria = criteria;
     this.rankCriteriaForm = this.formBuilder.group(createRankCriteriaConfig);
+    Object.keys(this.rankCriteriaForm.controls).forEach((key) => {
+      if (key !== 'type') {
+        this.inputTypes[key] = 'number';
+      }
+    });
     this.rankCriteriaForm.patchValue(
       this.rankCriteriaFormArray.controls.find(ctrl => ctrl.get('id').value === criteria.id).value
     );
