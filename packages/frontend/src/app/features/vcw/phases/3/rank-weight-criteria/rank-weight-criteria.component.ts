@@ -117,4 +117,14 @@ export class RankWeightCriteriaComponent implements OnInit {
       .during(3000).show();
     }
   }
+
+  getColor(criteria: Criteria): string {
+    const criteriaRankData = this.rankCriteriaFormArray.controls.find(ctrl => ctrl.get('id').value === criteria.id);
+    if (criteriaRankData) {
+      const criteriaType = criteriaRankData.get('type').value;
+      return criteriaType === 'must_have' ? 'bg-red-100' : (criteriaType === 'nice_to_have' ? 'bg-green-100' : 'bg-blue-100');
+    } else {
+      return 'bg-blue-100';
+    }
+  }
 }
