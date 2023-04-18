@@ -72,3 +72,12 @@ export interface VCWHasCriteria {
     selected: boolean;
     id: number;
 }
+
+export interface CriteriaRanking {
+    type: string;
+    ranking: number;
+    weight: number;
+    intervalMin: number;
+    intervalMax: number;
+    id: number;
+}

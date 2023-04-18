@@ -8,7 +8,7 @@
             [isSelectable]="false"
             [value]="criteria.name"
             [isDeleteEnabled]="false"
-            (editClick)="editCriteriaRank(criteria.id)"
+            (editClick)="editCriteriaRank(criteria)"
             [icon]="getIcon(criteria.source)"
         ></app-list-item>
     </ng-container>
@@ -17,9 +17,12 @@
     *ngIf="itemDialogOpen"
     [isEditing]="true"
     [formGroup]="rankCriteriaForm"
-    [title]="'Criteria Rank/Weight'"
+    [title]="rankingCriteria.name"
     [tabFormControlsToExclude]="{'0': ['id']}"
     [isAwaitingAction]="isLoading"
+    [checkboxes]="checkboxes"
+    [checkboxFormControl]="'type'"
+    [checkboxCategoryLabel]="'Criteria type'"
     (cancel)="onCancel()"
     (confirm)="onConfirm()"
 ></app-create-item-dialog>

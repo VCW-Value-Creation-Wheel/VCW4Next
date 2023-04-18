@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, UntypedFormArray, UntypedFormGroup } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { PhaseNavigationService, VcwPhasesService, SnackbarService, Criteria, createRankCriteriaConfig } from '@core';
+import { PhaseNavigationService, VcwPhasesService, SnackbarService, Criteria, createRankCriteriaConfig, CheckboxItemInput } from '@core';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faGlobe, faUser } from '@fortawesome/free-solid-svg-icons';
 import { map, take } from 'rxjs/operators';
@@ -20,10 +20,20 @@ export class RankWeightCriteriaComponent implements OnInit {
 
   rankCriteriaFormArray: UntypedFormArray;
   rankCriteriaForm: UntypedFormGroup;
-  rankingCriteriaId: number;
+  rankingCriteria: Criteria;
 
   itemDialogOpen = false;
   isLoading = false;
+  checkboxes: CheckboxItemInput[] = [
+    {
+      label: 'Must have',
+      value: 'must_have'
+    },
+    {
+      label: 'Nice to have',
+      value: 'nice_to_have'
+    }
+  ];
 
   constructor(private phaseNavService: PhaseNavigationService,
     private router: Router,
@@ -61,8 +71,8 @@ export class RankWeightCriteriaComponent implements OnInit {
     }
   }
 
-  editCriteriaRank(criteriaId: number) {
-    this.rankingCriteriaId = criteriaId;
+  editCriteriaRank(criteria: Criteria) {
+    this.rankingCriteria = criteria;
     this.rankCriteriaForm = this.formBuilder.group(createRankCriteriaConfig);
     this.itemDialogOpen = true;
   }
@@ -73,6 +83,15 @@ export class RankWeightCriteriaComponent implements OnInit {
   }
 
   onConfirm() {
-    
+    if (this.rankCriteriaForm.valid) {
+      const criteriaId = this.rankingCriteria.id;
+      if (criteriaId) {
+        this.vcwPhasesService.updateCriteriaRanking(this.vcwId,
+          this.projectId, criteriaId, this.rankCriteriaForm.value)
+        .pipe(take(1)).subscribe((response) => {
+          console.log(response)
+        })
+      }
+    }
   }
 }
