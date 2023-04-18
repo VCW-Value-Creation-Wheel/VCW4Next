@@ -14,10 +14,21 @@
             [isActive]="isTabActive(idx)"
             (clicked)="changeActiveTab(idx)"></app-tab>
         </ng-container>
-        
-
     </div>
     <div [formGroup]="formGroup" class="gap-4 flex flex-col">
+        <div class="flex flex-col gap-2" *ngIf="checkboxes.length > 0">
+            <label class="text-gray-700">{{ checkboxCategoryLabel }}</label>
+            <div class="flex flex-row gap-4">
+                <ng-container *ngFor="let checkbox of checkboxes; index as idx">
+                    <app-checkbox-input
+                        [label]="checkbox.label"
+                        [value]="checkbox.value"
+                        (propagate)="onCheckboxCheck($event, idx)"
+                        [isChecked]="isBoxChecked(idx)"
+                    ></app-checkbox-input>
+                </ng-container>
+            </div>
+        </div>
         <ng-container *ngFor="let field of formFields">
             <ng-container *ngIf="field === fileFormFieldName; else normalInput">
                 <app-input-file
@@ -54,18 +65,6 @@
             </ng-template>
             
         </ng-container>
-        <div class="flex flex-col gap-2" *ngIf="checkboxes.length > 0">
-            <label class="text-gray-700">{{ checkboxCategoryLabel }}</label>
-            <div class="flex flex-row gap-4">
-                <ng-container *ngFor="let checkbox of checkboxes; index as idx">
-                    <app-checkbox-input
-                        [label]="checkbox.label"
-                        [value]="checkbox.value"
-                        (propagate)="onCheckboxCheck($event, idx)"
-                        [isChecked]="isBoxChecked(idx)"
-                    ></app-checkbox-input>
-                </ng-container>
-            </div>
-        </div>
+        
     </div>
 </app-dialog>
