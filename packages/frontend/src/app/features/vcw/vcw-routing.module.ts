@@ -9,6 +9,7 @@ import { CreateIdeasComponent } from './phases/2/create-ideas/create-ideas.compo
 import { PurificationPageComponent } from './phases/2/purification-page/purification-page.component';
 import { VcwPageComponent } from './vcw-page/vcw-page.component';
 import { CriteriaPageComponent } from './phases/2/criteria-page/criteria-page.component';
+import { SelectCriteriaComponent } from './phases/3/select-criteria/select-criteria.component';
 import { ExpectedKpisComponent } from './phases/1/expected-kpis/expected-kpis.component';
 
 const routes: Routes = [
@@ -43,6 +44,10 @@ const routes: Routes = [
     {
         path: ':vcw_id/phases/3a',
         component: SelectIdeasComponent
+    },
+    {
+        path: ':vcw_id/phases/3b',
+        component: SelectCriteriaComponent
     }
 ];
 

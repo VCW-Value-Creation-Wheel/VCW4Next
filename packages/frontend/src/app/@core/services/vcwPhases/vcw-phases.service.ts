@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Criteria, ExpectedKPIs, Idea, IdeaCriteriaPair, SwotFieldRow, VCWChallenge, VCWHasIdea} from '@core/models';
+import { Criteria, ExpectedKPIs, Idea, IdeaCriteriaPair, SwotFieldRow, VCWChallenge, VCWHasCriteria, VCWHasIdea} from '@core/models';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 
@@ -148,5 +148,16 @@ export class VcwPhasesService {
   selectIdea(vcwId: number, projectId: number, ideaId: number, ideaSelectedData: VCWHasIdea): Observable<VCWHasIdea> {
     const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/selectedIdeas/${ideaId}`;
     return this.http.put<VCWHasIdea>(url, ideaSelectedData, this.httpOptions);
+  }
+
+  //Phase 3b
+  getSelectedCriterias(vcwId: number, projectId: number): Observable<VCWHasIdea[]> {
+    const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/selectedCriterias`;
+    return this.http.get<VCWHasCriteria[]>(url, this.httpOptions);
+  }
+
+  selectCriteria(vcwId: number, projectId: number, criteriaId: number, criteriaSelectedData: VCWHasCriteria): Observable<VCWHasCriteria> {
+    const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/selectedCriterias/${criteriaId}`;
+    return this.http.put<VCWHasCriteria>(url, criteriaSelectedData, this.httpOptions);
   }
 }

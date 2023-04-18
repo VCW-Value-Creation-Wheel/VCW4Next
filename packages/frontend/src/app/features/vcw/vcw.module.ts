@@ -13,6 +13,7 @@ import { SelectIdeasComponent } from './phases/3/select-ideas/select-ideas.compo
 import { CreateIdeasComponent } from './phases/2/create-ideas/create-ideas.component';
 import { PurificationPageComponent } from './phases/2/purification-page/purification-page.component';
 import { CriteriaPageComponent } from './phases/2/criteria-page/criteria-page.component';
+import { SelectCriteriaComponent } from './phases/3/select-criteria/select-criteria.component';
 import { ExpectedKpisComponent } from './phases/1/expected-kpis/expected-kpis.component';
 
 
@@ -30,7 +31,8 @@ import { ExpectedKpisComponent } from './phases/1/expected-kpis/expected-kpis.co
     CreateIdeasComponent,
     SelectIdeasComponent,
     CriteriaPageComponent,
-    ExpectedKpisComponent
+    ExpectedKpisComponent,
+    SelectCriteriaComponent
   ],
   imports: [
     CommonModule,
