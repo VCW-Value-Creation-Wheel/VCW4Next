@@ -66,3 +66,9 @@ export interface VCWHasIdea {
     selected: boolean;
     id: number;
 }
+
+export interface VCWHasCriteria {
+    vcwId: number;
+    selected: boolean;
+    id: number;
+}
