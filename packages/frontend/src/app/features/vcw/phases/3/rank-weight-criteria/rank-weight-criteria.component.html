@@ -13,6 +13,16 @@
             [mainBgColor]="getColor(criteria)"
         ></app-list-item>
     </ng-container>
+    <div class="flex flex-row gap-4 bord border-t-4 py-4">
+        <div class="flex flex-row gap-4 justify-left">
+            <div class="bg-red-100 w-10 h-10 rounded-lg"></div>
+            <span class="text-base leading-10">= Must have</span>
+        </div>
+        <div class="flex flex-row gap-4 justify-left">
+            <div class="bg-green-100 w-10 h-10 rounded-lg"></div>
+            <span class="text-base leading-10">= Nice to have</span>
+        </div>
+    </div>
 </div>
 <app-create-item-dialog
     *ngIf="itemDialogOpen"
