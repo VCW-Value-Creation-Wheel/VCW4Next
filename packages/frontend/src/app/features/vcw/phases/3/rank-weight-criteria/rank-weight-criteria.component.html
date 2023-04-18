@@ -13,3 +13,13 @@
         ></app-list-item>
     </ng-container>
 </div>
+<app-create-item-dialog
+    *ngIf="itemDialogOpen"
+    [isEditing]="true"
+    [formGroup]="rankCriteriaForm"
+    [title]="'Criteria Rank/Weight'"
+    [tabFormControlsToExclude]="{'0': ['id']}"
+    [isAwaitingAction]="isLoading"
+    (cancel)="onCancel()"
+    (confirm)="onConfirm()"
+></app-create-item-dialog>
