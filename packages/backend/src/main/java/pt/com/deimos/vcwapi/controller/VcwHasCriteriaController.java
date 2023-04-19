@@ -10,6 +10,7 @@ import pt.com.deimos.vcwapi.dto.RankedDTO;
 import pt.com.deimos.vcwapi.dto.SelectedDTO;
 import pt.com.deimos.vcwapi.entity.ProjectEntity;
 import pt.com.deimos.vcwapi.entity.VcwHasCriteriaEntity;
+import pt.com.deimos.vcwapi.exceptions.BadRequestException;
 import pt.com.deimos.vcwapi.exceptions.NotFoundException;
 import pt.com.deimos.vcwapi.service.VcwHasCriteriaService;
 
@@ -69,6 +70,9 @@ public class VcwHasCriteriaController {
             @PathVariable Long id,
             @RequestBody @Valid RankedDTO ranked
     ) {
+
+        if (ranked.getIntervalMin() == null && ranked.getIntervalMax() == null)
+            throw new BadRequestException("Both minimum and maximum thresholds are null.");
 
         Optional<ProjectEntity> project =
                 this.vcwHasCriteriaService.findProjectByIdAndUser(projectId, principal.getSubject());

@@ -31,10 +31,10 @@ public class VcwHasCriteriaEntity {
     private Float weight;
 
     @Column(name="interval_min")
-    private Float IntervalMin;
+    private Float intervalMin;
 
     @Column(name="interval_max")
-    private Float IntervalMax;
+    private Float intervalMax;
 
 
     @ManyToOne(optional = false)

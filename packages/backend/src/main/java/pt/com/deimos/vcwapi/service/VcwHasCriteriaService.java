@@ -42,8 +42,6 @@ public class VcwHasCriteriaService {
 
   public VcwHasCriteriaEntity updateRank(VcwHasCriteriaEntity oldVcwHasCriteria, RankedDTO rank) {
     BeanUtils.copyProperties(rank, oldVcwHasCriteria);
-    oldVcwHasCriteria.setIntervalMax(rank.getIntervalMax());
-    oldVcwHasCriteria.setIntervalMin(rank.getIntervalMin());
     return this.vcwHasCriteriaRepository.save(oldVcwHasCriteria);
   }
 
