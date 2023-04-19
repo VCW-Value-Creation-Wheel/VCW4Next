@@ -54,16 +54,18 @@
                 <ng-template #nestedInput>
                     <div [formGroupName]="field">
                         <ng-container *ngFor="let nestedField of getNestedFields(field)">
-                            <app-input
-                                [label]="formatFieldLabel(field + ' ' + nestedField) | titlecase"
-                                [formControlName]="nestedField"
-                                [placeholder]="formatFieldLabel(field + ' ' + nestedField) | titlecase"
-                                *ngIf="!tabFormControlsToExclude[activeTab].includes(nestedField)"
-                                [inputType]="getInputType(nestedField)"
-                                [numberMin]="getMinValue(nestedField)"
-                                [numberMax]="getMaxValue(nestedField)"
-                                [isDisabled]="isFieldEditDisabled(nestedField)"
-                            ></app-input>
+                            <div class="pb-4">
+                                <app-input
+                                    [label]="formatFieldLabel(field + ' ' + nestedField) | titlecase"
+                                    [formControlName]="nestedField"
+                                    [placeholder]="formatFieldLabel(field + ' ' + nestedField) | titlecase"
+                                    *ngIf="!tabFormControlsToExclude[activeTab].includes(nestedField)"
+                                    [inputType]="getInputType(nestedField)"
+                                    [numberMin]="getMinValue(nestedField)"
+                                    [numberMax]="getMaxValue(nestedField)"
+                                    [isDisabled]="isFieldEditDisabled(nestedField)"
+                                ></app-input>
+                            </div>
                         </ng-container>
                     </div>
                 </ng-template>
