@@ -120,30 +120,54 @@ export class RankWeightCriteriaComponent implements OnInit {
   }
 
   onConfirm() {
-    if (this.rankCriteriaForm.valid && this.intervalsValid() && this.typeFieldValidation()) {
-      this.isLoading = true;
-      const criteriaId = this.rankingCriteria.id;
-      if (criteriaId) {
-        this.vcwPhasesService.updateCriteriaRanking(this.vcwId,
-          this.projectId, criteriaId, this.rankCriteriaForm.value)
-        .pipe(take(1)).subscribe((response) => {
-          this.rankCriteriaFormArray.controls.find(ctrl => ctrl.get('id').value === response.id).patchValue(response);
-          this.itemDialogOpen = false;
-          this.isLoading = false;
-          this.snackbarService.success('Success!', 'Criteria ranking updated successfully.')
-          .during(3000).show();
-        }, (error) => {
-          this.isLoading = false;
-          this.snackbarService.danger('Error!', 'Could not save your changes. Please try again.')
-          .during(3000).show();
-        });
+    if (this.rankCriteriaForm.valid) {
+      const type = this.rankCriteriaForm.controls.type.value;
+      if (this.intervalsValid()) {
+        if (this.typeFieldValidation(type)) {
+          this.updateCriteriaRanking();
+        } else {
+          if (type === 'must_have') {
+            this.snackbarService.danger('Not valid!', 'For "Must Have" criteria, Ranking is required.')
+            .during(3000).show();
+          } else if (type === 'nice_to_have') {
+            this.snackbarService.danger('Not valid!', 'For "Nice to Have" criteria, Weight is required.')
+            .during(3000).show();
+          } else {
+            this.snackbarService.danger('Not valid!', 'Please review your values.')
+            .during(3000).show();
+          }
+        }
       } else {
-        this.snackbarService.danger('Error!', 'Unable to access data of the selected criteria. Please refresh'+
-        ' your page or contact support for help.').during(3000).show();
+        this.snackbarService.danger('Not valid!', 'At least one of IntervalMin or IntervalMax are required.')
+        .during(3000).show();
       }
+      
     } else {
       this.snackbarService.danger('Error!', 'Form not valid. Please review your values.')
       .during(3000).show();
+    }
+  }
+
+  updateCriteriaRanking() {
+    this.isLoading = true;
+    const criteriaId = this.rankingCriteria.id;
+    if (criteriaId) {
+      this.vcwPhasesService.updateCriteriaRanking(this.vcwId,
+        this.projectId, criteriaId, this.rankCriteriaForm.value)
+      .pipe(take(1)).subscribe((response) => {
+        this.rankCriteriaFormArray.controls.find(ctrl => ctrl.get('id').value === response.id).patchValue(response);
+        this.itemDialogOpen = false;
+        this.isLoading = false;
+        this.snackbarService.success('Success!', 'Criteria ranking updated successfully.')
+        .during(3000).show();
+      }, (error) => {
+        this.isLoading = false;
+        this.snackbarService.danger('Error!', 'Could not save your changes. Please try again.')
+        .during(3000).show();
+      });
+    } else {
+      this.snackbarService.danger('Error!', 'Unable to access data of the selected criteria. Please refresh'+
+      ' your page or contact support for help.').during(3000).show();
     }
   }
 
@@ -167,8 +191,7 @@ export class RankWeightCriteriaComponent implements OnInit {
       }
   }
 
-  typeFieldValidation(): boolean {
-    const type = this.rankCriteriaForm.controls.type.value;
+  typeFieldValidation(type: string): boolean {
     if (type === 'must_have') {
       return this.rankCriteriaForm.controls.ranking.value !== null && this.rankCriteriaForm.controls.ranking.value !== '';
     } else if (type === 'nice_to_have') {
