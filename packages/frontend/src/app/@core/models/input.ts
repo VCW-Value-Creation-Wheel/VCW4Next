@@ -22,3 +22,10 @@ export interface CheckboxItemInput {
     label: string;
     value: string | number;
 }
+
+export interface MinMaxMap {
+    [key: string]: {
+        min: number;
+        max: number;
+    }
+}

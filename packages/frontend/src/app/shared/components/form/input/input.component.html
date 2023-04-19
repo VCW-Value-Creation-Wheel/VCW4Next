@@ -32,6 +32,8 @@
     [disabled]="isDisabled"
     [(ngModel)]="value"
     [maxLength]="maxLength"
+    [min]="numberMin"
+    [max]="numberMax"
     [pattern]="pattern?pattern:''"
     (ngModelChange)="handleInputChange($event)"
     (keyup)="handleKeyPress($event)"

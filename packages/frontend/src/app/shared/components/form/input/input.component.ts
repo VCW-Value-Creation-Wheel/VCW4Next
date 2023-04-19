@@ -43,6 +43,8 @@ export class InputComponent implements OnInit, OnChanges {
   @Input() focusRig: boolean = true;
   @Input() required?: boolean;
   @Input() pattern?: string;
+  @Input() numberMin?: number;
+  @Input() numberMax?: number;
   @Output() emitInputChange = new EventEmitter<EventOption>();
   @Output() emitKeyPress = new EventEmitter<KeyboardEvent>();
 
@@ -87,6 +89,9 @@ export class InputComponent implements OnInit, OnChanges {
   }
 
   handleInputChange(value: EventOption['value']) {
+    if (value === '') {
+      value = null;
+    }
     this.emitInputChange.emit({ value, id: this.id });
   }
 

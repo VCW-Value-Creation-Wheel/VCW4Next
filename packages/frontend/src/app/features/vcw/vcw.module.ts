@@ -15,6 +15,7 @@ import { PurificationPageComponent } from './phases/2/purification-page/purifica
 import { CriteriaPageComponent } from './phases/2/criteria-page/criteria-page.component';
 import { SelectCriteriaComponent } from './phases/3/select-criteria/select-criteria.component';
 import { ExpectedKpisComponent } from './phases/1/expected-kpis/expected-kpis.component';
+import { RankWeightCriteriaComponent } from './phases/3/rank-weight-criteria/rank-weight-criteria.component';
 
 
 
@@ -32,7 +33,8 @@ import { ExpectedKpisComponent } from './phases/1/expected-kpis/expected-kpis.co
     SelectIdeasComponent,
     CriteriaPageComponent,
     ExpectedKpisComponent,
-    SelectCriteriaComponent
+    SelectCriteriaComponent,
+    RankWeightCriteriaComponent
   ],
   imports: [
     CommonModule,

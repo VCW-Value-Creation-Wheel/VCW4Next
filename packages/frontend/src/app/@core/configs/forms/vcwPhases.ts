@@ -47,3 +47,12 @@ export const createPairConfig = {
     value: [null, Validators.required],
     id: [null]
 };
+
+export const createRankCriteriaConfig = {
+    type: [null, Validators.required],
+    ranking: [null],
+    weight: [null],
+    intervalMin: [null],
+    intervalMax: [null],
+    id: [null]
+}

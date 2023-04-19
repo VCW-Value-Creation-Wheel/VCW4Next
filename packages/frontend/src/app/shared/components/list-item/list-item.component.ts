@@ -20,6 +20,7 @@ export class ListItemComponent implements OnInit {
   @Input() value: string;
   @Input() icon?: IconDefinition;
   @Input() isSelected = false;
+  @Input() isDeleteEnabled = true;
   @Output() editClick = new EventEmitter();
   @Output() deleteClick = new EventEmitter();
   @Output() selectChange = new EventEmitter<boolean>();
