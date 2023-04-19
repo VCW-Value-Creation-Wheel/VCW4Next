@@ -50,7 +50,7 @@ export const createPairConfig = {
 
 export const createRankCriteriaConfig = {
     type: [null, Validators.required],
-    ranking: [null, Validators.required],
+    ranking: [null],
     weight: [null],
     intervalMin: [null],
     intervalMax: [null],

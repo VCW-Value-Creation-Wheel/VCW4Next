@@ -26,6 +26,10 @@ export class RankWeightCriteriaComponent implements OnInit {
   isLoading = false;
   inputTypes: InputMap = {};
   minMaxValues: MinMaxMap = {};
+  helperText: InputMap = {
+    ranking: 'for "Must have" criteria',
+    weight: 'for "Nice to have" criteria'
+  };
   checkboxes: CheckboxItemInput[] = [
     {
       label: 'Must have',
@@ -116,7 +120,7 @@ export class RankWeightCriteriaComponent implements OnInit {
   }
 
   onConfirm() {
-    if (this.rankCriteriaForm.valid && this.intervalsValid()) {
+    if (this.rankCriteriaForm.valid && this.intervalsValid() && this.typeFieldValidation()) {
       this.isLoading = true;
       const criteriaId = this.rankingCriteria.id;
       if (criteriaId) {
@@ -161,5 +165,16 @@ export class RankWeightCriteriaComponent implements OnInit {
       } else {
         return (this.rankCriteriaForm.controls.intervalMin.value || this.rankCriteriaForm.controls.intervalMax.value)
       }
+  }
+
+  typeFieldValidation(): boolean {
+    const type = this.rankCriteriaForm.controls.type.value;
+    if (type === 'must_have') {
+      return this.rankCriteriaForm.controls.ranking.value !== null && this.rankCriteriaForm.controls.ranking.value !== '';
+    } else if (type === 'nice_to_have') {
+      return this.rankCriteriaForm.controls.weight.value !== null && this.rankCriteriaForm.controls.weight.value !== '';
+    } else {
+      return false;
+    }
   }
 }
