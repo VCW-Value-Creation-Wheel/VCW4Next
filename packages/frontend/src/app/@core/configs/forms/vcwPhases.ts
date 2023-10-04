@@ -56,3 +56,7 @@ export const createRankCriteriaConfig = {
     intervalMax: [null],
     id: [null]
 }
+
+export const prototypeConfig = {
+    prototype: [null, Validators.required]
+};
