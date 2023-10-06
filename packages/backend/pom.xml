@@ -29,6 +29,12 @@
 			<version>2.1.0</version>
 		</dependency>
 
+		<!-- Used to place rest requests to keycloak api -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-webflux</artifactId>
+		</dependency>
+
 		<!-- SECURITY -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
