@@ -1,5 +1,7 @@
 package pt.com.deimos.vcwapi.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/v1/projects/{project_id}/vcws/{vcw_id}/ideas")
+@Tag(name = "Idea", description = "Idea endpoints")
 public class IdeaController {
 
   private final IdeaService ideaService;
@@ -25,6 +28,7 @@ public class IdeaController {
   }
 
   @GetMapping
+  @Operation(summary = "Gets all ideas of the vcw.")
   public ResponseEntity<Iterable<IdeaEntity>> getByVcw(
           @AuthenticationPrincipal Jwt principal,
           @PathVariable(value = "project_id") Long projectId,
@@ -39,6 +43,7 @@ public class IdeaController {
   }
 
   @PostMapping
+  @Operation(summary = "Adds new idea.")
   public ResponseEntity<Object> save(
           @AuthenticationPrincipal Jwt principal,
           @PathVariable(value = "project_id") Long projectId,
@@ -56,6 +61,7 @@ public class IdeaController {
   }
 
   @PutMapping("/{id}")
+  @Operation(summary = "Edits given idea.")
   public ResponseEntity<Object> update(
           @AuthenticationPrincipal Jwt principal,
           @PathVariable(value = "project_id") Long projectId,
@@ -79,6 +85,7 @@ public class IdeaController {
   }
 
   @DeleteMapping("/{id}")
+  @Operation(summary = "Deletes given idea.")
   public ResponseEntity<Object> delete(
           @AuthenticationPrincipal Jwt principal,
           @PathVariable(value = "project_id") Long projectId,

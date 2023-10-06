@@ -1,5 +1,7 @@
 package pt.com.deimos.vcwapi.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.http.HttpStatus;
@@ -18,6 +20,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/v1/projects/{project_id}/vcws/{vcw_id}/selectedIdeas")
+@Tag(name = "Selected Idea", description = "Selected idea endpoints")
 public class VcwHasIdeaController {
 
     private final VcwHasIdeaService vcwHasIdeaService;
@@ -27,6 +30,7 @@ public class VcwHasIdeaController {
     }
 
     @GetMapping
+    @Operation(summary = "Shows vcw ideas.")
     public ResponseEntity<Iterable<VcwHasIdeaEntity>> getByVcw(
             @AuthenticationPrincipal Jwt principal,
             @PathVariable(value = "project_id") Long projectId,
@@ -41,6 +45,7 @@ public class VcwHasIdeaController {
     }
 
   @PutMapping("/{id}")
+  @Operation(summary = "Changes the selected status of the idea to true or false.")
   public ResponseEntity<Object> update(
           @AuthenticationPrincipal Jwt principal,
           @PathVariable(value = "project_id") Long projectId,

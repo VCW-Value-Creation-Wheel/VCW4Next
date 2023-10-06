@@ -1,5 +1,7 @@
 package pt.com.deimos.vcwapi.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/v1/projects/{project_id}/vcws/{vcw_id}/selectedCriterias")
+@Tag(name = "Selected Criteria", description = "Selected criteria endpoints")
 public class VcwHasCriteriaController {
 
     private final VcwHasCriteriaService vcwHasCriteriaService;
@@ -26,6 +29,7 @@ public class VcwHasCriteriaController {
     }
 
     @GetMapping
+    @Operation(summary = "Shows vcw criterias.")
     public ResponseEntity<Iterable<VcwHasCriteriaEntity>> getByVcw(
             @AuthenticationPrincipal Jwt principal,
             @PathVariable(value = "project_id") Long projectId,
@@ -40,6 +44,7 @@ public class VcwHasCriteriaController {
     }
 
   @PutMapping("/{id}")
+  @Operation(summary = "Changes the selected status of the criteria to true or false. ")
   public ResponseEntity<Object> updateSelected(
           @AuthenticationPrincipal Jwt principal,
           @PathVariable(value = "project_id") Long projectId,
@@ -63,6 +68,7 @@ public class VcwHasCriteriaController {
 
 
     @PutMapping("/rank/{id}")
+    @Operation(summary = "Sets the criteria as must have or not and also updates its ranking, weight and max/min thresh olds.")
     public ResponseEntity<Object> updateRank(
             @AuthenticationPrincipal Jwt principal,
             @PathVariable(value = "project_id") Long projectId,

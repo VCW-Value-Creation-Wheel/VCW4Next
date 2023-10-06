@@ -1,5 +1,7 @@
 package pt.com.deimos.vcwapi.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
@@ -21,6 +23,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/v1/projects/{project_id}/vcws")
+@Tag(name = "Vcw", description = "Vcw endpoints")
 public class VcwController {
 
   private final VcwService vcwService;
@@ -30,6 +33,7 @@ public class VcwController {
   }
 
   @GetMapping("/admin")
+  @Operation(summary = "Shows All available vcws if the user is an admin role.")
   @PreAuthorize("hasAuthority('ADMIN')")
   public ResponseEntity<Iterable<VcwEntity>> index(
       @AuthenticationPrincipal Jwt principal
@@ -38,6 +42,7 @@ public class VcwController {
   }
 
   @GetMapping("/{id}")
+  @Operation(summary = "Shows VCW with given id if the user has access to it.")
   public ResponseEntity<Object> getById(
           @PathVariable(value = "project_id") Long projectId,
           @AuthenticationPrincipal Jwt principal,
@@ -59,6 +64,7 @@ public class VcwController {
   }
 
   @GetMapping
+  @Operation(summary = "Shows All available vcws for the given project if the user has access to it.")
   public ResponseEntity<Iterable<VcwEntity>> getByProject(
           @PathVariable(value = "project_id") Long projectId,
           @AuthenticationPrincipal Jwt principal) {
@@ -72,6 +78,7 @@ public class VcwController {
   }
 
   @PostMapping
+  @Operation(summary = "Creates a new vcw.")
   public ResponseEntity<Object> store(
           @PathVariable(value = "project_id") Long projectId,
           @RequestBody @Valid VcwDTO vcwDTO,
@@ -91,6 +98,7 @@ public class VcwController {
   // challenges
 
   @GetMapping("/{id}/challenges")
+  @Operation(summary = "Shows the vcw challenge.")
   public ResponseEntity<Object> getChallenge(
           @PathVariable(value = "id") Long id,
           @PathVariable(value = "project_id") Long projectId,
@@ -114,6 +122,7 @@ public class VcwController {
   }
 
   @PutMapping("/{id}/challenges")
+  @Operation(summary = "Edits the vcw challenge.")
   public ResponseEntity<Object> saveChallenges(
           @PathVariable(value = "id") Long vcwId,
           @RequestBody ChallengeDTO challenge,
@@ -141,6 +150,7 @@ public class VcwController {
   // ExpectedKpis
 
   @GetMapping("/{id}/kpis")
+  @Operation(summary = "Shows the vcw kpis.")
   public ResponseEntity<Object> getKpis(
           @PathVariable(value = "id") Long id,
           @PathVariable(value = "project_id") Long projectId,
@@ -164,6 +174,7 @@ public class VcwController {
   }
 
   @PutMapping("/{id}/kpis")
+  @Operation(summary = "Edits the vcw kpis.")
   public ResponseEntity<Object> saveKpis(
           @PathVariable(value = "id") Long vcwId,
           @RequestBody KpiDTO kpis,

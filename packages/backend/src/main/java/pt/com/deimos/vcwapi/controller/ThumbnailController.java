@@ -1,5 +1,7 @@
 package pt.com.deimos.vcwapi.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -18,6 +20,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/v1/projects/{project_id}/thumbnails")
+@Tag(name = "Project Thumbnail", description = "Project Thumbnail endpoints")
 public class ThumbnailController {
 
     private final ThumbnailService thumbnailService;
@@ -27,6 +30,7 @@ public class ThumbnailController {
     }
 
     @GetMapping
+    @Operation(summary = "Show project thumbnail.")
     public ResponseEntity<Object> getThumbnail(
             @PathVariable(value = "project_id") Long projectId,
             @AuthenticationPrincipal Jwt principal) {
@@ -40,6 +44,7 @@ public class ThumbnailController {
     }
 
     @PostMapping
+    @Operation(summary = "Create project thumbnail.")
     public ResponseEntity<Object> saveThumbnail(
            @PathVariable(value = "project_id") Long projectId,
            @RequestPart(required = true) MultipartFile thumbnail,
@@ -58,7 +63,8 @@ public class ThumbnailController {
                 this.thumbnailService.save(principal.getSubject(), project.get(), thumbnail));
     }
 
-    @PutMapping("{thumbnail_id}")
+    @PutMapping("/{thumbnail_id}")
+    @Operation(summary = "Updates the project thumbnail.")
     public ResponseEntity<Object> updateThumbnail(
             @PathVariable(value = "project_id") Long projectId,
             @PathVariable(value = "thumbnail_id") Long thumbnailId,
@@ -84,7 +90,8 @@ public class ThumbnailController {
                         oldThumbnail.get(), thumbnail));
     }
 
-    @DeleteMapping("{thumbnail_id}")
+    @DeleteMapping("/{thumbnail_id}")
+    @Operation(summary = "Deletes the project thumbnail.")
     public ResponseEntity<Object> deleteThumbnail(
             @PathVariable(value = "project_id") Long projectId,
             @PathVariable(value = "thumbnail_id") Long thumbnailId,

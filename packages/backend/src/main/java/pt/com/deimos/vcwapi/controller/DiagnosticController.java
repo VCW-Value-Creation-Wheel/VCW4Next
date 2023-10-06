@@ -1,5 +1,7 @@
 package pt.com.deimos.vcwapi.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/v1/projects/{project_id}/vcws/{vcw_id}/diagnostics")
+@Tag(name = "Diagnostic", description = "Diagnostic endpoints")
 public class DiagnosticController {
 
     private final DiagnosticService diagnosticService;
@@ -25,6 +28,7 @@ public class DiagnosticController {
     }
 
     @GetMapping
+    @Operation(summary = "Shows all diagnostics of the given vcw.")
     public ResponseEntity<Iterable<DiagnosticEntity>> getByVcw(
             @AuthenticationPrincipal Jwt principal,
             @PathVariable(value = "project_id") Long projectId,
@@ -39,6 +43,7 @@ public class DiagnosticController {
     }
 
     @PostMapping
+    @Operation(summary = "Creates a single diagnostic.")
     public ResponseEntity<Object> save(
             @PathVariable(value = "project_id") Long projectId,
             @PathVariable(value = "vcw_id") Long vcwId,
@@ -55,6 +60,7 @@ public class DiagnosticController {
     }
 
       @PutMapping("/{id}")
+      @Operation(summary = "Edits the given diagnostic.")
       public ResponseEntity<Object> update(
               @AuthenticationPrincipal Jwt principal,
               @PathVariable(value = "project_id") Long projectId,
@@ -77,6 +83,7 @@ public class DiagnosticController {
       }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Deletes the given diagnostic.")
     public ResponseEntity<Object> delete(
             @AuthenticationPrincipal Jwt principal,
             @PathVariable(value = "project_id") Long projectId,
