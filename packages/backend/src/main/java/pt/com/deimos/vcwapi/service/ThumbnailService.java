@@ -41,6 +41,7 @@ public class ThumbnailService {
         return this.projectRepository.findByIdAndProjectHasUserRoleEntitiesUserInum(project_id, userId);
     }
 
+    @Transactional(readOnly = true)
     public FileEntity findByProject(Long projectId) {
 
         Optional<FileEntity> result =
@@ -58,7 +59,7 @@ public class ThumbnailService {
     }
 
 
-    public FileEntity getDownloadThumbnail(FileEntity thumbnail) {
+    private FileEntity getDownloadThumbnail(FileEntity thumbnail) {
 
         //generate image with download url
         FileEntity tempThumbnail = null;
