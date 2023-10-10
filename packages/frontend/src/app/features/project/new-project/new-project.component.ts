@@ -58,6 +58,7 @@ export class NewProjectComponent implements OnInit {
     userRole: UserRole[] = [];
 
     ind: number;
+    inputFiles: FileList;
 
   constructor(
       private router: Router,
@@ -75,8 +76,18 @@ export class NewProjectComponent implements OnInit {
     if (this.form.valid) {
       this.projectService.createProject(this.form.value)
       .pipe(take(1)).subscribe(response => {
-        this.snackbar.success('Success!', 'New Project created!').during(3000).show();
-        this.router.navigate(['../'], {relativeTo: this.route});
+        
+        if(this.inputFiles !== undefined){
+          const data = new FormData();
+          data.append('thumbnail', this.inputFiles[0]);
+          this.projectService.createProjectThumbnail(response.id ,data).subscribe(res => {
+
+            this.snackbar.success('Success!', 'New Project created!').during(3000).show();
+            this.router.navigate(['../'], {relativeTo: this.route});
+            
+          });
+        }
+     
       }, (error) => {
         this.snackbar.danger('Error!', 'Project creation failed.').during(3000).show();
       });
@@ -130,6 +141,16 @@ export class NewProjectComponent implements OnInit {
 
   getUserArrayIndex(isEditing: boolean): number {
     return isEditing ? this.ind : (this.form.get('userArray') as FormArray).length - 1;
+  }
+
+  onFileSelected(event:Event){
+    
+    const target = event.target as HTMLInputElement;
+    const files = target.files as FileList
+
+    this.inputFiles = files;
+   
+   
   }
 
 }
