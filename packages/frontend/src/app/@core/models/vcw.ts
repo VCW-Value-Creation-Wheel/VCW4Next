@@ -81,3 +81,7 @@ export interface CriteriaRanking {
     intervalMax: number;
     id: number;
 }
+
+export interface VCWPrototype {
+    prototype: string;
+}

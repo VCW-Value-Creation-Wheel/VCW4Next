@@ -16,6 +16,7 @@ import { CriteriaPageComponent } from './phases/2/criteria-page/criteria-page.co
 import { SelectCriteriaComponent } from './phases/3/select-criteria/select-criteria.component';
 import { ExpectedKpisComponent } from './phases/1/expected-kpis/expected-kpis.component';
 import { RankWeightCriteriaComponent } from './phases/3/rank-weight-criteria/rank-weight-criteria.component';
+import { PrototypeComponent } from './phases/4/prototype/prototype.component';
 
 
 
@@ -34,7 +35,8 @@ import { RankWeightCriteriaComponent } from './phases/3/rank-weight-criteria/ran
     CriteriaPageComponent,
     ExpectedKpisComponent,
     SelectCriteriaComponent,
-    RankWeightCriteriaComponent
+    RankWeightCriteriaComponent,
+    PrototypeComponent
   ],
   imports: [
     CommonModule,
