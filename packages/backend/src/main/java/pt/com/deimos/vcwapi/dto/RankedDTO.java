@@ -14,12 +14,9 @@ public class RankedDTO {
     @NotNull
     private Integer ranking;
 
-    @NotNull
     private Float weight;
 
-    @NotNull
     private Float intervalMin;
 
-    @NotNull
     private Float intervalMax;
 }
