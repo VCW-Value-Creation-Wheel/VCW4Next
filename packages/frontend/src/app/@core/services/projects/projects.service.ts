@@ -35,7 +35,12 @@ export class ProjectsService {
 
   getProjectThumbnail(projectId: number): Observable<Thumbnail> {
     const url = `${this.projectsBaseUrl}/${projectId}/thumbnails`;
-    return this.http.get<Thumbnail>(url, this.httpOptions);
+    return this.http.get<Thumbnail>(url);
+  }
+
+  createProjectThumbnail(projectId: number, thumbnail: any): Observable<Thumbnail>{
+    const url = `${this.projectsBaseUrl}/${projectId}/thumbnails`;
+    return this.http.post<Thumbnail>(url, thumbnail);
   }
 
 }
