@@ -1,5 +1,7 @@
 package pt.com.deimos.vcwapi.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/v1/projects/{project_id}/vcws/{vcw_id}/criterias")
+@Tag(name = "Criteria", description = "Criteria endpoints")
 public class CriteriaController {
 
   private final CriteriaService criteriaService;
@@ -25,6 +28,7 @@ public class CriteriaController {
   }
 
   @GetMapping
+  @Operation(summary = "Gets all criterias of the vcw.")
   public ResponseEntity<Iterable<CriteriaEntity>> getByVcw(
           @AuthenticationPrincipal Jwt principal,
           @PathVariable(value = "project_id") Long projectId,
@@ -39,6 +43,7 @@ public class CriteriaController {
   }
 
   @PostMapping
+  @Operation(summary = "Adds new criteria.")
   public ResponseEntity<Object> save(
           @PathVariable(value = "project_id") Long projectId,
           @PathVariable Long vcw_id,
@@ -56,6 +61,7 @@ public class CriteriaController {
   }
 
   @PutMapping("/{id}")
+  @Operation(summary = "Updates given criteria.")
   public ResponseEntity<Object> update(
           @AuthenticationPrincipal Jwt principal,
           @PathVariable(value = "project_id") Long projectId,
@@ -79,6 +85,7 @@ public class CriteriaController {
   }
 
   @DeleteMapping("/{id}")
+  @Operation(summary = "Deletes given criteria.")
   public ResponseEntity<Object> delete(
           @AuthenticationPrincipal Jwt principal,
           @PathVariable(value = "project_id") Long projectId,

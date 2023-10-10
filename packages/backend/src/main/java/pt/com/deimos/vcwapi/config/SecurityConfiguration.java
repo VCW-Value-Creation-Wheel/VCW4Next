@@ -20,6 +20,13 @@ import java.util.Collections;
 @EnableMethodSecurity
 public class SecurityConfiguration {
 
+
+  private static final String[] AUTH_WHITELIST = {
+          //NOTE: swagger docs need these endpoints
+          "/swagger-ui/**",
+          "/v3/api-docs/**"
+  };
+
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
    http
@@ -29,6 +36,7 @@ public class SecurityConfiguration {
        .cors()
        .and()
        .authorizeHttpRequests()
+       .requestMatchers(AUTH_WHITELIST).permitAll()
        .anyRequest().authenticated()
        .and()
        .oauth2ResourceServer().jwt();

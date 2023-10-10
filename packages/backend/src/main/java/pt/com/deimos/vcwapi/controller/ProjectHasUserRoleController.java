@@ -1,5 +1,7 @@
 package pt.com.deimos.vcwapi.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/v1/projects/{project_id}/users")
+@Tag(name = "Project User Roles", description = "Project User Roles endpoints")
 public class ProjectHasUserRoleController {
 
     private final ProjectHasUserRoleService projectHasUserRolesService;
@@ -26,6 +29,7 @@ public class ProjectHasUserRoleController {
     }
 
     @GetMapping
+    @Operation(summary = "Shows all project users.")
     public ResponseEntity<Object> getAllProjectUsers(
             @PathVariable(value = "project_id") Long project_id,
             @AuthenticationPrincipal Jwt principal) {
@@ -42,6 +46,7 @@ public class ProjectHasUserRoleController {
     }
 
     @GetMapping("/{user_id}")
+    @Operation(summary = "Shows project user with given id.")
     public ResponseEntity<Object> getProjectUserById(
             @PathVariable(value = "project_id") Long project_id,
             @PathVariable(value = "user_id") Long user_id,
@@ -59,6 +64,7 @@ public class ProjectHasUserRoleController {
     }
 
     @PostMapping
+    @Operation(summary = "Adds a project user.")
     public ResponseEntity<Object> addProjectUser(
             @PathVariable(value = "project_id") Long project_id,
             @RequestBody @Valid ProjectHasUserRoleDTO newUser,
@@ -78,6 +84,7 @@ public class ProjectHasUserRoleController {
 
 
     @PutMapping("/{user_id}")
+    @Operation(summary = "Updates a project user.")
     public ResponseEntity<Object> updateProjectUser(
             @PathVariable(value = "project_id") Long project_id,
             @PathVariable(value = "user_id") Long user_id,
@@ -102,6 +109,7 @@ public class ProjectHasUserRoleController {
     }
 
     @DeleteMapping("/{user_id}")
+    @Operation(summary = "Removes a project user.")
     public ResponseEntity<Object> deleteProjectUser(
             @PathVariable(value = "project_id") Long project_id,
             @PathVariable(value = "user_id") Long user_id,

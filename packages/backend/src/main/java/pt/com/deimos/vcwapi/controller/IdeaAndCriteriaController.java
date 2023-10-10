@@ -1,5 +1,7 @@
 package pt.com.deimos.vcwapi.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/v1/projects/{project_id}/vcws/{vcw_id}/ideasAndCriterias")
+@Tag(name = "Ideas And Criterias", description = "Ideas And Criterias endpoints")
 public class IdeaAndCriteriaController {
 
   private final IdeaAndCriteriaService ideaAndCriteriaService;
@@ -26,6 +29,7 @@ public class IdeaAndCriteriaController {
   }
 
   @GetMapping
+  @Operation(summary = "Gets all ideaAndCriteria pairs available for the current vcw.")
   public ResponseEntity<Iterable<IdeaAndCriteriaEntity>> getByVcw(
           @AuthenticationPrincipal Jwt principal,
           @PathVariable(value = "project_id") Long projectId,
@@ -40,6 +44,7 @@ public class IdeaAndCriteriaController {
   }
 
   @PostMapping
+  @Operation(summary = "Adds new ideaAndCriteria pair to vcw.")
   public ResponseEntity<Object> save(
           @PathVariable(value = "project_id") Long projectId,
           @PathVariable Long vcw_id,
@@ -57,6 +62,7 @@ public class IdeaAndCriteriaController {
   }
 
   @PutMapping("/{id}")
+  @Operation(summary = "Updates given idea and criteria pair.")
   public ResponseEntity<Object> update(
           @AuthenticationPrincipal Jwt principal,
           @PathVariable(value = "project_id") Long projectId,
@@ -92,6 +98,7 @@ public class IdeaAndCriteriaController {
   }
 
   @DeleteMapping("/{id}")
+  @Operation(summary = "Deletes given idea and criteria pair.")
   public ResponseEntity<Object> delete(
           @AuthenticationPrincipal Jwt principal,
           @PathVariable(value = "project_id") Long projectId,

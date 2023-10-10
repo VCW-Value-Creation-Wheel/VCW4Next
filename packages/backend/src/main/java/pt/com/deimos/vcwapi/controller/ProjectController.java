@@ -1,5 +1,7 @@
 package pt.com.deimos.vcwapi.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import io.minio.errors.MinioException;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -22,6 +24,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/v1/projects")
+@Tag(name = "Project", description = "Project endpoints")
 public class ProjectController {
 
   private final ProjectService projectService;
@@ -32,6 +35,7 @@ public class ProjectController {
 
   @GetMapping("/admin")
   @PreAuthorize("hasAuthority('ADMIN')")
+  @Operation(summary = "Shows all projects if user has an admin role.")
   public ResponseEntity<Iterable<ProjectEntity>> getAll(
           @AuthenticationPrincipal Jwt principal
   ) {
@@ -47,6 +51,7 @@ public class ProjectController {
   }
 
   @GetMapping
+  @Operation(summary = "Shows all projects a user has access to.")
   public ResponseEntity<Iterable<ProjectEntity>> getByUser(
           @AuthenticationPrincipal Jwt principal) {
 
@@ -61,6 +66,7 @@ public class ProjectController {
   }
 
   @GetMapping("/{id}")
+  @Operation(summary = "Shows project with given id if the user has access to it.")
   public ResponseEntity<Object> getByIdAndUser(
           @PathVariable(value = "id") Long id,
           @AuthenticationPrincipal Jwt principal) {
@@ -70,6 +76,7 @@ public class ProjectController {
   }
 
   @PostMapping
+  @Operation(summary = "Creates a new project.")
   public ResponseEntity<Object> store(
           @RequestBody @Valid ProjectDTO project,
           @AuthenticationPrincipal Jwt principal
