@@ -43,4 +43,9 @@ export class ProjectsService {
     return this.http.post<Thumbnail>(url, thumbnail);
   }
 
+  getUser(user:any){
+    const url = `${environment.api}/users?search=${user}`;
+    return this.http.get(url);
+  }
+
 }

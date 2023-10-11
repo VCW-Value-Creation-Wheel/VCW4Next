@@ -1,9 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Options, ProjectsService, SnackbarService } from '@core';
 import { projectConfig } from '@core/configs/forms/project';
-import { faArrowLeft, faPenToSquare, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { userConfig } from '@core/configs/forms/user';
+import { faArrowLeft, faPenToSquare, faXmark, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { take } from 'rxjs/operators';
 
 interface UserRole {
@@ -18,10 +19,12 @@ interface UserRole {
 })
 export class NewProjectComponent implements OnInit {
   form: FormGroup;
+  formUser: FormGroup;
 
   faPenToSquare = faPenToSquare;
   faXmark = faXmark;
   faArrowLeft = faArrowLeft;
+  faSearch = faSearch;
 
   langOptions: Options[] = [
     {
@@ -39,10 +42,13 @@ export class NewProjectComponent implements OnInit {
 
     isAddUserActive = false;
 
-    options: string[] = ['user1', 'user2', 'user3', 'user4'];
+    options: string[] = [];
+    users: string[] = [];
     error = false;
     isDisabled = false;
     isEditing = false;
+    showResults: boolean = false;
+    isAdded = false;
 
     roleOptions: Options[] = [
       {
@@ -70,6 +76,7 @@ export class NewProjectComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = this.formBuilder.group(projectConfig);
+    this.formUser = this.formBuilder.group(userConfig);
   }
 
   onSubmit(e: Event): void{
@@ -97,15 +104,19 @@ export class NewProjectComponent implements OnInit {
   }
 
   addUser(): void{
-    (this.form.get('userArray') as FormArray).push(this.formBuilder.group({
+   
+    this.isAddUserActive = true;
+
+    /*(this.form.get('userArray') as FormArray).push(this.formBuilder.group({
       user: new FormControl(),
       role: new FormControl()
-    }));
-    this.isAddUserActive = true;
+    }));*/
   }
 
+  /*
   confirmUser(): void{
     this.userRole = this.form.get('userArray').value;
+    console.log(this.userRole)
     this.isAddUserActive = false;
   }
 
@@ -121,12 +132,13 @@ export class NewProjectComponent implements OnInit {
     this.isAddUserActive = false;
     this.isEditing = false;
     (this.form.get('userArray') as FormArray).setValue(this.userRole);
-  }
+  }*/
 
   onBack(): void{
     this.router.navigate(['../'], {relativeTo: this.route});
   }
 
+  /*
   editUser(ind: number): void{
     this.ind = ind;
     this.isEditing = true;
@@ -141,7 +153,7 @@ export class NewProjectComponent implements OnInit {
 
   getUserArrayIndex(isEditing: boolean): number {
     return isEditing ? this.ind : (this.form.get('userArray') as FormArray).length - 1;
-  }
+  }*/
 
   onFileSelected(event:Event){
     
@@ -149,8 +161,30 @@ export class NewProjectComponent implements OnInit {
     const files = target.files as FileList
 
     this.inputFiles = files;
-   
-   
+    
+  }
+
+  findUser(){
+    let user = this.formUser.get('user').value;
+    if(user === ''){
+      user = null
+    }
+    console.log(user)
+    this.users = [];
+    let username: string [] = [];
+    const searchedUser = this.projectService.getUser(user).subscribe((res) =>{
+      const lenght = Object.keys(res).length;
+
+      if(lenght === 0){
+        this.showResults = false;
+      }else{
+        this.showResults = true;
+      }
+
+      for(let i=0; i< lenght; i++){
+         this.users[i] = res[i].username;
+      }
+    });
   }
 
 }
