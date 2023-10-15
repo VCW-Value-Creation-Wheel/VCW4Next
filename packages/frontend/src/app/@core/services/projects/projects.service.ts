@@ -43,9 +43,19 @@ export class ProjectsService {
     return this.http.post<Thumbnail>(url, thumbnail);
   }
 
-  getUser(user:any){
+  getUser(user:any) {
     const url = `${environment.api}/users?search=${user}`;
-    return this.http.get(url);
+    return this.http.get(url, this.httpOptions);
+  }
+
+  getRoles(){
+    const url = `${environment.api}/roles`;
+    return this.http.get(url, this.httpOptions);
+  }
+
+  addUserRoleToProject(userId: string, roleId: string, projectId:number){
+    const url =`${this.projectsBaseUrl}/${projectId}/users`;
+    return this.http.post(url,{userId,roleId},this.httpOptions);
   }
 
 }

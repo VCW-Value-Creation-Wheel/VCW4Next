@@ -45,9 +45,9 @@
             </app-select-input>
         </div>
         <div class="col-span-4 text-xl font-bold ">Users and Roles</div>
-        <div class="grid grid-cols-4 col-span-4 px-2">
-            <div *ngIf="isAddUserActive" [formGroup]="formUser" class="col-span-4 m-2 p-2">
-                <p class="{{isDisabled?'text-gray-400':'text-gray-700'}} pb-2">
+        <div class="grid grid-cols-4 col-span-4 px-2 ">
+            <div *ngIf="isAddUserActive" [formGroup]="formUser" class="col-span-4 md:m-2 md:p-2 ">
+                <p class="text-gray-700 pb-2">
                     Find User
                 </p>
                 <div class="flex align-top">
@@ -92,9 +92,9 @@
           
                 
               
-                <div *ngFor="let user of this.users" class="flex md:px-20 p-2">
-                    <div class="w-1/5 items-end">
-                        <p class="mb-2">User</p>
+                <div *ngFor="let user of this.users; index as id" class="flex md:px-20 md:p-2 w-full items-center md:items-end">
+                    <div class="w-full md:w-1/5 items-end">
+                        <p class="mt-2 mb:4 md:mb-2">User</p>
                         <p
                         class="
                         focus:outline-none
@@ -114,25 +114,27 @@
                     </div>
                     <app-select-input
                         [label]="'Role'"
-                        [options]="langOptions"
+                        [options]="roleOptions"
                         formControlName="role"
                         id="role"
-                        class="w-1/4 pl-3"
+                        class="md:w-1/4 pl-3"
+                        (emitInputChange)="saveRole($event,id)"
+                        
                         >
                     </app-select-input>
 
-                    <div *ngIf="isAdded === false" class="px-4 mt-7 self-center">
+                    <div *ngIf="isAdded[id] === false" class="md:px-4 mt-5 md:mt-8 self-center px-2 ">
                         <app-button
                         [label]="'Add'"
-                        (buttonClick)="isAdded = true"
+                        (buttonClick)="addRole(id)"
                         >
                         </app-button>
                     </div>
 
-                    <div *ngIf="isAdded === true" class="px-4 mt-7 self-center">
+                    <div *ngIf="isAdded[id] === true" class="px-4 mt-5 md:mt-8 self-center md:self-end">
                         <app-button
                         [label]="'Cancel'"  
-                        (buttonClick)="isAdded = false"        
+                        (buttonClick)="cancelRole(id)"        
                         > 
                         </app-button>
                     </div>
@@ -142,7 +144,7 @@
             <div class="col-span-4 my-2" *ngIf="!isAddUserActive ">
                 <app-button
                 [label]="'Add User'"
-                (click)="addUser()"
+                (click)="isAddUserActive = true"
                 >
                 </app-button>
             </div>
