@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { NewVcwComponent } from 'features/vcw/new-vcw/new-vcw.component';
 import { ProjectPageComponent } from './project-page/project-page.component';
+import { EditProjectComponent } from './edit-project/edit-project.component';
 
 
 const routes: Routes = [
@@ -18,6 +19,10 @@ const routes: Routes = [
     {
         path: ':project_id',
         component: ProjectPageComponent
+    },
+    {
+        path: ':project_id/edit-project',
+        component: EditProjectComponent
     }
 ];
 

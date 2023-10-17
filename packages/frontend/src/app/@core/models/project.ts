@@ -3,6 +3,7 @@ export interface Project {
     name: string;
     description: string;
     thumbnailURL?: string;
+    lang: string;
 }
 
 export interface Thumbnail {
