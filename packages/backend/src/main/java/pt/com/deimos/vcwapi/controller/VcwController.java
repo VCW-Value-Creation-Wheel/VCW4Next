@@ -304,7 +304,7 @@ public class VcwController {
 
   //Concept
 
-  @GetMapping("/{id}/concept")
+  @GetMapping("/{id}/concepts")
   public ResponseEntity<Object> getConcept(
           @PathVariable(value = "id") Long id,
           @PathVariable(value = "project_id") Long projectId,
@@ -327,7 +327,7 @@ public class VcwController {
     return ResponseEntity.ok(Collections.singletonMap("concept", concept));
   }
 
-  @PutMapping("/{id}/concept")
+  @PutMapping("/{id}/concepts")
   public ResponseEntity<Object> saveConcept(
           @PathVariable(value = "id") Long vcwId,
           @RequestBody ConceptDTO concept,
