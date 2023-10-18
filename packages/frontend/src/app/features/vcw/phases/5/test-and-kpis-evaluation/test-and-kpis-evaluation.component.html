@@ -1,20 +1,35 @@
-<div class="px-4 py-4 flex flex-row justify-between mx-4 md:mx-64 lg:mx-80">
-    <h1 class="text-2xl font-bold text-primary ">Test & KPIs Evaluation </h1>
-    <div>
-        <app-button
-            [label]="'Save'"
-            [leftIcon]="faFloppyDisk"
-            (buttonClick)="onSave()"
-        ></app-button>
-    </div>
+<div class="px-4 py-4 grid mx-4 justify-items-end"> 
+    <app-button
+        [label]="'Save'"
+        [leftIcon]="faFloppyDisk"
+        (buttonClick)="onSave()"
+     ></app-button>
 </div>
-<div [formGroup]="dataForm" class="mx-4 md:mx-64 lg:mx-80">
-    <div class="px-4 py-4">
+<div [formGroup]="dataForm" class="px-4 py-4 flex flex-row justify-between mx-4 w-full ">
+    <div class="w-3/6">
+        <h1 class="text-2xl font-bold text-primary py-4">Test & KPIs Evaluation </h1>
         <app-cke-editor
             id="testAndKpisEvaluation"
             [label]="''"
             formControlName="testAndKpisEvaluation"
         ></app-cke-editor>
+    </div>
+    <div class="grid w-2/5" [formGroup]="dataFormKpis">
+        <h1 class="text-2xl font-bold text-primary p-4">Expected KPIs</h1>
+        <app-cke-editor
+            id="kpis"
+            [label]="''"
+            formControlName="kpis"
+            isDisabled="true"
+            class=" w-11/12 md:ml-4 mr-4"
+        ></app-cke-editor>
+        <div class="justify-self-end md:mr-7 self-end m-4">
+            <app-button
+                [label]="'Go to Phase 1c'"
+                [leftIcon]="faLocationArrow"
+                (buttonClick)="goPhase1C()"
+            ></app-button>
+        </div>
     </div>
 </div>
 

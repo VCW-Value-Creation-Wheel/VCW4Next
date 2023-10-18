@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PhaseNavigationService, SnackbarService, testAndKpisEvaluationConfig, VcwPhasesService } from '@core';
-import { faFloppyDisk } from '@fortawesome/free-solid-svg-icons';
+import { expectedKPIsConfig, PhaseNavigationService, SnackbarService, testAndKpisEvaluationConfig, VcwPhasesService } from '@core';
+import { faFloppyDisk, faLocationArrow } from '@fortawesome/free-solid-svg-icons';
 import { take } from 'rxjs/operators';
 import { environment } from '../../../../../../environments/environment';
-import { VCWTestAndKpisEvaluation } from '@core/models';
+import { ExpectedKPIs, VCWTestAndKpisEvaluation } from '@core/models';
 
 @Component({
   selector: 'app-test-and-kpis-evaluation',
@@ -15,12 +15,15 @@ import { VCWTestAndKpisEvaluation } from '@core/models';
 export class TestAndKpisEvaluationComponent implements OnInit{
 
   faFloppyDisk = faFloppyDisk;
+  faLocationArrow = faLocationArrow;
 
   dataForm: UntypedFormGroup;
+  dataFormKpis: UntypedFormGroup;
 
   projectId: number;
   vcwId: number;
   isEditing = false;
+  expectedKPIs: ExpectedKPIs;
 
   useMocks: boolean;
 
@@ -35,6 +38,7 @@ export class TestAndKpisEvaluationComponent implements OnInit{
     private snackbarService: SnackbarService
   ){
     this.dataForm = this.formBuilder.group(testAndKpisEvaluationConfig);
+    this.dataFormKpis = this.formBuilder.group(expectedKPIsConfig);
   }
 
   ngOnInit(): void {
@@ -62,13 +66,28 @@ export class TestAndKpisEvaluationComponent implements OnInit{
         this.snackbarService.danger('Data Fetching Error', 'Unable to check and retrieve data from the server. Try again later.')
           .during(2000).show();
       });
+
+
+    
+      this.vcwPhasesService.getExpectedKPIs(this.vcwId, this.projectId)
+      .pipe(take(1))
+      .subscribe(data => {
+        if (data) {
+          this.expectedKPIs = data;
+          this.dataFormKpis.controls.kpis.patchValue(this.expectedKPIs.kpis);
+        }
+      }, error => {
+        this.snackbarService.danger('Data Fetching Error', 'Unable to check and retrieve data from the server. Try again later.')
+          .during(2000).show();
+      });
     }
+    
   }
 
   onSave() {
     if (this.isFormValid('testAndKpisEvaluation')) {
 
-      this.vcwTestAndKpisEvaluation.testAndKpisEvaluation = this.dataForm.controls.prototype.value;
+      this.vcwTestAndKpisEvaluation.testAndKpisEvaluation = this.dataForm.controls.testAndKpisEvaluation.value;
 
       if (this.isEditing) {
         this.vcwPhasesService.editTestAndKpisEvaluation(this.vcwId, this.projectId, this.vcwTestAndKpisEvaluation)
@@ -95,5 +114,9 @@ export class TestAndKpisEvaluationComponent implements OnInit{
 
   isFormValid(control: string) {
     return this.dataForm.get(control).valid;
+  }
+
+  goPhase1C(){
+    this.router.navigate(['../' + '1c'], {relativeTo: this.activatedRoute});
   }
 }
