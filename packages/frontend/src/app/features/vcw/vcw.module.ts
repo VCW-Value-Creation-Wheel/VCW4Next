@@ -18,6 +18,10 @@ import { ExpectedKpisComponent } from './phases/1/expected-kpis/expected-kpis.co
 import { RankWeightCriteriaComponent } from './phases/3/rank-weight-criteria/rank-weight-criteria.component';
 import { PrototypeComponent } from './phases/4/prototype/prototype.component';
 import { TestAndKpisEvaluationComponent } from './phases/5/test-and-kpis-evaluation/test-and-kpis-evaluation.component';
+import { ValueCreationFunnelComponent } from './phases/4/value-creation-funnel/value-creation-funnel.component';
+import { ConceptAndValuePropositionComponent } from './phases/4/concept-and-value-proposition/concept-and-value-proposition.component';
+import { MsAndBusinessModelComponent } from './phases/5/ms-and-business-model/ms-and-business-model.component';
+import { ImplementationControlComponent } from './phases/5/implementation-control/implementation-control.component';
 
 
 
@@ -38,7 +42,11 @@ import { TestAndKpisEvaluationComponent } from './phases/5/test-and-kpis-evaluat
     SelectCriteriaComponent,
     RankWeightCriteriaComponent,
     PrototypeComponent,
-    TestAndKpisEvaluationComponent
+    TestAndKpisEvaluationComponent,
+    ValueCreationFunnelComponent,
+    ConceptAndValuePropositionComponent,
+    MsAndBusinessModelComponent,
+    ImplementationControlComponent
   ],
   imports: [
     CommonModule,

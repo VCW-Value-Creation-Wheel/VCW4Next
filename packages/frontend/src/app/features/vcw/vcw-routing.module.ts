@@ -14,6 +14,10 @@ import { ExpectedKpisComponent } from './phases/1/expected-kpis/expected-kpis.co
 import { RankWeightCriteriaComponent } from './phases/3/rank-weight-criteria/rank-weight-criteria.component';
 import { PrototypeComponent } from './phases/4/prototype/prototype.component';
 import { TestAndKpisEvaluationComponent } from './phases/5/test-and-kpis-evaluation/test-and-kpis-evaluation.component';
+import { ValueCreationFunnelComponent } from './phases/4/value-creation-funnel/value-creation-funnel.component';
+import { ConceptAndValuePropositionComponent } from './phases/4/concept-and-value-proposition/concept-and-value-proposition.component';
+import { MsAndBusinessModelComponent } from './phases/5/ms-and-business-model/ms-and-business-model.component';
+import { ImplementationControlComponent } from './phases/5/implementation-control/implementation-control.component';
 
 const routes: Routes = [
     {
@@ -57,12 +61,28 @@ const routes: Routes = [
         component: RankWeightCriteriaComponent
     },
     {
+        path: ':vcw_id/phases/4a',
+        component: ValueCreationFunnelComponent
+    },
+    {
+        path: ':vcw_id/phases/4b',
+        component: ConceptAndValuePropositionComponent
+    },
+    {
         path: ':vcw_id/phases/4c',
         component: PrototypeComponent
     },
     {
+        path: ':vcw_id/phases/5a',
+        component: MsAndBusinessModelComponent
+    },
+    {
         path: ':vcw_id/phases/5b',
         component: TestAndKpisEvaluationComponent
+    },
+    {
+        path: ':vcw_id/phases/5c',
+        component: ImplementationControlComponent
     },
 
     

@@ -56,17 +56,41 @@ const vcwPhasesNavigation: VCWPhase = {
         previousPhaseId: '3b',
         nextPhaseId: '4a'
     },
+    '4a': {
+        id: '4a',
+        name: 'Value Creation Funnel',
+        previousPhaseId: '3c',
+        nextPhaseId: '4b'
+    },
+    '4b': {
+        id: '4b',
+        name: 'Concept & Value Proposition',
+        previousPhaseId: '4a',
+        nextPhaseId: '4c'
+    },
     '4c': {
         id: '4c',
         name: 'Prototype',
         previousPhaseId: '4b',
         nextPhaseId: '5a'
     },
+    '5a': {
+        id: '5a',
+        name: '3 Ms & Business Model',
+        previousPhaseId: '4c',
+        nextPhaseId: '5b'
+    },
     '5b': {
         id: '5b',
         name: 'Test & KPIs Evaluation',
         previousPhaseId: '5a',
         nextPhaseId: '5c'
+    },
+    '5c': {
+        id: '5c',
+        name: 'Implementation & Control',
+        previousPhaseId: '5b',
+        nextPhaseId: '1a'
     },
 };
 
