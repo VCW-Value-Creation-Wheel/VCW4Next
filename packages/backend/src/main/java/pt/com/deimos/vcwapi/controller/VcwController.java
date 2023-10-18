@@ -11,6 +11,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import pt.com.deimos.vcwapi.dto.ChallengeDTO;
+import pt.com.deimos.vcwapi.dto.ConceptDTO;
 import pt.com.deimos.vcwapi.dto.KpiDTO;
 import pt.com.deimos.vcwapi.dto.PrototypeDTO;
 import pt.com.deimos.vcwapi.dto.TestAndKpisEvaluationDTO;
@@ -295,6 +296,56 @@ public class VcwController {
     }
     VcwEntity editedVcw = vcwEntityOptional.get();
     editedVcw.setTestAndKpisEvaluation(testAndKpisEvaluation.getTestAndKpisEvaluation());
+
+    return ResponseEntity.status(HttpStatus.OK).body(
+            this.vcwService.update(editedVcw));
+
+  }
+
+  //Concept
+
+  @GetMapping("/{id}/concept")
+  public ResponseEntity<Object> getConcept(
+          @PathVariable(value = "id") Long id,
+          @PathVariable(value = "project_id") Long projectId,
+          @AuthenticationPrincipal Jwt principal) {
+
+    Optional<ProjectEntity> project = this.vcwService.findProjectByIdAndUser(
+            projectId, principal.getSubject());
+    if (project.isEmpty())
+      throw new NotFoundException("Project not found.");
+    
+    Optional<VcwEntity> vcwEntityOptional =
+            this.vcwService.findById(id);
+
+    if(vcwEntityOptional.isEmpty()) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Vcw not found");
+    }
+
+    //find Concept
+    String concept = vcwEntityOptional.get().getConcept();
+    return ResponseEntity.ok(Collections.singletonMap("concept", concept));
+  }
+
+  @PutMapping("/{id}/concept")
+  public ResponseEntity<Object> saveConcept(
+          @PathVariable(value = "id") Long vcwId,
+          @RequestBody ConceptDTO concept,
+          @PathVariable(value = "project_id") Long projectId,
+          @AuthenticationPrincipal Jwt principal
+  ) {
+
+    Optional<ProjectEntity> project = this.vcwService.findProjectByIdAndUser(
+            projectId, principal.getSubject());
+    if (project.isEmpty())
+      throw new NotFoundException("Project not found.");
+    
+    Optional<VcwEntity> vcwEntityOptional = this.vcwService.findById(vcwId);
+    if(vcwEntityOptional.isEmpty()) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Vcw not found");
+    }
+    VcwEntity editedVcw = vcwEntityOptional.get();
+    editedVcw.setConcept(concept.getConcept());
 
     return ResponseEntity.status(HttpStatus.OK).body(
             this.vcwService.update(editedVcw));
