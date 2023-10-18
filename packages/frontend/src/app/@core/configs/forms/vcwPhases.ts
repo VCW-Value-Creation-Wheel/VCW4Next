@@ -60,3 +60,7 @@ export const createRankCriteriaConfig = {
 export const prototypeConfig = {
     prototype: [null, Validators.required]
 };
+
+export const testAndKpisEvaluationConfig = {
+    testAndKpisEvaluation: [null, Validators.required]
+}

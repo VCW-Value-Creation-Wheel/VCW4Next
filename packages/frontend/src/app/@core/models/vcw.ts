@@ -85,3 +85,7 @@ export interface CriteriaRanking {
 export interface VCWPrototype {
     prototype: string;
 }
+
+export interface VCWTestAndKpisEvaluation{
+    testAndKpisEvaluation: string;
+}

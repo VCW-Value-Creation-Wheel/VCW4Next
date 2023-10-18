@@ -17,6 +17,7 @@ import { SelectCriteriaComponent } from './phases/3/select-criteria/select-crite
 import { ExpectedKpisComponent } from './phases/1/expected-kpis/expected-kpis.component';
 import { RankWeightCriteriaComponent } from './phases/3/rank-weight-criteria/rank-weight-criteria.component';
 import { PrototypeComponent } from './phases/4/prototype/prototype.component';
+import { TestAndKpisEvaluationComponent } from './phases/5/test-and-kpis-evaluation/test-and-kpis-evaluation.component';
 
 
 
@@ -36,7 +37,8 @@ import { PrototypeComponent } from './phases/4/prototype/prototype.component';
     ExpectedKpisComponent,
     SelectCriteriaComponent,
     RankWeightCriteriaComponent,
-    PrototypeComponent
+    PrototypeComponent,
+    TestAndKpisEvaluationComponent
   ],
   imports: [
     CommonModule,

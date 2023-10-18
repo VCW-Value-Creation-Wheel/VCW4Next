@@ -62,6 +62,12 @@ const vcwPhasesNavigation: VCWPhase = {
         previousPhaseId: '4b',
         nextPhaseId: '5a'
     },
+    '5b': {
+        id: '5b',
+        name: 'Test & KPIs Evaluation',
+        previousPhaseId: '5a',
+        nextPhaseId: '5c'
+    },
 };
 
 export {vcwPhasesNavigation};

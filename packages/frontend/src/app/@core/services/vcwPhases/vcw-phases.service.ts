@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Criteria, CriteriaRanking, ExpectedKPIs, Idea, IdeaCriteriaPair, SwotFieldRow, VCWChallenge, VCWHasCriteria, VCWHasIdea, VCWPrototype} from '@core/models';
+import { Criteria, CriteriaRanking, ExpectedKPIs, Idea, IdeaCriteriaPair, SwotFieldRow, VCWChallenge, VCWHasCriteria, VCWHasIdea, VCWPrototype, VCWTestAndKpisEvaluation} from '@core/models';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 
@@ -168,7 +168,7 @@ export class VcwPhasesService {
   }
 
    // Phase 4c
-   getPrototype(vcwId: number, projectId: number): Observable<VCWPrototype> {
+  getPrototype(vcwId: number, projectId: number): Observable<VCWPrototype> {
     const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/prototypes`;
     return this.http.get<VCWPrototype>(url, this.httpOptions);
   }
@@ -180,6 +180,22 @@ export class VcwPhasesService {
 
   editPrototype(vcwId: number, projectId: number, data: VCWPrototype): Observable<any> {
     const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/prototypes`;
+    return this.http.put<any>(url, data, this.httpOptions);
+  }
+
+  // Phase 5b
+  getTestAndKpisEvaluation(vcwId: number, projectId: number): Observable<VCWTestAndKpisEvaluation>{
+    const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/testAndKpisEvaluation`;
+    return this.http.get<VCWTestAndKpisEvaluation>(url, this.httpOptions);
+  }
+
+  createTestAndKpisEvaluation(vcwId: number, projectId: number, data: VCWTestAndKpisEvaluation): Observable<any> {
+    const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/testAndKpisEvaluation`;
+    return this.http.post(url, data, this.httpOptions);
+  }
+
+  editTestAndKpisEvaluation(vcwId: number, projectId: number, data: VCWTestAndKpisEvaluation): Observable<any> {
+    const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/testAndKpisEvaluation`;
     return this.http.put<any>(url, data, this.httpOptions);
   }
 }
