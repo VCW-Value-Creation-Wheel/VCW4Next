@@ -110,7 +110,6 @@ public class ThumbnailService {
         try{
             newThumbnail = processThumbnail(userId, thumbnail);
             oldThumbnail.setFileType(newThumbnail.getFileType());
-            oldThumbnail.setPath(newThumbnail.getPath());
             oldThumbnail.setName(newThumbnail.getName());
             oldThumbnail.setUpdatedBy(userId);
             oldThumbnail.setUpdatedAt(LocalDateTime.now());
@@ -122,6 +121,7 @@ public class ThumbnailService {
         // delete old thumbnail
         try{
             this.minioService.delete(oldThumbnail.getPath());
+            oldThumbnail.setPath(newThumbnail.getPath());
         }
         catch (MinioException e){
             throw new InternalErrorException("Failed to remove old thumbnail: "+e);
