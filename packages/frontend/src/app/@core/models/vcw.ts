@@ -82,6 +82,10 @@ export interface CriteriaRanking {
     id: number;
 }
 
+export interface VCWConcept {
+    concept: string;
+}
+
 export interface VCWPrototype {
     prototype: string;
 }

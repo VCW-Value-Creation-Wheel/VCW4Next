@@ -1,0 +1,59 @@
+<form [formGroup]="Proposition" (ngSubmit)="onSubmit()">
+  <table class="form-group">
+    <tbody formArrayName="labels">
+      <td
+        *ngFor="let obj of formArr.controls; let i = index; let l = last"
+        [formGroupName]="i"
+      >
+        <tr>
+          <input
+            type="textarea"
+            class="form-control"
+            id="Knowledge"
+            formControlName="Knowledge"
+          />
+        </tr>
+        <tr>
+          <input
+            type="text"
+            class="form-control"
+            id="Delivery"
+            formControlName="Delivery"
+          />
+        </tr>
+        <tr>
+          <input
+            type="text"
+            class="form-control"
+            id="Effectiveness"
+            formControlName="Effectiveness"
+          />
+        </tr>
+        <tr>
+          <input
+            type="text"
+            class="form-control"
+            id="Helpful"
+            formControlName="Helpful"
+          />
+        </tr>
+        
+        <tr>
+          <input
+            type="text"
+            class="form-control"
+            id="Punctual"
+            formControlName="Punctual"
+          />
+        </tr>
+      </td>
+    
+    </tbody>
+  </table>
+  <button type="button" (click)="addNewRow()" class="btn btn-dark">
+    Add new Row
+  </button>
+  <button type="button" (click)="ShowData()" class="btn btn-dark p-5">
+    Show Data
+  </button>
+</form>

@@ -57,6 +57,10 @@ export const createRankCriteriaConfig = {
     id: [null]
 }
 
+export const conceptConfig = {
+    concept: [null, Validators.required]
+};
+
 export const prototypeConfig = {
     prototype: [null, Validators.required]
 };

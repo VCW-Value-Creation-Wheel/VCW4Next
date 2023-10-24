@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Criteria, CriteriaRanking, ExpectedKPIs, Idea, IdeaCriteriaPair, SwotFieldRow, VCWChallenge, VCWHasCriteria, VCWHasIdea, VCWPrototype, VCWTestAndKpisEvaluation} from '@core/models';
+import { Criteria, CriteriaRanking, ExpectedKPIs, Idea, IdeaCriteriaPair, SwotFieldRow, VCWChallenge, VCWConcept, VCWHasCriteria, VCWHasIdea, VCWPrototype, VCWTestAndKpisEvaluation} from '@core/models';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 
@@ -165,6 +165,22 @@ export class VcwPhasesService {
   updateCriteriaRanking(vcwId: number, projectId: number, criteriaId: number, rankingData: CriteriaRanking): Observable<CriteriaRanking> {
     const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/selectedCriterias/rank/${criteriaId}`;
     return this.http.put<CriteriaRanking>(url, rankingData, this.httpOptions);
+  }
+
+   // Phase 4c
+   getConcept(vcwId: number, projectId: number): Observable<VCWConcept> {
+    const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/concepts`;
+    return this.http.get<VCWConcept>(url, this.httpOptions);
+  }
+
+  createConcept(vcwId: number, projectId: number, data: VCWConcept): Observable<any> {
+    const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/concepts`;
+    return this.http.post(url, data, this.httpOptions);
+  }
+
+  editConcept(vcwId: number, projectId: number, data: VCWConcept): Observable<any> {
+    const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/concepts`;
+    return this.http.put<any>(url, data, this.httpOptions);
   }
 
    // Phase 4c

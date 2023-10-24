@@ -1,4 +1,36 @@
 <div class="px-4 py-4 flex flex-row justify-between mx-4 md:mx-64 lg:mx-80">
-    <h1 class="text-2xl font-bold text-primary ">Concept & Value Proposition</h1>
+    <h1 class="text-2xl font-bold text-primary ">Concept</h1>
+    <div>
+        <app-button
+            [label]="'Save'"
+            [leftIcon]="faFloppyDisk"
+            (buttonClick)="onSave()"
+        ></app-button>
+    </div>
+</div>
+<div [formGroup]="dataForm" class="mx-4 md:mx-64 lg:mx-80">
+    <div class="px-4 py-4">
+        <app-cke-editor
+            id="concept"
+            [label]="''"
+            formControlName="concept"
+        ></app-cke-editor>
+    </div>
 </div>
 
+<div class="px-4 py-4 flex flex-row justify-between mx-4 md:mx-64 lg:mx-80">
+    <h1 class="text-2xl font-bold text-primary ">Value Proposition</h1>
+    <div>
+        <app-button
+            [label]="'Save'"
+            [leftIcon]="faFloppyDisk"
+            (buttonClick)="onSave()"
+        ></app-button>
+    </div>
+</div>
+<div [formGroup]="dataForm" class="mx-4 md:mx-64 lg:mx-80">
+    <div class="grid grid-cols-2 px-4 py-4 ">
+        <app-table class="self-cente" (data)="getLabels($event)"></app-table>
+        <app-chart-graphic [labels]="labels" *ngIf="this.hasData"></app-chart-graphic>
+    </div>
+</div>
