@@ -74,21 +74,34 @@ export class NewProjectComponent implements OnInit {
         if(this.inputFiles !== undefined){
           const data = new FormData();
           data.append('thumbnail', this.inputFiles[0]);
-          this.projectService.createProjectThumbnail(response.id ,data).subscribe(res => {
-            
-          this.snackbar.success('Success!', 'New Project created!').during(3000).show();
-          this.router.navigate(['../'], {relativeTo: this.route});
-           
+          this.projectService.createProjectThumbnail(response.id ,data).pipe(take(1)).subscribe( {
+          
+            next: (res) => {
+              this.router.navigate(['../'], {relativeTo: this.route});
+              this.snackbar.success('Success!', 'New Project created!').during(3000).show();
+            },
+            error: (error) => {
+              this.snackbar.danger('Error!', 'Thumbnail creation failed.').during(3000).show();
+            }
+        
           });
         }
         this.userRole.forEach(item =>{
-          this.projectService.addUserRoleToProject(item.user,item.role,response.id).subscribe();
+          this.projectService.addUserRoleToProject(item.user,item.role,response.id).pipe(take(1)).subscribe({
+            next: (res) => {
+              this.snackbar.success('Success!', 'User added!').during(3000).show();
+            },
+            error: (error) => {
+              this.snackbar.danger('Error!', 'User adition failed.').during(3000).show();
+            }
+          });
            
         });
         if(this.inputFiles === undefined){
           this.snackbar.success('Success!', 'New Project created!').during(3000).show();
           this.router.navigate(['../'], {relativeTo: this.route});
         }
+       
       }, (error) => {
         this.snackbar.danger('Error!', 'Project creation failed.').during(3000).show();
       });
