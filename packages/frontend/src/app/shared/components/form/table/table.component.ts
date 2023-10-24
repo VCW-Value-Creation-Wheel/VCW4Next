@@ -20,15 +20,17 @@ import { FormArray, FormBuilder, FormGroup, NG_VALUE_ACCESSOR } from '@angular/f
 
 
 export class TableComponent{
-  SubmittedAnswers: any[] = [];
-  QuestionsAndAnswers: any[] = [];
   //Sample test data it can be dynamic as well.
-  QuestionsForSubmittedAnswersArray: any[] = [];
+  DataArray: any[] = [];
   Proposition!: FormGroup;
-  labels:any;
+  labels:string[];
+  users:string[];
+  values:number[];
   hasData:boolean;
 
   @Output() data: EventEmitter<any> = new EventEmitter;
+  @Output() dataUsers: EventEmitter<any> = new EventEmitter;
+  @Output() dataNumbers: EventEmitter<any> = new EventEmitter;
   
 
   constructor(private formBuilder: FormBuilder) {
@@ -55,11 +57,17 @@ export class TableComponent{
       Effectiveness: [''],
       Helpful: [''],
       Punctual: [''],
+      User1: [''],
+      User1Knowledge: [''],
+      User1Delivery: [''],
+      User1Effectiveness: [''],
+      User1Helpful: [''],
+      User1Punctual: [''],
     });
   }
 
   sampleData() {
-    this.QuestionsForSubmittedAnswersArray.forEach((row) => {
+    this.DataArray.forEach((row) => {
       this.formArr.push(this.addRow(row));
     });
   }
@@ -76,11 +84,11 @@ export class TableComponent{
 
   addNewRow() {
     let obj1 = {
-      Knowledge: 1,
-      Delivery: 1,
+      Knowledge: '',
+      Delivery: '',
       Effectiveness: '',
-      Helpful: 'testing',
-      Punctual: 'test desc',
+      Helpful: '',
+      Punctual: '',
     };
     this.formArr.push(this.addRow(obj1));
   }
@@ -104,8 +112,23 @@ export class TableComponent{
     this.Proposition.get('labels').value[0].Punctual,
   ];
 
-  this.data.emit(this.labels)
+  this.users = [
+    this.Proposition.get('labels').value[0].User1,
+  ];
 
+  this.values = [
+    this.Proposition.get('labels').value[0].User1Knowledge,
+    this.Proposition.get('labels').value[0].User1Delivery,
+    this.Proposition.get('labels').value[0].User1Effectiveness,
+    this.Proposition.get('labels').value[0].User1Helpful,
+    this.Proposition.get('labels').value[0].User1Punctual,
+  ];
+
+
+
+  this.data.emit(this.labels);
+  this.dataUsers.emit(this.users);
+  this.dataNumbers.emit(this.values);
 
   
    

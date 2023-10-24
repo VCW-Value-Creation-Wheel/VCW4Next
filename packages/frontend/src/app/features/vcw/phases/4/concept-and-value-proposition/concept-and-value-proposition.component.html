@@ -30,7 +30,7 @@
 </div>
 <div [formGroup]="dataForm" class="mx-4 md:mx-64 lg:mx-80">
     <div class="grid grid-cols-2 px-4 py-4 ">
-        <app-table class="self-cente" (data)="getLabels($event)"></app-table>
-        <app-chart-graphic [labels]="labels" *ngIf="this.hasData"></app-chart-graphic>
+        <app-table class="self-cente" (data)="getLabels($event)" (dataUsers)="getUsers($event)" (dataNumbers)="getNumbers($event)"></app-table>
+        <app-chart-graphic [labels]="labels" [users]="users" [values]="numbers" *ngIf="this.hasData"></app-chart-graphic>
     </div>
 </div>

@@ -3,11 +3,19 @@
     <tbody formArrayName="labels">
       <td
         *ngFor="let obj of formArr.controls; let i = index; let l = last"
-        [formGroupName]="i"
+        [formGroupName]="i" 
       >
+        <tr class="text-center">
+          <input
+            type="text"
+            class="form-control"
+            [disabled]="true"
+            [value]="'Labels'"
+          />
+        </tr>
         <tr>
           <input
-            type="textarea"
+            type="text"
             class="form-control"
             id="Knowledge"
             formControlName="Knowledge"
@@ -48,11 +56,67 @@
         </tr>
       </td>
     
+      <td
+        *ngFor="let obj of formArr.controls; let i = index; let l = last"
+        [formGroupName]="i"
+      >
+        <tr>
+          <input
+            type="text"
+            class="form-control"
+            id="User1"
+            formControlName="User1"
+          />
+        </tr>
+        <tr>
+          <input
+            type="textarea"
+            class="form-control"
+            id="Knowledge"
+            formControlName="User1Knowledge"
+          />
+        </tr>
+        <tr>
+          <input
+            type="text"
+            class="form-control"
+            id="Delivery"
+            formControlName="User1Delivery"
+          />
+        </tr>
+        <tr>
+          <input
+            type="text"
+            class="form-control"
+            id="Effectiveness"
+            formControlName="User1Effectiveness"
+          />
+        </tr>
+        <tr>
+          <input
+            type="text"
+            class="form-control"
+            id="Helpful"
+            formControlName="User1Helpful"
+          />
+        </tr>
+        
+        <tr>
+          <input
+            type="text"
+            class="form-control"
+            id="Punctual"
+            formControlName="User1Punctual"
+          />
+        </tr>
+      </td>
+    
     </tbody>
+    
   </table>
-  <button type="button" (click)="addNewRow()" class="btn btn-dark">
+  <!-- <button type="button" (click)="addNewRow()" class="btn btn-dark">
     Add new Row
-  </button>
+  </button> -->
   <button type="button" (click)="ShowData()" class="btn btn-dark p-5">
     Show Data
   </button>

@@ -53,6 +53,8 @@ export class ConceptAndValuePropositionComponent implements OnInit{
   }
 
   labels = [];
+  users = [];
+  numbers = [];
 
   constructor(
     private phaseNavService: PhaseNavigationService,
@@ -125,9 +127,19 @@ export class ConceptAndValuePropositionComponent implements OnInit{
     return this.dataForm.get(control).valid;
   }
 
-  getLabels(data){
+  getLabels(data: string[]){
     this.hasData = true;
-   this.labels = data;
+    this.labels = data;
+  }
+
+  getUsers(data: string[]){
+    this.hasData = true;
+    this.users = data;
+  }
+
+  getNumbers(data: number[]){
+    this.hasData = true;
+    this.numbers = data;
   }
 }
 
