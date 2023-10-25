@@ -317,18 +317,7 @@ public class VcwController {
     if (project.isEmpty())
       throw new NotFoundException("Project not found.");
       // Value Proposition
-
-  @GetMapping("/{id}/valueProposition")
-  public ResponseEntity<Object> getValueProposition(
-          @PathVariable(value = "id") Long id,
-          @PathVariable(value = "project_id") Long projectId,
-          @AuthenticationPrincipal Jwt principal) {
-
-    Optional<ProjectEntity> project = this.vcwService.findProjectByIdAndUser(
-            projectId, principal.getSubject());
-    if (project.isEmpty())
-      throw new NotFoundException("Project not found.");
-    
+          
     Optional<VcwEntity> vcwEntityOptional =
             this.vcwService.findById(id);
 
@@ -366,7 +355,17 @@ public class VcwController {
 
   }
 
+  @GetMapping("/{id}/valueProposition")
+  public ResponseEntity<Object> getValueProposition(
+          @PathVariable(value = "id") Long id,
+          @PathVariable(value = "project_id") Long projectId,
+          @AuthenticationPrincipal Jwt principal) {
 
+    Optional<ProjectEntity> project = this.vcwService.findProjectByIdAndUser(
+            projectId, principal.getSubject());
+    if (project.isEmpty())
+      throw new NotFoundException("Project not found.");
+    
     Optional<VcwEntity> vcwEntityOptional =
             this.vcwService.findById(id);
 
@@ -378,6 +377,7 @@ public class VcwController {
     Object valueProposition = vcwEntityOptional.get().getValueProposition();
     return ResponseEntity.ok(Collections.singletonMap("valueProposition", valueProposition));
   }
+
 
   @PutMapping("/{id}/valueProposition")
   public ResponseEntity<Object> saveValueProposition(
