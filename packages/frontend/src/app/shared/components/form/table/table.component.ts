@@ -28,6 +28,10 @@ export class TableComponent{
   values:number[];
   hasData:boolean;
 
+  example:string[]=['eeu'];
+  example2:string[]=['eeu'];
+  newArray;
+
   @Output() data: EventEmitter<any> = new EventEmitter;
   @Output() dataUsers: EventEmitter<any> = new EventEmitter;
   @Output() dataNumbers: EventEmitter<any> = new EventEmitter;
@@ -41,6 +45,9 @@ export class TableComponent{
   createContactForm() {
     this.Proposition = this.formBuilder.group({
       labels: this.formBuilder.array([this.initRows()]),
+      values: this.formBuilder.array([this.initRows()]),
+      users: this.formBuilder.array([this.initRows()]),
+      
     });
   }
 
@@ -50,47 +57,60 @@ export class TableComponent{
     
   }
 
+  get formArrUsers() {
+    return this.Proposition.get('users') as FormArray;
+  }
+
+  get formArrValues() {
+    return this.Proposition.get('values') as FormArray;
+  }
+
   initRows() {
     return this.formBuilder.group({
-      Knowledge: [''],
-      Delivery: [''],
-      Effectiveness: [''],
-      Helpful: [''],
-      Punctual: [''],
-      User1: [''],
-      User1Knowledge: [''],
-      User1Delivery: [''],
-      User1Effectiveness: [''],
-      User1Helpful: [''],
-      User1Punctual: [''],
+      Labels: [''],
+  
     });
   }
 
   sampleData() {
     this.DataArray.forEach((row) => {
       this.formArr.push(this.addRow(row));
+      this.formArrUsers.push(this.addRow(row));
+      this.formArrValues.push(this.addRow(row));
     });
   }
 
   addRow(obj) {
     return this.formBuilder.group({
-      Knowledge: [obj.Name1],
-      Delivery: [obj.Delivery],
-      Effectiveness: [obj.Effectiveness],
-      Helpful: [obj.Helpful],
-      Punctual: [obj.Punctual],
+      Labels: [obj.Labels],
+   
     });
   }
 
   addNewRow() {
+
     let obj1 = {
-      Knowledge: '',
-      Delivery: '',
-      Effectiveness: '',
-      Helpful: '',
-      Punctual: '',
+      Labels: '',
     };
-    this.formArr.push(this.addRow(obj1));
+
+    this.formArrUsers.push(this.addRow(this.formArr));
+    this.formArrValues.push(this.addRow(this.formArr));
+  
+  
+ 
+    
+  }
+
+  addNewColumn(){
+  
+    
+   
+    let obj1 = {
+      Labels: '',
+
+    };
+    this.formArr.push(this.addRow(this.formArrUsers));
+    this.formArrValues.push(this.addRow(this.formArrUsers));
   }
 
   deleteRow(index: number) {
@@ -105,25 +125,24 @@ export class TableComponent{
   ShowData(){
   this.hasData = true;
   this.labels = [
-    this.Proposition.get('labels').value[0].Knowledge,
-    this.Proposition.get('labels').value[0].Delivery,
-    this.Proposition.get('labels').value[0].Effectiveness,
-    this.Proposition.get('labels').value[0].Helpful,
-    this.Proposition.get('labels').value[0].Punctual,
+    this.Proposition.get('labels').value[0].Labels,
+
   ];
 
   this.users = [
-    this.Proposition.get('labels').value[0].User1,
+    this.Proposition.get('values').value[0].Labels,
   ];
 
   this.values = [
-    this.Proposition.get('labels').value[0].User1Knowledge,
-    this.Proposition.get('labels').value[0].User1Delivery,
-    this.Proposition.get('labels').value[0].User1Effectiveness,
-    this.Proposition.get('labels').value[0].User1Helpful,
-    this.Proposition.get('labels').value[0].User1Punctual,
+    this.Proposition.get('values').value[0].Labels,
+  
   ];
+  const values =  this.Proposition.get('values').value;
+  const lenght = this.formArrUsers.length;
 
+ for(let i=0; i < lenght; i++){
+  console.log(this.Proposition.get('labels').value[i].Labels)
+ }
 
 
   this.data.emit(this.labels);
@@ -136,3 +155,4 @@ export class TableComponent{
   
 
 }
+

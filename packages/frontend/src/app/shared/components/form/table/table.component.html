@@ -1,123 +1,72 @@
-<form [formGroup]="Proposition" (ngSubmit)="onSubmit()">
+<form [formGroup]="Proposition" (ngSubmit)="onSubmit()" >
+  
   <table class="form-group">
+
+<div class="flex flex-row" >
+     
     <tbody formArrayName="labels">
-      <td
-        *ngFor="let obj of formArr.controls; let i = index; let l = last"
-        [formGroupName]="i" 
-      >
-        <tr class="text-center">
-          <input
-            type="text"
-            class="form-control"
-            [disabled]="true"
-            [value]="'Labels'"
-          />
-        </tr>
-        <tr>
-          <input
-            type="text"
-            class="form-control"
-            id="Knowledge"
-            formControlName="Knowledge"
-          />
-        </tr>
-        <tr>
-          <input
-            type="text"
-            class="form-control"
-            id="Delivery"
-            formControlName="Delivery"
-          />
-        </tr>
-        <tr>
-          <input
-            type="text"
-            class="form-control"
-            id="Effectiveness"
-            formControlName="Effectiveness"
-          />
-        </tr>
-        <tr>
-          <input
-            type="text"
-            class="form-control"
-            id="Helpful"
-            formControlName="Helpful"
-          />
-        </tr>
-        
-        <tr>
-          <input
-            type="text"
-            class="form-control"
-            id="Punctual"
-            formControlName="Punctual"
-          />
-        </tr>
-      </td>
+    <td class="bg-primary-500">
+      <input
+      type="text"
+      class="form-control"
+      [disabled]="true"
+    />
+    </td>
+    <tr *ngFor="let obj of formArr.controls; let i = index; let l = last"
+      [formGroupName]="i" >
+      <input
+      type="text"
+      class="form-control"
+      formControlName="Labels"
+      id="Labels"
+    /></tr>
+
     
-      <td
-        *ngFor="let obj of formArr.controls; let i = index; let l = last"
-        [formGroupName]="i"
-      >
-        <tr>
-          <input
-            type="text"
-            class="form-control"
-            id="User1"
-            formControlName="User1"
-          />
-        </tr>
-        <tr>
-          <input
-            type="textarea"
-            class="form-control"
-            id="Knowledge"
-            formControlName="User1Knowledge"
-          />
-        </tr>
-        <tr>
-          <input
-            type="text"
-            class="form-control"
-            id="Delivery"
-            formControlName="User1Delivery"
-          />
-        </tr>
-        <tr>
-          <input
-            type="text"
-            class="form-control"
-            id="Effectiveness"
-            formControlName="User1Effectiveness"
-          />
-        </tr>
-        <tr>
-          <input
-            type="text"
-            class="form-control"
-            id="Helpful"
-            formControlName="User1Helpful"
-          />
-        </tr>
-        
-        <tr>
-          <input
-            type="text"
-            class="form-control"
-            id="Punctual"
-            formControlName="User1Punctual"
-          />
-        </tr>
-      </td>
     
+    
+
     </tbody>
+<tr>
+  <tbody formArrayName="users" >
     
+    <td *ngFor="let obj of formArrUsers.controls; let i = index; let l = last"
+      [formGroupName]="i" >
+     <input
+        type="text"
+        class="form-control"
+        formControlName="Labels"
+        id="Labels"
+      />
+
+     </td>
+  </tbody>
+
+  <tbody formArrayName="values" >
+    
+    <tr *ngFor="let obj of formArrUsers.controls; let i = index; let l = last"
+      [formGroupName]="i" >
+     <input
+        type="text"
+        class="form-control"
+        formControlName="Labels"
+        id="Labels"
+      />
+
+     </tr>
+  </tbody>
+</tr>
+</div>
+
   </table>
-  <!-- <button type="button" (click)="addNewRow()" class="btn btn-dark">
-    Add new Row
-  </button> -->
+   <button type="button" (click)="addNewRow()" class="btn btn-dark">
+    Add new Column
+  </button> 
   <button type="button" (click)="ShowData()" class="btn btn-dark p-5">
     Show Data
   </button>
+  <button type="button" (click)="addNewColumn()" class="btn btn-dark">
+    Add new Row
+  </button> 
 </form>
+
+
