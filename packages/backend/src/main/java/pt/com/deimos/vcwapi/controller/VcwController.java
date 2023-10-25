@@ -14,6 +14,7 @@ import pt.com.deimos.vcwapi.dto.ChallengeDTO;
 import pt.com.deimos.vcwapi.dto.KpiDTO;
 import pt.com.deimos.vcwapi.dto.PrototypeDTO;
 import pt.com.deimos.vcwapi.dto.TestAndKpisEvaluationDTO;
+import pt.com.deimos.vcwapi.dto.ValuePropositionDTO;
 import pt.com.deimos.vcwapi.dto.VcwDTO;
 import pt.com.deimos.vcwapi.entity.ProjectEntity;
 import pt.com.deimos.vcwapi.entity.VcwEntity;
@@ -21,6 +22,7 @@ import pt.com.deimos.vcwapi.exceptions.NotFoundException;
 import pt.com.deimos.vcwapi.service.VcwService;
 
 import java.util.Collections;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -301,6 +303,54 @@ public class VcwController {
 
   }
 
+  // Value Proposition
 
+  @GetMapping("/{id}/valueProposition")
+  public ResponseEntity<Object> getValueProposition(
+          @PathVariable(value = "id") Long id,
+          @PathVariable(value = "project_id") Long projectId,
+          @AuthenticationPrincipal Jwt principal) {
+
+    Optional<ProjectEntity> project = this.vcwService.findProjectByIdAndUser(
+            projectId, principal.getSubject());
+    if (project.isEmpty())
+      throw new NotFoundException("Project not found.");
+    
+    Optional<VcwEntity> vcwEntityOptional =
+            this.vcwService.findById(id);
+
+    if(vcwEntityOptional.isEmpty()) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Vcw not found");
+    }
+
+    //find value Proposition
+    Object valueProposition = vcwEntityOptional.get().getValueProposition();
+    return ResponseEntity.ok(Collections.singletonMap("valueProposition", valueProposition));
+  }
+
+  @PutMapping("/{id}/valueProposition")
+  public ResponseEntity<Object> saveValueProposition(
+          @PathVariable(value = "id") Long vcwId,
+          @RequestBody ValuePropositionDTO valueProposition,
+          @PathVariable(value = "project_id") Long projectId,
+          @AuthenticationPrincipal Jwt principal
+  ) {
+
+    Optional<ProjectEntity> project = this.vcwService.findProjectByIdAndUser(
+            projectId, principal.getSubject());
+    if (project.isEmpty())
+      throw new NotFoundException("Project not found.");
+    
+    Optional<VcwEntity> vcwEntityOptional = this.vcwService.findById(vcwId);
+    if(vcwEntityOptional.isEmpty()) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Vcw not found");
+    }
+    VcwEntity editedVcw = vcwEntityOptional.get();
+    editedVcw.setValueProposition(valueProposition.getValueProposition());
+
+    return ResponseEntity.status(HttpStatus.OK).body(
+            this.vcwService.update(editedVcw));
+
+  }
 
 }
