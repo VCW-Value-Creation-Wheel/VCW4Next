@@ -1,4 +1,4 @@
-<form [formGroup]="Proposition" (ngSubmit)="onSubmit()" >
+<!-- <form [formGroup]="Proposition" (ngSubmit)="onSubmit()" >
   
   <table class="form-group">
 
@@ -58,15 +58,48 @@
 </div>
 
   </table>
-   <button type="button" (click)="addNewRow()" class="btn btn-dark">
+   
+</form> -->
+<div class="flex flex-row gap-4 justify-start">
+  <button type="button" (click)="addUser()" class="btn btn-dark">
     Add new Column
   </button> 
-  <button type="button" (click)="ShowData()" class="btn btn-dark p-5">
+  <button type="button" (click)="showData()" class="btn btn-dark p-5">
     Show Data
   </button>
-  <button type="button" (click)="addNewColumn()" class="btn btn-dark">
+  <button *ngIf="userColumns.length > 0" type="button" (click)="addLabel()" class="btn btn-dark">
     Add new Row
-  </button> 
+  </button>   
+</div>
+<div *ngIf="isAddingLabel || isAddingUser">
+  <app-simple-item-input
+    [hasDialog]="false"
+    [dataForm]="inputForm"
+    [formControlFieldName]="'inputValue'"
+    (addClicked)="isAddingLabel ? addLabelRow() : (isAddingUser ? addUserColumn() : '')"
+    (cancelClicked)="isAddingLabel = false; isAddingUser = false"
+  ></app-simple-item-input>
+</div>
+
+<form [formGroup]="mainForm">
+  <table class="form-group">
+    <tr>
+      <th *ngIf="userColumns.length > 0" class="bg-primary-500 w-24"></th>
+      <th class="w-24" *ngFor="let user of userColumns">{{user}}</th>
+    </tr>
+    <tr *ngFor="let label of labelRows">
+      <td>{{label}}</td>
+      <td *ngFor="let user of userColumns" [formGroupName]="user">
+        <input
+          type="text"
+          class="form-control"
+          [formControlName]="label"
+        />
+      </td>
+    </tr>
+    
+  </table>
+
 </form>
 
 

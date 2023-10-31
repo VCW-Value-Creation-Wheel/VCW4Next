@@ -5,7 +5,7 @@ import { conceptConfig, PhaseNavigationService, SnackbarService, VcwPhasesServic
 import { faFloppyDisk } from '@fortawesome/free-solid-svg-icons';
 import { take } from 'rxjs/operators';
 import { environment } from '../../../../../../environments/environment';
-import { VCWConcept } from '@core/models';
+import { PropositionUserData, VCWConcept } from '@core/models';
 
 
 @Component({
@@ -127,19 +127,8 @@ export class ConceptAndValuePropositionComponent implements OnInit{
     return this.dataForm.get(control).valid;
   }
 
-  getLabels(data: string[]){
+  getData(data: PropositionUserData){
     this.hasData = true;
-    this.labels = data;
-  }
-
-  getUsers(data: string[]){
-    this.hasData = true;
-    this.users = data;
-  }
-
-  getNumbers(data: number[]){
-    this.hasData = true;
-    this.numbers = data;
   }
 }
 
