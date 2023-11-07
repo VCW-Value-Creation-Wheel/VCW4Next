@@ -21,9 +21,22 @@ export class ChartGraphicComponent implements OnInit, OnChanges{
     
   }
 
-  @Input() labels:string[] = [];
-  @Input() users:string[] = [];
-  @Input() values:number[] = [];
+  @Input() values:Map<string,number[]>;
+  @Input() labels: string[];
+
+  backgroundColors = [
+    'rgba(255, 99, 132, 0.2)',
+    'rgba(235, 174, 54, 0.2)',
+    'rgba(54, 162, 235, 0.2)',
+  ];
+
+  borderColors = [
+    'rgba(255, 99, 132)',
+    'rgba(235, 174, 54)',
+    'rgba(54, 162, 235)',
+  ];
+
+  
 
   ngOnInit(): void {
 
@@ -33,32 +46,39 @@ export class ChartGraphicComponent implements OnInit, OnChanges{
 };
 
 getData(){
+
+  const dataSets = [];
+  Array.from(this.values.keys()).forEach((key,i) =>{
+    dataSets.push({
+      label: key,
+      data: this.values.get(key),
+      fill: true,
+      backgroundColor: this.backgroundColors.slice(0,this.values.size),
+      borderColor: this.borderColors[i],
+      pointBackgroundColor:  this.borderColors[i],
+      pointBorderColor: '#fff',
+      pointHoverBackgroundColor: '#fff',
+      pointHoverBorderColor: this.borderColors[i]
+    })
+ 
+  })
+
   const data = {
       
     labels: this.labels,
-    datasets: [{
-      label: this.users[0],
-      data: [this.values[0],this.values[1],this.values[2],this.values[3],this.values[4]],
-      fill: true,
-      backgroundColor: 'rgba(255, 99, 132, 0.2)',
-      borderColor: 'rgb(255, 99, 132)',
-      pointBackgroundColor: 'rgb(255, 99, 132)',
-      pointBorderColor: '#fff',
-      pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: 'rgb(255, 99, 132)'
-    }]
+    datasets: dataSets
   };
 
   var myChart = new Chart("myChart", {
     type: 'radar',
-data: data,
-options: {
-  elements: {
-    line: {
-      borderWidth: 3
-    }
-  }
-},
+    data: data,
+    options: {
+      elements: {
+        line: {
+          borderWidth: 3
+        }
+      }
+    },
   });
 
 

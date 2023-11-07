@@ -52,9 +52,9 @@ export class ConceptAndValuePropositionComponent implements OnInit{
     }
   }
 
-  labels = [];
-  users = [];
-  numbers = [];
+  labels:string[] = [];
+  userValues: Map<string,number[]> = new Map(); 
+  
 
   constructor(
     private phaseNavService: PhaseNavigationService,
@@ -129,6 +129,23 @@ export class ConceptAndValuePropositionComponent implements OnInit{
 
   getData(data: PropositionUserData){
     this.hasData = true;
+
+
+    Object.keys(data).forEach(name =>{
+
+      const userValues = [];
+
+      Object.keys(data[name]).forEach(label =>{
+       userValues.push(data[name][label]);
+      
+      })
+      this.userValues.set(name,userValues)
+    });
+   
+
+    const user = data[Object.keys(data)[0]];
+    this.labels = Object.keys(user);
+
   }
 }
 

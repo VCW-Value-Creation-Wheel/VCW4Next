@@ -185,7 +185,7 @@ export class TableComponent{
     const user = this.inputForm.get('inputValue').value;
     this.addControlToForm(user, this.mainForm);
     this.buildNestedFormGroup(user, {}, 'group')
-    console.log(this.mainForm)
+    //console.log(this.mainForm)
     const group = (this.mainForm.get(user) as FormGroup)
     this.labelRows.forEach(label => {
       this.addControlToForm(label, group);
@@ -199,7 +199,7 @@ export class TableComponent{
       const group = (this.mainForm.get(key) as FormGroup);
       this.addControlToForm(label, group);
     })
-    console.log(this.mainForm)
+    //console.log(this.mainForm)
   }
 
   get userColumns(): string[] {
