@@ -17,8 +17,16 @@ Chart.register(...registerables);
 })
 export class ChartGraphicComponent implements OnInit, OnChanges{
 
+  myChart:Chart;
+
   ngOnChanges(changes: SimpleChanges): void {
+
+    if(this.myChart){
+      this.myChart.destroy();
+    }
+
     
+    this.getData();
   }
 
   @Input() values:Map<string,number[]>;
@@ -28,12 +36,16 @@ export class ChartGraphicComponent implements OnInit, OnChanges{
     'rgba(255, 99, 132, 0.2)',
     'rgba(235, 174, 54, 0.2)',
     'rgba(54, 162, 235, 0.2)',
+    'rgba(146, 104, 246, 0.2)',
+    'rgba(109, 190, 191, 0.2)',
   ];
 
   borderColors = [
     'rgba(255, 99, 132)',
     'rgba(235, 174, 54)',
     'rgba(54, 162, 235)',
+    'rgba(146,104,246)',
+    'rgba(109, 190, 191)',
   ];
 
   
@@ -69,7 +81,7 @@ getData(){
     datasets: dataSets
   };
 
-  var myChart = new Chart("myChart", {
+   this.myChart = new Chart("myChart", {
     type: 'radar',
     data: data,
     options: {
