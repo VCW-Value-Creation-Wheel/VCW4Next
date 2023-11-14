@@ -27,7 +27,7 @@
     <span  *ngIf="userColumns.length && labelRows.length < 3" class='group-hover:opacity-100 transition-opacity bg-gray-800 p-1.5 text-sm text-gray-100 rounded-md absolute  
      -translate-x-3.5 -translate-y-10 opacity-0 z-50 whitespace-nowrap'>Min 3 Names/Propositions</span>
     <app-button 
-      [isDisabled]="userColumns.length && labelRows.length <3"
+      [isDisabled]="userColumns.length <3  || labelRows.length < 3"
       class=" whitespace-nowrap"
       (click)="showData()" 
       label="Show Data">
