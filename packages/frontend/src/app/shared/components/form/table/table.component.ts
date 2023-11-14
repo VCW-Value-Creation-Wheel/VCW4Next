@@ -58,16 +58,16 @@ export class TableComponent{
         this.labelRows.forEach(label => {
         this.addControlToForm(label, group);
         });
-       
-        
-      })
-      
 
+        const labels = Object.keys(values[user]);
 
-     /* Object.keys(this.mainForm.controls).forEach((key) => {
-        const group = (this.mainForm.get(key) as FormGroup);
-        this.addControlToForm(label, group);
-      })*/
+        labels.forEach((label)=>{
+          Object.keys(this.mainForm.controls).forEach((key) => {
+            const group = (this.mainForm.get(key) as FormGroup);
+            this.addControlToForm(label, group);
+        });
+        });
+      });
       
     },300);
  
