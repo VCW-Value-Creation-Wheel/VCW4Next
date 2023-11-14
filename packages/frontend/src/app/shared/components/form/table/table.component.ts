@@ -1,4 +1,4 @@
-import { Component, Output, forwardRef, EventEmitter } from '@angular/core';
+import { Component, Output, forwardRef, EventEmitter, Input} from '@angular/core';
 import { FormBuilder, FormGroup, NG_VALUE_ACCESSOR, UntypedFormGroup } from '@angular/forms';
 import { PropositionUserData } from '@core';
 import { faMinus } from '@fortawesome/free-solid-svg-icons';
@@ -37,12 +37,28 @@ export class TableComponent{
   maxRows: boolean = false;
 
   @Output() data: EventEmitter<PropositionUserData> = new EventEmitter; 
+  @Input() valuesUser:string;
 
   constructor(private formBuilder: FormBuilder) {
     this.mainForm = formBuilder.group({});
     this.inputForm = formBuilder.group({});
     this.addControlToForm('inputValue', this.inputForm);
   }
+
+
+  ngOnInit(): void {
+    setTimeout(()=>{
+      console.log(JSON.parse(this.valuesUser["valueProposition"]))
+      const values: PropositionUserData = JSON.parse(this.valuesUser["valueProposition"]);
+      this.data.emit(values);
+    },300);
+ 
+  }
+
+
+  
+   
+  
 
   showData(){
   this.mainForm.updateValueAndValidity();

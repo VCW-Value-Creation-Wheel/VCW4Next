@@ -61,6 +61,10 @@ export const conceptConfig = {
     concept: [null, Validators.required]
 };
 
+export const valuePropositionConfig = {
+    valueProposition: [null, Validators.required]
+};
+
 export const prototypeConfig = {
     prototype: [null, Validators.required]
 };

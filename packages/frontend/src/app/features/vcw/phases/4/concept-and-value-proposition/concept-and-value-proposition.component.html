@@ -28,9 +28,9 @@
         ></app-button>
     </div>
 </div>
-<div [formGroup]="dataForm" class="mx-4 md:mx-64 lg:mx-80 grid">
+<div [formGroup]="dataFormValue" class="mx-4 md:mx-64 lg:mx-80 grid">
    
-        <app-table (data)="getData($event)"></app-table>
+        <app-table (data)="getData($event)" id="valueProposition" formControlName="valueProposition" [valuesUser]="tableValues"></app-table>
         <app-chart-graphic [values]="userValues" [labels]="labels" *ngIf="this.hasData" class="justify-self-center p-4"></app-chart-graphic>
 
    

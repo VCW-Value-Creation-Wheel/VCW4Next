@@ -1,23 +1,24 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { conceptConfig, PhaseNavigationService, SnackbarService, VcwPhasesService } from '@core';
+import { conceptConfig, PhaseNavigationService, SnackbarService, valuePropositionConfig, VcwPhasesService } from '@core';
 import { faFloppyDisk } from '@fortawesome/free-solid-svg-icons';
 import { take } from 'rxjs/operators';
 import { environment } from '../../../../../../environments/environment';
-import { PropositionUserData, VCWConcept } from '@core/models';
+import { PropositionUserData, VCWConcept, VCWValueProposition } from '@core/models';
 
 
 @Component({
   selector: 'app-concept-and-value-proposition',
   templateUrl: './concept-and-value-proposition.component.html',
-  styleUrls: ['./concept-and-value-proposition.component.scss']
+  styleUrls: ['./concept-and-value-proposition.component.scss'],
 })
 export class ConceptAndValuePropositionComponent implements OnInit{
 
   faFloppyDisk = faFloppyDisk;
 
   dataForm: UntypedFormGroup;
+  dataFormValue: UntypedFormGroup;
 
   projectId: number;
   vcwId: number;
@@ -26,7 +27,9 @@ export class ConceptAndValuePropositionComponent implements OnInit{
   useMocks: boolean;
 
   vcwConcept: VCWConcept;
+  vcwValueProposition: VCWValueProposition;
   hasData = false;
+  tableValues: any;
 
   valueProposition = {
     "Sally":{
@@ -65,6 +68,7 @@ export class ConceptAndValuePropositionComponent implements OnInit{
     private snackbarService: SnackbarService
   ){
     this.dataForm = this.formBuilder.group(conceptConfig);
+    this.dataFormValue = this.formBuilder.group(valuePropositionConfig);
   }
 
   ngOnInit(): void {
@@ -87,17 +91,35 @@ export class ConceptAndValuePropositionComponent implements OnInit{
           this.vcwConcept = data;
           this.isEditing = true;
           this.dataForm.controls.concept.patchValue(this.vcwConcept.concept);
+
         }
       }, error => {
         this.snackbarService.danger('Data Fetching Error', 'Unable to check and retrieve data from the server. Try again later.')
           .during(2000).show();
       });
+
+      this.vcwPhasesService.getValueProposition(this.vcwId, this.projectId)
+      .pipe(take(1))
+      .subscribe(data => {
+        if (data) {
+
+          this.vcwValueProposition = data;
+          this.tableValues = data;
+          this.isEditing = true;
+          this.dataFormValue.controls.concept.patchValue(this.vcwValueProposition.valueProposition);
+
+        }
+      }, error => {
+        this.snackbarService.danger('Data Fetching Error', 'Unable to check and retrieve data from the server. Try again later.')
+          .during(2000).show();
+      });
+
     }
   }
 
   onSave() {
     if (this.isFormValid('concept')) {
-
+      
       this.vcwConcept.concept = this.dataForm.controls.concept.value;
 
       if (this.isEditing) {
@@ -121,6 +143,43 @@ export class ConceptAndValuePropositionComponent implements OnInit{
         });
       }
     }
+    /*if(this.isFormValid('valueProposition')){
+      this.vcwValueProposition.valueProposition = this.dataFormValue.controls.valueProposition.value;
+
+      if (this.isEditing) {
+        this.vcwPhasesService.editValueProposition(this.vcwId, this.projectId, this.vcwValueProposition)
+        .pipe(take(1))
+        .subscribe(response => {
+          this.snackbarService.success('Success!', 'Your changes were saved.').during(2000).show();
+        }, error => {
+          this.snackbarService.danger('Error', 'Unable to save your changes. Please try again later.')
+          .during(2000).show();
+        });
+      } else {
+        this.vcwPhasesService.createValueProposition(this.vcwId, this.projectId, this.vcwValueProposition)
+        .pipe(take(1))
+        .subscribe(response => {
+          this.isEditing = true;
+          this.snackbarService.success('Success!', 'Your changes were saved.').during(2000).show();
+        }, error => {
+          this.snackbarService.danger('Error', 'Unable to save your changes. Please try again later.')
+          .during(2000).show();
+        });
+      }
+    }*/
+   
+    this.vcwValueProposition.valueProposition = JSON.stringify(this.tableValues);
+    this.vcwPhasesService.editValueProposition(this.vcwId, this.projectId, this.vcwValueProposition)
+        .pipe(take(1))
+        .subscribe(response => {
+          this.isEditing = true;
+          this.snackbarService.success('Success!', 'Your changes were saved.').during(2000).show();
+        }, error => {
+          this.snackbarService.danger('Error', 'Unable to save your changes. Please try again later.')
+          .during(2000).show();
+
+        });
+    
   }
 
   isFormValid(control: string) {
@@ -129,7 +188,7 @@ export class ConceptAndValuePropositionComponent implements OnInit{
 
   getData(data: PropositionUserData){
     this.hasData = true;
-
+    this.tableValues = data;
 
     Object.keys(data).forEach(name =>{
 

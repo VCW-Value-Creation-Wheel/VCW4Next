@@ -86,6 +86,10 @@ export interface VCWConcept {
     concept: string;
 }
 
+export interface VCWValueProposition {
+    valueProposition: string;
+}
+
 export interface VCWPrototype {
     prototype: string;
 }

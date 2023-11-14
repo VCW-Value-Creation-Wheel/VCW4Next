@@ -51,6 +51,9 @@ export class ChartGraphicComponent implements OnInit, OnChanges{
   
 
   ngOnInit(): void {
+    if(this.myChart){
+      this.myChart.destroy();
+    }
 
     this.getData();
   
