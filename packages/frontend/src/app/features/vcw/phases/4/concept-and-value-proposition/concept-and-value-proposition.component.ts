@@ -106,7 +106,7 @@ export class ConceptAndValuePropositionComponent implements OnInit{
           this.vcwValueProposition = data;
           this.tableValues = data;
           this.isEditing = true;
-          this.dataFormValue.controls.concept.patchValue(this.vcwValueProposition.valueProposition);
+          //this.dataFormValue.controls.concept.patchValue(this.vcwValueProposition.valueProposition);
 
         }
       }, error => {

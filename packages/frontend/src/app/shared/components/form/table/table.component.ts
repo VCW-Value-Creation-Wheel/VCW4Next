@@ -48,7 +48,7 @@ export class TableComponent{
 
   ngOnInit(): void {
     setTimeout(()=>{
-      console.log(JSON.parse(this.valuesUser["valueProposition"]))
+
       const values: PropositionUserData = JSON.parse(this.valuesUser["valueProposition"]);
       this.data.emit(values);
     },300);
