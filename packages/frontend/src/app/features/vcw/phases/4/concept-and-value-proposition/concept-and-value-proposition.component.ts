@@ -68,7 +68,7 @@ export class ConceptAndValuePropositionComponent implements OnInit{
     private snackbarService: SnackbarService
   ){
     this.dataForm = this.formBuilder.group(conceptConfig);
-    this.dataFormValue = this.formBuilder.group(valuePropositionConfig);
+    //this.dataFormValue = this.formBuilder.group(valuePropositionConfig);
   }
 
   ngOnInit(): void {
@@ -205,6 +205,9 @@ export class ConceptAndValuePropositionComponent implements OnInit{
     const user = data[Object.keys(data)[0]];
     this.labels = Object.keys(user);
 
+  }
+  tableChange(){
+    console.log("CHANGE");
   }
 }
 

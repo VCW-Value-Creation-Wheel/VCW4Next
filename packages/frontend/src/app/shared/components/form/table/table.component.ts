@@ -1,6 +1,7 @@
 import { Component, Output, forwardRef, EventEmitter, Input} from '@angular/core';
 import { FormBuilder, FormGroup, NG_VALUE_ACCESSOR, UntypedFormGroup } from '@angular/forms';
 import { PropositionUserData } from '@core';
+import { ValueTableService } from '@core/services/value-table/value-table.service';
 import { faMinus } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
@@ -39,7 +40,8 @@ export class TableComponent{
   @Output() data: EventEmitter<PropositionUserData> = new EventEmitter; 
   @Input() valuesUser:string;
 
-  constructor(private formBuilder: FormBuilder) {
+
+  constructor(private formBuilder: FormBuilder, public changeTable: ValueTableService ) {
     this.mainForm = formBuilder.group({});
     this.inputForm = formBuilder.group({});
     this.addControlToForm('inputValue', this.inputForm);
@@ -179,13 +181,15 @@ export class TableComponent{
       this.maxColumns = false;
     }
     this.removeControlToFormUser(this.userColumns, this.mainForm);
+    this.tableChange();
   }
 
   removeLabel(){
     if(this.labelRows.length === 5 ){
       this.maxRows = false;
     }
-    this.removeControlToFormLabel(this.labelRows, this.mainForm.get(this.userColumns[0]) as FormGroup); 
+    this.removeControlToFormLabel(this.labelRows, this.mainForm.get(this.userColumns[0]) as FormGroup);
+    this.tableChange();
   }
 
   cancelInput(){
@@ -198,6 +202,10 @@ export class TableComponent{
       this.isAddingLabel = false; 
       this.isAddingUser = false;
     }
+  }
+
+  tableChange(){
+      this.changeTable.changeTable$.next(true);
   }
 }
 

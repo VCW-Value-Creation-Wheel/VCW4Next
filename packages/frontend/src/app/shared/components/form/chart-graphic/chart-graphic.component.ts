@@ -1,5 +1,6 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges, forwardRef } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ValueTableService } from '@core/services/value-table/value-table.service';
 import { Chart, registerables } from 'chart.js';
 Chart.register(...registerables);
 
@@ -19,14 +20,22 @@ export class ChartGraphicComponent implements OnInit, OnChanges{
 
   myChart:Chart;
 
+  constructor(public changeTable: ValueTableService ) {}
+
   ngOnChanges(changes: SimpleChanges): void {
 
     if(this.myChart){
       this.myChart.destroy();
     }
 
-    
     this.getData();
+
+    this.changeTable.changeTable$.subscribe((change:boolean)=>{
+      if(change === true){
+        this.myChart.destroy();
+      }
+    })
+
   }
 
   @Input() values:Map<string,number[]>;
@@ -56,7 +65,8 @@ export class ChartGraphicComponent implements OnInit, OnChanges{
     }
 
     this.getData();
-  
+    
+    this.changeTable.changeTable$
     
 };
 

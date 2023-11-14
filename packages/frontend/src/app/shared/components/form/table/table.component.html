@@ -46,7 +46,7 @@
   ></app-simple-item-input>
 </div>
 
-<form [formGroup]="mainForm" class="grid grid-cols-4 w-full pt-4 ">
+<form [formGroup]="mainForm" class="grid grid-cols-4 w-full pt-4" (change)="tableChange()">
   <div class="grid grid-rows-2  col-span-3 ">
     <table class="border-2 border-primary-500">
       <tr>
