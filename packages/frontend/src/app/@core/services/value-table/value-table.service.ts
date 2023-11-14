@@ -6,7 +6,7 @@ import { BehaviorSubject, Subject } from 'rxjs';
 })
 export class ValueTableService {
 
-  public changeTable$: BehaviorSubject<Boolean> = new BehaviorSubject<boolean>(false);
+  public changeTable$: Subject<Boolean> = new Subject<boolean>;
 
   constructor() { }
 }
