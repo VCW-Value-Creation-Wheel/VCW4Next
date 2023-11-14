@@ -52,7 +52,8 @@ export class TableComponent{
     setTimeout(()=>{
 
       const values: PropositionUserData = JSON.parse(this.valuesUser["valueProposition"]);
-      this.data.emit(values);
+      if(values !== null){
+        this.data.emit(values);
       Object.keys(values).forEach((user)=>{
         this.addControlToForm(user, this.mainForm);
         this.buildNestedFormGroup(user, {}, 'group')
@@ -70,6 +71,7 @@ export class TableComponent{
         });
         });
       });
+      }
       
     },300);
  

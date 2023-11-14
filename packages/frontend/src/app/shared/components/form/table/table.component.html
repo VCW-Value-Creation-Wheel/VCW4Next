@@ -57,9 +57,10 @@
         <td class="text-center">{{label}}</td>
         <td *ngFor="let user of userColumns" [formGroupName]="user" class="border-2 border-primary-500">
           <input
-            type="text"
+            type="number"
             [formControlName]="label"
             class="text-center w-full"
+            min="0"
           />
         </td>
       </tr> 
