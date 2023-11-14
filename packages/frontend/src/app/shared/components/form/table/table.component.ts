@@ -51,6 +51,24 @@ export class TableComponent{
 
       const values: PropositionUserData = JSON.parse(this.valuesUser["valueProposition"]);
       this.data.emit(values);
+      Object.keys(values).forEach((user)=>{
+        this.addControlToForm(user, this.mainForm);
+        this.buildNestedFormGroup(user, {}, 'group')
+        const group = (this.mainForm.get(user) as FormGroup)
+        this.labelRows.forEach(label => {
+        this.addControlToForm(label, group);
+        });
+       
+        
+      })
+      
+
+
+     /* Object.keys(this.mainForm.controls).forEach((key) => {
+        const group = (this.mainForm.get(key) as FormGroup);
+        this.addControlToForm(label, group);
+      })*/
+      
     },300);
  
   }
