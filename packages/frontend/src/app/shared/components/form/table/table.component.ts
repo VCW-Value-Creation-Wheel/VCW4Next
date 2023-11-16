@@ -55,24 +55,31 @@ export class TableComponent{
       if(values !== null){
         this.data.emit(values);
       Object.keys(values).forEach((user)=>{
+    
         this.addControlToForm(user, this.mainForm);
         this.buildNestedFormGroup(user, {}, 'group')
         const group = (this.mainForm.get(user) as FormGroup)
+        
+      
         this.labelRows.forEach(label => {
         this.addControlToForm(label, group);
+       
+ 
         });
-
+       
+        
         const labels = Object.keys(values[user]);
-
+        
         labels.forEach((label)=>{
           Object.keys(this.mainForm.controls).forEach((key) => {
-            const group = (this.mainForm.get(key) as FormGroup);
+            const group = (this.mainForm.get(key) as FormGroup);  
             this.addControlToForm(label, group);
+            (this.mainForm.get(user) as FormGroup).get(label).patchValue(values[user][label]);
         });
         });
       });
+
       }
-      
     },300);
  
   }

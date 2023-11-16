@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges, forwardRef } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, forwardRef } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { ValueTableService } from '@core/services/value-table/value-table.service';
 import { Chart, registerables } from 'chart.js';
@@ -19,6 +19,7 @@ Chart.register(...registerables);
 export class ChartGraphicComponent implements OnInit, OnChanges{
 
   myChart:Chart;
+  @Output() isShowing: EventEmitter<boolean> = new EventEmitter; 
 
   constructor(public changeTable: ValueTableService ) {}
 
@@ -33,6 +34,7 @@ export class ChartGraphicComponent implements OnInit, OnChanges{
     this.changeTable.changeTable$.subscribe((change:boolean)=>{
       if(change === true){
         this.myChart.destroy();
+        this.isShowing.emit(false);
       }
     })
 
@@ -66,7 +68,7 @@ export class ChartGraphicComponent implements OnInit, OnChanges{
 
     this.getData();
     
-    this.changeTable.changeTable$
+    this.changeTable.changeTable$.subscribe();
     
 };
 
