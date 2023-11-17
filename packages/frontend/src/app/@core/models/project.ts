@@ -2,7 +2,7 @@ export interface Project {
     id: number;
     name: string;
     description: string;
-    thumbnailURL?: string;
+    fileThumbnail?: Thumbnail;
     lang: string;
 }
 

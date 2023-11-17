@@ -44,6 +44,10 @@ export class EditProjectComponent {
     error = false;
     isDisabled = false;
     isEditing = false;
+    showInput = false;
+    fileName: string;
+    fileType: string;
+    fileId: number;
 
     roleOptions: Options[] = [
       {
@@ -79,8 +83,12 @@ export class EditProjectComponent {
         name: itens.name,
         description: itens.description,
         lang: itens.lang,
-
+      
       });
+
+      this.fileName = itens.fileThumbnail.name;
+      this.fileType = itens.fileThumbnail.fileType;
+      this.fileId = itens.fileThumbnail.id;
     });
 
   }
@@ -88,30 +96,29 @@ export class EditProjectComponent {
   onSubmit(e: Event): void{
     if (this.form.valid) {
       
-      /*this.projectService.editProject(this.projectId,this.form.value)
+      this.projectService.editProject(this.projectId,this.form.value)
         .pipe(take(1)).subscribe(response => {
 
-          this.snackbar.success('Success!', 'Edited Project!').during(3000).show();
-          this.router.navigate(['../'], {relativeTo: this.route});
-        })*/
-
-    /* this.projectService.createProject(this.form.value)
-      .pipe(take(1)).subscribe(response => {
-        
-        if(this.inputFiles !== undefined){
-          const data = new FormData();
+          if(this.inputFiles !== undefined){
+            const data = new FormData();
           data.append('thumbnail', this.inputFiles[0]);
-          this.projectService.createProjectThumbnail(response.id ,data).subscribe(res => {
+          this.projectService.editProjectThumbnail(response.id ,data,this.fileId).subscribe(res => {
 
-            this.snackbar.success('Success!', 'New Project created!').during(3000).show();
+            this.snackbar.success('Success!', 'New Project Edited!').during(3000).show();
             this.router.navigate(['../'], {relativeTo: this.route});
             
           });
-        }
-    
-      }, (error) => {
-        this.snackbar.danger('Error!', 'Project creation failed.').during(3000).show();
-      });*/
+          }
+          if(this.inputFiles === undefined){
+            this.snackbar.success('Success!', 'New Project Edited!').during(3000).show();
+            this.router.navigate(['../'], {relativeTo: this.route});
+          }
+         
+
+          
+        }, (error) => {
+        this.snackbar.danger('Error!', 'Failed on Edit Project.').during(3000).show();
+      });
     } else {
       console.log(this.form)
     }

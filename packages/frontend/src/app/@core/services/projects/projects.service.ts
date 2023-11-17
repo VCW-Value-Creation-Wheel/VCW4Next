@@ -43,6 +43,11 @@ export class ProjectsService {
     return this.http.post<Thumbnail>(url, thumbnail);
   }
 
+  editProjectThumbnail(projectId: number, thumbnail: any, thumbnailId: number): Observable<Thumbnail>{
+    const url = `${this.projectsBaseUrl}/${projectId}/thumbnails/${thumbnailId}`;
+    return this.http.put<Thumbnail>(url, thumbnail);
+  }
+
 
   editProject(projectId: number,projectData: Project): Observable<Project>{
     const url = `${this.projectsBaseUrl}/${projectId}`;

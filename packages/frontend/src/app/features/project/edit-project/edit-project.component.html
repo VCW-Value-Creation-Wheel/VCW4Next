@@ -27,7 +27,21 @@
             </app-text-area>
         </div>
         <div class="col-span-3 md:col-span-1 m-2 p-2">
+            <div class="flex flex-cols-2 ">
+                <p class="pr-3 text-primary-500">File Name: </p>
+                <p>{{fileName}}</p>
+            </div>
+            <div class="flex flex-cols-2 pt-4">
+                <p class="pr-3 text-primary-500">File Type: </p>
+                <p>{{fileType}}</p>
+            </div>
+            <app-button
+                [label]="'Add New Thumbnail'"
+                (click)="showInput = true"
+                class="p-2">
+            </app-button>
             <app-input-file
+                *ngIf="showInput === true"
                 [label]="'Thumbnail'"
                 id="project-thumbnail"
                 ngDefaultControl
