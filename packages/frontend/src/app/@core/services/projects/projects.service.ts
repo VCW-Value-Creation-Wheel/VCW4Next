@@ -47,6 +47,22 @@ export class ProjectsService {
   editProject(projectId: number,projectData: Project): Observable<Project>{
     const url = `${this.projectsBaseUrl}/${projectId}`;
     return this.http.put<Project>(url, projectData, this.httpOptions);
+
+  }
+  
+  getUser(user:any) {
+    const url = `${environment.api}/users?search=${user}`;
+    return this.http.get(url, this.httpOptions);
+  }
+
+  getRoles(){
+    const url = `${environment.api}/roles`;
+    return this.http.get(url, this.httpOptions);
+  }
+
+  addUserRoleToProject(userId: string, roleId: string, projectId:number){
+    const url =`${this.projectsBaseUrl}/${projectId}/users`;
+    return this.http.post(url,{userId,roleId},this.httpOptions);
   }
 
 }

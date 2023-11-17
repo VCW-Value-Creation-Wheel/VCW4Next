@@ -4,19 +4,27 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
+
+import pt.com.deimos.vcwapi.dto.BusinessModelCanvasDTO;
 import pt.com.deimos.vcwapi.dto.ChallengeDTO;
 import pt.com.deimos.vcwapi.dto.KpiDTO;
 import pt.com.deimos.vcwapi.dto.PrototypeDTO;
+import pt.com.deimos.vcwapi.dto.TestAndKpisEvaluationDTO;
+import pt.com.deimos.vcwapi.dto.ThreeMsDto;
 import pt.com.deimos.vcwapi.dto.VcwDTO;
+import pt.com.deimos.vcwapi.entity.BusinessModelCanvasEntity;
 import pt.com.deimos.vcwapi.entity.ProjectEntity;
 import pt.com.deimos.vcwapi.entity.VcwEntity;
 import pt.com.deimos.vcwapi.exceptions.NotFoundException;
+import pt.com.deimos.vcwapi.repository.BusinessModelCanvasRepository;
+import pt.com.deimos.vcwapi.service.BusinessModelCanvasService;
 import pt.com.deimos.vcwapi.service.VcwService;
 
 import java.util.Collections;
@@ -32,6 +40,9 @@ public class VcwController {
   public VcwController(VcwService vcwService) {
     this.vcwService = vcwService;
   }
+
+  @Autowired
+  private BusinessModelCanvasService businessModelCanvasService;
 
   @GetMapping("/admin")
   @Operation(summary = "Shows All available vcws if the user is an admin role.")
@@ -200,7 +211,7 @@ public class VcwController {
 
   }
 
-   // prototypes
+  // prototypes
 
   @GetMapping("/{id}/prototypes")
   public ResponseEntity<Object> getPrototype(
@@ -250,6 +261,158 @@ public class VcwController {
 
   }
 
+  // Test And KPIs Evaluation
 
+  @GetMapping("/{id}/testAndKpisEvaluation")
+  public ResponseEntity<Object> getTestAndKpisEvaluation(
+          @PathVariable(value = "id") Long id,
+          @PathVariable(value = "project_id") Long projectId,
+          @AuthenticationPrincipal Jwt principal) {
 
+    Optional<ProjectEntity> project = this.vcwService.findProjectByIdAndUser(
+            projectId, principal.getSubject());
+    if (project.isEmpty())
+      throw new NotFoundException("Project not found.");
+    
+    Optional<VcwEntity> vcwEntityOptional =
+            this.vcwService.findById(id);
+
+    if(vcwEntityOptional.isEmpty()) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Vcw not found");
+    }
+
+    //find Test And KPIs Evaluation
+    String testAndKpisEvaluation = vcwEntityOptional.get().getTestAndKpisEvaluation();
+    return ResponseEntity.ok(Collections.singletonMap("testAndKpisEvaluation", testAndKpisEvaluation));
+  }
+
+  @PutMapping("/{id}/testAndKpisEvaluation")
+  public ResponseEntity<Object> saveTestAndKpisEvaluation(
+          @PathVariable(value = "id") Long vcwId,
+          @RequestBody TestAndKpisEvaluationDTO testAndKpisEvaluation,
+          @PathVariable(value = "project_id") Long projectId,
+          @AuthenticationPrincipal Jwt principal
+  ) {
+
+    Optional<ProjectEntity> project = this.vcwService.findProjectByIdAndUser(
+            projectId, principal.getSubject());
+    if (project.isEmpty())
+      throw new NotFoundException("Project not found.");
+    
+    Optional<VcwEntity> vcwEntityOptional = this.vcwService.findById(vcwId);
+    if(vcwEntityOptional.isEmpty()) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Vcw not found");
+    }
+    VcwEntity editedVcw = vcwEntityOptional.get();
+    editedVcw.setTestAndKpisEvaluation(testAndKpisEvaluation.getTestAndKpisEvaluation());
+
+    return ResponseEntity.status(HttpStatus.OK).body(
+            this.vcwService.update(editedVcw));
+
+  }
+
+  // 5a 3 M's and Business Model Page
+
+  @GetMapping("/{id}/threeMs")
+  public ResponseEntity<Object> getThreeMs(
+    @PathVariable(value = "id") Long vcwId,
+    @PathVariable(value = "project_id") Long projectId,
+    @AuthenticationPrincipal Jwt principal
+  ){
+    Optional<ProjectEntity> project = this.vcwService.findProjectByIdAndUser(
+            projectId, principal.getSubject());
+    if (project.isEmpty())
+      throw new NotFoundException("Project not found.");
+    
+    Optional<VcwEntity> vcwEntityOptional =
+            this.vcwService.findById(vcwId);
+
+    if(vcwEntityOptional.isEmpty()) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Vcw not found");
+    }
+
+    //find three Ms
+    String threeMs = vcwEntityOptional.get().getThreeMs();
+    return ResponseEntity.ok(Collections.singletonMap("threeMs", threeMs));
+  }
+
+  @PutMapping("/{id}/threeMs")
+  public ResponseEntity<Object> saveThreeMs(
+          @PathVariable(value = "id") Long vcwId,
+          @RequestBody ThreeMsDto threeMsDto,
+          @PathVariable(value = "project_id") Long projectId,
+          @AuthenticationPrincipal Jwt principal
+  ) {
+
+    Optional<ProjectEntity> project = this.vcwService.findProjectByIdAndUser(
+            projectId, principal.getSubject());
+    if (project.isEmpty())
+      throw new NotFoundException("Project not found.");
+    
+    Optional<VcwEntity> vcwEntityOptional = this.vcwService.findById(vcwId);
+    if(vcwEntityOptional.isEmpty()) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Vcw not found");
+    }
+    VcwEntity editedVcw = vcwEntityOptional.get();
+    editedVcw.setThreeMs(threeMsDto.getThreeMs());
+
+    return ResponseEntity.status(HttpStatus.OK).body(
+            this.vcwService.update(editedVcw));
+
+  }
+
+  @GetMapping("/{id}/businessModel")
+  public ResponseEntity<Object> getBusinessModels(
+    @PathVariable(value = "id") Long vcwId,
+    @PathVariable(value = "project_id") Long projectId,
+    @AuthenticationPrincipal Jwt principal
+  ){
+    Optional<ProjectEntity> project = this.vcwService.findProjectByIdAndUser(
+            projectId, principal.getSubject());
+    if (project.isEmpty())
+      throw new NotFoundException("Project not found.");
+    
+    Optional<VcwEntity> vcwEntityOptional =
+            this.vcwService.findById(vcwId);
+
+    if(vcwEntityOptional.isEmpty()) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Vcw not found");
+    }
+
+    BusinessModelCanvasEntity businessModel = vcwEntityOptional.get().getBusinessModelCanvas();
+    if(businessModel == null) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Business Model not found");
+    }
+    return ResponseEntity.status(HttpStatus.OK).body(businessModel);
+  }
+
+  @PutMapping("/{id}/businessModel")
+  public ResponseEntity<Object> saveBusinessModels(
+          @PathVariable(value = "id") Long vcwId,
+          @RequestBody BusinessModelCanvasDTO businessModelCanvasDTO,
+          @PathVariable(value = "project_id") Long projectId,
+          @AuthenticationPrincipal Jwt principal
+  ) {
+
+    Optional<ProjectEntity> project = this.vcwService.findProjectByIdAndUser(
+            projectId, principal.getSubject());
+    if (project.isEmpty())
+      throw new NotFoundException("Project not found.");
+    
+    Optional<VcwEntity> vcwEntityOptional = this.vcwService.findById(vcwId);
+    if(vcwEntityOptional.isEmpty()) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Vcw not found");
+    }
+    
+    BusinessModelCanvasEntity businessModel = vcwEntityOptional.get().getBusinessModelCanvas();
+    if(businessModel == null){
+      BusinessModelCanvasEntity response = this.businessModelCanvasService.saveBusinessModel(businessModelCanvasDTO);
+      vcwEntityOptional.get().setBusinessModelCanvasId(response.getId());
+      vcwService.update(vcwEntityOptional.get());
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+    }else{
+      Long businessModelId = vcwEntityOptional.get().getBusinessModelCanvasId();
+      return ResponseEntity.status(HttpStatus.OK).body(this.businessModelCanvasService.updateBusinessModel(businessModelId,businessModelCanvasDTO));
+    }
+  }
 }
