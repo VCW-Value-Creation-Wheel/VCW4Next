@@ -60,21 +60,82 @@
             </app-select-input>
         </div>
         <div class="col-span-4 text-xl font-bold ">Users and Roles</div>
-        <div class="grid grid-cols-4 col-span-4 px-2">
-            <div *ngFor="let userEntry of userRole; index as ind" class="col-span-3 flex justify-between m-2 p-2 bg-gray-200 rounded-md">
-                    <div class="m-2">{{userEntry.user}} - {{userEntry.role}}</div>
-                    <div class="">
-                        <app-icon-button [icon]="faPenToSquare" (click)="editUser(ind)"></app-icon-button>
-                        <app-icon-button [icon]="faXmark" (click)="removeUser(ind)"></app-icon-button>
-                    </div>
+
+        <div class="flex flex-row col-span-2 p-2  p-2 ">
+            <div class="flex flex-col justify-around items-center ">
+                <div *ngFor="let userInfo of this.userInfo; index as id" >
+                    <p class="">{{userInfo}}</p>
+                </div>
             </div>
-            <div *ngIf="isAddUserActive || isEditing" class="grid grid-cols-4 col-span-4 gap-1"  [formGroupName]="getUserArrayIndex(isEditing)">
-                <div class="flex flex-col align-top col-span-2">
-                    <label class="{{isDisabled?'text-gray-400':'text-gray-700'}} py-1">
-                    Select User
-                    </label>
+            <div class="flex flex-col items-start pl-4">
+            <div *ngFor="let userRole of this.allUsersRole; index as id">
+                <div class="flex flex-row justify-around items-center ">
+                    <div>               
+                        <p class="">{{userRole}}</p>
+                     </div>   
+                        <app-button
+                            label="Remove"
+                            isDangerous="true"
+                            class="p-2 "
+                            (buttonClick)="removeUserProject(id)">
+                        </app-button>
+                </div>
+            </div> 
+        </div>
+        </div>
+
+        <div class="grid grid-cols-4 col-span-4 px-2 ">
+            <div *ngIf="isAddUserActive" [formGroup]="formUser" class="col-span-4 md:m-2 md:p-2 ">
+                <p class="text-gray-700 pb-2">
+                    Find User
+                </p>
+                <div class="flex align-top">
                     <input
                     class="
+                        focus:outline-none
+                        caret-primary-500
+                        block
+                        w-1/2
+                        rounded-md
+                        border border-transparent
+                        max-h-[40px]
+                        focus:ring-primary-500 focus:bg-white focus:ring-1
+                        py-2
+                        px-3
+                        {{error?'bg-red-200':'bg-gray-100'}}
+                    "
+                    type="text"
+                    formControlName="user"
+                    (keydown.enter)="findUser()"
+                    placeholder="Search"
+                    />
+                   
+                
+                    <div class="flex justify-end md:justify-start col-span-4 md:col-span-1 items-end px-4 self-center">
+                        <app-button
+                        [label]="'Find'"
+                        (click)="findUser()"
+                        [leftIcon]="faSearch"
+                        >
+                        </app-button>
+                    </div>
+                </div>
+
+                <div *ngIf="showResults">
+                    <p class="font-bold text-primary p-2">Results</p>
+                </div>
+
+                <div *ngIf="!showResults">
+                    <p class="font-bold text-primary p-2">No results found</p>
+                </div>
+          
+                
+              
+                <div *ngFor="let user of this.users; index as id" class="flex md:px-20 md:p-2 w-full items-center md:items-end">
+                    <div class="w-full md:w-1/5 items-end">
+                        <p class="mt-2 mb:4 md:mb-2">User</p>
+                        <p
+                        class="
                         focus:outline-none
                         caret-primary-500
                         block
@@ -84,53 +145,46 @@
                         max-h-[40px]
                         focus:ring-primary-500 focus:bg-white focus:ring-1
                         py-2
-                        px-3
+                        px-2
                         {{error?'bg-red-200':'bg-gray-100'}}
-                    "
-                    list="userList"
-                    formControlName="user"
-                    />
-                </div>
-                <datalist id="userList">
-                    <option *ngFor="let option of options">{{option}}</option>
-                </datalist>
-                <div class="col-span-2 md:col-span-1">
+                        ">
+                            {{user}}
+                        </p>
+                    </div>
                     <app-select-input
-                    [label]="'Select Role'"
-                    [options]="roleOptions"
-                    formControlName="role"
-                    >
+                        [label]="'Role'"
+                        [options]="roleOptions"
+                        formControlName="role"
+                        id="role"
+                        class="md:w-1/4 pl-3"
+                        (emitInputChange)="saveRole($event,id)"
+                        
+                        >
                     </app-select-input>
-                </div>
-                <div class="flex justify-end md:justify-start col-span-4 md:col-span-1">
-                    <div *ngIf="isAddUserActive" class="mx-1 mt-7">
+
+                    <div *ngIf="isAdded[id] === false" class="md:px-4 mt-5 md:mt-8 self-center px-2 ">
                         <app-button
                         [label]="'Add'"
-                        (click)="confirmUser()"
+                        (buttonClick)="addRole(id)"
                         >
                         </app-button>
                     </div>
-                    <div *ngIf="isEditing" class="mx-1 mt-7">
+
+                    <div *ngIf="isAdded[id] === true" class="md:px-4 mt-5 md:mt-8 self-center px-2 ">
                         <app-button
-                        [label]="'Edit'"
-                        (click)="confirmEditUser()"
-                        >
-                        </app-button>
-                    </div> 
-                    <div class="mx-1 mt-7">
-                        <app-button
-                        [label]="'Cancel'"
-                        (click)="cancelUserSelection()"
+                        [label]="'Cancel'"  
+                        (buttonClick)="cancelRole(id)"        
                         > 
                         </app-button>
                     </div>
                 </div>
                  
             </div>
-            <div class="col-span-4 my-2" *ngIf="!isAddUserActive && !isEditing">
+            <div class="col-span-4 my-2" *ngIf="!isAddUserActive ">
                 <app-button
                 [label]="'Add User'"
-                (click)="addUser()">
+                (click)="isAddUserActive = true"
+                >
                 </app-button>
             </div>
         </div>
