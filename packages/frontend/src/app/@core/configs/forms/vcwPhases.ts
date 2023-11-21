@@ -55,12 +55,16 @@ export const createRankCriteriaConfig = {
     intervalMin: [null],
     intervalMax: [null],
     id: [null]
-}
+};
 
 export const prototypeConfig = {
     prototype: [null, Validators.required]
 };
 
+export const threeMs = {
+    threeMs: [null, Validators.required]
+};
+
 export const testAndKpisEvaluationConfig = {
     testAndKpisEvaluation: [null, Validators.required]
-}
+};

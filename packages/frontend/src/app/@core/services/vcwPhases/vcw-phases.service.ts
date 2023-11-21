@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Criteria, CriteriaRanking, ExpectedKPIs, Idea, IdeaCriteriaPair, SwotFieldRow, VCWChallenge, VCWHasCriteria, VCWHasIdea, VCWPrototype, VCWTestAndKpisEvaluation} from '@core/models';
+import { Criteria, CriteriaRanking, ExpectedKPIs, Idea, IdeaCriteriaPair, SwotFieldRow, VCWChallenge, VCWHasCriteria, VCWHasIdea, VCWPrototype, VCWTestAndKpisEvaluation, VCWThreeMs} from '@core/models';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 
@@ -181,6 +181,23 @@ export class VcwPhasesService {
   editPrototype(vcwId: number, projectId: number, data: VCWPrototype): Observable<any> {
     const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/prototypes`;
     return this.http.put<any>(url, data, this.httpOptions);
+  }
+
+
+  // Phase 5a
+  getThreeMs(vcwId: number, projectId: number): Observable<VCWThreeMs> {
+    const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/threeMs`;
+    return this.http.get<VCWThreeMs>(url, this.httpOptions);
+  }
+
+  createThreeMs(vcwId: number, projectId: number, data: VCWThreeMs): Observable<any> {
+    const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/threeMs`;
+    return this.http.post<VCWPrototype>(url, data, this.httpOptions);
+  }
+
+  editThreeMs(vcwId: number, projectId: number, data: VCWThreeMs): Observable<any> {
+    const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/threeMs`;
+    return this.http.put<VCWThreeMs>(url, data, this.httpOptions);
   }
 
   // Phase 5b

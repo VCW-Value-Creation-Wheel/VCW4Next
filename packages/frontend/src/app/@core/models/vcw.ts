@@ -86,6 +86,10 @@ export interface VCWPrototype {
     prototype: string;
 }
 
+export interface VCWThreeMs {
+    threeMs: string;
+}
+
 export interface VCWTestAndKpisEvaluation{
     testAndKpisEvaluation: string;
 }
