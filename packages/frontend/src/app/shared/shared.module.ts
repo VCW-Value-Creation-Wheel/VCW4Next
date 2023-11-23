@@ -35,6 +35,7 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { ListItemComponent } from './components/list-item/list-item.component';
 import { CreateItemDialogComponent } from './components/create-item-dialog/create-item-dialog.component';
 import { SimpleItemInputComponent } from './components/simple-item-input/simple-item-input.component';
+import { BusinessModelTableComponent } from './components/form/business-model-table/business-model-table.component';
 
 
 @NgModule({
@@ -62,6 +63,7 @@ import { SimpleItemInputComponent } from './components/simple-item-input/simple-
     DialogComponent,
     VcwCardComponent,
     CkeEditorComponent,
+    BusinessModelTableComponent,
     ListItemComponent,
     CreateItemDialogComponent,
     SnackbarComponent,
@@ -106,6 +108,7 @@ import { SimpleItemInputComponent } from './components/simple-item-input/simple-
     DialogComponent,
     VcwCardComponent,
     CkeEditorComponent,
+    BusinessModelTableComponent,
     ListItemComponent,
     CreateItemDialogComponent,
     SnackbarComponent,

@@ -8,3 +8,4 @@ export * from './dynamics';
 export * from './custom-select-input/custom-select-input.component';
 export * from './multiple-select-input/multiple-select-input.component';
 export * from './cke-editor/cke-editor.component'
+export * from './business-model-table/business-model-table.component';

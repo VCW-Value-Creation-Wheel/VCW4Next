@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Criteria, CriteriaRanking, ExpectedKPIs, Idea, IdeaCriteriaPair, SwotFieldRow, VCWChallenge, VCWHasCriteria, VCWHasIdea, VCWPrototype, VCWTestAndKpisEvaluation, VCWThreeMs} from '@core/models';
+import { Criteria, CriteriaRanking, ExpectedKPIs, Idea, IdeaCriteriaPair, SwotFieldRow, VCWBusinessModel, VCWChallenge, VCWHasCriteria, VCWHasIdea, VCWPrototype, VCWTestAndKpisEvaluation, VCWThreeMs} from '@core/models';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 
@@ -198,6 +198,16 @@ export class VcwPhasesService {
   editThreeMs(vcwId: number, projectId: number, data: VCWThreeMs): Observable<any> {
     const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/threeMs`;
     return this.http.put<VCWThreeMs>(url, data, this.httpOptions);
+  }
+
+  getBusinessModel(vcwId: number, projectId:number): Observable<VCWBusinessModel>{
+    const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/businessModel`;
+    return this.http.get<VCWBusinessModel>(url, this.httpOptions);
+  }
+
+  editBusinessModel(vcwId: number, projectId: number, data: VCWBusinessModel): Observable<VCWBusinessModel>{ 
+    const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/businessModel`;
+    return this.http.put<VCWBusinessModel>(url, data, this.httpOptions);
   }
 
   // Phase 5b

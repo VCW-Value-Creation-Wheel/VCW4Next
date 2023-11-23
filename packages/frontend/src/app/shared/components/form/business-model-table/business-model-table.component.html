@@ -1,0 +1,18 @@
+<div class = "flex-1 border-2 border-primary-500 h-full">
+    <div class = "flex ">
+        <p class = "font-bold w-full p-1 2xl:p-2 md:inline md:whitespace-nowrap">{{label}}</p>
+        <fa-icon
+            [icon] = "icon"
+            class = "text-primary-500 pr-1 pt-1 2xl:p-2"
+        ></fa-icon>
+    </div>  
+   <div class="flex ">
+        <app-text-area
+            [rows] = "rows"
+            class = "flex-1 p-1 2xl:p-2 w-full h-full"
+            [label] = "''"
+            [placeholder] = "'Insert Text'">
+        </app-text-area>
+    </div>
+  
+</div>

@@ -61,9 +61,21 @@ export const prototypeConfig = {
     prototype: [null, Validators.required]
 };
 
-export const threeMs = {
+export const threeMsConfig = {
     threeMs: [null, Validators.required]
 };
+
+export const BusinessModelConfig = {
+    customerSegments: [null],
+    valuePropositions: [null],
+    channels: [null],
+    customerRelationships: [null],
+    revenueStream: [null],
+    keyResources: [null],
+    keyActivities: [null],
+    keyPartnerships: [null],
+    costStructure: [null]
+}
 
 export const testAndKpisEvaluationConfig = {
     testAndKpisEvaluation: [null, Validators.required]

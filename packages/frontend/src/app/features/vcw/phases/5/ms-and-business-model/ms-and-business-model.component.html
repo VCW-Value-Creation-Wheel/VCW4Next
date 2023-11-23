@@ -1,5 +1,5 @@
-<div class="px-4 py-4 flex flex-row justify-between mx-4 md:mx-64 lg:mx-80">
-    <h1 class="text-2xl font-bold text-primary ">3 Ms & Business model</h1>
+<div class="px-4 py-4 flex flex-row justify-between mx-4 md:mx-32">
+    <h1 class="text-2xl font-bold text-primary ">3 Ms: Manpower, Minute, Money</h1>
     <div>
         <app-button
             [label]="'Save'"
@@ -8,13 +8,94 @@
         ></app-button>
     </div>
 </div>
-<div [formGroup]="dataForm" class="mx-4 md:mx-64 lg:mx-80">
+<div [formGroup]="dataForm" class="mx-4 md:mx-32">
     <div class="px-4 py-4">
         <app-cke-editor
             id="prototype"
             [label]="''"
             formControlName="threeMs"
         ></app-cke-editor>
+    </div>
+</div>
+<div class="px-4 py-4 flex flex-row justify-between  mx-4 md:mx-32 ">
+    <h1 class="text-2xl font-bold text-primary ">Business Model</h1>
+    <div>
+        <app-button
+            [label]="'Save'"
+            [leftIcon]="faFloppyDisk"
+            (buttonClick)="onSave()"
+        ></app-button>
+    </div>
+</div>
+<div class="mx-4 md:mx-32">
+    <div class="grid grid-cols-5 grid-rows-3 px-4 py-4 ">
+
+        <app-business-model-table
+            [icon] = "faLink"
+            [label] = "'Key Partners'"
+            class = "row-span-2 "
+            [rows] = "'14'"
+        >
+        </app-business-model-table>
+
+        <app-business-model-table
+            [icon] = "faSquareCheck"
+            [label] = "'Key Activities'"
+        >
+        </app-business-model-table>
+
+        <app-business-model-table
+            [icon] = "faGift"
+            [label] = "'Value Propositions'"
+            class = "row-span-2 "
+            [rows] = "'14'"
+        >
+        </app-business-model-table>
+
+        <app-business-model-table
+            [icon] = "faHeart"
+            [label] = "'Customer Relationships'"
+        >
+        </app-business-model-table>
+
+        <app-business-model-table
+            [icon] = "faUserGroup"
+            [label] = "'Customer Segments'"
+            class = "row-span-2"
+            [rows] = "'14'"
+        >
+        </app-business-model-table>
+
+        <app-business-model-table
+            [icon] = "faIndustry"
+            [label] = "'Key Resources'"
+        >
+        </app-business-model-table>
+
+        <app-business-model-table
+            [icon]="faTruck"
+            [label] = "'Channels'"
+        >
+        </app-business-model-table>
+        
+        <div class="col-span-5 grid grid-cols-6">
+            <app-business-model-table
+                [icon] = "faTags"
+                [label] = "'Cost Structure'"
+                class = "col-span-3"
+            >
+            </app-business-model-table>
+
+            <app-business-model-table
+                [icon] = "faSackDollar"
+                [label] = "'Revenue Streams'"
+                class = "col-span-3"
+             >
+            </app-business-model-table>
+
+        </div>
+        
+        
     </div>
 </div>
 

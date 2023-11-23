@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PhaseNavigationService, threeMs, SnackbarService, VcwPhasesService } from '@core';
-import { faFloppyDisk } from '@fortawesome/free-solid-svg-icons';
+import { PhaseNavigationService, threeMsConfig, SnackbarService, VcwPhasesService, BusinessModelConfig } from '@core';
+import { faFloppyDisk, faLink, faSquareCheck, faGift, faHeart, faUserGroup, faIndustry, faTruck, faTags, faSackDollar } from '@fortawesome/free-solid-svg-icons';
 import { take } from 'rxjs/operators';
 import { environment } from '../../../../../../environments/environment';
 import { VCWThreeMs } from '@core/models';
@@ -15,8 +15,18 @@ import { VCWThreeMs } from '@core/models';
 export class MsAndBusinessModelComponent implements OnInit{
 
   faFloppyDisk = faFloppyDisk;
+  faLink = faLink;
+  faSquareCheck = faSquareCheck;
+  faGift = faGift;
+  faHeart = faHeart;
+  faUserGroup = faUserGroup;
+  faIndustry = faIndustry;
+  faTruck = faTruck;
+  faTags = faTags;
+  faSackDollar = faSackDollar;
 
   dataForm: UntypedFormGroup;
+  dataBusinessForm: UntypedFormGroup;
 
   projectId: number;
   vcwId: number;
@@ -34,7 +44,8 @@ export class MsAndBusinessModelComponent implements OnInit{
     private vcwPhasesService: VcwPhasesService,
     private snackbarService: SnackbarService
   ){
-    this.dataForm = this.formBuilder.group(threeMs);
+    this.dataForm = this.formBuilder.group(threeMsConfig);
+    this.dataBusinessForm = this.formBuilder.group(BusinessModelConfig);
   }
 
   ngOnInit(): void {
