@@ -1,4 +1,4 @@
-<div class="px-4 py-4 flex flex-row justify-between mx-4 md:mx-32">
+<div class="px-4 py-4 flex flex-row justify-between mx-4 md:mx-32 2xl:mx-80">
     <h1 class="text-2xl font-bold text-primary ">3 Ms: Manpower, Minute, Money</h1>
     <div>
         <app-button
@@ -8,26 +8,26 @@
         ></app-button>
     </div>
 </div>
-<div [formGroup]="dataForm" class="mx-4 md:mx-32">
+<div [formGroup] = "dataForm" class="mx-4 md:mx-32 2xl:mx-80">
     <div class="px-4 py-4">
         <app-cke-editor
-            id="prototype"
+            id="threeMs"
             [label]="''"
             formControlName="threeMs"
         ></app-cke-editor>
     </div>
 </div>
-<div class="px-4 py-4 flex flex-row justify-between  mx-4 md:mx-32 ">
+<div class="px-4 py-4 flex flex-row justify-between  mx-4 md:mx-32 2xl:mx-80">
     <h1 class="text-2xl font-bold text-primary ">Business Model</h1>
     <div>
         <app-button
             [label]="'Save'"
             [leftIcon]="faFloppyDisk"
-            (buttonClick)="onSave()"
+            (buttonClick)="onSaveBusinessModel()"
         ></app-button>
     </div>
 </div>
-<div class="mx-4 md:mx-32">
+<div class="mx-4 md:mx-32 2xl:mx-80" [formGroup] = "dataBusinessForm">
     <div class="grid grid-cols-5 grid-rows-3 px-4 py-4 ">
 
         <app-business-model-table
@@ -35,12 +35,14 @@
             [label] = "'Key Partners'"
             class = "row-span-2 "
             [rows] = "'14'"
+            formControlName = "keyPartnerships"
         >
         </app-business-model-table>
 
         <app-business-model-table
             [icon] = "faSquareCheck"
             [label] = "'Key Activities'"
+            formControlName = "keyActivities"
         >
         </app-business-model-table>
 
@@ -49,12 +51,14 @@
             [label] = "'Value Propositions'"
             class = "row-span-2 "
             [rows] = "'14'"
+            formControlName = "valuePropositions"
         >
         </app-business-model-table>
 
         <app-business-model-table
             [icon] = "faHeart"
             [label] = "'Customer Relationships'"
+            formControlName = "customerRelationships"
         >
         </app-business-model-table>
 
@@ -63,18 +67,21 @@
             [label] = "'Customer Segments'"
             class = "row-span-2"
             [rows] = "'14'"
+            formControlName = "customerSegments"
         >
         </app-business-model-table>
 
         <app-business-model-table
             [icon] = "faIndustry"
             [label] = "'Key Resources'"
+            formControlName = "keyResources"
         >
         </app-business-model-table>
 
         <app-business-model-table
             [icon]="faTruck"
             [label] = "'Channels'"
+            formControlName = "channels"
         >
         </app-business-model-table>
         
@@ -83,6 +90,7 @@
                 [icon] = "faTags"
                 [label] = "'Cost Structure'"
                 class = "col-span-3"
+                formControlName = "costStructure"
             >
             </app-business-model-table>
 
@@ -90,7 +98,8 @@
                 [icon] = "faSackDollar"
                 [label] = "'Revenue Streams'"
                 class = "col-span-3"
-             >
+                formControlName = "revenueStreams"
+            >
             </app-business-model-table>
 
         </div>

@@ -6,8 +6,9 @@
             class = "text-primary-500 pr-1 pt-1 2xl:p-2"
         ></fa-icon>
     </div>  
-   <div class="flex ">
+   <div class = "flex">
         <app-text-area
+            [(ngModel)] = "value"
             [rows] = "rows"
             class = "flex-1 p-1 2xl:p-2 w-full h-full"
             [label] = "''"

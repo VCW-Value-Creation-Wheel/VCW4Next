@@ -70,7 +70,7 @@ export const BusinessModelConfig = {
     valuePropositions: [null],
     channels: [null],
     customerRelationships: [null],
-    revenueStream: [null],
+    revenueStreams: [null],
     keyResources: [null],
     keyActivities: [null],
     keyPartnerships: [null],

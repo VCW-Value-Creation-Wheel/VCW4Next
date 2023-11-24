@@ -1,4 +1,4 @@
-import { Component, Input, forwardRef } from '@angular/core';
+import { Component, EventEmitter, Input, Output, forwardRef } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { faLink } from '@fortawesome/free-solid-svg-icons';
 
@@ -19,8 +19,36 @@ export class BusinessModelTableComponent {
   @Input() icon;
   @Input() label;
   @Input() rows = 5;
+  @Input('value') _value?: any = '';  
 
   faLink = faLink;
 
+  onChange: any = () => {};
+  onTouched: any = () => {};
 
+  constructor() {}
+
+  ngOnInit(): void {}
+
+  get value() {
+    return this._value;
+  }
+
+  set value(val) {
+    this._value = val;
+    this.onChange(val);
+    this.onTouched();
+  }
+
+  writeValue(value: string): void {
+    if (value) { this._value = value; }
+  }
+
+  registerOnChange(fn: any): void {
+    this.onChange = fn;
+  }
+
+  registerOnTouched(fn: any): void {
+    this.onTouched = fn;
+  }
 }

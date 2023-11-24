@@ -5,7 +5,7 @@ import { PhaseNavigationService, threeMsConfig, SnackbarService, VcwPhasesServic
 import { faFloppyDisk, faLink, faSquareCheck, faGift, faHeart, faUserGroup, faIndustry, faTruck, faTags, faSackDollar } from '@fortawesome/free-solid-svg-icons';
 import { take } from 'rxjs/operators';
 import { environment } from '../../../../../../environments/environment';
-import { VCWThreeMs } from '@core/models';
+import { VCWBusinessModel, VCWThreeMs } from '@core/models';
 
 @Component({
   selector: 'app-ms-and-business-model',
@@ -35,6 +35,7 @@ export class MsAndBusinessModelComponent implements OnInit{
   useMocks: boolean;
 
   vcwThreeMs: VCWThreeMs;
+  vcwBusinessModel: VCWBusinessModel;
 
   constructor(
     private phaseNavService: PhaseNavigationService,
@@ -73,6 +74,24 @@ export class MsAndBusinessModelComponent implements OnInit{
         this.snackbarService.danger('Data Fetching Error', 'Unable to check and retrieve data from the server. Try again later.')
           .during(2000).show();
       });
+
+      this.vcwPhasesService.getBusinessModel(this.vcwId, this.projectId)
+      .pipe(take(1))
+      .subscribe(data => {
+        if (data) {
+          
+          this.vcwBusinessModel = data;
+          this.isEditing = true;
+
+          Object.keys(this.dataBusinessForm.controls).forEach((key) =>{
+            this.dataBusinessForm.controls[key].patchValue(this.vcwBusinessModel[key])
+          });
+
+        }
+      }, error => {
+        this.snackbarService.danger('Data Fetching Error', 'Unable to check and retrieve data from the server. Try again later.')
+          .during(2000).show();
+      });
     }
   }
 
@@ -102,6 +121,29 @@ export class MsAndBusinessModelComponent implements OnInit{
         });
       }
     }
+    
+  }
+
+  onSaveBusinessModel(){
+
+      Object.keys(this.dataBusinessForm.controls).forEach((key) =>{
+        this.vcwBusinessModel[key] = this.dataBusinessForm.controls[key].value;   
+      })
+    
+      console.log(this.vcwBusinessModel)
+
+      this.vcwPhasesService.editBusinessModel(this.vcwId,this.projectId, this.vcwBusinessModel)
+      .pipe(take(1))
+      .subscribe(response => {
+        this.isEditing = true;
+        this.snackbarService.success('Success!', 'Your changes were saved.').during(2000).show();
+      }, error => {
+        this.snackbarService.danger('Error', 'Unable to save your changes. Please try again later.')
+        .during(2000).show();
+      });
+    
+
+   
   }
 
   isFormValid(control: string) {
