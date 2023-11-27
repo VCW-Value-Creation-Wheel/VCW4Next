@@ -28,13 +28,13 @@
     </div>
 </div>
 <div class="mx-4 md:mx-32 2xl:mx-80" [formGroup] = "dataBusinessForm">
-    <div class="grid grid-cols-5 grid-rows-3 px-4 py-4 ">
+    <div class="grid grid-cols-1 md:grid-cols-5 grid-rows-1 md:grid-rows-3 px-4 py-4 ">
 
         <app-business-model-table
             [icon] = "faLink"
             [label] = "'Key Partners'"
-            class = "row-span-2 "
             [rows] = "'14'"
+            class = "md:row-span-2 "
             formControlName = "keyPartnerships"
         >
         </app-business-model-table>
@@ -49,8 +49,8 @@
         <app-business-model-table
             [icon] = "faGift"
             [label] = "'Value Propositions'"
-            class = "row-span-2 "
             [rows] = "'14'"
+            class = "md:row-span-2 "
             formControlName = "valuePropositions"
         >
         </app-business-model-table>
@@ -58,6 +58,7 @@
         <app-business-model-table
             [icon] = "faHeart"
             [label] = "'Customer Relationships'"
+           
             formControlName = "customerRelationships"
         >
         </app-business-model-table>
@@ -65,7 +66,7 @@
         <app-business-model-table
             [icon] = "faUserGroup"
             [label] = "'Customer Segments'"
-            class = "row-span-2"
+            class = "md:row-span-2"
             [rows] = "'14'"
             formControlName = "customerSegments"
         >
@@ -75,21 +76,24 @@
             [icon] = "faIndustry"
             [label] = "'Key Resources'"
             formControlName = "keyResources"
+          
         >
         </app-business-model-table>
 
         <app-business-model-table
             [icon]="faTruck"
             [label] = "'Channels'"
+           
+            class = " md:col-span-1"
             formControlName = "channels"
         >
         </app-business-model-table>
-        
-        <div class="col-span-5 grid grid-cols-6">
+        <div class="md:col-span-5 grid md:grid-cols-6 ">
             <app-business-model-table
                 [icon] = "faTags"
                 [label] = "'Cost Structure'"
-                class = "col-span-3"
+                class = "md:col-span-3"
+                
                 formControlName = "costStructure"
             >
             </app-business-model-table>
@@ -97,7 +101,8 @@
             <app-business-model-table
                 [icon] = "faSackDollar"
                 [label] = "'Revenue Streams'"
-                class = "col-span-3"
+                class = "md:col-span-3"
+               
                 formControlName = "revenueStreams"
             >
             </app-business-model-table>
