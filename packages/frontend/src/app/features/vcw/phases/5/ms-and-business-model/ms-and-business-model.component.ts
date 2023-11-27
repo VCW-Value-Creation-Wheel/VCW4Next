@@ -64,6 +64,7 @@ export class MsAndBusinessModelComponent implements OnInit{
       this.vcwPhasesService.getThreeMs(this.vcwId, this.projectId)
       .pipe(take(1))
       .subscribe(data => {
+       
         if (data) {
 
           this.vcwThreeMs = data;
@@ -78,7 +79,8 @@ export class MsAndBusinessModelComponent implements OnInit{
       this.vcwPhasesService.getBusinessModel(this.vcwId, this.projectId)
       .pipe(take(1))
       .subscribe(data => {
-        if (data) {
+      
+      if (data) {
           
           this.vcwBusinessModel = data;
           this.isEditing = true;
@@ -88,9 +90,6 @@ export class MsAndBusinessModelComponent implements OnInit{
           });
 
         }
-      }, error => {
-        this.snackbarService.danger('Data Fetching Error', 'Unable to check and retrieve data from the server. Try again later.')
-          .during(2000).show();
       });
     }
   }
@@ -130,7 +129,7 @@ export class MsAndBusinessModelComponent implements OnInit{
         this.vcwBusinessModel[key] = this.dataBusinessForm.controls[key].value;   
       })
     
-      console.log(this.vcwBusinessModel)
+     
 
       this.vcwPhasesService.editBusinessModel(this.vcwId,this.projectId, this.vcwBusinessModel)
       .pipe(take(1))
