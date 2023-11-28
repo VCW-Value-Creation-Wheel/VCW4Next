@@ -89,3 +89,7 @@ export interface VCWPrototype {
 export interface VCWTestAndKpisEvaluation{
     testAndKpisEvaluation: string;
 }
+
+export interface VCWImplementationAndControl{
+    implementation: string;
+}
