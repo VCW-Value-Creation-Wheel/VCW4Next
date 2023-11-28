@@ -3,7 +3,6 @@ package pt.com.deimos.vcwapi.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import pt.com.deimos.vcwapi.dto.BusinessModelCanvasDTO;
 import pt.com.deimos.vcwapi.dto.ChallengeDTO;
+import pt.com.deimos.vcwapi.dto.ImplementationAndControlDTO;
 import pt.com.deimos.vcwapi.dto.KpiDTO;
 import pt.com.deimos.vcwapi.dto.PrototypeDTO;
 import pt.com.deimos.vcwapi.dto.TestAndKpisEvaluationDTO;
@@ -23,8 +23,8 @@ import pt.com.deimos.vcwapi.entity.BusinessModelCanvasEntity;
 import pt.com.deimos.vcwapi.entity.ProjectEntity;
 import pt.com.deimos.vcwapi.entity.VcwEntity;
 import pt.com.deimos.vcwapi.exceptions.NotFoundException;
-import pt.com.deimos.vcwapi.repository.BusinessModelCanvasRepository;
 import pt.com.deimos.vcwapi.service.BusinessModelCanvasService;
+import pt.com.deimos.vcwapi.service.ThumbnailService;
 import pt.com.deimos.vcwapi.service.VcwService;
 
 import java.util.Collections;
@@ -415,4 +415,58 @@ public class VcwController {
       return ResponseEntity.status(HttpStatus.OK).body(this.businessModelCanvasService.updateBusinessModel(businessModelId,businessModelCanvasDTO));
     }
   }
+
+  // 5c implementation and control page
+  @GetMapping("/{id}/implementationAndControl")
+  public ResponseEntity<Object> getImplementationAndControl(
+    @PathVariable(value = "id") Long vcwId,
+    @PathVariable(value = "project_id") Long projectId,
+    @AuthenticationPrincipal Jwt principal
+  ){
+    Optional<ProjectEntity> project = this.vcwService.findProjectByIdAndUser(
+            projectId, principal.getSubject());
+    if (project.isEmpty())
+      throw new NotFoundException("Project not found.");
+    
+    Optional<VcwEntity> vcwEntityOptional =
+            this.vcwService.findById(vcwId);
+
+    if(vcwEntityOptional.isEmpty()) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Vcw not found");
+    }
+
+    ImplementationAndControlDTO implementationAndControlDTO = new ImplementationAndControlDTO();
+    implementationAndControlDTO.setExecutiveSummary(vcwEntityOptional.get().getExecutiveSummary());
+    if(implementationAndControlDTO.getExecutiveSummary() == null) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Executive Summary not found");
+    }
+
+    implementationAndControlDTO.setAttachment(vcwEntityOptional.get().getAttachments());
+
+    return ResponseEntity.status(HttpStatus.OK).body(implementationAndControlDTO);
+  }
+
+  @PutMapping("/{id}/implementationAndControl")
+  public ResponseEntity<Object> saveImplementationAndControl(
+          @PathVariable(value = "id") Long vcwId,
+          @RequestBody ImplementationAndControlDTO implementationAndControlDTO,
+          @PathVariable(value = "project_id") Long projectId,
+          @AuthenticationPrincipal Jwt principal
+  ) {
+
+    Optional<ProjectEntity> project = this.vcwService.findProjectByIdAndUser(
+            projectId, principal.getSubject());
+    if (project.isEmpty())
+      throw new NotFoundException("Project not found.");
+    
+    Optional<VcwEntity> vcwEntityOptional = this.vcwService.findById(vcwId);
+    if(vcwEntityOptional.isEmpty()) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Vcw not found");
+    }
+    vcwEntityOptional.get().setExecutiveSummary(implementationAndControlDTO.getExecutiveSummary());
+    return ResponseEntity.status(HttpStatus.OK).body(this.vcwService.update(vcwEntityOptional.get())); 
+  }
+
+
+
 }
