@@ -64,3 +64,7 @@ export const prototypeConfig = {
 export const testAndKpisEvaluationConfig = {
     testAndKpisEvaluation: [null, Validators.required]
 }
+
+export const implementationAndControlConfig = {
+    implementationAndControlConfig: [null, Validators.required]
+}
