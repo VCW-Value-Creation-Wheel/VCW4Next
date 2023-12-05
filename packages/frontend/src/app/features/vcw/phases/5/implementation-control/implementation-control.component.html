@@ -1,5 +1,5 @@
 <div class="px-4 py-4 flex flex-row justify-between mx-4 md:mx-64 lg:mx-80">
-    <h1 class="text-2xl font-bold text-primary ">Implementation & Control</h1>
+    <h1 class="text-2xl font-bold text-primary ">Executive Summary</h1>
     <div>
         <app-button
             [label]="'Save'"
@@ -16,7 +16,19 @@
             formControlName="executiveSummary"
         ></app-cke-editor>
     </div>
-    <div (drop)="dropHandler($event)" (dragover)="onDragOver($event)" (dragenter)="onDragLeave($event)" (click)="onClick()" class=" relative flex flex-col text-gray-400 bg-blue-50 border border-gray-200 border-dashed rounded"  >
+    <h1 class="text-2xl font-bold text-primary pb-4">Attach Documents</h1>
+    <div *ngIf="current_file && !valid_files" class="flex flex-col-2 place-content-center">
+        <p class="p-2 text-center">Current File:</p>
+        <p class="py-2 text-center text-primary-500 ">{{current_file.name}}</p>
+        <p class="p-2 text-center text-primary-500 ">{{current_file.fileType}}</p>
+    </div>
+    <div 
+       
+        (drop)="dropHandler($event)" 
+        (dragover)="onDragOver($event)"    
+        (dragenter)="onDragLeave($event)" 
+        (click)="onClick()" 
+        class=" relative flex flex-col text-gray-400 bg-blue-50 border border-gray-200 border-dashed rounded"  >
 
             
        
@@ -24,13 +36,15 @@
             <input #FileInput type="file" name="file" class="hidden absolute inset-0 z-50 w-full h-full p-0 m-0 outline-none opacity-0" (change)="onFileChange($event.target.files)">
             <label for="file" class="flex flex-col items-center justify-center pt-3  text-center gap-2 text-sm">Drag or drop here</label>
             <label class="flex flex-col items-center justify-center  text-center gap-2 text-sm">or</label>
-            <label class="flex flex-col items-center justify-center  text-center gap-2 text-sm pb-5">Search for files</label>
+            <label class="flex flex-col items-center justify-center  text-center gap-2 text-sm pb-2">Search for files</label>
 
-            <div *ngFor="let files of valid_files">
-                <p class="py-2 text-center text-primary-500">{{files.name}}</p>
+            <div *ngFor="let files of valid_files" class="flex flex-col-2 place-content-center">
+                <p class="p-2 text-center text-primary-500 ">{{files.name}}</p>
             </div>
-
-            <p>Type of files accepted: .pdf .doc .docx</p>
+  
+          
+            
+            <p>Type of files accepted: pdf, doc, docx, xls, xlsx, ppt, pptx, txt, zip</p>
     
 
             

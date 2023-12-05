@@ -5,7 +5,7 @@ import { implementationAndControlConfig, PhaseNavigationService, SnackbarService
 import { faFileUpload, faFloppyDisk } from '@fortawesome/free-solid-svg-icons';
 import { take } from 'rxjs/operators';
 import { environment } from '../../../../../../environments/environment';
-import { VCWImplementationAndControl } from '@core/models';
+import { Thumbnail, VCWImplementationAndControl } from '@core/models';
 
 @Component({
   selector: 'app-implementation-control',
@@ -24,7 +24,7 @@ export class ImplementationControlComponent implements OnInit{
   isEditing = false;
 
   useMocks: boolean;
-
+  current_file: Thumbnail;
   valid_files : Array<File>;
 
   vcwImplementation: VCWImplementationAndControl;
@@ -73,6 +73,14 @@ export class ImplementationControlComponent implements OnInit{
         this.snackbarService.danger('Data Fetching Error', 'Unable to check and retrieve data from the server. Try again later.')
           .during(2000).show();
       });
+
+      this.vcwPhasesService.getAttachment(this.vcwId, this.projectId)
+        .pipe(take(1))
+        .subscribe( data =>{
+          if(data){
+            this.current_file = data;
+          }
+        });
     }
     
   }
