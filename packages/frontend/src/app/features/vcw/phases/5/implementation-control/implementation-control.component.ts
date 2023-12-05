@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostBinding, HostListener, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { implementationAndControlConfig, PhaseNavigationService, SnackbarService, VcwPhasesService } from '@core';
-import { faFloppyDisk } from '@fortawesome/free-solid-svg-icons';
+import { faFileUpload, faFloppyDisk } from '@fortawesome/free-solid-svg-icons';
 import { take } from 'rxjs/operators';
 import { environment } from '../../../../../../environments/environment';
-import { VCWImplementationAndControl } from '@core/models';
+import { Thumbnail, VCWImplementationAndControl } from '@core/models';
 
 @Component({
   selector: 'app-implementation-control',
@@ -15,6 +15,7 @@ import { VCWImplementationAndControl } from '@core/models';
 export class ImplementationControlComponent implements OnInit{
 
   faFloppyDisk = faFloppyDisk;
+  faFileUpload = faFileUpload;
 
   dataForm: UntypedFormGroup;
 
@@ -23,8 +24,18 @@ export class ImplementationControlComponent implements OnInit{
   isEditing = false;
 
   useMocks: boolean;
+  current_file: Thumbnail;
+  valid_files : Array<File>;
 
   vcwImplementation: VCWImplementationAndControl;
+
+  
+
+  @Output() private filesChangeEmiter : EventEmitter<File[]> = new EventEmitter();
+  files: any[] = [];
+  @ViewChild('FileInput') FileInput!: ElementRef;
+
+
 
   constructor(
     private phaseNavService: PhaseNavigationService,
@@ -56,19 +67,28 @@ export class ImplementationControlComponent implements OnInit{
 
           this.vcwImplementation = data;
           this.isEditing = true;
-          this.dataForm.controls.prototype.patchValue(this.vcwImplementation.implementation);
+          this.dataForm.controls.executiveSummary.patchValue(this.vcwImplementation.executiveSummary);
         }
       }, error => {
         this.snackbarService.danger('Data Fetching Error', 'Unable to check and retrieve data from the server. Try again later.')
           .during(2000).show();
       });
+
+      this.vcwPhasesService.getAttachment(this.vcwId, this.projectId)
+        .pipe(take(1))
+        .subscribe( data =>{
+          if(data){
+            this.current_file = data;
+          }
+        });
     }
+    
   }
 
   onSave() {
-    if (this.isFormValid('prototype')) {
+    if (this.isFormValid('executiveSummary')) {
 
-      this.vcwImplementation.implementation = this.dataForm.controls.implementation.value;
+      this.vcwImplementation.executiveSummary = this.dataForm.controls.executiveSummary.value;
 
       if (this.isEditing) {
         this.vcwPhasesService.editImplementationAndControl(this.vcwId, this.projectId, this.vcwImplementation)
@@ -96,5 +116,47 @@ export class ImplementationControlComponent implements OnInit{
   isFormValid(control: string) {
     return this.dataForm.get(control).valid;
   }
+
+  dropHandler(ev: any) {
+   
+    ev.preventDefault();
+    let files = ev.dataTransfer.files;
+    this.valid_files  = files;
+    this.filesChangeEmiter.emit(this.valid_files);
+  
+  }
+
+  onDragOver(e: DragEvent){
+    e.preventDefault();
+  }
+
+
+  onDragLeave(e: DragEvent){
+    e.preventDefault();
+  }
+
+
+  onFileChange(pFileList: File[]){
+    this.files = Object.keys(pFileList).map(key => pFileList[key]); 
+    this.valid_files = this.files
+  }
+
+  onClick(){
+    const nativeElement = this.FileInput.nativeElement;
+    
+    nativeElement.click();
+
+    nativeElement.onchange = (e: Event) => {
+   
+      const target = e.target as HTMLInputElement;
+     
+    };
+  }
+
+  
+
+  
+
+ 
 }
 

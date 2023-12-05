@@ -91,5 +91,17 @@ export interface VCWTestAndKpisEvaluation{
 }
 
 export interface VCWImplementationAndControl{
-    implementation: string;
+    executiveSummary: string;
+}
+
+export interface Attachment{
+    id: number;
+    vcwId: number;
+    name: string;
+    data: number;
+    fileType: string;
+    createdAt: string;
+    createdBy: string;
+    updateAt: string;
+    updateBy: string;
 }
