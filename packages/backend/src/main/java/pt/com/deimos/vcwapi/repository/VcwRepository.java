@@ -9,4 +9,6 @@ public interface VcwRepository extends CrudRepository<VcwEntity, Long> {
 
     Iterable<VcwEntity> findByProjectsId(Long projectId);
 
+    Optional<VcwEntity> findByIdAndAttachmentsId(Long id, Long attachmentsId);
+
 }

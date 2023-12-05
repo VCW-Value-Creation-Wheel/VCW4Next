@@ -190,5 +190,5 @@ public class ThumbnailService {
         return newThumbnail;
     }
 
-
+    
 }
