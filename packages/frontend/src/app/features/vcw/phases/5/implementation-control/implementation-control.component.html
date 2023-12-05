@@ -8,13 +8,33 @@
         ></app-button>
     </div>
 </div>
-<div [formGroup]="dataForm" class="mx-4 md:mx-64 lg:mx-80">
-    <div class="px-4 py-4">
+<div [formGroup]="dataForm" class="mx-4 md:mx-64 lg:mx-80 px-4 py-4">
+    <div >
         <app-cke-editor
-            id="implementation"
+            id="executiveSummary"
             [label]="''"
-            formControlName="implementation"
+            formControlName="executiveSummary"
         ></app-cke-editor>
+    </div>
+    <div (drop)="dropHandler($event)" (dragover)="onDragOver($event)" (dragenter)="onDragLeave($event)" (click)="onClick()" class=" relative flex flex-col text-gray-400 bg-blue-50 border border-gray-200 border-dashed rounded"  >
+
+            
+       
+            <fa-icon [icon]="faFileUpload" size="3x" class="flex flex-col items-center justify-center  text-center pt-10 text-sm"></fa-icon>
+            <input #FileInput type="file" name="file" class="hidden absolute inset-0 z-50 w-full h-full p-0 m-0 outline-none opacity-0" (change)="onFileChange($event.target.files)">
+            <label for="file" class="flex flex-col items-center justify-center pt-3  text-center gap-2 text-sm">Drag or drop here</label>
+            <label class="flex flex-col items-center justify-center  text-center gap-2 text-sm">or</label>
+            <label class="flex flex-col items-center justify-center  text-center gap-2 text-sm pb-5">Search for files</label>
+
+            <div *ngFor="let files of valid_files">
+                <p class="py-2 text-center text-primary-500">{{files.name}}</p>
+            </div>
+
+            <p>Type of files accepted: .pdf .doc .docx</p>
+    
+
+            
+           
     </div>
 </div>
 

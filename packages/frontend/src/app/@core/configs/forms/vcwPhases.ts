@@ -66,5 +66,5 @@ export const testAndKpisEvaluationConfig = {
 }
 
 export const implementationAndControlConfig = {
-    implementationAndControlConfig: [null, Validators.required]
+    executiveSummary: [null, Validators.required]
 }
