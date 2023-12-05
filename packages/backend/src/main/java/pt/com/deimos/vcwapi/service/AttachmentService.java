@@ -26,7 +26,7 @@ public class AttachmentService {
     @Autowired
     private MinioService minioService;
 
-    public Optional<FileEntity> getByVcwId(Long vcwId) {
+    public Iterable<FileEntity> getByVcwId(Long vcwId) {
         return this.thumbnailRepository.findByVcwsId(vcwId);
     }
 

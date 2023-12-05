@@ -14,7 +14,7 @@ public interface ThumbnailRepository extends CrudRepository<FileEntity, Long> {
 
     Optional<FileEntity> findByIdAndProjectId(Long id, Long projectId);
 
-    Optional<FileEntity> findByVcwsId(Long vcwsId);    
+    Iterable<FileEntity> findByVcwsId(Long vcwsId);    
     
     Optional<FileEntity> findByIdAndVcwsId(Long id,Long vcwsId);
 

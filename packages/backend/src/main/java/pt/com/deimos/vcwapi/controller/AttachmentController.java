@@ -52,7 +52,7 @@ public class AttachmentController {
         if (vcw.isEmpty())
             throw new NotFoundException("Vcw not found.");
 
-        return ResponseEntity.ok(this.attachmentService.getByVcwId(vcwId).get());
+        return ResponseEntity.ok(this.attachmentService.getByVcwId(vcwId));
     }
     
     @PostMapping("/{vcw_id}")
