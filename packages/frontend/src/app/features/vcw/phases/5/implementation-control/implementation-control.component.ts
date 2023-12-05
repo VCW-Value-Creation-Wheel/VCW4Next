@@ -67,7 +67,7 @@ export class ImplementationControlComponent implements OnInit{
 
           this.vcwImplementation = data;
           this.isEditing = true;
-          this.dataForm.controls.prototype.patchValue(this.vcwImplementation.implementation);
+          this.dataForm.controls.executiveSummary.patchValue(this.vcwImplementation.executiveSummary);
         }
       }, error => {
         this.snackbarService.danger('Data Fetching Error', 'Unable to check and retrieve data from the server. Try again later.')
@@ -78,9 +78,9 @@ export class ImplementationControlComponent implements OnInit{
   }
 
   onSave() {
-    if (this.isFormValid('prototype')) {
+    if (this.isFormValid('executiveSummary')) {
 
-      this.vcwImplementation.implementation = this.dataForm.controls.implementation.value;
+      this.vcwImplementation.executiveSummary = this.dataForm.controls.executiveSummary.value;
 
       if (this.isEditing) {
         this.vcwPhasesService.editImplementationAndControl(this.vcwId, this.projectId, this.vcwImplementation)

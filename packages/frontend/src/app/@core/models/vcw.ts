@@ -91,7 +91,7 @@ export interface VCWTestAndKpisEvaluation{
 }
 
 export interface VCWImplementationAndControl{
-    implementation: string;
+    executiveSummary: string;
 }
 
 export interface Attachment{
