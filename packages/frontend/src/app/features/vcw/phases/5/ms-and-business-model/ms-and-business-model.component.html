@@ -1,3 +1,115 @@
-<div class="px-4 py-4 flex flex-row justify-between mx-4 md:mx-64 lg:mx-80">
-    <h1 class="text-2xl font-bold text-primary ">3 Ms & Business model</h1>
+<div class="px-4 py-4 flex flex-row justify-between mx-4 md:mx-32 2xl:mx-80">
+    <h1 class="text-2xl font-bold text-primary ">3 Ms: Manpower, Minute, Money</h1>
+    <div>
+        <app-button
+            [label]="'Save'"
+            [leftIcon]="faFloppyDisk"
+            (buttonClick)="onSave()"
+        ></app-button>
+    </div>
 </div>
+<div [formGroup] = "dataForm" class="mx-4 md:mx-32 2xl:mx-80">
+    <div class="px-4 py-4">
+        <app-cke-editor
+            id="threeMs"
+            [label]="''"
+            formControlName="threeMs"
+        ></app-cke-editor>
+    </div>
+</div>
+<div class="px-4 py-4 flex flex-row justify-between  mx-4 md:mx-32 2xl:mx-80">
+    <h1 class="text-2xl font-bold text-primary ">Business Model</h1>
+    <div>
+        <app-button
+            [label]="'Save'"
+            [leftIcon]="faFloppyDisk"
+            (buttonClick)="onSaveBusinessModel()"
+        ></app-button>
+    </div>
+</div>
+<div class="mx-4 md:mx-32 2xl:mx-80" [formGroup] = "dataBusinessForm">
+    <div class="grid grid-cols-1 md:grid-cols-5 grid-rows-1 md:grid-rows-3 px-4 py-4 ">
+
+        <app-business-model-table
+            [icon] = "faLink"
+            [label] = "'Key Partners'"
+            [rows] = "'14'"
+            class = "md:row-span-2 "
+            formControlName = "keyPartnerships"
+        >
+        </app-business-model-table>
+
+        <app-business-model-table
+            [icon] = "faSquareCheck"
+            [label] = "'Key Activities'"
+            formControlName = "keyActivities"
+        >
+        </app-business-model-table>
+
+        <app-business-model-table
+            [icon] = "faGift"
+            [label] = "'Value Propositions'"
+            [rows] = "'14'"
+            class = "md:row-span-2 "
+            formControlName = "valuePropositions"
+        >
+        </app-business-model-table>
+
+        <app-business-model-table
+            [icon] = "faHeart"
+            [label] = "'Customer Relationships'"
+           
+            formControlName = "customerRelationships"
+        >
+        </app-business-model-table>
+
+        <app-business-model-table
+            [icon] = "faUserGroup"
+            [label] = "'Customer Segments'"
+            class = "md:row-span-2"
+            [rows] = "'14'"
+            formControlName = "customerSegments"
+        >
+        </app-business-model-table>
+
+        <app-business-model-table
+            [icon] = "faIndustry"
+            [label] = "'Key Resources'"
+            formControlName = "keyResources"
+          
+        >
+        </app-business-model-table>
+
+        <app-business-model-table
+            [icon]="faTruck"
+            [label] = "'Channels'"
+           
+            class = " md:col-span-1"
+            formControlName = "channels"
+        >
+        </app-business-model-table>
+        <div class="md:col-span-5 grid md:grid-cols-6 ">
+            <app-business-model-table
+                [icon] = "faTags"
+                [label] = "'Cost Structure'"
+                class = "md:col-span-3"
+                
+                formControlName = "costStructure"
+            >
+            </app-business-model-table>
+
+            <app-business-model-table
+                [icon] = "faSackDollar"
+                [label] = "'Revenue Streams'"
+                class = "md:col-span-3"
+               
+                formControlName = "revenueStreams"
+            >
+            </app-business-model-table>
+
+        </div>
+        
+        
+    </div>
+</div>
+
