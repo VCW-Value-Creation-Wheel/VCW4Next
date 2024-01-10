@@ -94,7 +94,7 @@ export interface VCWImplementationAndControl{
     executiveSummary: string;
 }
 
-export interface Attachment{
+export interface VCWAttachment{
     id: number;
     vcwId: number;
     name: string;

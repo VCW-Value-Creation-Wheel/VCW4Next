@@ -2,10 +2,10 @@ import { Component, ElementRef, EventEmitter, HostBinding, HostListener, OnInit,
 import { FormBuilder, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { implementationAndControlConfig, PhaseNavigationService, SnackbarService, VcwPhasesService } from '@core';
-import { faFileUpload, faFloppyDisk } from '@fortawesome/free-solid-svg-icons';
+import { faFileUpload, faFloppyDisk, faMinus } from '@fortawesome/free-solid-svg-icons';
 import { take } from 'rxjs/operators';
 import { environment } from '../../../../../../environments/environment';
-import { Thumbnail, VCWImplementationAndControl } from '@core/models';
+import { Thumbnail, VCWAttachment, VCWImplementationAndControl } from '@core/models';
 
 @Component({
   selector: 'app-implementation-control',
@@ -16,6 +16,7 @@ export class ImplementationControlComponent implements OnInit{
 
   faFloppyDisk = faFloppyDisk;
   faFileUpload = faFileUpload;
+  faMinus = faMinus;
 
   dataForm: UntypedFormGroup;
 
@@ -28,7 +29,7 @@ export class ImplementationControlComponent implements OnInit{
   valid_files : Array<File>;
 
   vcwImplementation: VCWImplementationAndControl;
-
+  vcwAttachment: VCWAttachment;
   
 
   @Output() private filesChangeEmiter : EventEmitter<File[]> = new EventEmitter();
@@ -64,7 +65,7 @@ export class ImplementationControlComponent implements OnInit{
       .pipe(take(1))
       .subscribe(data => {
         if (data) {
-
+          
           this.vcwImplementation = data;
           this.isEditing = true;
           this.dataForm.controls.executiveSummary.patchValue(this.vcwImplementation.executiveSummary);
@@ -79,6 +80,7 @@ export class ImplementationControlComponent implements OnInit{
         .subscribe( data =>{
           if(data){
             this.current_file = data;
+            this.isEditing = true;
           }
         });
     }
@@ -87,10 +89,11 @@ export class ImplementationControlComponent implements OnInit{
 
   onSave() {
     if (this.isFormValid('executiveSummary')) {
-
+    
       this.vcwImplementation.executiveSummary = this.dataForm.controls.executiveSummary.value;
 
       if (this.isEditing) {
+       
         this.vcwPhasesService.editImplementationAndControl(this.vcwId, this.projectId, this.vcwImplementation)
         .pipe(take(1))
         .subscribe(response => {
@@ -99,7 +102,21 @@ export class ImplementationControlComponent implements OnInit{
           this.snackbarService.danger('Error', 'Unable to save your changes. Please try again later.')
           .during(2000).show();
         });
+
+       
+        for(let i =0; i < this.valid_files.length; i++){
+          const data = new FormData();
+          data.append('attachment', this.valid_files[i]);
+          this.vcwPhasesService.createAttachment(this.vcwId, this.projectId, data)
+            .pipe(take(1))
+            .subscribe((data) =>{
+              this.ngOnInit();
+            });
+        }
+        
+        
       } else {
+       
         this.vcwPhasesService.createImplementationAndControl(this.vcwId, this.projectId, this.vcwImplementation)
         .pipe(take(1))
         .subscribe(response => {
@@ -109,6 +126,8 @@ export class ImplementationControlComponent implements OnInit{
           this.snackbarService.danger('Error', 'Unable to save your changes. Please try again later.')
           .during(2000).show();
         });
+
+        
       }
     }
   }
@@ -151,6 +170,19 @@ export class ImplementationControlComponent implements OnInit{
       const target = e.target as HTMLInputElement;
      
     };
+  }
+
+  removeFile(idx:number){
+
+    this.vcwPhasesService.deleteAttachment(this.vcwId,this.projectId, this.current_file[idx].id)
+      .pipe(take(1))
+      .subscribe((data)=>{
+        this.ngOnInit();
+        this.snackbarService.success('Success!', 'File removed.').during(2000).show();
+      }, error => {
+        this.snackbarService.danger('Error', 'Unable to save your changes. Please try again later.')
+        .during(2000).show();
+      });
   }
 
   

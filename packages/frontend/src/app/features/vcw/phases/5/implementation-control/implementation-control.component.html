@@ -17,10 +17,20 @@
         ></app-cke-editor>
     </div>
     <h1 class="text-2xl font-bold text-primary pb-4">Attach Documents</h1>
-    <div *ngIf="current_file && !valid_files" class="flex flex-col-2 place-content-center">
-        <p class="p-2 text-center">Current File:</p>
-        <p class="py-2 text-center text-primary-500 ">{{current_file.name}}</p>
-        <p class="p-2 text-center text-primary-500 ">{{current_file.fileType}}</p>
+    <div *ngFor="let file of current_file let idx = index" class="pb-4">
+        <div *ngIf="current_file" class="grid grid-cols-4 p-1">
+            <p class="p-2 text-center">Current File:</p>
+            <p class="py-2 text-center text-primary-500 ">{{file.name}}</p>
+            <p class="p-2 text-center text-primary-500 ">{{file.fileType}}</p>
+            <app-button 
+                label="Remove"
+                isDangerous="true" 
+                isRounded="true"
+                class="self-end"
+                (buttonClick)="removeFile(idx)"
+                >
+            </app-button>
+        </div>
     </div>
     <div 
        

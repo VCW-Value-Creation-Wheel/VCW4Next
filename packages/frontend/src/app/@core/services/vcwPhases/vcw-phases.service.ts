@@ -215,18 +215,23 @@ export class VcwPhasesService {
     return this.http.put<any>(url, data, this.httpOptions);
   }
 
-  getAttachment(vcwId: number, projectId: number): Observable<Thumbnail>{
+   getAttachment(vcwId: number, projectId: number): Observable<Thumbnail>{
     const url = `${this.baseUrl}/${projectId}/attachments/${vcwId}`;
     return this.http.get<Thumbnail>(url);
   }
 
-  editAttachment(vcwId: number, projectId: number, data: Thumbnail, attachmentId: number): Observable<Thumbnail>{
+  editAttachment(vcwId: number, projectId: number, data: File, attachmentId: number): Observable<Thumbnail>{
     const url = `${this.baseUrl}/${projectId}/attachments/${vcwId}/${attachmentId}`;
     return this.http.put<Thumbnail>(url, data);
   }
 
-  createAttachment( vcwId: number, projectId: number, data: Thumbnail){
+  createAttachment( vcwId: number, projectId: number, data: any): Observable<Thumbnail>{
     const url = `${this.baseUrl}/${projectId}/attachments/${vcwId}`;
-    return this.http.post<Thumbnail>(url, data);
+    return this.http.post< Thumbnail>(url, data);
+  }
+
+  deleteAttachment( vcwId: number, projectId: number, attachmentId: Thumbnail){
+    const url = `${this.baseUrl}/${projectId}/attachments/${vcwId}/${attachmentId}`;
+    return this.http.delete<Thumbnail>(url);
   }
 }
