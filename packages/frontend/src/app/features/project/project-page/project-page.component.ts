@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MockProjectService, Project, VcwService, VCW, ProjectsService } from '@core';
 import { VcwMockService } from '@core/services/mocks/vcw/vcw-mock.service';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 
@@ -16,6 +16,8 @@ export class ProjectPageComponent implements OnInit {
   projectId: number;
 
   faPlus = faPlus;
+  faPenToSquare = faPenToSquare;
+
   // vcws: VCW[] = [];
   vcws$: Observable<VCW[]>;
   project$: Observable<Project>;
@@ -44,6 +46,7 @@ export class ProjectPageComponent implements OnInit {
       this.project$ = this.projectsService.getProjectById(this.projectId);
       this.vcws$ = this.vcwService.getProjectVcws(this.projectId);
     }
+    
   }
 
   onVcwClick(vcw: VCW) {
@@ -52,6 +55,10 @@ export class ProjectPageComponent implements OnInit {
 
   addNewVcw() {
     this.router.navigate(['new-vcw'], { relativeTo: this.route });
+  }
+
+  editProject(){
+    this.router.navigate(['edit-project'], { relativeTo: this.route });
   }
 
 }

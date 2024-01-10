@@ -21,6 +21,7 @@ export class ButtonComponent implements OnInit {
   @Input() isFull = false;
   @Input() type = 'button';
   @Input() noLabel = false;
+  @Input() isRounded = false;
   @Output() buttonClick = new EventEmitter();
   constructor() {}
 
