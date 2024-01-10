@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Criteria, CriteriaRanking, ExpectedKPIs, Idea, IdeaCriteriaPair, SwotFieldRow, VCWChallenge, VCWHasCriteria, VCWHasIdea, VCWPrototype, VCWTestAndKpisEvaluation} from '@core/models';
+import { Criteria, CriteriaRanking, ExpectedKPIs, Idea, IdeaCriteriaPair, SwotFieldRow, VCWChallenge, VCWConcept, VCWHasCriteria, VCWHasIdea, VCWPrototype, VCWTestAndKpisEvaluation, VCWValueProposition} from '@core/models';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 
@@ -166,6 +166,39 @@ export class VcwPhasesService {
     const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/selectedCriterias/rank/${criteriaId}`;
     return this.http.put<CriteriaRanking>(url, rankingData, this.httpOptions);
   }
+
+   // Phase 4b
+   getConcept(vcwId: number, projectId: number): Observable<VCWConcept> {
+    const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/concepts`;
+    return this.http.get<VCWConcept>(url, this.httpOptions);
+  }
+
+  createConcept(vcwId: number, projectId: number, data: VCWConcept): Observable<any> {
+    const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/concepts`;
+    return this.http.post(url, data, this.httpOptions);
+  }
+
+  editConcept(vcwId: number, projectId: number, data: VCWConcept): Observable<any> {
+    const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/concepts`;
+    return this.http.put<any>(url, data, this.httpOptions);
+  }
+
+  getValueProposition(vcwId: number, projectId: number): Observable<VCWValueProposition> {
+    const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/valueProposition`;
+    return this.http.get<VCWValueProposition>(url, this.httpOptions);
+  }
+
+  createValueProposition(vcwId: number, projectId: number, data: VCWValueProposition): Observable<any> {
+    const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/valueProposition`;
+    return this.http.post(url, data, this.httpOptions);
+  }
+
+  editValueProposition(vcwId: number, projectId: number, data: VCWValueProposition): Observable<any> {
+    const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/valueProposition`;
+    return this.http.put<any>(url, data, this.httpOptions);
+  }
+
+
 
    // Phase 4c
   getPrototype(vcwId: number, projectId: number): Observable<VCWPrototype> {
