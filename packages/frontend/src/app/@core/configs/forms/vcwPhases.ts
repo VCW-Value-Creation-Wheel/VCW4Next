@@ -55,16 +55,41 @@ export const createRankCriteriaConfig = {
     intervalMin: [null],
     intervalMax: [null],
     id: [null]
-}
+};
+
+export const conceptConfig = {
+    concept: [null, Validators.required]
+};
+
+export const valuePropositionConfig = {
+    valueProposition: [null, Validators.required]
+};
 
 export const prototypeConfig = {
     prototype: [null, Validators.required]
 };
 
+export const threeMsConfig = {
+    threeMs: [null, Validators.required]
+};
+
+export const BusinessModelConfig = {
+    customerSegments: [null],
+    valuePropositions: [null],
+    channels: [null],
+    customerRelationships: [null],
+    revenueStreams: [null],
+    keyResources: [null],
+    keyActivities: [null],
+    keyPartnerships: [null],
+    costStructure: [null]
+};
+
 export const testAndKpisEvaluationConfig = {
     testAndKpisEvaluation: [null, Validators.required]
-}
+};
 
 export const implementationAndControlConfig = {
     executiveSummary: [null, Validators.required]
-}
+};
+

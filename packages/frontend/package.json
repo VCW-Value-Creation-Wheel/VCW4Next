@@ -31,6 +31,7 @@
     "@ng-select/ng-select": "^9.1.0",
     "angular-mydatepicker": "^0.11.5",
     "angular-svg-icon": "^14.0.0",
+    "chart.js": "^4.4.0",
     "date-fns": "^2.29.3",
     "keycloak-angular": "^13.0.0",
     "keycloak-js": "^20.0.3",

@@ -82,8 +82,32 @@ export interface CriteriaRanking {
     id: number;
 }
 
+export interface VCWConcept {
+    concept: string;
+}
+
+export interface VCWValueProposition {
+    valueProposition: string;
+}
+
 export interface VCWPrototype {
     prototype: string;
+}
+
+export interface VCWThreeMs {
+    threeMs: string;
+}
+
+export interface VCWBusinessModel {
+    customerSegments: string;
+    valuePropositions: string;
+    channels: string;
+    customerRelationships: string;
+    revenueStreams: string;
+    keyResources: string;
+    keyActivities: string;
+    keyPartnerships: string;
+    costStructure: string;
 }
 
 export interface VCWTestAndKpisEvaluation{

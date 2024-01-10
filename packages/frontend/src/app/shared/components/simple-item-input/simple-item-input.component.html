@@ -19,6 +19,7 @@
             (buttonClick)="onCancel()"
         ></app-button>
         <app-button
+            *ngIf="hasDialog"
             [label]="'Dialog'"
             [isTransparent]="true"
             [leftIcon]="faWindowMaximize"
@@ -36,6 +37,7 @@
             (btnClick)="onCancel()"
         ></app-icon-button>
         <app-icon-button
+            *ngIf="hasDialog"
             [icon]="faWindowMaximize"
             (btnClick)="onOpenDialog()"
         ></app-icon-button>
