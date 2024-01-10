@@ -111,6 +111,9 @@ export class ImplementationControlComponent implements OnInit{
             .pipe(take(1))
             .subscribe((data) =>{
               this.ngOnInit();
+            }, error => {
+              this.snackbarService.danger('Error', 'Unable to save your changes. Please try again later.')
+              .during(2000).show();
             });
         }
         
