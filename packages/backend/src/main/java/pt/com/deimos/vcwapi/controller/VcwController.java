@@ -419,7 +419,7 @@ public class VcwController {
   // 5c implementation and control page
   @GetMapping("/{id}/implementationAndControl")
   public ResponseEntity<Object> getImplementationAndControl(
-    @PathVariable(value = "id") Long vcwId,
+    @PathVariable(value = "id") Long id,
     @PathVariable(value = "project_id") Long projectId,
     @AuthenticationPrincipal Jwt principal
   ){
@@ -428,8 +428,7 @@ public class VcwController {
     if (project.isEmpty())
       throw new NotFoundException("Project not found.");
     
-    Optional<VcwEntity> vcwEntityOptional =
-            this.vcwService.findById(vcwId);
+    Optional<VcwEntity> vcwEntityOptional = this.vcwService.findById(id);
 
     if(vcwEntityOptional.isEmpty()) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Vcw not found");
@@ -437,9 +436,7 @@ public class VcwController {
 
     ImplementationAndControlDTO implementationAndControlDTO = new ImplementationAndControlDTO();
     implementationAndControlDTO.setExecutiveSummary(vcwEntityOptional.get().getExecutiveSummary());
-    if(implementationAndControlDTO.getExecutiveSummary() == null) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Executive Summary not found");
-    }
+    
 
     implementationAndControlDTO.setAttachment(vcwEntityOptional.get().getAttachments());
 
