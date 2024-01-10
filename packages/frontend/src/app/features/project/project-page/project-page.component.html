@@ -1,8 +1,20 @@
 <div *ngIf="project$ | async; let project">
-    <div class="pl-4 py-4">
-        <h1 class="text-2xl font-bold text-primary">{{project.name}}</h1>
+    <div class="grid grid-cols-2 w-full">
+        <div>
+            <div class="pl-4 py-4">
+                <h1 class="text-2xl font-bold text-primary">{{project.name}}</h1>
+            </div>
+            <div class="m-3 p-2">{{project.description}}</div>
+        </div>
+        <app-button
+            [leftIcon]="faPenToSquare"
+            [label]="'Edit Project'"
+            [isDisabled]="false"
+            class="py-4 px-4 place-self-end self-start "
+            (buttonClick)="editProject()"
+        ></app-button>
     </div>
-    <div class="m-2 p-2">{{project.description}}</div>
+   
     <div class="justify-between gap-4 pl-4 py-4 w-full flex flex-wrap">
         <app-button
             [leftIcon]="faPlus"
