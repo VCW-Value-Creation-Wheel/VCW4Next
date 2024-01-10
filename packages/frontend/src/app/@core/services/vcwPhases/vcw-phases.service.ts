@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Criteria, CriteriaRanking, ExpectedKPIs, Idea, IdeaCriteriaPair, SwotFieldRow, VCWBusinessModel, VCWChallenge, VCWConcept, VCWHasCriteria, VCWHasIdea, VCWPrototype, VCWTestAndKpisEvaluation, VCWThreeMs, VCWValueProposition} from '@core/models';
+import { Criteria, CriteriaRanking, ExpectedKPIs, Idea, IdeaCriteriaPair, SwotFieldRow, Thumbnail, VCWBusinessModel, VCWChallenge, VCWConcept, VCWHasCriteria, VCWHasIdea, VCWPrototype, VCWTestAndKpisEvaluation, VCWThreeMs, VCWValueProposition, VCWImplementationAndControl} from '@core/models';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 
@@ -257,5 +257,41 @@ export class VcwPhasesService {
   editTestAndKpisEvaluation(vcwId: number, projectId: number, data: VCWTestAndKpisEvaluation): Observable<any> {
     const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/testAndKpisEvaluation`;
     return this.http.put<any>(url, data, this.httpOptions);
+  }
+
+  // Phase 5c
+  getImplementationAndControl(vcwId: number, projectId: number): Observable<VCWImplementationAndControl>{
+    const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/implementationAndControl`;
+    return this.http.get<VCWImplementationAndControl>(url, this.httpOptions);
+  }
+
+  createImplementationAndControl(vcwId: number, projectId: number, data: VCWImplementationAndControl): Observable<any>{
+    const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/implementationAndControl`;
+    return this.http.post(url, data, this.httpOptions);
+  }
+
+  editImplementationAndControl(vcwId: number, projectId: number, data: VCWImplementationAndControl): Observable<any> {
+    const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/implementationAndControl`;
+    return this.http.put<any>(url, data, this.httpOptions);
+  }
+
+   getAttachment(vcwId: number, projectId: number): Observable<Thumbnail>{
+    const url = `${this.baseUrl}/${projectId}/attachments/${vcwId}`;
+    return this.http.get<Thumbnail>(url);
+  }
+
+  editAttachment(vcwId: number, projectId: number, data: File, attachmentId: number): Observable<Thumbnail>{
+    const url = `${this.baseUrl}/${projectId}/attachments/${vcwId}/${attachmentId}`;
+    return this.http.put<Thumbnail>(url, data);
+  }
+
+  createAttachment( vcwId: number, projectId: number, data: any): Observable<Thumbnail>{
+    const url = `${this.baseUrl}/${projectId}/attachments/${vcwId}`;
+    return this.http.post< Thumbnail>(url, data);
+  }
+
+  deleteAttachment( vcwId: number, projectId: number, attachmentId: Thumbnail){
+    const url = `${this.baseUrl}/${projectId}/attachments/${vcwId}/${attachmentId}`;
+    return this.http.delete<Thumbnail>(url);
   }
 }

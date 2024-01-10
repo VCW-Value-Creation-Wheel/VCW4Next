@@ -113,3 +113,19 @@ export interface VCWBusinessModel {
 export interface VCWTestAndKpisEvaluation{
     testAndKpisEvaluation: string;
 }
+
+export interface VCWImplementationAndControl{
+    executiveSummary: string;
+}
+
+export interface VCWAttachment{
+    id: number;
+    vcwId: number;
+    name: string;
+    data: number;
+    fileType: string;
+    createdAt: string;
+    createdBy: string;
+    updateAt: string;
+    updateBy: string;
+}

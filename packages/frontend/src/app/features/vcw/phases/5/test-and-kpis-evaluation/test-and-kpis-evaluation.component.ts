@@ -57,7 +57,7 @@ export class TestAndKpisEvaluationComponent implements OnInit{
       .pipe(take(1))
       .subscribe(data => {
         if (data) {
-
+          
           this.vcwTestAndKpisEvaluation = data;
           this.isEditing = true;
           this.dataForm.controls.testAndKpisEvaluation.patchValue(this.vcwTestAndKpisEvaluation.testAndKpisEvaluation);

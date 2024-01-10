@@ -83,8 +83,13 @@ export const BusinessModelConfig = {
     keyActivities: [null],
     keyPartnerships: [null],
     costStructure: [null]
-}
+};
 
 export const testAndKpisEvaluationConfig = {
     testAndKpisEvaluation: [null, Validators.required]
 };
+
+export const implementationAndControlConfig = {
+    executiveSummary: [null, Validators.required]
+};
+

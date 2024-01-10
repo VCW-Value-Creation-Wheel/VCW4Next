@@ -2,6 +2,8 @@ package pt.com.deimos.vcwapi.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -10,10 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import pt.com.deimos.vcwapi.entity.FileEntity;
 import pt.com.deimos.vcwapi.entity.ProjectEntity;
-import pt.com.deimos.vcwapi.entity.ProjectHasUserRoleEntity;
 import pt.com.deimos.vcwapi.exceptions.BadRequestException;
 import pt.com.deimos.vcwapi.exceptions.NotFoundException;
-import pt.com.deimos.vcwapi.service.ProjectService;
 import pt.com.deimos.vcwapi.service.ThumbnailService;
 
 import java.util.Optional;
