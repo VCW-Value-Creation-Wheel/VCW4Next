@@ -3,6 +3,8 @@ package pt.com.deimos.vcwapi.service;
 import io.minio.errors.MinioException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -93,6 +95,21 @@ public class ProjectService {
 
     public void delete(ProjectEntity projectEntity) {
         this.projectRepository.delete(projectEntity);
+    }
+
+    public ResponseEntity<Object> update(ProjectDTO projectDto, String userId, Long projectId){
+        Optional<ProjectEntity> projectEntityOptional = this.projectRepository.findById(projectId);
+
+        if(projectEntityOptional.isEmpty()) {
+          return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Project not found");
+        }
+
+        ProjectEntity projectEntity = projectEntityOptional.get();
+        projectEntity.setUpdatedBy(userId);
+        projectEntity.setName(projectDto.getName());
+        projectEntity.setDescription(projectDto.getDescription());
+        projectEntity.setLang(projectDto.getLang());
+        return ResponseEntity.status(HttpStatus.OK).body(this.projectRepository.save(projectEntity));
     }
 
 }

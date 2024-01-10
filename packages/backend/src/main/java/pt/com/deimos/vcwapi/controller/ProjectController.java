@@ -4,6 +4,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.minio.errors.MinioException;
 import jakarta.validation.Valid;
+
+import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -87,21 +89,16 @@ public class ProjectController {
     return ResponseEntity.status(HttpStatus.CREATED).body(results);
   }
 
-//  @PutMapping("/{id}")
-//  public ResponseEntity<Object> update(
-//      @PathVariable Long id,
-//      @RequestBody @Valid ProjectDTO projectDTO
-//  ) {
-//    Optional<ProjectEntity> projectEntityOptional = this.projectService.findById(id);
-//
-//    if(projectEntityOptional.isEmpty()) {
-//      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Project not found");
-//    }
-//
-//    BeanUtils.copyProperties(projectDTO, projectEntityOptional.get());
-//
-//    return ResponseEntity.status(HttpStatus.OK).body(this.projectService.update(projectEntityOptional.get()));
-//  }
+  @PutMapping("/{id}")
+  @Operation(summary = "Edits a project.")
+  public ResponseEntity<Object> update(
+      @PathVariable Long id,
+      @RequestBody @Valid ProjectDTO projectDTO,
+      @AuthenticationPrincipal Jwt principal
+  ) {
+
+    return this.projectService.update(projectDTO, principal.getSubject(), id);
+  }
 
 //  @DeleteMapping("/{id}")
 //  public ResponseEntity<Object> delete(
@@ -119,5 +116,6 @@ public class ProjectController {
 //    this.projectService.delete(projectEntityOptional.get());
 //
 //    return ResponseEntity.noContent().build();
-//  }
+  //}
+
 }

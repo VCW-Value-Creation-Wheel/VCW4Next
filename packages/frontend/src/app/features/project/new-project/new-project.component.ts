@@ -1,15 +1,14 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Options, ProjectsService, SnackbarService } from '@core';
+import { EventOption, Options, ProjectsService, SnackbarService, UserRole } from '@core';
 import { projectConfig } from '@core/configs/forms/project';
-import { faArrowLeft, faPenToSquare, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { userConfig } from '@core/configs/forms/user';
+import { faArrowLeft, faPenToSquare, faXmark, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { take } from 'rxjs/operators';
 
-interface UserRole {
-  user: string;
-  role: string;
-}
+
+
 
 @Component({
   selector: 'app-new-project',
@@ -18,10 +17,12 @@ interface UserRole {
 })
 export class NewProjectComponent implements OnInit {
   form: FormGroup;
+  formUser: FormGroup;
 
   faPenToSquare = faPenToSquare;
   faXmark = faXmark;
   faArrowLeft = faArrowLeft;
+  faSearch = faSearch;
 
   langOptions: Options[] = [
     {
@@ -38,27 +39,18 @@ export class NewProjectComponent implements OnInit {
     }];
 
     isAddUserActive = false;
-
-    options: string[] = ['user1', 'user2', 'user3', 'user4'];
     error = false;
-    isDisabled = false;
-    isEditing = false;
+    showResults: boolean = false;
 
-    roleOptions: Options[] = [
-      {
-        label: 'Admin',
-        value: 'Admin'
-      },
-      {
-        label: 'Normal User',
-        value: 'Normal User'
-      }
-    ];
-
+    options: string[] = [];
+    users: string[] = [];
+    usersId: string[] = [];
+    userWithRole: string|number|boolean[] = [];
+    isAdded: boolean[] = [];
+    roleOptions: Options[] = [];
     userRole: UserRole[] = [];
-
-    ind: number;
     inputFiles: FileList;
+    
 
   constructor(
       private router: Router,
@@ -70,77 +62,59 @@ export class NewProjectComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = this.formBuilder.group(projectConfig);
+    this.formUser = this.formBuilder.group(userConfig);
   }
 
   onSubmit(e: Event): void{
-    if (this.form.valid) {
+
+   if (this.form.valid) {
       this.projectService.createProject(this.form.value)
       .pipe(take(1)).subscribe(response => {
         
         if(this.inputFiles !== undefined){
           const data = new FormData();
           data.append('thumbnail', this.inputFiles[0]);
-          this.projectService.createProjectThumbnail(response.id ,data).subscribe(res => {
-
-            this.snackbar.success('Success!', 'New Project created!').during(3000).show();
-            this.router.navigate(['../'], {relativeTo: this.route});
-            
+          this.projectService.createProjectThumbnail(response.id ,data).pipe(take(1)).subscribe( {
+          
+            next: (res) => {
+              this.router.navigate(['../'], {relativeTo: this.route});
+              this.snackbar.success('Success!', 'New Project created!').during(3000).show();
+            },
+            error: (error) => {
+              this.snackbar.danger('Error!', 'Thumbnail creation failed.').during(3000).show();
+            }
+        
           });
         }
-     
+        this.userRole.forEach(item =>{
+          this.projectService.addUserRoleToProject(item.user,item.role,response.id).pipe(take(1)).subscribe({
+            next: (res) => {
+              this.snackbar.success('Success!', 'User added!').during(3000).show();
+            },
+            error: (error) => {
+              this.snackbar.danger('Error!', 'User adition failed.').during(3000).show();
+            }
+          });
+           
+        });
+        if(this.inputFiles === undefined){
+          this.snackbar.success('Success!', 'New Project created!').during(3000).show();
+          this.router.navigate(['../'], {relativeTo: this.route});
+        }
+       
       }, (error) => {
         this.snackbar.danger('Error!', 'Project creation failed.').during(3000).show();
       });
     } else {
       console.log(this.form)
     }
+
+    
   }
 
-  addUser(): void{
-    (this.form.get('userArray') as FormArray).push(this.formBuilder.group({
-      user: new FormControl(),
-      role: new FormControl()
-    }));
-    this.isAddUserActive = true;
-  }
-
-  confirmUser(): void{
-    this.userRole = this.form.get('userArray').value;
-    this.isAddUserActive = false;
-  }
-
-  confirmEditUser(){
-    this.userRole = this.form.get('userArray').value;
-    this.isEditing = false;
-  }
-
-  cancelUserSelection(): void{
-    if (this.isAddUserActive){
-      (this.form.get('userArray') as FormArray).controls.pop();
-    }
-    this.isAddUserActive = false;
-    this.isEditing = false;
-    (this.form.get('userArray') as FormArray).setValue(this.userRole);
-  }
 
   onBack(): void{
     this.router.navigate(['../'], {relativeTo: this.route});
-  }
-
-  editUser(ind: number): void{
-    this.ind = ind;
-    this.isEditing = true;
-    this.isAddUserActive = false;
-
-  }
-
-  removeUser(ind: number): void{
-   (this.form.controls.userArray as FormArray).removeAt(ind);
-   this.userRole = this.form.get('userArray').value;
-  }
-
-  getUserArrayIndex(isEditing: boolean): number {
-    return isEditing ? this.ind : (this.form.get('userArray') as FormArray).length - 1;
   }
 
   onFileSelected(event:Event){
@@ -149,8 +123,70 @@ export class NewProjectComponent implements OnInit {
     const files = target.files as FileList
 
     this.inputFiles = files;
-   
-   
+    
+  }
+
+  findUser(){
+    let user = this.formUser.get('user').value;
+    if(user === ''){
+      user = null
+    }
+    this.users = [];
+    this.projectService.getUser(user).subscribe(res =>{
+
+      const lenght = Object.keys(res).length;
+
+      if(lenght === 0){
+        this.showResults = false;
+      }else{
+        this.showResults = true;
+      }
+
+      for(let i=0; i< lenght; i++){
+        this.isAdded[i] = false;
+        this.users[i] = res[i].username;
+        this.usersId[i] = res[i].id;
+      }
+    });
+
+    if(this.roleOptions.length === 0){
+      this.projectService.getRoles().subscribe(role =>{
+
+        const lenght = Object.keys(role).length;
+  
+        for(let i=0; i< lenght; i++){
+           this.roleOptions.push({
+            label: role[i].name,
+            value: role[i].id
+           });
+        }
+  
+      }
+      );
+    }
+  }
+
+  addRole(index: number){
+
+    this.isAdded[index] = true;
+    this.userRole.push({
+      user: this.usersId[index],
+      role: this.userWithRole[index]
+    });
+  }
+
+  
+
+  cancelRole(index: number){
+    this.isAdded[index] = false;
+    this.userRole.splice(index,1); 
+  }
+
+  saveRole(e: EventOption, index:number){
+    this.isAdded[index] = false;
+    this.userRole.splice(index,1);
+    this.userWithRole[index] = e.value;
   }
 
 }
+

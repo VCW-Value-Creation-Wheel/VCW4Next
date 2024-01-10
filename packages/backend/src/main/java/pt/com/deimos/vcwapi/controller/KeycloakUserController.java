@@ -53,4 +53,25 @@ public class KeycloakUserController {
         return ResponseEntity.status(HttpStatus.OK).body(results);
     }
 
+    @GetMapping("/id/{uuid}")
+    public ResponseEntity<Object> getUsersByHashCode(
+        @AuthenticationPrincipal Jwt principal,
+        @PathVariable String uuid
+    ){
+        List<KeycloakUserDTO> results;
+        try {
+            results = this.keycloakService.getUsersByHashCode(uuid, principal.getTokenValue());
+        } catch (WebClientResponseException.Unauthorized e){
+            throw new UnauthorizedException("Failed to get user info from keycloak.");
+        }
+        catch (WebClientResponseException.Forbidden e){
+            throw new ForbiddenException("Failed to get user info from keycloak.");
+        }
+        catch (Exception e) {
+            throw new InternalErrorException("Failed to get user info from keycloak: " + e);
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(results);
+    }
+
 }

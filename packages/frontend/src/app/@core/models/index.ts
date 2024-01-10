@@ -5,3 +5,4 @@ export * from './filters';
 export * from './project';
 export * from './vcw';
 export * from './value-proposition';
+export * from './user';

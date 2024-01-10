@@ -10,6 +10,7 @@ import pt.com.deimos.vcwapi.exceptions.BadRequestException;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.web.reactive.function.BodyInserters.fromFormData;
@@ -69,6 +70,45 @@ public class KeycloakService {
                     .bodyToMono(KeycloakUserDTO[].class)
                     .block();
         return List.of(response);
+    }
+
+    public List<KeycloakUserDTO> getUsers(String tokenValue) {
+
+        String accessToken = getToken().getAccessToken();
+
+        String path = this.identityAdminUrl+"/users";
+
+            KeycloakUserDTO[] response = webClient.get()
+                    .uri(path)
+                    .headers(h->h.setBearerAuth(accessToken))
+                    .retrieve()
+                    .bodyToMono(KeycloakUserDTO[].class)
+                    .block();
+        return List.of(response);
+    }
+
+    public List<KeycloakUserDTO> getUsersByHashCode(String uuid,String tokenValue) {
+
+        String accessToken = getToken().getAccessToken();
+
+        String path = this.identityAdminUrl+"/users";
+
+            KeycloakUserDTO[] response = webClient.get()
+                    .uri(path)
+                    .headers(h->h.setBearerAuth(accessToken))
+                    .retrieve()
+                    .bodyToMono(KeycloakUserDTO[].class)
+                    .block();
+
+            List<KeycloakUserDTO> userList = List.of(response);            
+            List<KeycloakUserDTO> responseList = new ArrayList<>();
+            userList.forEach(user -> {
+                if (uuid.equals(user.getId())){
+                    responseList.add(user);
+                }
+            });
+
+        return responseList;
     }
 
 
