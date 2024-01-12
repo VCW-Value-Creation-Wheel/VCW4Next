@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { challengeConfig, PhaseNavigationService, SnackbarService, testAndKpisEvaluationConfig, threeMsConfig, VcwPhasesService } from '@core';
-import { faFloppyDisk } from '@fortawesome/free-solid-svg-icons';
+import { faDownload } from '@fortawesome/free-solid-svg-icons';
 import { take } from 'rxjs/operators';
 import { VCWChallenge, VCWTestAndKpisEvaluation, VCWThreeMs } from '@core/models';
 import { environment } from '../../../../environments/environment';
@@ -18,7 +18,7 @@ import jsPDF from 'jspdf';
 export class FinalVcwReportComponent {
 
 
-  faFloppyDisk = faFloppyDisk;
+  faDownload = faDownload;
 
   dataForm: UntypedFormGroup;
   dataFormKpis: UntypedFormGroup;
