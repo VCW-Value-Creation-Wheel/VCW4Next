@@ -99,15 +99,15 @@ export interface VCWThreeMs {
 }
 
 export interface VCWBusinessModel {
-    customerSegments: string;
-    valuePropositions: string;
-    channels: string;
-    customerRelationships: string;
-    revenueStreams: string;
-    keyResources: string;
-    keyActivities: string;
-    keyPartnerships: string;
-    costStructure: string;
+    customerSegments?: string;
+    valuePropositions?: string;
+    channels?: string;
+    customerRelationships?: string;
+    revenueStreams?: string;
+    keyResources?: string;
+    keyActivities?: string;
+    keyPartnerships?: string;
+    costStructure?: string;
 }
 
 export interface VCWTestAndKpisEvaluation{

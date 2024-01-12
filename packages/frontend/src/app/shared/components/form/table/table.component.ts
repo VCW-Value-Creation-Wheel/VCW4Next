@@ -1,6 +1,6 @@
 import { Component, Output, forwardRef, EventEmitter, Input} from '@angular/core';
 import { FormBuilder, FormGroup, NG_VALUE_ACCESSOR, UntypedFormGroup } from '@angular/forms';
-import { PropositionUserData } from '@core';
+import { PropositionUserData, SnackbarService } from '@core';
 import { ValueTableService } from '@core/services/value-table/value-table.service';
 import { faMinus } from '@fortawesome/free-solid-svg-icons';
 
@@ -41,7 +41,7 @@ export class TableComponent{
   @Input() valuesUser:string;
 
 
-  constructor(private formBuilder: FormBuilder, public changeTable: ValueTableService ) {
+  constructor(private formBuilder: FormBuilder, public changeTable: ValueTableService,  private snackbarService: SnackbarService ) {
     this.mainForm = formBuilder.group({});
     this.inputForm = formBuilder.group({});
     this.addControlToForm('inputValue', this.inputForm);
@@ -96,6 +96,9 @@ export class TableComponent{
     const values: PropositionUserData = this.mainForm.value;
 
     this.data.emit(values);
+  }else{
+    this.snackbarService.danger('Data Fetching Error', 'Make sure that all input numbers are between 0 and 5.')
+    .during(2000).show();
   }
 
   }
