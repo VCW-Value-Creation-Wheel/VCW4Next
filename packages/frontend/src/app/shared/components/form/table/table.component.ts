@@ -97,7 +97,7 @@ export class TableComponent{
 
     this.data.emit(values);
   }else{
-    this.snackbarService.danger('Data Fetching Error', 'Make sure that all input numbers are between 1 and 5.')
+    this.snackbarService.danger('Data Fetching Error', 'Make sure that all input numbers are between 0 and 5.')
     .during(2000).show();
   }
 
