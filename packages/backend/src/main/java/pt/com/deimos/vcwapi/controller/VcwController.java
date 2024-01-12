@@ -486,9 +486,7 @@ public class VcwController {
     }
 
     BusinessModelCanvasEntity businessModel = vcwEntityOptional.get().getBusinessModelCanvas();
-    if(businessModel == null) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Business Model not found");
-    }
+    
     return ResponseEntity.status(HttpStatus.OK).body(businessModel);
   }
 

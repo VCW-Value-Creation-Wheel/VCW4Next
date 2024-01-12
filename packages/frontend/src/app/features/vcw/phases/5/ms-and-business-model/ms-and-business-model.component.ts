@@ -66,7 +66,7 @@ export class MsAndBusinessModelComponent implements OnInit{
       .subscribe(data => {
        
         if (data) {
-
+    
           this.vcwThreeMs = data;
           this.isEditing = true;
           this.dataForm.controls.threeMs.patchValue(this.vcwThreeMs.threeMs);
@@ -79,9 +79,8 @@ export class MsAndBusinessModelComponent implements OnInit{
       this.vcwPhasesService.getBusinessModel(this.vcwId, this.projectId)
       .pipe(take(1))
       .subscribe(data => {
-      
       if (data) {
-          
+       
           this.vcwBusinessModel = data;
           this.isEditing = true;
 
@@ -89,6 +88,11 @@ export class MsAndBusinessModelComponent implements OnInit{
             this.dataBusinessForm.controls[key].patchValue(this.vcwBusinessModel[key])
           });
 
+        }else{
+          this.vcwBusinessModel ={}
+          Object.keys(this.dataBusinessForm.controls).forEach((key) =>{
+            this.dataBusinessForm.controls[key].patchValue(this.vcwBusinessModel[key])
+          });
         }
       });
     }
