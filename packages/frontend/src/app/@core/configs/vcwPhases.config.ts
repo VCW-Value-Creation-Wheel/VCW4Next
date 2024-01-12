@@ -90,8 +90,14 @@ const vcwPhasesNavigation: VCWPhase = {
         id: '5c',
         name: 'Implementation & Control',
         previousPhaseId: '5b',
-        nextPhaseId: '1a'
+        nextPhaseId: 'finalVCWReport'
     },
+    'finalVCWReport':{
+        id: 'Final',
+        name: 'VCW Report',
+        previousPhaseId:'5c',
+        nextPhaseId: '../'
+    }
 };
 
 export {vcwPhasesNavigation};
