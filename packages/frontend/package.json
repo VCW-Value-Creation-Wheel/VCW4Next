@@ -33,6 +33,8 @@
     "angular-svg-icon": "^14.0.0",
     "chart.js": "^4.4.0",
     "date-fns": "^2.29.3",
+    "dom-to-image": "^2.6.0",
+    "jspdf": "^2.5.1",
     "keycloak-angular": "^13.0.0",
     "keycloak-js": "^20.0.3",
     "rxjs": "~6.5.4",

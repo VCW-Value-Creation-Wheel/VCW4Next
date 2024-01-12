@@ -1,4 +1,15 @@
+<div class="grid mx-8 my-4 md:mx-32 2xl:mx-80 justify-end">
+    <div>
+        <app-button
+            [label]="'Download as PDF'"
+            [leftIcon]="faFloppyDisk"
+            (buttonClick)="saveAsPDF()"
+            class="self-end	"
+        ></app-button>
+    </div>
+</div>
 <div id="finalReport">
+    <h1 class="text-2xl text-gray-700 py-4 text-center">Final VCW Report </h1>
 <div [formGroup]="dataForm" class="mx-4 md:mx-64 lg:mx-80 px-4 ">
     <h1 class="text-2xl font-bold text-primary py-4">Challenge</h1>
     <div>
@@ -9,7 +20,7 @@
             isDisabled="true"
         ></app-cke-editor>
     </div>
-    <hr>
+
 </div>
 
 <div [formGroup]="dataFormKpis" class="mx-4 md:mx-64 lg:mx-80 px-4 ">
@@ -22,7 +33,7 @@
             formControlName="testAndKpisEvaluation"
         ></app-cke-editor>
     </div>
-    <hr>
+
 </div>
 
 <div [formGroup] = "dataFormThreeMs" class="mx-4 md:mx-64 lg:mx-80 px-4 ">

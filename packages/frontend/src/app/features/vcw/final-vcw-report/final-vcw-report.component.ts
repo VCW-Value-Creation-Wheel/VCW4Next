@@ -6,6 +6,9 @@ import { faFloppyDisk } from '@fortawesome/free-solid-svg-icons';
 import { take } from 'rxjs/operators';
 import { VCWChallenge, VCWTestAndKpisEvaluation, VCWThreeMs } from '@core/models';
 import { environment } from '../../../../environments/environment';
+import domtoimage from 'dom-to-image';
+import jsPDF from 'jspdf';
+
 
 @Component({
   selector: 'app-final-vcw-report',
@@ -99,6 +102,27 @@ export class FinalVcwReportComponent {
           .during(2000).show();
       });
     }
+  }
+
+  saveAsPDF() {
+    document.getElementById('finalReport').style.display = 'visible';
+    const div = document.getElementById('finalReport');
+    setTimeout(() => {
+      const divHeight = div.clientHeight;
+      const divWidth = div.clientWidth;
+      const options = { background: 'white', width: divWidth, height: divHeight };
+
+      domtoimage.toPng(div, options).then((imgData) => {
+        document.getElementById('finalReport').style.overflow = 'hidden';
+        const doc = new jsPDF('p', 'mm', [divWidth, divHeight]);
+        const imgProps = doc.getImageProperties(imgData);
+        const pdfWidth = doc.internal.pageSize.getWidth();
+        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+        doc.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+        doc.save(`FinalVCWReport.pdf`)
+      });
+    }, 1000);
+    console.log('DOWNLOAD')
   }
 
 
