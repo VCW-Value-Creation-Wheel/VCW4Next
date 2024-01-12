@@ -22,6 +22,7 @@ import { ValueCreationFunnelComponent } from './phases/4/value-creation-funnel/v
 import { ConceptAndValuePropositionComponent } from './phases/4/concept-and-value-proposition/concept-and-value-proposition.component';
 import { MsAndBusinessModelComponent } from './phases/5/ms-and-business-model/ms-and-business-model.component';
 import { ImplementationControlComponent } from './phases/5/implementation-control/implementation-control.component';
+import { FinalVcwReportComponent } from './final-vcw-report/final-vcw-report.component';
 
 
 
@@ -46,7 +47,8 @@ import { ImplementationControlComponent } from './phases/5/implementation-contro
     ValueCreationFunnelComponent,
     ConceptAndValuePropositionComponent,
     MsAndBusinessModelComponent,
-    ImplementationControlComponent
+    ImplementationControlComponent,
+    FinalVcwReportComponent
   ],
   imports: [
     CommonModule,
