@@ -67,7 +67,7 @@ public class TestController {
     @GetMapping("/funnel")
     Funnel getFunnel () {
         
-        Funnel f = createFunnel (14L, true);
+        Funnel f = createVcfDataModel (14L, true);
 
         return f;
     }
@@ -75,19 +75,22 @@ public class TestController {
     @GetMapping("/orderedFunnel")
     Funnel getOFunnel () {
         
-        Funnel f = createFunnel (14L, true);
+        Funnel f = createVcfDataModel (14L, true);
 
 
-        Funnel of = orderFunnel(f);
+        Funnel of = executeVcf(f, 14L);
 
         return of;
     }
 
-    Funnel orderFunnel(Funnel f) {
+    Funnel executeVcf(Funnel f, Long vcwId) {
 
         List<Idea> listIdeas01 = new LinkedList<>();
         List<Idea> listIdeas02 = new LinkedList<>();
         Funnel of = new Funnel();
+
+        List<IdeaAndCriteriaEntity> iacs = new ArrayList<>();
+        ideaAndCriteriaRepository.findByIdeaVcwHasIdeaEntityVcwId(vcwId).forEach(iacs::add);
 
         List<Criteria> criterias = f.getIs().get(0).getCs();
 
@@ -100,6 +103,13 @@ public class TestController {
             listIdeas01 = new LinkedList<>();
 
             for (Idea idea : auxlist) {
+
+                // find IdeaAndCriteriaEntity
+
+                IdeaAndCriteriaEntity iac = iacs.stream().filter(e -> e.getCriteria().equals(criteria.getC())
+                        && e.getIdea().equals(idea.getI())).findAny().orElse(null);
+
+                //System.out.println(iac.getIdea().getName());
 
                 Float value = idea.getCs().get(index).getIc().getValue();
 
@@ -114,25 +124,31 @@ public class TestController {
                     if (value <= intervalMax) {
 
                         ((LinkedList<Idea>) listIdeas01).addFirst(idea);
+                        iac.setVcfResult(true);
 
                     } else {
                         ((LinkedList<Idea>) listIdeas02).addFirst(idea);
+                        iac.setVcfResult(false);
                     }
                 } else if (intervalMax == null) {
                     if (value >= intervalMin) {
 
                         ((LinkedList<Idea>) listIdeas01).addFirst(idea);
+                        iac.setVcfResult(true);
 
                     } else {
                         ((LinkedList<Idea>) listIdeas02).addFirst(idea);
+                        iac.setVcfResult(false);
                     }
                 } else {
                     if (value >= intervalMin && value <= intervalMax) {
 
                         ((LinkedList<Idea>) listIdeas01).addFirst(idea);
+                        iac.setVcfResult(true);
 
                     } else {
                         ((LinkedList<Idea>) listIdeas02).addFirst(idea);
+                        iac.setVcfResult(false);
                     }
                 }
             }
@@ -140,19 +156,23 @@ public class TestController {
             index++;
         }
 
-        //TODO: update vcf result here.
+        //update vcf results in the DB
+        ideaAndCriteriaRepository.saveAll(iacs);
 
+
+        // concatenate
         of.setIs(listIdeas01);
         of.getIs().addAll(listIdeas02);
 
 
+        // temp: print idea names
         of.getIs().forEach(e->System.out.println(e.getI().getName()));
 
         return of;
 
     }
 
-    Funnel createFunnel(Long vcwId, Boolean IsMustHave) {
+    Funnel createVcfDataModel(Long vcwId, Boolean IsMustHave) {
 
         Funnel f = new Funnel();
         f.setIs(new ArrayList<>());
