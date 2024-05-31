@@ -98,9 +98,13 @@ public class TestController {
         int index = 0;
         for (Criteria criteria : criterias) {
 
+            System.out.println("c (" + index + "): " + criteria.getC().getName());
+
             List<Idea> auxlist = new ArrayList<>();
             auxlist.addAll(listIdeas01);
             listIdeas01 = new LinkedList<>();
+
+            System.out.println(" - ");
 
             for (Idea idea : auxlist) {
 
@@ -117,7 +121,7 @@ public class TestController {
 
                 Float intervalMax = idea.getCs().get(index).getVhc().getIntervalMax();
 
-                System.out.println(" -   - --   -- ");
+                System.out.println(" --- " + idea.getI().getName() + "  ---   --- ");
                 System.out.println(intervalMin + " " + value + " " + intervalMax);
 
                 if (intervalMin == null) {
@@ -182,7 +186,7 @@ public class TestController {
         List<VcwHasCriteriaEntity> vcwHasCriterias = new ArrayList<>();
         vcwHasCriteriaRepository.findByVcwId(vcwId).forEach(vcwHasCriterias::add);
 
-        // now only the selected
+        // now only the selected criterias
 
         Set<CriteriaEntity> selectedCriteriasSet = vcwHasCriterias
                 .stream()
@@ -195,7 +199,7 @@ public class TestController {
         List<VcwHasIdeaEntity> vcwHasIdeas = new ArrayList<>();
         vcwHasIdeaRepository.findByVcwId(vcwId).forEach(vcwHasIdeas::add);
 
-        // now only the selected
+        // now only the selected ideas
 
         Set<IdeaEntity> selectedIdeasSet = vcwHasIdeas
                 .stream()
@@ -229,6 +233,10 @@ public class TestController {
         List<CriteriaEntity> criteriasList = new ArrayList<>();
         criteriasList.addAll(criteriasSet);
 
+        // sort criterias based on ranking (ranking must be defined!!)
+
+        criteriasList.sort((c1, c2) -> c1.getVcwHasCriteriaEntity().getRanking()
+                .compareTo(c2.getVcwHasCriteriaEntity().getRanking()));
 
         // for each selected idea with pair
 
