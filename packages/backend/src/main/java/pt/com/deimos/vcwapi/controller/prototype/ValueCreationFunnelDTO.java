@@ -5,8 +5,8 @@ import java.util.List;
 import lombok.Data;
 
 @Data
-public class Funnel {
+public class ValueCreationFunnelDTO {
     
-    List<Idea> is;
+    List<VCFIdeaDTO> vcfIdeas;
 
 }

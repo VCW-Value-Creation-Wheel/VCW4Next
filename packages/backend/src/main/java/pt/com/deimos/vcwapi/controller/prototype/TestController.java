@@ -64,94 +64,94 @@ public class TestController {
     }
 
 
-    @GetMapping("/funnel")
-    Funnel getFunnel () {
+    @GetMapping("/valueCreationFunnelDTO")
+    ValueCreationFunnelDTO getValueCreationFunnelDTO () {
         
-        Funnel f = createVcfDataModel (14L, true);
+        ValueCreationFunnelDTO f = createVcfDataModel (14L, true);
 
         return f;
     }
 
-    @GetMapping("/orderedFunnel")
-    Funnel getOFunnel () {
+    @GetMapping("/orderedValueCreationFunnelDTO")
+    ValueCreationFunnelDTO getOValueCreationFunnelDTO () {
         
-        Funnel f = createVcfDataModel (14L, true);
+        ValueCreationFunnelDTO f = createVcfDataModel (14L, true);
 
 
-        Funnel of = executeVcf(f, 14L);
+        ValueCreationFunnelDTO of = executeVcf(f, 14L);
 
         return of;
     }
 
-    Funnel executeVcf(Funnel f, Long vcwId) {
+    ValueCreationFunnelDTO executeVcf(ValueCreationFunnelDTO f, Long vcwId) {
 
-        List<Idea> listIdeas01 = new LinkedList<>();
-        List<Idea> listIdeas02 = new LinkedList<>();
-        Funnel of = new Funnel();
+        List<VCFIdeaDTO> listIdeas01 = new LinkedList<>();
+        List<VCFIdeaDTO> listIdeas02 = new LinkedList<>();
+        ValueCreationFunnelDTO of = new ValueCreationFunnelDTO();
 
         List<IdeaAndCriteriaEntity> iacs = new ArrayList<>();
         ideaAndCriteriaRepository.findByIdeaVcwHasIdeaEntityVcwId(vcwId).forEach(iacs::add);
 
-        List<Criteria> criterias = f.getIs().get(0).getCs();
+        List<VCFCriteriaDTO> criterias = f.getVcfIdeas().get(0).getVcfCriterias();
 
-        listIdeas01.addAll(f.getIs());
+        listIdeas01.addAll(f.getVcfIdeas());
         int index = 0;
-        for (Criteria criteria : criterias) {
+        for (VCFCriteriaDTO criteria : criterias) {
 
-            System.out.println("c (" + index + "): " + criteria.getC().getName());
+            System.out.println("c (" + index + "): " + criteria.getCriteria().getName());
 
-            List<Idea> auxlist = new ArrayList<>();
+            List<VCFIdeaDTO> auxlist = new ArrayList<>();
             auxlist.addAll(listIdeas01);
             listIdeas01 = new LinkedList<>();
 
             System.out.println(" - ");
 
-            for (Idea idea : auxlist) {
+            for (VCFIdeaDTO idea : auxlist) {
 
                 // find IdeaAndCriteriaEntity
 
-                IdeaAndCriteriaEntity iac = iacs.stream().filter(e -> e.getCriteria().equals(criteria.getC())
-                        && e.getIdea().equals(idea.getI())).findAny().orElse(null);
+                IdeaAndCriteriaEntity iac = iacs.stream().filter(e -> e.getCriteria().equals(criteria.getCriteria())
+                        && e.getIdea().equals(idea.getIdea())).findAny().orElse(null);
 
                 //System.out.println(iac.getIdea().getName());
 
-                Float value = idea.getCs().get(index).getIc().getValue();
+                Float value = idea.getVcfCriterias().get(index).getIdeaAndCriteria().getValue();
 
-                Float intervalMin = idea.getCs().get(index).getVhc().getIntervalMin();
+                Float intervalMin = idea.getVcfCriterias().get(index).getVcwHasCriteria().getIntervalMin();
 
-                Float intervalMax = idea.getCs().get(index).getVhc().getIntervalMax();
+                Float intervalMax = idea.getVcfCriterias().get(index).getVcwHasCriteria().getIntervalMax();
 
-                System.out.println(" --- " + idea.getI().getName() + "  ---   --- ");
+                System.out.println(" --- " + idea.getIdea().getName() + "  ---   --- ");
                 System.out.println(intervalMin + " " + value + " " + intervalMax);
 
                 if (intervalMin == null) {
                     if (value <= intervalMax) {
 
-                        ((LinkedList<Idea>) listIdeas01).addFirst(idea);
+                        ((LinkedList<VCFIdeaDTO>) listIdeas01).addFirst(idea);
                         iac.setVcfResult(true);
 
                     } else {
-                        ((LinkedList<Idea>) listIdeas02).addFirst(idea);
+                        ((LinkedList<VCFIdeaDTO>) listIdeas02).addFirst(idea);
                         iac.setVcfResult(false);
                     }
                 } else if (intervalMax == null) {
                     if (value >= intervalMin) {
 
-                        ((LinkedList<Idea>) listIdeas01).addFirst(idea);
+                        ((LinkedList<VCFIdeaDTO>) listIdeas01).addFirst(idea);
                         iac.setVcfResult(true);
 
                     } else {
-                        ((LinkedList<Idea>) listIdeas02).addFirst(idea);
+                        ((LinkedList<VCFIdeaDTO>) listIdeas02).addFirst(idea);
                         iac.setVcfResult(false);
                     }
                 } else {
                     if (value >= intervalMin && value <= intervalMax) {
 
-                        ((LinkedList<Idea>) listIdeas01).addFirst(idea);
+                        ((LinkedList<VCFIdeaDTO>) listIdeas01).addFirst(idea);
                         iac.setVcfResult(true);
 
                     } else {
-                        ((LinkedList<Idea>) listIdeas02).addFirst(idea);
+                        ((LinkedList<VCFIdeaDTO>) listIdeas02).addFirst(idea);
                         iac.setVcfResult(false);
                     }
                 }
@@ -165,21 +165,21 @@ public class TestController {
 
 
         // concatenate
-        of.setIs(listIdeas01);
-        of.getIs().addAll(listIdeas02);
+        of.setVcfIdeas(listIdeas01);
+        of.getVcfIdeas().addAll(listIdeas02);
 
 
         // temp: print idea names
-        of.getIs().forEach(e->System.out.println(e.getI().getName()));
+        of.getVcfIdeas().forEach(e->System.out.println(e.getIdea().getName()));
 
         return of;
 
     }
 
-    Funnel createVcfDataModel(Long vcwId, Boolean IsMustHave) {
+    ValueCreationFunnelDTO createVcfDataModel(Long vcwId, Boolean IsMustHave) {
 
-        Funnel f = new Funnel();
-        f.setIs(new ArrayList<>());
+        ValueCreationFunnelDTO f = new ValueCreationFunnelDTO();
+        f.setVcfIdeas(new ArrayList<>());
 
         // get all VcwHasCriteriaEntities
 
@@ -246,39 +246,39 @@ public class TestController {
 
         ideasList.forEach(i -> {
 
-            Idea newIdea = new Idea();
+            VCFIdeaDTO newIdea = new VCFIdeaDTO();
 
-            newIdea.setI(i);
+            newIdea.setIdea(i);
 
-            newIdea.setCs(new ArrayList<>());
+            newIdea.setVcfCriterias(new ArrayList<>());
 
             // for each criteria with pair
 
             criteriasList.forEach(c -> {
 
-                Criteria newCriteria = new Criteria();
+                VCFCriteriaDTO newCriteria = new VCFCriteriaDTO();
 
-                newCriteria.setC(c);
+                newCriteria.setCriteria(c);
 
                 VcwHasCriteriaEntity vhc = vcwHasCriterias.stream()
                         .filter(e -> c.equals(e.getCriteria())).findAny().orElse(null);
 
-                newCriteria.setVhc(vhc);
+                newCriteria.setVcwHasCriteria(vhc);
 
                 IdeaAndCriteriaEntity iac = iacs.stream()
                         .filter(e -> c.equals(e.getCriteria()) && i.equals(e.getIdea())).findAny().orElse(null);
 
-                newCriteria.setIc(iac);
+                newCriteria.setIdeaAndCriteria(iac);
 
                 if (IsMustHave && "must_have".equals(vhc.getType())) {
-                    newIdea.getCs().add(newCriteria);
+                    newIdea.getVcfCriterias().add(newCriteria);
                 } else if (!IsMustHave && "nice_to_have".equals(vhc.getType())) {
-                    newIdea.getCs().add(newCriteria);
+                    newIdea.getVcfCriterias().add(newCriteria);
                 }
 
             });
 
-            f.getIs().add(newIdea);
+            f.getVcfIdeas().add(newIdea);
 
         });
 
