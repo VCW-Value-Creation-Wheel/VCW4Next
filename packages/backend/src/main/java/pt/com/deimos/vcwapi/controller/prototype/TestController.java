@@ -1,10 +1,6 @@
 package pt.com.deimos.vcwapi.controller.prototype;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,11 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import pt.com.deimos.vcwapi.dto.valueCreationFunnel.VCFCriteriaDTO;
 import pt.com.deimos.vcwapi.dto.valueCreationFunnel.VCFIdeaDTO;
 import pt.com.deimos.vcwapi.dto.valueCreationFunnel.ValueCreationFunnelDTO;
-import pt.com.deimos.vcwapi.entity.CriteriaEntity;
-import pt.com.deimos.vcwapi.entity.IdeaAndCriteriaEntity;
-import pt.com.deimos.vcwapi.entity.IdeaEntity;
-import pt.com.deimos.vcwapi.entity.VcwHasCriteriaEntity;
-import pt.com.deimos.vcwapi.entity.VcwHasIdeaEntity;
+import pt.com.deimos.vcwapi.entity.*;
 import pt.com.deimos.vcwapi.repository.CriteriaRepository;
 import pt.com.deimos.vcwapi.repository.IdeaAndCriteriaRepository;
 import pt.com.deimos.vcwapi.repository.VcwHasCriteriaRepository;
@@ -69,41 +61,43 @@ public class TestController {
     @GetMapping("/valueCreationFunnelDTO")
     ValueCreationFunnelDTO getValueCreationFunnelDTO () {
         
-        ValueCreationFunnelDTO f = createVcfDataModel (14L, true);
+        ValueCreationFunnelDTO vcfObj = generateVCWValueCreationFunnelDTOObject (14L, true);
 
-        return f;
+        return vcfObj;
     }
 
     @GetMapping("/orderedValueCreationFunnelDTO")
     ValueCreationFunnelDTO getOValueCreationFunnelDTO () {
         
-        ValueCreationFunnelDTO f = createVcfDataModel (14L, true);
+        ValueCreationFunnelDTO vcfObj = generateVCWValueCreationFunnelDTOObject (14L, true);
 
 
-        ValueCreationFunnelDTO of = executeVcf(f, 14L);
+        ValueCreationFunnelDTO finalVcfObj = runVcfAnalysis(vcfObj, 14L);
 
-        return of;
+        return finalVcfObj;
     }
 
-    ValueCreationFunnelDTO executeVcf(ValueCreationFunnelDTO f, Long vcwId) {
-        List<VCFIdeaDTO> listIdeas01 = new LinkedList<>();
-        List<VCFIdeaDTO> listIdeas02 = new LinkedList<>();
-        ValueCreationFunnelDTO of = new ValueCreationFunnelDTO();
+    ValueCreationFunnelDTO runVcfAnalysis(ValueCreationFunnelDTO vcfObj, Long vcwId) {
+
+        List<VCFIdeaDTO> acceptedVcfIdeas = new LinkedList<>();
+        List<VCFIdeaDTO> rejectedVcfIdeas = new LinkedList<>();
+
+        ValueCreationFunnelDTO finalVcfObj = new ValueCreationFunnelDTO();
 
         List<IdeaAndCriteriaEntity> iacs = new ArrayList<>();
         ideaAndCriteriaRepository.findByIdeaVcwHasIdeaEntityVcwId(vcwId).forEach(iacs::add);
 
-        List<VCFCriteriaDTO> criterias = f.getVcfIdeas().get(0).getVcfCriterias();
+        List<VCFCriteriaDTO> criterias = vcfObj.getVcfIdeas().get(0).getVcfCriterias();
 
-        listIdeas01.addAll(f.getVcfIdeas());
+        acceptedVcfIdeas.addAll(vcfObj.getVcfIdeas());
         int index = 0;
         for (VCFCriteriaDTO criteria : criterias) {
 
             System.out.println("c (" + index + "): " + criteria.getCriteria().getName());
 
             List<VCFIdeaDTO> auxlist = new ArrayList<>();
-            auxlist.addAll(listIdeas01);
-            listIdeas01 = new LinkedList<>();
+            auxlist.addAll(acceptedVcfIdeas);
+            acceptedVcfIdeas = new LinkedList<>();
 
             System.out.println(" - ");
 
@@ -128,31 +122,31 @@ public class TestController {
                 if (intervalMin == null) {
                     if (value <= intervalMax) {
 
-                        ((LinkedList<VCFIdeaDTO>) listIdeas01).addFirst(idea);
+                        ((LinkedList<VCFIdeaDTO>) acceptedVcfIdeas).addFirst(idea);
                         iac.setVcfResult(true);
 
                     } else {
-                        ((LinkedList<VCFIdeaDTO>) listIdeas02).addFirst(idea);
+                        ((LinkedList<VCFIdeaDTO>) rejectedVcfIdeas).addFirst(idea);
                         iac.setVcfResult(false);
                     }
                 } else if (intervalMax == null) {
                     if (value >= intervalMin) {
 
-                        ((LinkedList<VCFIdeaDTO>) listIdeas01).addFirst(idea);
+                        ((LinkedList<VCFIdeaDTO>) acceptedVcfIdeas).addFirst(idea);
                         iac.setVcfResult(true);
 
                     } else {
-                        ((LinkedList<VCFIdeaDTO>) listIdeas02).addFirst(idea);
+                        ((LinkedList<VCFIdeaDTO>) rejectedVcfIdeas).addFirst(idea);
                         iac.setVcfResult(false);
                     }
                 } else {
                     if (value >= intervalMin && value <= intervalMax) {
 
-                        ((LinkedList<VCFIdeaDTO>) listIdeas01).addFirst(idea);
+                        ((LinkedList<VCFIdeaDTO>) acceptedVcfIdeas).addFirst(idea);
                         iac.setVcfResult(true);
 
                     } else {
-                        ((LinkedList<VCFIdeaDTO>) listIdeas02).addFirst(idea);
+                        ((LinkedList<VCFIdeaDTO>) rejectedVcfIdeas).addFirst(idea);
                         iac.setVcfResult(false);
                     }
                 }
@@ -166,28 +160,29 @@ public class TestController {
 
 
         // concatenate
-        of.setVcfIdeas(listIdeas01);
-        of.getVcfIdeas().addAll(listIdeas02);
+        finalVcfObj.setVcfIdeas(acceptedVcfIdeas);
+        finalVcfObj.getVcfIdeas().addAll(rejectedVcfIdeas);
 
 
         // temp: print idea names
-        of.getVcfIdeas().forEach(e->System.out.println(e.getIdea().getName()));
+        finalVcfObj.getVcfIdeas().forEach(e->System.out.println(e.getIdea().getName()));
 
-        return of;
+        return finalVcfObj;
 
     }
 
-    ValueCreationFunnelDTO createVcfDataModel(Long vcwId, Boolean IsMustHave) {
 
-        ValueCreationFunnelDTO f = new ValueCreationFunnelDTO();
-        f.setVcfIdeas(new ArrayList<>());
+    ValueCreationFunnelDTO generateVCWValueCreationFunnelDTOObject (Long vcwId, Boolean IsMustHave) {
 
-        // get all VcwHasCriteriaEntities
+        ValueCreationFunnelDTO vcfObj = new ValueCreationFunnelDTO();
+        vcfObj.setVcfIdeas(new ArrayList<>());
+
+        // get all VCW VcwHasCriteriaEntities
 
         List<VcwHasCriteriaEntity> vcwHasCriterias = new ArrayList<>();
         vcwHasCriteriaRepository.findByVcwId(vcwId).forEach(vcwHasCriterias::add);
 
-        // now only the selected criterias
+        // from it extract the selected criteries as a set
 
         Set<CriteriaEntity> selectedCriteriasSet = vcwHasCriterias
                 .stream()
@@ -195,12 +190,12 @@ public class TestController {
                 .map(ie -> ie.getCriteria())
                 .collect(Collectors.toSet());
 
-        // get all VcwHasIdeasEntities
+        // get all VCW VcwHasIdeasEntities
 
         List<VcwHasIdeaEntity> vcwHasIdeas = new ArrayList<>();
         vcwHasIdeaRepository.findByVcwId(vcwId).forEach(vcwHasIdeas::add);
 
-        // now only the selected ideas
+        // from it extract the selected ideas as a set
 
         Set<IdeaEntity> selectedIdeasSet = vcwHasIdeas
                 .stream()
@@ -208,12 +203,12 @@ public class TestController {
                 .map(ie -> ie.getIdea())
                 .collect(Collectors.toSet());
 
-        // get all pairs (idea - criteria)
+        // get all VCW IdeaAndCriteria pairs
 
         List<IdeaAndCriteriaEntity> iacs = new ArrayList<>();
         ideaAndCriteriaRepository.findByIdeaVcwHasIdeaEntityVcwId(vcwId).forEach(iacs::add);
 
-        // from the pairs get separeted sets of ideas and criterias,
+        // from the pairs get separated sets of ideas and criterias,
         // for only ideas and criterias with established pairs can be used
 
         Set<IdeaEntity> ideasSet = new HashSet<>();
@@ -223,6 +218,7 @@ public class TestController {
             ideasSet.add(iac.getIdea());
             criteriasSet.add(iac.getCriteria());
         });
+
         // make sure only selected ideas and criterias are used
         ideasSet.retainAll(selectedIdeasSet);
         criteriasSet.retainAll(selectedCriteriasSet);
@@ -236,54 +232,53 @@ public class TestController {
 
         // sort ideas by name
 
-        ideasList.sort((i1, i2) -> i1.getName().compareTo(i2.getName()));
+        ideasList.sort(Comparator.comparing(BaseNamedEntity::getName));
 
         // sort criterias based on ranking (ranking must be defined!!)
 
-        criteriasList.sort((c1, c2) -> c1.getVcwHasCriteriaEntity().getRanking()
-                .compareTo(c2.getVcwHasCriteriaEntity().getRanking()));
+        criteriasList.sort(Comparator.comparing(c -> c.getVcwHasCriteriaEntity().getRanking()));
 
         // for each selected idea with pair
 
-        ideasList.forEach(i -> {
+        ideasList.forEach( i -> {
 
-            VCFIdeaDTO newIdea = new VCFIdeaDTO();
+            VCFIdeaDTO newVcfIdea = new VCFIdeaDTO();
 
-            newIdea.setIdea(i);
+            newVcfIdea.setIdea(i);
 
-            newIdea.setVcfCriterias(new ArrayList<>());
+            newVcfIdea.setVcfCriterias(new ArrayList<>());
 
-            // for each criteria with pair
+            // for each selected criteria with pair
 
-            criteriasList.forEach(c -> {
+            criteriasList.forEach( c -> {
 
-                VCFCriteriaDTO newCriteria = new VCFCriteriaDTO();
+                VCFCriteriaDTO newVcfCriteria = new VCFCriteriaDTO();
 
-                newCriteria.setCriteria(c);
+                newVcfCriteria.setCriteria(c);
 
                 VcwHasCriteriaEntity vhc = vcwHasCriterias.stream()
                         .filter(e -> c.equals(e.getCriteria())).findAny().orElse(null);
 
-                newCriteria.setVcwHasCriteria(vhc);
+                newVcfCriteria.setVcwHasCriteria(vhc);
 
                 IdeaAndCriteriaEntity iac = iacs.stream()
                         .filter(e -> c.equals(e.getCriteria()) && i.equals(e.getIdea())).findAny().orElse(null);
 
-                newCriteria.setIdeaAndCriteria(iac);
+                newVcfCriteria.setIdeaAndCriteria(iac);
 
                 if (IsMustHave && "must_have".equals(vhc.getType())) {
-                    newIdea.getVcfCriterias().add(newCriteria);
+                    newVcfIdea.getVcfCriterias().add(newVcfCriteria);
                 } else if (!IsMustHave && "nice_to_have".equals(vhc.getType())) {
-                    newIdea.getVcfCriterias().add(newCriteria);
+                    newVcfIdea.getVcfCriterias().add(newVcfCriteria);
                 }
 
             });
 
-            f.getVcfIdeas().add(newIdea);
+            vcfObj.getVcfIdeas().add(newVcfIdea);
 
         });
 
-        return f;
+        return vcfObj;
 
     }
 
