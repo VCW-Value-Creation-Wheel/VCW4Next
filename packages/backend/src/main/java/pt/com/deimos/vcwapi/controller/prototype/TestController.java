@@ -233,6 +233,10 @@ public class TestController {
         List<CriteriaEntity> criteriasList = new ArrayList<>();
         criteriasList.addAll(criteriasSet);
 
+        // sort ideas by name
+
+        ideasList.sort((i1, i2) -> i1.getName().compareTo(i2.getName()));
+
         // sort criterias based on ranking (ranking must be defined!!)
 
         criteriasList.sort((c1, c2) -> c1.getVcwHasCriteriaEntity().getRanking()
