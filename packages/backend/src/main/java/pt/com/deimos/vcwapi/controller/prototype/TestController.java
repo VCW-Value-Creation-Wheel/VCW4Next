@@ -1,7 +1,6 @@
 package pt.com.deimos.vcwapi.controller.prototype;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -13,6 +12,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import pt.com.deimos.vcwapi.dto.valueCreationFunnel.VCFCriteriaDTO;
+import pt.com.deimos.vcwapi.dto.valueCreationFunnel.VCFIdeaDTO;
+import pt.com.deimos.vcwapi.dto.valueCreationFunnel.ValueCreationFunnelDTO;
 import pt.com.deimos.vcwapi.entity.CriteriaEntity;
 import pt.com.deimos.vcwapi.entity.IdeaAndCriteriaEntity;
 import pt.com.deimos.vcwapi.entity.IdeaEntity;
@@ -84,7 +86,6 @@ public class TestController {
     }
 
     ValueCreationFunnelDTO executeVcf(ValueCreationFunnelDTO f, Long vcwId) {
-
         List<VCFIdeaDTO> listIdeas01 = new LinkedList<>();
         List<VCFIdeaDTO> listIdeas02 = new LinkedList<>();
         ValueCreationFunnelDTO of = new ValueCreationFunnelDTO();

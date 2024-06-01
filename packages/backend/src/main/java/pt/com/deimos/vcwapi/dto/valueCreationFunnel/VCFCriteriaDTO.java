@@ -1,4 +1,4 @@
-package pt.com.deimos.vcwapi.controller.prototype;
+package pt.com.deimos.vcwapi.dto.valueCreationFunnel;
 
 import lombok.Data;
 import pt.com.deimos.vcwapi.entity.CriteriaEntity;
