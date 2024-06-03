@@ -1,7 +1,9 @@
 package pt.com.deimos.vcwapi.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,14 +29,15 @@ public class ValueCreationFunnelController {
     //}
 
     @GetMapping("")
-    ValueCreationFunnelDTO getOValueCreationFunnelDTO () {
-        
-        ValueCreationFunnelDTO vcfObj = valueCreationFunnelService.generateVCWValueCreationFunnelDTOObject (14L, true);
+    ResponseEntity<ValueCreationFunnelDTO> getOValueCreationFunnelDTO(
+            @PathVariable(value = "project_id") Long projectId,
+            @PathVariable(value = "vcw_id") Long vcwId) {
 
+        ValueCreationFunnelDTO vcfObj = valueCreationFunnelService.generateVCWValueCreationFunnelDTOObject(vcwId, true);
 
-        ValueCreationFunnelDTO finalVcfObj = valueCreationFunnelService.runVcfAnalysis(vcfObj, 14L);
+        ValueCreationFunnelDTO finalVcfObj = valueCreationFunnelService.runVcfAnalysis(vcfObj, vcwId);
 
-        return finalVcfObj;
+        return ResponseEntity.ok(finalVcfObj);
     }
 
 }
