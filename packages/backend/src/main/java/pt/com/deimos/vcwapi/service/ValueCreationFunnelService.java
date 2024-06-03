@@ -11,6 +11,7 @@ import pt.com.deimos.vcwapi.exceptions.IdeaAndCriteriasNotFoundException;
 import pt.com.deimos.vcwapi.exceptions.IdeasNotFoundException;
 import pt.com.deimos.vcwapi.repository.*;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -160,19 +161,21 @@ public class ValueCreationFunnelService {
 
     }
 
-    public ValueCreationFunnelDTO runVcfAnalysis(ValueCreationFunnelDTO vcfObj, Long vcwId) {
+    public ValueCreationFunnelDTO runVcfAnalysis(ValueCreationFunnelDTO vcfObj, Long vcwId, String userId) {
 
         List<VCFIdeaDTO> acceptedVcfIdeas = new LinkedList<>();
         List<VCFIdeaDTO> rejectedVcfIdeas = new LinkedList<>();
 
         ValueCreationFunnelDTO finalVcfObj = new ValueCreationFunnelDTO();
 
+        // used to update the db with vcf results
         List<IdeaAndCriteriaEntity> iacs = new ArrayList<>();
         ideaAndCriteriaRepository.findByIdeaVcwHasIdeaEntityVcwId(vcwId).forEach(iacs::add);
 
         List<VCFCriteriaDTO> criterias = vcfObj.getVcfIdeas().get(0).getVcfCriterias();
 
         acceptedVcfIdeas.addAll(vcfObj.getVcfIdeas());
+        LocalDateTime vcfTimestamp = LocalDateTime.now();
         int index = 0;
         for (VCFCriteriaDTO criteria : criterias) {
 
@@ -207,30 +210,42 @@ public class ValueCreationFunnelService {
 
                         ((LinkedList<VCFIdeaDTO>) acceptedVcfIdeas).addFirst(idea);
                         iac.setVcfResult(true);
+                        iac.setUpdatedBy(userId);
+                        iac.setUpdatedAt(vcfTimestamp);
 
                     } else {
                         ((LinkedList<VCFIdeaDTO>) rejectedVcfIdeas).addFirst(idea);
                         iac.setVcfResult(false);
+                        iac.setUpdatedBy(userId);
+                        iac.setUpdatedAt(vcfTimestamp);
                     }
                 } else if (intervalMax == null) {
                     if (value >= intervalMin) {
 
                         ((LinkedList<VCFIdeaDTO>) acceptedVcfIdeas).addFirst(idea);
                         iac.setVcfResult(true);
+                        iac.setUpdatedBy(userId);
+                        iac.setUpdatedAt(vcfTimestamp);
 
                     } else {
                         ((LinkedList<VCFIdeaDTO>) rejectedVcfIdeas).addFirst(idea);
                         iac.setVcfResult(false);
+                        iac.setUpdatedBy(userId);
+                        iac.setUpdatedAt(vcfTimestamp);
                     }
                 } else {
                     if (value >= intervalMin && value <= intervalMax) {
 
                         ((LinkedList<VCFIdeaDTO>) acceptedVcfIdeas).addFirst(idea);
                         iac.setVcfResult(true);
+                        iac.setUpdatedBy(userId);
+                        iac.setUpdatedAt(vcfTimestamp);
 
                     } else {
                         ((LinkedList<VCFIdeaDTO>) rejectedVcfIdeas).addFirst(idea);
                         iac.setVcfResult(false);
+                        iac.setUpdatedBy(userId);
+                        iac.setUpdatedAt(vcfTimestamp);
                     }
                 }
             }
@@ -239,7 +254,6 @@ public class ValueCreationFunnelService {
         }
 
         //update vcf results in the DB
-        //TODO: update user and timestamp
         ideaAndCriteriaRepository.saveAll(iacs);
 
 

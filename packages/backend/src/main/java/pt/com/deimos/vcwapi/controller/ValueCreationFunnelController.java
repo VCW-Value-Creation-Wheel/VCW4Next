@@ -40,7 +40,7 @@ public class ValueCreationFunnelController {
 
         ValueCreationFunnelDTO vcfObj = valueCreationFunnelService.generateVCWValueCreationFunnelDTOObject(vcwId, true);
 
-        ValueCreationFunnelDTO finalVcfObj = valueCreationFunnelService.runVcfAnalysis(vcfObj, vcwId);
+        ValueCreationFunnelDTO finalVcfObj = valueCreationFunnelService.runVcfAnalysis(vcfObj, vcwId, principal.getSubject());
 
         return ResponseEntity.ok(finalVcfObj);
     }
