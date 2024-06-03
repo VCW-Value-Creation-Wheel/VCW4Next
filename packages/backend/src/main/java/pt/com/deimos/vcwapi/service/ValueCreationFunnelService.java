@@ -6,10 +6,10 @@ import pt.com.deimos.vcwapi.dto.valueCreationFunnel.VCFCriteriaDTO;
 import pt.com.deimos.vcwapi.dto.valueCreationFunnel.VCFIdeaDTO;
 import pt.com.deimos.vcwapi.dto.valueCreationFunnel.ValueCreationFunnelDTO;
 import pt.com.deimos.vcwapi.entity.*;
-import pt.com.deimos.vcwapi.repository.CriteriaRepository;
-import pt.com.deimos.vcwapi.repository.IdeaAndCriteriaRepository;
-import pt.com.deimos.vcwapi.repository.VcwHasCriteriaRepository;
-import pt.com.deimos.vcwapi.repository.VcwHasIdeaRepository;
+import pt.com.deimos.vcwapi.exceptions.CriteriasNotFoundException;
+import pt.com.deimos.vcwapi.exceptions.IdeaAndCriteriasNotFoundException;
+import pt.com.deimos.vcwapi.exceptions.IdeasNotFoundException;
+import pt.com.deimos.vcwapi.repository.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -21,32 +21,23 @@ public class ValueCreationFunnelService {
     IdeaAndCriteriaRepository ideaAndCriteriaRepository;
 
     @Autowired
-    CriteriaRepository criteriaRepository;
-
-    @Autowired
     VcwHasCriteriaRepository vcwHasCriteriaRepository;
 
     @Autowired
     VcwHasIdeaRepository vcwHasIdeaRepository;
+
+    @Autowired
+    ProjectRepository projectRepository;
+
+    public Optional<ProjectEntity> findProjectByIdAndUser(Long project_id, String userId) {
+        return this.projectRepository.findByIdAndProjectHasUserRoleEntitiesUserInum(project_id, userId);
+    }
 
 
     public ValueCreationFunnelDTO generateVCWValueCreationFunnelDTOObject (Long vcwId, Boolean IsMustHave) {
 
         ValueCreationFunnelDTO vcfObj = new ValueCreationFunnelDTO();
         vcfObj.setVcfIdeas(new ArrayList<>());
-
-        // get all VCW VcwHasCriteriaEntities
-
-        List<VcwHasCriteriaEntity> vcwHasCriterias = new ArrayList<>();
-        vcwHasCriteriaRepository.findByVcwId(vcwId).forEach(vcwHasCriterias::add);
-
-        // from it extract the selected criteries as a set
-
-        Set<CriteriaEntity> selectedCriteriasSet = vcwHasCriterias
-                .stream()
-                .filter(ie -> ie.getSelected())
-                .map(ie -> ie.getCriteria())
-                .collect(Collectors.toSet());
 
         // get all VCW VcwHasIdeasEntities
 
@@ -61,10 +52,32 @@ public class ValueCreationFunnelService {
                 .map(ie -> ie.getIdea())
                 .collect(Collectors.toSet());
 
+        if (selectedIdeasSet.isEmpty())
+            throw new IdeasNotFoundException("No selected ideas found!");
+
+        // get all VCW VcwHasCriteriaEntities
+
+        List<VcwHasCriteriaEntity> vcwHasCriterias = new ArrayList<>();
+        vcwHasCriteriaRepository.findByVcwId(vcwId).forEach(vcwHasCriterias::add);
+
+        // from it extract the selected criteries as a set
+
+        Set<CriteriaEntity> selectedCriteriasSet = vcwHasCriterias
+                .stream()
+                .filter(ie -> ie.getSelected())
+                .map(ie -> ie.getCriteria())
+                .collect(Collectors.toSet());
+
+        if (selectedCriteriasSet.isEmpty())
+            throw new CriteriasNotFoundException("No selected criterias found!");
+
         // get all VCW IdeaAndCriteria pairs
 
         List<IdeaAndCriteriaEntity> iacs = new ArrayList<>();
         ideaAndCriteriaRepository.findByIdeaVcwHasIdeaEntityVcwId(vcwId).forEach(iacs::add);
+
+        if (iacs.isEmpty())
+            throw new IdeaAndCriteriasNotFoundException("No Idea And Criteria pairs found!");
 
         // from the pairs get separated sets of ideas and criterias,
         // for only ideas and criterias with established pairs can be used
@@ -79,7 +92,14 @@ public class ValueCreationFunnelService {
 
         // make sure only selected ideas and criterias are used
         ideasSet.retainAll(selectedIdeasSet);
+
+        if (ideasSet.isEmpty())
+            throw new IdeasNotFoundException("No selected ideas with pairs found!");
+
         criteriasSet.retainAll(selectedCriteriasSet);
+
+        if (criteriasSet.isEmpty())
+            throw new CriteriasNotFoundException("No selected criterias with pairs found!");
 
         // convert the sets to lists
         List<IdeaEntity> ideasList = new ArrayList<>();
@@ -219,6 +239,7 @@ public class ValueCreationFunnelService {
         }
 
         //update vcf results in the DB
+        //TODO: update user and timestamp
         ideaAndCriteriaRepository.saveAll(iacs);
 
 
