@@ -53,6 +53,9 @@ public class MultipleCriteriaDecisionAnalysisService {
             }
         }
 
+        if(vcfNiceToHaveObj.getVcfIdeas().isEmpty())
+            throw new IdeasNotFoundException("No ideas found!");
+
         // create MCDA object with ideas not rejected in the VCF analysis
         MultipleCriteriaDecisionAnalysisDTO mcdaObj = new MultipleCriteriaDecisionAnalysisDTO();
         mcdaObj.setMcdaIdeas(new ArrayList<>());

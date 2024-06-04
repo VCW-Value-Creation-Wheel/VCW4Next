@@ -21,39 +21,31 @@ import pt.com.deimos.vcwapi.service.MultipleCriteriaDecisionAnalysisService;
 import pt.com.deimos.vcwapi.service.ValueCreationFunnelService;
 
 @RestController
-@RequestMapping("/test/v1/projects/{project_id}/vcws/{vcw_id}/MultipleCriteriaDecisionAnalysis")
-@Tag(name = "Value Creation Funnel", description = "Value Creation Funnel endpoints")
+@RequestMapping("/v1/projects/{project_id}/vcws/{vcw_id}/MultipleCriteriaDecisionAnalysis")
+@Tag(name = "Multiple Criteria Decision Analysis", description = "Multiple Criteria Decision Analysis endpoints")
 public class MultipleCriteriaDecisionAnalysisController {
 
     @Autowired
-    ValueCreationFunnelService valueCreationFunnelService;
-    @Autowired
     MultipleCriteriaDecisionAnalysisService multipleCriteriaDecisionAnalysisService;
 
-    @GetMapping("")
+    @GetMapping
     @Operation(summary = "Run Value Creation Funnel (VCF) and returns result object for a given VCW.")
-    ResponseEntity<MultipleCriteriaDecisionAnalysisDTO> getOValueCreationFunnelDTO(
-            //@AuthenticationPrincipal Jwt principal,
+    ResponseEntity<MultipleCriteriaDecisionAnalysisDTO> getOMultipleCriteriaDecisionAnalysisDTO(
+            @AuthenticationPrincipal Jwt principal,
             @PathVariable(value = "project_id") Long projectId,
             @PathVariable(value = "vcw_id") Long vcwId) {
-/*
+
         Optional<ProjectEntity> project =
         multipleCriteriaDecisionAnalysisService.findProjectByIdAndUser(projectId, principal.getSubject());
         if (project.isEmpty())
             throw new NotFoundException("Project not found.");
- */
 
-        
-        System.out.println("+++++++++++++");
         MultipleCriteriaDecisionAnalysisDTO mcdaObj = multipleCriteriaDecisionAnalysisService.generateMultipleCriteriaDecisionAnalysisDTOObject(vcwId);
 
-        MultipleCriteriaDecisionAnalysisDTO finalMcdaObj = multipleCriteriaDecisionAnalysisService.runMcdaAnalysis(mcdaObj, vcwId, "lol");
+        MultipleCriteriaDecisionAnalysisDTO finalMcdaObj = multipleCriteriaDecisionAnalysisService.runMcdaAnalysis(mcdaObj, vcwId, principal.getSubject());
 
         return ResponseEntity.ok(finalMcdaObj);
-        
-        //ValueCreationFunnelDTO finalVcfObj = multipleCriteriaDecisionAnalysisService.runVcfAnalysis(vcfObj, vcwId, "l0l");
 
-        //return ResponseEntity.ok(finalVcfObj);
     }
 
 }
