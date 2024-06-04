@@ -7,6 +7,6 @@ import lombok.Data;
 @Data
 public class ValueCreationFunnelDTO {
     
-    List<VCFIdeaDTO> vcfIdeas;
+    private List<VCFIdeaDTO> vcfIdeas;
 
 }

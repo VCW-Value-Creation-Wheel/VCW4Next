@@ -179,13 +179,9 @@ public class ValueCreationFunnelService {
         int index = 0;
         for (VCFCriteriaDTO criteria : criterias) {
 
-            System.out.println("c (" + index + "): " + criteria.getCriteria().getName());
-
             List<VCFIdeaDTO> auxlist = new ArrayList<>();
             auxlist.addAll(acceptedVcfIdeas);
             acceptedVcfIdeas = new LinkedList<>();
-
-            System.out.println(" - ");
 
             for (VCFIdeaDTO idea : auxlist) {
 
@@ -194,16 +190,11 @@ public class ValueCreationFunnelService {
                 IdeaAndCriteriaEntity iac = iacs.stream().filter(e -> e.getCriteria().equals(criteria.getCriteria())
                         && e.getIdea().equals(idea.getIdea())).findAny().orElse(null);
 
-                //System.out.println(iac.getIdea().getName());
-
                 Float value = idea.getVcfCriterias().get(index).getIdeaAndCriteria().getValue();
 
                 Float intervalMin = idea.getVcfCriterias().get(index).getVcwHasCriteria().getIntervalMin();
 
                 Float intervalMax = idea.getVcfCriterias().get(index).getVcwHasCriteria().getIntervalMax();
-
-                System.out.println(" --- " + idea.getIdea().getName() + "  ---   --- ");
-                System.out.println(intervalMin + " " + value + " " + intervalMax);
 
                 if (intervalMin == null) {
                     if (value <= intervalMax) {
@@ -260,10 +251,6 @@ public class ValueCreationFunnelService {
         // concatenate
         finalVcfObj.setVcfIdeas(acceptedVcfIdeas);
         finalVcfObj.getVcfIdeas().addAll(rejectedVcfIdeas);
-
-
-        // temp: print idea names
-        finalVcfObj.getVcfIdeas().forEach(e->System.out.println(e.getIdea().getName()));
 
         return finalVcfObj;
 

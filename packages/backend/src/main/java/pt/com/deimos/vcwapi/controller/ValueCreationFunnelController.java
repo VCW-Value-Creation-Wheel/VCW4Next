@@ -26,7 +26,7 @@ public class ValueCreationFunnelController {
     @Autowired
     ValueCreationFunnelService valueCreationFunnelService;
 
-    @GetMapping("")
+    @GetMapping
     @Operation(summary = "Run Value Creation Funnel (VCF) and returns result object for a given VCW.")
     ResponseEntity<ValueCreationFunnelDTO> getOValueCreationFunnelDTO(
             @AuthenticationPrincipal Jwt principal,
