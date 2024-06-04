@@ -22,6 +22,8 @@ import java.util.stream.Collectors;
 public class MultipleCriteriaDecisionAnalysisService {
 
     @Autowired
+    IdeaAndCriteriaRepository ideaAndCriteriaRepository;
+    @Autowired
     ValueCreationFunnelService valueCreationFunnelService;
 
     @Autowired
@@ -71,17 +73,22 @@ public class MultipleCriteriaDecisionAnalysisService {
     // perform MCDA analisys
     public MultipleCriteriaDecisionAnalysisDTO runMcdaAnalysis(MultipleCriteriaDecisionAnalysisDTO mcdaObj, Long vcwId, String userId) {
 
-        // TODO: Save in db
+        // used to update the db with vcf results
+        List<IdeaAndCriteriaEntity> iacs = new ArrayList<>();
+        ideaAndCriteriaRepository.findByIdeaVcwHasIdeaEntityVcwId(vcwId).forEach(iacs::add);
+
+        LocalDateTime mcdaTimestamp = LocalDateTime.now();
         for (MCDAIdeaDTO mcdaIdea: mcdaObj.getMcdaIdeas()) {
 
             for (VCFCriteriaDTO mcdaCriteria: mcdaIdea.getVcfCriterias()) {
 
+                // find IdeaAndCriteriaEntity
+                IdeaAndCriteriaEntity iac = iacs.stream().filter(e -> e.getCriteria().equals(mcdaCriteria.getCriteria())
+                        && e.getIdea().equals(mcdaIdea.getIdea())).findAny().orElse(null);
+
                 Float value = mcdaCriteria.getIdeaAndCriteria().getValue();
-
                 Float intervalMin = mcdaCriteria.getVcwHasCriteria().getIntervalMin();
-
                 Float intervalMax = mcdaCriteria.getVcwHasCriteria().getIntervalMax();
-
                 Float weight = mcdaCriteria.getVcwHasCriteria().getWeight();
 
                 if (intervalMin == null) {
@@ -107,9 +114,16 @@ public class MultipleCriteriaDecisionAnalysisService {
                     }
                 }
 
+                iac.setMcdaResult(mcdaCriteria.getIdeaAndCriteria().getMcdaResult());
+                iac.setUpdatedBy(userId);
+                iac.setUpdatedAt(mcdaTimestamp);
+
             }
         }
+        //update vcf results in the DB
+        ideaAndCriteriaRepository.saveAll(iacs);
 
+        // sort by weight sum
         mcdaObj.getMcdaIdeas().sort(Comparator.comparing(i -> -i.getSum()));
 
         return mcdaObj;

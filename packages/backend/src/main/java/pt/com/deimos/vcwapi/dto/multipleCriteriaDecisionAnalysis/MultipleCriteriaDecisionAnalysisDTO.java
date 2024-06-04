@@ -6,5 +6,5 @@ import java.util.List;
 
 @Data
 public class MultipleCriteriaDecisionAnalysisDTO {
-    List<MCDAIdeaDTO> mcdaIdeas;
+    private List<MCDAIdeaDTO> mcdaIdeas;
 }

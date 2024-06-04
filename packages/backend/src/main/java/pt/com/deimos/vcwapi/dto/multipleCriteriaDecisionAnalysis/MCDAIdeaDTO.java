@@ -5,5 +5,5 @@ import pt.com.deimos.vcwapi.dto.valueCreationFunnel.VCFIdeaDTO;
 
 @Data
 public class MCDAIdeaDTO extends VCFIdeaDTO {
-    Double sum = .0;
+    private Double sum = .0;
 }
