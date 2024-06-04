@@ -8,10 +8,10 @@ import pt.com.deimos.vcwapi.entity.VcwHasCriteriaEntity;
 @Data
 public class VCFCriteriaDTO {
 
-    CriteriaEntity criteria;
+    private CriteriaEntity criteria;
 
-    VcwHasCriteriaEntity vcwHasCriteria;
+    private VcwHasCriteriaEntity vcwHasCriteria;
 
-    IdeaAndCriteriaEntity ideaAndCriteria;
+    private IdeaAndCriteriaEntity ideaAndCriteria;
 
 }

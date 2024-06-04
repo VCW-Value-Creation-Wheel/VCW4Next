@@ -10,8 +10,8 @@ import pt.com.deimos.vcwapi.entity.IdeaEntity;
 @Data
 public class VCFIdeaDTO {
 
-    IdeaEntity idea;
+    private IdeaEntity idea;
 
-    List<VCFCriteriaDTO> vcfCriterias;
+    private List<VCFCriteriaDTO> vcfCriterias;
 
 }
