@@ -8,14 +8,11 @@ import pt.com.deimos.vcwapi.dto.valueCreationFunnel.VCFCriteriaDTO;
 import pt.com.deimos.vcwapi.dto.valueCreationFunnel.VCFIdeaDTO;
 import pt.com.deimos.vcwapi.dto.valueCreationFunnel.ValueCreationFunnelDTO;
 import pt.com.deimos.vcwapi.entity.*;
-import pt.com.deimos.vcwapi.exceptions.CriteriasNotFoundException;
-import pt.com.deimos.vcwapi.exceptions.IdeaAndCriteriasNotFoundException;
 import pt.com.deimos.vcwapi.exceptions.IdeasNotFoundException;
 import pt.com.deimos.vcwapi.repository.*;
 
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class MultipleCriteriaDecisionAnalysisService {

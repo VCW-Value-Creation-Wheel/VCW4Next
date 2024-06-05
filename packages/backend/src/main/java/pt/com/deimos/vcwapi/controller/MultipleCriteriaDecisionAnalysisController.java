@@ -14,11 +14,9 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import pt.com.deimos.vcwapi.dto.multipleCriteriaDecisionAnalysis.MultipleCriteriaDecisionAnalysisDTO;
-import pt.com.deimos.vcwapi.dto.valueCreationFunnel.ValueCreationFunnelDTO;
 import pt.com.deimos.vcwapi.entity.ProjectEntity;
 import pt.com.deimos.vcwapi.exceptions.NotFoundException;
 import pt.com.deimos.vcwapi.service.MultipleCriteriaDecisionAnalysisService;
-import pt.com.deimos.vcwapi.service.ValueCreationFunnelService;
 
 @RestController
 @RequestMapping("/v1/projects/{project_id}/vcws/{vcw_id}/MultipleCriteriaDecisionAnalysis")
@@ -35,14 +33,16 @@ public class MultipleCriteriaDecisionAnalysisController {
             @PathVariable(value = "project_id") Long projectId,
             @PathVariable(value = "vcw_id") Long vcwId) {
 
-        Optional<ProjectEntity> project =
-        multipleCriteriaDecisionAnalysisService.findProjectByIdAndUser(projectId, principal.getSubject());
+        Optional<ProjectEntity> project = multipleCriteriaDecisionAnalysisService.findProjectByIdAndUser(projectId,
+                principal.getSubject());
         if (project.isEmpty())
             throw new NotFoundException("Project not found.");
 
-        MultipleCriteriaDecisionAnalysisDTO mcdaObj = multipleCriteriaDecisionAnalysisService.generateMultipleCriteriaDecisionAnalysisDTOObject(vcwId);
+        MultipleCriteriaDecisionAnalysisDTO mcdaObj = multipleCriteriaDecisionAnalysisService
+                .generateMultipleCriteriaDecisionAnalysisDTOObject(vcwId);
 
-        MultipleCriteriaDecisionAnalysisDTO finalMcdaObj = multipleCriteriaDecisionAnalysisService.runMcdaAnalysis(mcdaObj, vcwId, principal.getSubject());
+        MultipleCriteriaDecisionAnalysisDTO finalMcdaObj = multipleCriteriaDecisionAnalysisService
+                .runMcdaAnalysis(mcdaObj, vcwId, principal.getSubject());
 
         return ResponseEntity.ok(finalMcdaObj);
 
