@@ -103,11 +103,9 @@ public class ValueCreationFunnelService {
             throw new CriteriasNotFoundException("No selected criterias with pairs found!");
 
         // convert the sets to lists
-        List<IdeaEntity> ideasList = new ArrayList<>();
-        ideasList.addAll(ideasSet);
+        List<IdeaEntity> ideasList = new ArrayList<>(ideasSet);
 
-        List<CriteriaEntity> criteriasList = new ArrayList<>();
-        criteriasList.addAll(criteriasSet);
+        List<CriteriaEntity> criteriasList = new ArrayList<>(criteriasSet);
 
         // sort ideas by name
 
@@ -163,8 +161,7 @@ public class ValueCreationFunnelService {
 
     public ValueCreationFunnelDTO runVcfAnalysis(ValueCreationFunnelDTO vcfObj, Long vcwId, String userId) {
 
-        List<VCFIdeaDTO> acceptedVcfIdeas = new LinkedList<>();
-        List<VCFIdeaDTO> rejectedVcfIdeas = new LinkedList<>();
+        LinkedList<VCFIdeaDTO> rejectedVcfIdeas = new LinkedList<>();
 
         ValueCreationFunnelDTO finalVcfObj = new ValueCreationFunnelDTO();
 
@@ -174,13 +171,12 @@ public class ValueCreationFunnelService {
 
         List<VCFCriteriaDTO> criterias = vcfObj.getVcfIdeas().get(0).getVcfCriterias();
 
-        acceptedVcfIdeas.addAll(vcfObj.getVcfIdeas());
+        LinkedList<VCFIdeaDTO> acceptedVcfIdeas = new LinkedList<>(vcfObj.getVcfIdeas());
         LocalDateTime vcfTimestamp = LocalDateTime.now();
         int index = 0;
         for (VCFCriteriaDTO criteria : criterias) {
 
-            List<VCFIdeaDTO> auxlist = new ArrayList<>();
-            auxlist.addAll(acceptedVcfIdeas);
+            List<VCFIdeaDTO> auxlist = new ArrayList<>(acceptedVcfIdeas);
             acceptedVcfIdeas = new LinkedList<>();
 
             for (VCFIdeaDTO idea : auxlist) {
@@ -199,13 +195,13 @@ public class ValueCreationFunnelService {
                 if (intervalMin == null) {
                     if (value <= intervalMax) {
 
-                        ((LinkedList<VCFIdeaDTO>) acceptedVcfIdeas).addFirst(idea);
+                        acceptedVcfIdeas.addFirst(idea);
                         iac.setVcfResult(true);
                         iac.setUpdatedBy(userId);
                         iac.setUpdatedAt(vcfTimestamp);
 
                     } else {
-                        ((LinkedList<VCFIdeaDTO>) rejectedVcfIdeas).addFirst(idea);
+                        rejectedVcfIdeas.addFirst(idea);
                         iac.setVcfResult(false);
                         iac.setUpdatedBy(userId);
                         iac.setUpdatedAt(vcfTimestamp);
@@ -213,13 +209,13 @@ public class ValueCreationFunnelService {
                 } else if (intervalMax == null) {
                     if (value >= intervalMin) {
 
-                        ((LinkedList<VCFIdeaDTO>) acceptedVcfIdeas).addFirst(idea);
+                        acceptedVcfIdeas.addFirst(idea);
                         iac.setVcfResult(true);
                         iac.setUpdatedBy(userId);
                         iac.setUpdatedAt(vcfTimestamp);
 
                     } else {
-                        ((LinkedList<VCFIdeaDTO>) rejectedVcfIdeas).addFirst(idea);
+                        rejectedVcfIdeas.addFirst(idea);
                         iac.setVcfResult(false);
                         iac.setUpdatedBy(userId);
                         iac.setUpdatedAt(vcfTimestamp);
@@ -227,13 +223,13 @@ public class ValueCreationFunnelService {
                 } else {
                     if (value >= intervalMin && value <= intervalMax) {
 
-                        ((LinkedList<VCFIdeaDTO>) acceptedVcfIdeas).addFirst(idea);
+                        acceptedVcfIdeas.addFirst(idea);
                         iac.setVcfResult(true);
                         iac.setUpdatedBy(userId);
                         iac.setUpdatedAt(vcfTimestamp);
 
                     } else {
-                        ((LinkedList<VCFIdeaDTO>) rejectedVcfIdeas).addFirst(idea);
+                        rejectedVcfIdeas.addFirst(idea);
                         iac.setVcfResult(false);
                         iac.setUpdatedBy(userId);
                         iac.setUpdatedAt(vcfTimestamp);
