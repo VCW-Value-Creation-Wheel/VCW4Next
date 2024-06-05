@@ -2,7 +2,6 @@ package pt.com.deimos.vcwapi.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pt.com.deimos.vcwapi.dto.multipleCriteriaDecisionAnalysis.MCDACriteriaDTO;
 import pt.com.deimos.vcwapi.dto.multipleCriteriaDecisionAnalysis.MCDAIdeaDTO;
 import pt.com.deimos.vcwapi.dto.multipleCriteriaDecisionAnalysis.MultipleCriteriaDecisionAnalysisDTO;
 import pt.com.deimos.vcwapi.dto.valueCreationFunnel.VCFCriteriaDTO;
