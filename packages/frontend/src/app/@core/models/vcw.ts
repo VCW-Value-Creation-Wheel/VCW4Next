@@ -129,3 +129,29 @@ export interface VCWAttachment{
     updateAt: string;
     updateBy: string;
 }
+
+export interface VCWValueCreationFunnel{
+    vcfIdeas: VcfIdeas[];
+}
+
+export interface VcfIdeas{
+    idea: Idea;
+    vcfCriterias: VcfCriterias[];
+}
+
+export interface VcfCriterias{
+    criteria: Criteria;
+    ideaAndCriteria: IdeaCriteriaPair;
+    vcwHasCriteria: HasCriteria;
+}
+
+export interface HasCriteria{
+    id: number;
+    intervalMax: number;
+    intervalMin: number;
+    ranking: number;
+    selected: boolean;
+    type: string;
+    vcwId: number;
+    weight: number;
+}
