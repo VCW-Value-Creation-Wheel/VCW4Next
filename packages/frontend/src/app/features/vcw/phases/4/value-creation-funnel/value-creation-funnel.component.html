@@ -1,3 +1,21 @@
 <div class="px-4 py-4 flex flex-row justify-between mx-4 md:mx-64 lg:mx-80">
-    <h1 class="text-2xl font-bold text-primary ">Value Creation Funnel</h1>
+    <h1 class="text-2xl font-bold text-primary">Value Creation Funnel</h1>
+</div>
+
+<div class="px-4 py-4 flex flex-row justify-between mx-4 md:mx-64 lg:mx-80">
+    <div *ngIf="vcfIdeas !== undefined" class="px-4 py-4 flex flex-row w-full ">
+        <table class="border-2 border-primary-500 rounded-full">
+            <tr class="border-2 border-primary-500" *ngFor="let ideas of vcfIdeas">
+                <td class="border-2 border-primary-500"></td>
+           
+                    <td *ngFor="let criterias of ideas.vcfCriterias" class=" p-2">{{criterias.criteria.name}}</td>
+            </tr>
+            
+            <tr *ngFor="let ideas of vcfIdeas">
+                <td class="border-2 border-primary-500 p-2 border-radius" >{{ideas.idea.name}}</td>
+             
+                <td *ngFor="let criterias of ideas.vcfCriterias" class="flex bg-green-200 w-full justify-center h-10 p-2">{{criterias.ideaAndCriteria.value}}</td>
+            </tr>
+        </table>
+    </div>
 </div>

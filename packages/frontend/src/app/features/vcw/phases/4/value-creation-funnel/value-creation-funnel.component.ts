@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PhaseNavigationService, VcwPhasesService } from '@core';
+import { PhaseNavigationService, VCWValueCreationFunnel, VcfIdeas, VcwPhasesService } from '@core';
 
 @Component({
   selector: 'app-value-creation-funnel',
@@ -11,6 +11,11 @@ export class ValueCreationFunnelComponent implements OnInit{
 
   projectId: number;
   vcwId: number;
+  vcwValueCreationFunnel: VCWValueCreationFunnel;
+  vcfIdeas: VcfIdeas[] = [];
+  console = console;
+
+
 
   constructor(  
     private phaseNavService: PhaseNavigationService,
@@ -29,8 +34,16 @@ export class ValueCreationFunnelComponent implements OnInit{
     this.vcwId = parseInt(this.activatedRoute.snapshot.paramMap.get('vcw_id'), 10);
 
     this.vcwPhasesService.getValueCreationFunnel(this.vcwId, this.projectId).subscribe((data)=>{
-      
-    })
+      if(data){
+        this.vcwValueCreationFunnel = data;
+
+        this.vcwValueCreationFunnel.vcfIdeas.forEach((element)=>{
+          this.vcfIdeas.push(element);
+          this.console.log(element)
+        });
+       
+      }
+    });
    
   }
 
