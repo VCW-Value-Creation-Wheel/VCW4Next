@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PhaseNavigationService, VCWValueCreationFunnel, VcfIdeas, VcwPhasesService } from '@core';
+import { Idea, PhaseNavigationService, VCWValueCreationFunnel, VcfIdeas, VcwPhasesService } from '@core';
 
 @Component({
   selector: 'app-value-creation-funnel',
@@ -14,6 +14,7 @@ export class ValueCreationFunnelComponent implements OnInit{
   vcwValueCreationFunnel: VCWValueCreationFunnel;
   vcfIdeas: VcfIdeas[] = [];
   console = console;
+  pass: boolean[] = [];
 
 
 
@@ -36,15 +37,29 @@ export class ValueCreationFunnelComponent implements OnInit{
     this.vcwPhasesService.getValueCreationFunnel(this.vcwId, this.projectId).subscribe((data)=>{
       if(data){
         this.vcwValueCreationFunnel = data;
-
         this.vcwValueCreationFunnel.vcfIdeas.forEach((element)=>{
           this.vcfIdeas.push(element);
-          this.console.log(element)
         });
-       
       }
     });
    
   }
+
+  setPass(ideaPass: boolean, i:number){
+    this.pass[i] = ideaPass;
+  
+    if(this.pass[i] === true){
+      return 'bg-green-200';
+    }else{
+      
+      return 'bg-red-200';
+    }
+  }
+
+  getPass(i:number){
+    return this.pass[i];
+  }
+
+ 
 
 }
