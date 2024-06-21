@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Criteria, CriteriaRanking, ExpectedKPIs, Idea, IdeaCriteriaPair, SwotFieldRow, Thumbnail, VCWBusinessModel, VCWChallenge, VCWConcept, VCWHasCriteria, VCWHasIdea, VCWPrototype, VCWTestAndKpisEvaluation, VCWThreeMs, VCWValueProposition, VCWImplementationAndControl} from '@core/models';
+import { Criteria, CriteriaRanking, ExpectedKPIs, Idea, IdeaCriteriaPair, SwotFieldRow, Thumbnail, VCWBusinessModel, VCWChallenge, VCWConcept, VCWHasCriteria, VCWHasIdea, VCWPrototype, VCWTestAndKpisEvaluation, VCWThreeMs, VCWValueProposition, VCWImplementationAndControl, VCWValueCreationFunnel} from '@core/models';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 
@@ -167,7 +167,13 @@ export class VcwPhasesService {
     return this.http.put<CriteriaRanking>(url, rankingData, this.httpOptions);
   }
 
-   // Phase 4b
+  //Phase 4a
+  getValueCreationFunnel(vcwId: number, projectId: number): Observable<VCWValueCreationFunnel>{
+    const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/ValueCreationFunnel`;
+    return this.http.get<VCWValueCreationFunnel>(url, this.httpOptions);
+  }
+
+  // Phase 4b
    getConcept(vcwId: number, projectId: number): Observable<VCWConcept> {
     const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/concepts`;
     return this.http.get<VCWConcept>(url, this.httpOptions);
