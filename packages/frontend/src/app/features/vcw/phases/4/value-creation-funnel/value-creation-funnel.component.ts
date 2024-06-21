@@ -13,7 +13,6 @@ export class ValueCreationFunnelComponent implements OnInit{
   vcwId: number;
   vcwValueCreationFunnel: VCWValueCreationFunnel;
   vcfIdeas: VcfIdeas[] = [];
-  console = console;
   pass: boolean[] = [];
 
 
