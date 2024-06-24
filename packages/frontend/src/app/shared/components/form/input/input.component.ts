@@ -77,7 +77,7 @@ export class InputComponent implements OnInit, OnChanges {
   ngOnInit(): void { }
 
   writeValue(value: string): void {
-    if (value) this._value = value;
+    if (value !== undefined) this._value = value;
   }
 
   registerOnChange(fn: any): void {
