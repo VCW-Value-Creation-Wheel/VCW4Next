@@ -123,19 +123,29 @@ export class RankWeightCriteriaComponent implements OnInit {
     if (this.rankCriteriaForm.valid) {
       const type = this.rankCriteriaForm.controls.type.value;
       if (this.intervalsValid()) {
-        if (this.typeFieldValidation(type)) {
-          this.updateCriteriaRanking();
-        } else {
-          if (type === 'must_have') {
-            this.snackbarService.danger('Not valid!', 'For "Must Have" criteria, Ranking is required.')
-            .during(3000).show();
-          } else if (type === 'nice_to_have') {
-            this.snackbarService.danger('Not valid!', 'For "Nice to Have" criteria, Weight is required.')
-            .during(3000).show();
+        if (this.minMaxValuesValid()) {
+          if (this.booleanFieldValidation(type)) {
+            if (this.typeFieldValidation(type)) {
+              this.updateCriteriaRanking();
+            } else {
+              if (type === 'must_have') {
+                this.snackbarService.danger('Not valid!', 'For "Must Have" criteria, Ranking is required.')
+                .during(3000).show();
+              } else if (type === 'nice_to_have') {
+                this.snackbarService.danger('Not valid!', 'For "Nice to Have" criteria, Weight is required.')
+                .during(3000).show();
+              } else {
+                this.snackbarService.danger('Not valid!', 'Please review your values.')
+                .during(3000).show();
+              }
+            }
           } else {
-            this.snackbarService.danger('Not valid!', 'Please review your values.')
+            this.snackbarService.danger('Not valid!', 'For "Must Have" Yes/No criteria, both IntervalMin and IntervalMax have to be "1".')
             .during(3000).show();
           }
+        } else {
+          this.snackbarService.danger('Not valid!', 'IntervalMax should be equal or greater than IntervalMin.')
+          .during(3000).show();
         }
       } else {
         this.snackbarService.danger('Not valid!', 'At least one of IntervalMin or IntervalMax are required.')
@@ -182,9 +192,9 @@ export class RankWeightCriteriaComponent implements OnInit {
   }
 
   intervalsValid(): boolean {
-      if (this.rankCriteriaForm.controls.intervalMin.value
-        && this.rankCriteriaForm.controls.intervalMax.value
-        && this.rankCriteriaForm.controls.intervalMax.value > this.rankCriteriaForm.controls.intervalMin.value) {
+      if (this.rankCriteriaForm.controls.intervalMin.value !== undefined
+        && this.rankCriteriaForm.controls.intervalMax.value !== undefined
+        && this.rankCriteriaForm.controls.intervalMax.value >= this.rankCriteriaForm.controls.intervalMin.value) {
           return true;
       } else {
         return (this.rankCriteriaForm.controls.intervalMin.value || this.rankCriteriaForm.controls.intervalMax.value)
@@ -198,6 +208,28 @@ export class RankWeightCriteriaComponent implements OnInit {
       return this.rankCriteriaForm.controls.weight.value !== null && this.rankCriteriaForm.controls.weight.value !== '';
     } else {
       return false;
+    }
+  }
+
+  booleanFieldValidation(type: string): boolean {
+    if (type === 'must_have') {
+      if (this.rankingCriteria.valueType === 'yes_or_no') {
+        return this.rankCriteriaForm.controls.intervalMin.value == 1 
+          && this.rankCriteriaForm.controls.intervalMax.value == 1;
+      } else {
+        return true;
+      }
+    } else {
+      return true;
+    }
+  }
+
+  minMaxValuesValid(): boolean {
+    if (this.rankCriteriaForm.controls.intervalMin.value !== undefined
+      && this.rankCriteriaForm.controls.intervalMax.value !== undefined) {
+        return this.rankCriteriaForm.controls.intervalMax.value >= this.rankCriteriaForm.controls.intervalMin.value;
+    } else {
+      return true;
     }
   }
 }
