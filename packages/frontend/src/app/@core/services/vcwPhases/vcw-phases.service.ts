@@ -173,6 +173,11 @@ export class VcwPhasesService {
     return this.http.get<VCWValueCreationFunnel>(url, this.httpOptions);
   }
 
+  getMultipleCriteriaDecisionAnalysis(vcwId: number, projectId){
+    const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/MultipleCriteriaDecisionAnalysis`;
+    return this.http.get(url, this.httpOptions);
+  }
+
   // Phase 4b
    getConcept(vcwId: number, projectId: number): Observable<VCWConcept> {
     const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}/concepts`;
