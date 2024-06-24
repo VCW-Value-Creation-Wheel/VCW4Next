@@ -49,6 +49,7 @@
                         [numberMin]="getMinValue(field)"
                         [numberMax]="getMaxValue(field)"
                         [isDisabled]="isFieldEditDisabled(field)"
+                        (emitKeyPress)="keyPressHandler($event, field)"
                     ></app-input>
                 </ng-container>
                 <ng-template #nestedInput>
