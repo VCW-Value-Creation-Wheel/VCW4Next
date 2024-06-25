@@ -140,7 +140,7 @@ export class RankWeightCriteriaComponent implements OnInit {
               }
             }
           } else {
-            this.snackbarService.danger('Not valid!', 'For "Must Have" Yes/No criteria, both IntervalMin and IntervalMax have to be "1".')
+            this.snackbarService.danger('Not valid!', 'For "Must Have" Yes/No criteria, IntervalMin and IntervalMax have to be the same value.')
             .during(3000).show();
           }
         } else {
@@ -214,8 +214,11 @@ export class RankWeightCriteriaComponent implements OnInit {
   booleanFieldValidation(type: string): boolean {
     if (type === 'must_have') {
       if (this.rankingCriteria.valueType === 'yes_or_no') {
-        return this.rankCriteriaForm.controls.intervalMin.value == 1 
-          && this.rankCriteriaForm.controls.intervalMax.value == 1;
+        return (this.rankCriteriaForm.controls.intervalMin.value == 1 
+          && this.rankCriteriaForm.controls.intervalMax.value == 1)
+          || (this.rankCriteriaForm.controls.intervalMin.value == 0
+            && this.rankCriteriaForm.controls.intervalMax.value == 0
+          );
       } else {
         return true;
       }
@@ -225,9 +228,16 @@ export class RankWeightCriteriaComponent implements OnInit {
   }
 
   minMaxValuesValid(): boolean {
-    if (this.rankCriteriaForm.controls.intervalMin.value !== undefined
-      && this.rankCriteriaForm.controls.intervalMax.value !== undefined) {
-        return this.rankCriteriaForm.controls.intervalMax.value >= this.rankCriteriaForm.controls.intervalMin.value;
+    if ((this.rankCriteriaForm.controls.intervalMin.value !== undefined 
+      && this.rankCriteriaForm.controls.intervalMin.value !== null
+      && this.rankCriteriaForm.controls.intervalMin.value !== ''
+      )
+      && (this.rankCriteriaForm.controls.intervalMax.value !== undefined 
+        && this.rankCriteriaForm.controls.intervalMax.value !== null
+        && this.rankCriteriaForm.controls.intervalMax.value !== ''
+      )) {
+        return parseFloat(this.rankCriteriaForm.controls.intervalMax.value) 
+          >= parseFloat(this.rankCriteriaForm.controls.intervalMin.value);
     } else {
       return true;
     }
