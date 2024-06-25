@@ -24,14 +24,14 @@
             
             <tr *ngFor="let ideas of vcfIdeas; let i = index;" >
                 <td class="border-2 border-primary-500 p-2 border-radiusw-56 font-bold"   
-                [ngClass]="getPass(i) === true ? 'bg-green-200' : 'bg-red-200 line-through'">
+                [ngClass]="getIdeaPass(i) ? 'bg-green-200' : 'bg-red-200 line-through'">
                     {{ideas.idea.name}}
                 </td>
 
                 <td class=" w-56 justify-center h-10 p-2 text-center border-2 border-primary-500" 
-                    [ngClass]="criterias.ideaAndCriteria.vcfResult === true ?  setPass(true,i) : setPass(false,i)" 
-                    *ngFor="let criterias of ideas.vcfCriterias" >
-                    {{criterias.ideaAndCriteria.value}}
+                    [ngClass]="getCriteriaPass(i, j)" 
+                    *ngFor="let criterias of ideas.vcfCriterias; let j = index;" >
+                    {{criterias.ideaAndCriteria.criteria.valueType === 'number' ? criterias.ideaAndCriteria.value : getValueLabel(criterias.ideaAndCriteria.value)}}
                 </td>
             </tr>
         </table>

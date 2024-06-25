@@ -13,7 +13,7 @@ export class ValueCreationFunnelComponent implements OnInit{
   vcwId: number;
   vcwValueCreationFunnel: VCWValueCreationFunnel;
   vcfIdeas: VcfIdeas[] = [];
-  pass: boolean[] = [];
+  pass: boolean[][] = [];
 
 
 
@@ -39,26 +39,33 @@ export class ValueCreationFunnelComponent implements OnInit{
         this.vcwValueCreationFunnel.vcfIdeas.forEach((element)=>{
           this.vcfIdeas.push(element);
         });
+        this.evaluateIdeaAndCriteria();
+
       }
     });
    
   }
 
-  setPass(ideaPass: boolean, i:number){
-    this.pass[i] = ideaPass;
+  getCriteriaPass(i: number, j: number){
+    return this.pass[i][j] ? 'bg-green-200' : 'bg-red-200';
+  }
+
+  getIdeaPass(ideaIndex: number) {
+    return this.pass[ideaIndex].every(value => value === true);
+  }
+
+  getValueLabel(value: number): string {
+    return value === 1 ? 'Yes' : 'No';
+  }
   
-    if(this.pass[i] === true){
-      return 'bg-green-200';
-    }else{
-      
-      return 'bg-red-200';
-    }
+  evaluateIdeaAndCriteria() {
+    let criteriaPass: boolean[];
+    this.vcfIdeas.forEach((ideas, ideaIndex) => {
+      criteriaPass = [];
+      ideas.vcfCriterias.forEach((criteria, criteriaIndex) => {
+        criteriaPass[criteriaIndex] = criteria.ideaAndCriteria.vcfResult;
+      });
+      this.pass[ideaIndex] = criteriaPass;
+    });
   }
-
-  getPass(i:number){
-    return this.pass[i];
-  }
-
- 
-
 }
