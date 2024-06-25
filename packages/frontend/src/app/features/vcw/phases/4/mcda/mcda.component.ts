@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PhaseNavigationService, VcwPhasesService } from '@core';
+import { PhaseNavigationService, VCWMcda, VcwPhasesService, mcdaIdeas } from '@core';
 
 @Component({
   selector: 'app-mcda',
@@ -11,6 +11,9 @@ export class McdaComponent implements OnInit{
 
   projectId: number;
   vcwId: number;
+  vcwMcda: VCWMcda;
+  mcdaIdeas: mcdaIdeas[] = [];
+  pass: boolean[] = [];
 
   constructor(  
     private phaseNavService: PhaseNavigationService,
@@ -28,11 +31,32 @@ export class McdaComponent implements OnInit{
     this.projectId = parseInt(this.activatedRoute.snapshot.paramMap.get('project_id'), 10);
     this.vcwId = parseInt(this.activatedRoute.snapshot.paramMap.get('vcw_id'), 10);
 
-    this.vcwPhasesService.getMultipleCriteriaDecisionAnalysis(this.vcwId,this.projectId).subscribe((teste)=>{
-      console.log(teste);
+    this.vcwPhasesService.getMultipleCriteriaDecisionAnalysis(this.vcwId,this.projectId).subscribe((data)=>{
+      if(data){
+        console.log(data)
+        this.vcwMcda = data;
+        this.vcwMcda.mcdaIdeas.forEach((element)=>{
+          this.mcdaIdeas.push(element);
+        });
+      };
     })
   }
 
+  setPass(ideaPass: boolean, i:number){
+    this.pass[i] = ideaPass;
   
+    if(this.pass[i] === true){
+      return 'bg-green-200';
+    }else{
+      
+      return 'bg-red-200';
+    }
+  }
+
+  getPass(i:number){
+    return this.pass[i];
+  }
 
 }
+
+
