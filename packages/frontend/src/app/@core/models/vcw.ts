@@ -155,3 +155,13 @@ export interface HasCriteria{
     vcwId: number;
     weight: number;
 }
+
+export interface VCWMcda{
+    mcdaIdeas: mcdaIdeas[];
+}
+
+export interface mcdaIdeas{
+    idea: Idea;
+    sum: number;
+    vcfCriterias: VcfCriterias[];
+}
