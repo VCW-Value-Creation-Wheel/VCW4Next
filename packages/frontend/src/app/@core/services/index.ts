@@ -5,3 +5,4 @@ export * from './phaseNavigation/phase-navigation.service';
 export * from './vcwPhases/vcw-phases.service';
 export * from './projects/projects.service';
 export * from './vcw/vcw.service';
+export * from './context/context.service';
