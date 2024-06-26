@@ -168,83 +168,63 @@ public class ValueCreationFunnelService {
         // used to update the db with vcf results
         List<IdeaAndCriteriaEntity> iacs = new ArrayList<>();
         ideaAndCriteriaRepository.findByIdeaVcwHasIdeaEntityVcwId(vcwId).forEach(iacs::add);
+        iacs.stream().forEach(iac -> iac.setVcfResult(false)); // by default the vcf result is false for all pairs
 
         List<VCFCriteriaDTO> criterias = vcfObj.getVcfIdeas().get(0).getVcfCriterias();
 
         LinkedList<VCFIdeaDTO> acceptedVcfIdeas = new LinkedList<>(vcfObj.getVcfIdeas());
         LocalDateTime vcfTimestamp = LocalDateTime.now();
-        int index = 0;
+        int criteriaIndex = 0;
         for (VCFCriteriaDTO criteria : criterias) {
 
-            List<VCFIdeaDTO> auxlist = new ArrayList<>(acceptedVcfIdeas);
+            List<VCFIdeaDTO> auxList = new ArrayList<>(acceptedVcfIdeas);
             acceptedVcfIdeas = new LinkedList<>();
 
-            for (VCFIdeaDTO idea : auxlist) {
+            for (VCFIdeaDTO idea : auxList) {
 
                 // find IdeaAndCriteriaEntity
 
                 IdeaAndCriteriaEntity iac = iacs.stream().filter(e -> e.getCriteria().equals(criteria.getCriteria())
                         && e.getIdea().equals(idea.getIdea())).findAny().orElse(null);
 
-                Float value = idea.getVcfCriterias().get(index).getIdeaAndCriteria().getValue();
-
-                Float intervalMin = idea.getVcfCriterias().get(index).getVcwHasCriteria().getIntervalMin();
-
-                Float intervalMax = idea.getVcfCriterias().get(index).getVcwHasCriteria().getIntervalMax();
+                Float value = idea.getVcfCriterias().get(criteriaIndex).getIdeaAndCriteria().getValue();
+                Float intervalMin = idea.getVcfCriterias().get(criteriaIndex).getVcwHasCriteria().getIntervalMin();
+                Float intervalMax = idea.getVcfCriterias().get(criteriaIndex).getVcwHasCriteria().getIntervalMax();
 
                 if (intervalMin == null) {
                     if (value <= intervalMax) {
-
                         acceptedVcfIdeas.addFirst(idea);
                         iac.setVcfResult(true);
-                        iac.setUpdatedBy(userId);
-                        iac.setUpdatedAt(vcfTimestamp);
-
                     } else {
                         rejectedVcfIdeas.addFirst(idea);
-                        iac.setVcfResult(false);
-                        iac.setUpdatedBy(userId);
-                        iac.setUpdatedAt(vcfTimestamp);
                     }
                 } else if (intervalMax == null) {
                     if (value >= intervalMin) {
-
                         acceptedVcfIdeas.addFirst(idea);
                         iac.setVcfResult(true);
-                        iac.setUpdatedBy(userId);
-                        iac.setUpdatedAt(vcfTimestamp);
-
                     } else {
                         rejectedVcfIdeas.addFirst(idea);
-                        iac.setVcfResult(false);
-                        iac.setUpdatedBy(userId);
-                        iac.setUpdatedAt(vcfTimestamp);
                     }
                 } else {
                     if (value >= intervalMin && value <= intervalMax) {
-
                         acceptedVcfIdeas.addFirst(idea);
                         iac.setVcfResult(true);
-                        iac.setUpdatedBy(userId);
-                        iac.setUpdatedAt(vcfTimestamp);
-
                     } else {
                         rejectedVcfIdeas.addFirst(idea);
-                        iac.setVcfResult(false);
-                        iac.setUpdatedBy(userId);
-                        iac.setUpdatedAt(vcfTimestamp);
                     }
                 }
+                iac.setUpdatedBy(userId);
+                iac.setUpdatedAt(vcfTimestamp);
             }
 
-            index++;
+            criteriaIndex++;
         }
 
-        //update vcf results in the DB
+        // update vcf results in the DB
         ideaAndCriteriaRepository.saveAll(iacs);
 
 
-        // concatenate
+        // concatenate acceptedVcfIdeas with rejectedVcfIdeas lists
         finalVcfObj.setVcfIdeas(acceptedVcfIdeas);
         finalVcfObj.getVcfIdeas().addAll(rejectedVcfIdeas);
 
