@@ -59,6 +59,7 @@ export type IdeaCriteriaPair = {
     criteria: Criteria;
     value: number | string;
     id?: number;
+    mcdaResult?: number;
 };
 
 export interface VCWHasIdea {
@@ -143,6 +144,7 @@ export interface VcfCriterias{
     criteria: Criteria;
     ideaAndCriteria: IdeaCriteriaPair;
     vcwHasCriteria: HasCriteria;
+  
 }
 
 export interface HasCriteria{

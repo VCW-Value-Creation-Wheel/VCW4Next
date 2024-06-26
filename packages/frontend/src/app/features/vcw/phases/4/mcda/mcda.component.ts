@@ -13,7 +13,7 @@ export class McdaComponent implements OnInit{
   vcwId: number;
   vcwMcda: VCWMcda;
   mcdaIdeas: mcdaIdeas[] = [];
-  pass: boolean[] = [];
+  pass: boolean[][] = [];
 
   constructor(  
     private phaseNavService: PhaseNavigationService,
@@ -33,30 +33,43 @@ export class McdaComponent implements OnInit{
 
     this.vcwPhasesService.getMultipleCriteriaDecisionAnalysis(this.vcwId,this.projectId).subscribe((data)=>{
       if(data){
-        console.log(data)
+        
         this.vcwMcda = data;
         this.vcwMcda.mcdaIdeas.forEach((element)=>{
           this.mcdaIdeas.push(element);
         });
+        this.evaluateIdeaAndCriteria();
       };
     })
   }
 
-  setPass(ideaPass: boolean, i:number){
-    this.pass[i] = ideaPass;
+
+
+  getCriteriaPass(i: number, j: number){
+    return this.pass[i][j] ? 'bg-green-200' : 'bg-red-200';
+  }
+
+  getIdeaPass(ideaIndex: number) {
+    return this.pass[ideaIndex].every(value => value === true);
+  }
+
+  getValueLabel(value: number): string {
+    return value > 0 ? 'Yes' : 'No';
+  }
   
-    if(this.pass[i] === true){
-      return 'bg-green-200';
-    }else{
-      
-      return 'bg-red-200';
-    }
-  }
+  evaluateIdeaAndCriteria() {
+    let criteriaPass: boolean[];
+    this.mcdaIdeas.forEach((ideas, ideaIndex) => {
+      criteriaPass = [];
+      ideas.vcfCriterias.forEach((criteria, criteriaIndex) => {
+       
+        criteriaPass[criteriaIndex] = criteria.ideaAndCriteria.mcdaResult > 0;
+       
+      });
+      this.pass[ideaIndex] = criteriaPass;
+    });
 
-  getPass(i:number){
-    return this.pass[i];
-  }
-
+}
 }
 
 

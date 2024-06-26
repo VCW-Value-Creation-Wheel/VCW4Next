@@ -25,18 +25,20 @@
             
             <tr *ngFor="let ideas of mcdaIdeas; let i = index;" >
                 <td class="border-2 border-primary-500 p-2 border-radiusw-56 font-bold"   
-                [ngClass]="getPass(i) === true ? 'bg-green-200' : 'bg-red-200 line-through'">
+                [ngClass]="getIdeaPass(i) ? 'bg-green-200' : 'bg-red-200 line-through'">
                     {{ideas.idea.name}}
                 </td>
 
                 <td class=" w-56 justify-center h-10 p-2 text-center border-2 border-primary-500" 
-                    [ngClass]="criterias.ideaAndCriteria.mcdaResult > 0 ?  setPass(true,i) : setPass(false,i)" 
-                    *ngFor="let criterias of ideas.vcfCriterias" >
-                    {{criterias.ideaAndCriteria.mcdaResult + ' (' + criterias.ideaAndCriteria.value + ')'}}
+                    [ngClass]="  getCriteriaPass(i, j)" 
+                    *ngFor="let criterias of ideas.vcfCriterias; let j = index;" >
+                    {{criterias.ideaAndCriteria.criteria.valueType === 'number' 
+                        ? criterias.ideaAndCriteria.mcdaResult + ' (' + criterias.ideaAndCriteria.value + ')' : getValueLabel(criterias.ideaAndCriteria.mcdaResult)}}
+                 
                 </td>
                 <td class="justify-center h-10 p-2 text-center border-2 border-primary-500">{{ideas.sum}}</td>
             </tr>
         </table>
     </div>
 </div>
-<!--   -->
+<!--    {{criterias.ideaAndCriteria.mcdaResult + ' (' + criterias.ideaAndCriteria.value + ')'}}  -->
