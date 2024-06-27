@@ -86,4 +86,9 @@ export class ProjectsService {
     return this.http.post(url,{userId,roleId},this.httpOptions);
   }
 
+  getProjectRoles(projectId: number): Observable<UserEnum[]> {
+    const url =`${this.projectsBaseUrl}/${projectId}/users`;
+    return this.http.get<UserEnum[]>(url, this.httpOptions);
+  }
+
 }
