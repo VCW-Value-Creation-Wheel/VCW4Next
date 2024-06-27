@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { EventOption, Options, ProjectsService, SnackbarService, UserRole } from '@core';
 import { projectConfig } from '@core/configs/forms/project';
 import { userConfig } from '@core/configs/forms/user';
-import { faArrowLeft, faPenToSquare, faXmark, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faPenToSquare, faXmark, faSearch, faSave, faUserPlus } from '@fortawesome/free-solid-svg-icons';
 import { take } from 'rxjs/operators';
 
 
@@ -23,6 +23,8 @@ export class NewProjectComponent implements OnInit {
   faXmark = faXmark;
   faArrowLeft = faArrowLeft;
   faSearch = faSearch;
+  faSave = faSave;
+  faUserPlus = faUserPlus;
 
   langOptions: Options[] = [
     {
