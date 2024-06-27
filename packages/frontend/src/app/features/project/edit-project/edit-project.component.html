@@ -1,4 +1,4 @@
-<div class="m-4 p-4">
+<div class="m-4 p-4 px-64">
     <app-button  
     [label]="'Back'"
     [leftIcon]="faArrowLeft"
@@ -6,9 +6,9 @@
     ></app-button>
 </div>
 <div [formGroup]="form" (ngSubmit)="onSubmit($event)">
-    <div class="grid grid-cols-4 gap-4 m-4 p-4 rounded-lg">
+    <div class="grid grid-cols-4 gap-4 m-4 p-4 px-64 rounded-lg">
         <div class="col-span-4 text-2xl font-bold text-primary">Edit Project</div>
-        <div class="col-span-3 md:col-span-2 m-2 p-2">
+        <div class="col-span-3 md:col-span-2 my-2 py-2">
             <app-input
                 id="project-title"
                 [label]="'Project Title'"
@@ -17,7 +17,7 @@
             >
             </app-input>
         </div>
-        <div class="col-span-4 m-2 p-2">
+        <div class="col-span-4 my-2 py-2 pr-96">
             <app-text-area
                 id="project-description"   
                 [label]="'Project Description'"
@@ -26,7 +26,7 @@
             >
             </app-text-area>
         </div>
-        <div class="col-span-3 md:col-span-1 m-2 p-2">
+        <div class="col-span-3 md:col-span-1 my-2 py-2">
             <div class="flex flex-cols-2 ">
                 <p class="pr-3 text-primary-500">File Name: </p>
                 <p>{{fileName}}</p>
@@ -36,6 +36,7 @@
                 <p>{{fileType}}</p>
             </div>
             <app-button
+                [leftIcon]="faImage"
                 [label]="'Add New Thumbnail'"
                 (click)="showInput = true"
                 class="p-2">
@@ -50,7 +51,7 @@
             >
             </app-input-file>
         </div>
-        <div class="col-span-3 md:col-span-1 m-2 p-2">
+        <div class="col-span-3 md:col-span-1 my-2 py-2">
             <app-select-input
                 [label] = "'Language'"
                 [options]="langOptions"
@@ -87,8 +88,8 @@
         </div>
         </div>
 
-        <div class="grid grid-cols-4 col-span-4 px-2 ">
-            <div *ngIf="isAddUserActive" [formGroup]="formUser" class="col-span-4 md:m-2 md:p-2 ">
+        <div class="grid grid-cols-4 col-span-4">
+            <div *ngIf="isAddUserActive" [formGroup]="formUser" class="col-span-4 md:my-2 md:py-2 ">
                 <p class="text-gray-700 pb-2">
                     Find User
                 </p>
@@ -103,7 +104,7 @@
                         border border-transparent
                         max-h-[40px]
                         focus:ring-primary-500 focus:bg-white focus:ring-1
-                        py-2
+                        py-2pl-4 place-items-stretch 
                         px-3
                         {{error?'bg-red-200':'bg-gray-100'}}
                     "
@@ -134,7 +135,7 @@
           
                 
               
-                <div *ngFor="let user of this.users; index as id" class="flex md:px-20 md:p-2 w-full items-center md:items-end">
+                <div *ngFor="let user of this.users; index as id" class="flex md:py-2 w-full items-center md:items-end">
                     <div class="w-full md:w-1/5 items-end">
                         <p class="mt-2 mb:4 md:mb-2">User</p>
                         <p
@@ -183,19 +184,21 @@
                 </div>
                  
             </div>
-            <div class="col-span-4 my-2" *ngIf="!isAddUserActive ">
+            <div class="col-span-4" *ngIf="!isAddUserActive ">
                 <app-button
                 [label]="'Add User'"
                 (click)="isAddUserActive = true"
+                [leftIcon]="faUser"
                 >
                 </app-button>
             </div>
         </div>
-        <div class="m-2 flex">
+        <div class="my-2 pt-8 flex">
             <app-button
             [label]="'Submit'"
             (click)="onSubmit($event)"
             [isDisabled]="!form.valid"
+            [leftIcon]="faSave"
             >
             </app-button>
         </div>

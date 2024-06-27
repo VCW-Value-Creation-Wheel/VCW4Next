@@ -5,7 +5,7 @@ import { EventOption, Options, ProjectsService, SnackbarService, UserInfo, UserR
 import { projectConfig } from '@core/configs/forms/project';
 import { userConfig } from '@core/configs/forms/user';
 import { Role } from '@core/models/role';
-import { faArrowLeft, faPenToSquare, faSearch, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faPenToSquare, faSearch, faXmark, faSave, faImage, faUserPlus } from '@fortawesome/free-solid-svg-icons';
 import { take } from 'rxjs/operators';
 
 
@@ -24,7 +24,9 @@ export class EditProjectComponent {
   faXmark = faXmark;
   faArrowLeft = faArrowLeft;
   faSearch = faSearch;
-  
+  faSave = faSave;
+  faImage = faImage;
+  faUser = faUserPlus;
 
   langOptions: Options[] = [
     {
