@@ -61,15 +61,15 @@
         </div>
         <div class="col-span-4 text-xl font-bold ">Users and Roles</div>
 
-        <div class="flex flex-row col-span-1 rounded-md ">
+        <div class="flex flex-row col-span-4 rounded-md ">
             
-            <div class="flex flex-col ">
+            <div class="flex flex-col gap-4 justify-between w-1/12">
                 <div *ngFor="let userInfo of this.userInfo; index as id" class="w-full pb-2" >
                     <p class="pb-2 text-primary-500 font-bold">User</p>
                     <p class="rounded-md border-2 border-primary-500 p-2 w-full ">{{userInfo}}</p>
                 </div>
             </div>
-            <div class="flex flex-col  pl-4 place-items-stretch ">
+            <div class="flex flex-col gap-4 justify-between w-4/12 pl-4 place-items-stretch ">
             <div *ngFor="let userRole of this.allUsersRole; index as id" class="pb-2">
                 <p class="pb-2 text-primary-500 font-bold">Role</p>
                 <div class="flex flex-row  items-center ">   
