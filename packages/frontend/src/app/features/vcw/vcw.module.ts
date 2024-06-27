@@ -23,6 +23,7 @@ import { ConceptAndValuePropositionComponent } from './phases/4/concept-and-valu
 import { MsAndBusinessModelComponent } from './phases/5/ms-and-business-model/ms-and-business-model.component';
 import { ImplementationControlComponent } from './phases/5/implementation-control/implementation-control.component';
 import { FinalVcwReportComponent } from './final-vcw-report/final-vcw-report.component';
+import { McdaComponent } from './phases/4/mcda/mcda.component';
 
 
 
@@ -45,6 +46,7 @@ import { FinalVcwReportComponent } from './final-vcw-report/final-vcw-report.com
     PrototypeComponent,
     TestAndKpisEvaluationComponent,
     ValueCreationFunnelComponent,
+    McdaComponent,
     ConceptAndValuePropositionComponent,
     MsAndBusinessModelComponent,
     ImplementationControlComponent,

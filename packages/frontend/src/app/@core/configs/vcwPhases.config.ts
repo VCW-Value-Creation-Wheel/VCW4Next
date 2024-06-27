@@ -60,12 +60,18 @@ const vcwPhasesNavigation: VCWPhase = {
         id: '4a',
         name: 'Value Creation Funnel',
         previousPhaseId: '3c',
+        nextPhaseId: '4A'
+    },
+    '4A': {
+        id: '4a',
+        name: 'MCDA',
+        previousPhaseId: '4a',
         nextPhaseId: '4b'
     },
     '4b': {
         id: '4b',
         name: 'Concept & Value Proposition',
-        previousPhaseId: '4a',
+        previousPhaseId: '4A',
         nextPhaseId: '4c'
     },
     '4c': {

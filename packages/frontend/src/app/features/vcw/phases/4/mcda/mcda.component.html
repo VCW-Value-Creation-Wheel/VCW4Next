@@ -1,12 +1,12 @@
 <div class="px-4 py-4 flex flex-row justify-between mx-4 md:mx-64 lg:mx-80">
-    <h1 class="text-2xl font-bold text-primary">Value Creation Funnel</h1>
+    <h1 class="text-2xl font-bold text-primary">MCDA</h1>
 </div>
 
 <div class="px-4 py-4 flex flex-row justify-between mx-4 md:mx-64 lg:mx-80">
-    <div *ngIf="vcfIdeas !== undefined" class="w-full">
+    <div *ngIf="mcdaIdeas !== undefined" class="w-full">
         <table class="border-2 border-primary-500 rounded-full w-full">
 
-            <tr class="border-2 border-primary-500" *ngFor="let ideas of vcfIdeas.slice(0,1)">
+            <tr class="border-2 border-primary-500" *ngFor="let ideas of mcdaIdeas.slice(0,1)">
                 <td class="border-2 border-primary-500 w-56" ></td>
                 
                 <td *ngFor="let criterias of ideas.vcfCriterias" class="p-2 border-2 border-primary-500 w-56 text-center font-bold group ">
@@ -20,20 +20,25 @@
                         <p>{{ 'max value: ' + criterias.vcwHasCriteria.intervalMax}}</p>
                     </span>
                 </td>
+                <td class="font-bold p-2">sum</td>
             </tr>
             
-            <tr *ngFor="let ideas of vcfIdeas; let i = index;" >
+            <tr *ngFor="let ideas of mcdaIdeas; let i = index;" >
                 <td class="border-2 border-primary-500 p-2 border-radiusw-56 font-bold"   
-                [ngClass]="getPass(i) === true ? 'bg-green-200' : 'bg-red-200 line-through'">
+                [ngClass]="getIdeaPass(i) ? 'bg-green-200' : 'bg-red-200 line-through'">
                     {{ideas.idea.name}}
                 </td>
 
                 <td class=" w-56 justify-center h-10 p-2 text-center border-2 border-primary-500" 
-                    [ngClass]="criterias.ideaAndCriteria.vcfResult === true ?  setPass(true,i) : setPass(false,i)" 
-                    *ngFor="let criterias of ideas.vcfCriterias" >
-                    {{criterias.ideaAndCriteria.value}}
+                    [ngClass]="  getCriteriaPass(i, j)" 
+                    *ngFor="let criterias of ideas.vcfCriterias; let j = index;" >
+                    {{criterias.ideaAndCriteria.criteria.valueType === 'number' 
+                        ? criterias.ideaAndCriteria.mcdaResult + ' (' + criterias.ideaAndCriteria.value + ')' : getValueLabel(criterias.ideaAndCriteria.mcdaResult)}}
+                 
                 </td>
+                <td class="justify-center h-10 p-2 text-center border-2 border-primary-500">{{ideas.sum}}</td>
             </tr>
         </table>
     </div>
 </div>
+<!--    {{criterias.ideaAndCriteria.mcdaResult + ' (' + criterias.ideaAndCriteria.value + ')'}}  -->
