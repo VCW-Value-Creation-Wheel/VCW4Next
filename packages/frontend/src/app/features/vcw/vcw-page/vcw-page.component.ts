@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { VCW, VcwService } from '@core';
+import { SnackbarService, VCW, VcwService } from '@core';
 import { VcwMockService } from '@core/services/mocks/vcw/vcw-mock.service';
-import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
-import { Observable } from 'rxjs';
+import { faArrowLeft, faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import { Observable, Subject } from 'rxjs';
 import { environment } from '../../../../environments/environment';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-vcw-page',
@@ -14,19 +15,23 @@ import { environment } from '../../../../environments/environment';
 export class VcwPageComponent implements OnInit {
 
   faArrowLeft = faArrowLeft;
+  faTrashCan = faTrashCan;
 
   // vcwType: string;
   projectId: number;
   vcwId: number;
 
   vcw$: Observable<VCW>;
+  actionConfirm$: Subject<boolean> = new Subject();
 
   useMocks: boolean;
+  confirmDialogOpen: boolean = false;
 
   constructor(private router: Router,
               private activatedRoute: ActivatedRoute,
               private vcwService: VcwService,
-              private vcwMockService: VcwMockService) {}
+              private vcwMockService: VcwMockService,
+              private snackbar: SnackbarService) {}
 
   ngOnInit(): void {
     this.useMocks = environment.activateMocks;
@@ -48,5 +53,37 @@ export class VcwPageComponent implements OnInit {
 
   onBack() {
     this.router.navigate(['../../'], {relativeTo: this.activatedRoute});
+  }
+
+  deleteVcw() {
+    this.confirmDialogOpen = true;
+    this.actionConfirm$.pipe(take(1)).subscribe((userConfirm) => {
+      if (userConfirm) {
+        this.confirmDialogOpen = false;
+        this.vcwService.deleteVcw(this.projectId, this.vcwId).pipe(take(1))
+        .subscribe({
+          next: () => {
+            this.snackbar.success('VCW Deleted!', 'The selected VCW was successfully deleted.')
+            .during(4000).show();
+            this.onBack();
+          },
+          error: () => {
+            this.snackbar.danger('Error!', 'Could not delete VCW. Try again later.')
+            .during(4000).show();
+          }
+        });
+      } else {
+        this.confirmDialogOpen = false;
+      }
+    });
+
+  }
+
+  onActionCancel() {
+    this.actionConfirm$.next(false);
+  }
+
+  onActionConfirm() {
+    this.actionConfirm$.next(true);
   }
 }
