@@ -3,6 +3,8 @@ import { Role } from "./role";
 export interface UserRole {
     user: string;
     role: string;
+    userName?: string;
+    roleName?: string
 }
 
 export interface UserEnum {

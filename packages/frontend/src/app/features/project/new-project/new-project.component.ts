@@ -145,7 +145,7 @@ export class NewProjectComponent implements OnInit {
       }
 
       for(let i=0; i< lenght; i++){
-        this.isAdded[i] = false;
+        this.isAdded[i] = this.isAdded[i] ?? false;
         this.users[i] = res[i].username;
         this.usersId[i] = res[i].id;
       }
@@ -173,8 +173,16 @@ export class NewProjectComponent implements OnInit {
     this.isAdded[index] = true;
     this.userRole.push({
       user: this.usersId[index],
-      role: this.userWithRole[index]
+      role: this.userWithRole[index],
+      userName: this.users[index],
+      roleName: this.roleOptions[index].label as string
     });
+
+    console.log(this.userRole)
+    console.log(this.users)
+    console.log(this.usersId)
+    console.log(this.isAdded)
+    console.log(this.userWithRole)
   }
 
   
