@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SnackbarService, VCW, VcwService } from '@core';
+import { ProjectsService, SnackbarService, VCW, VcwService } from '@core';
 import { VcwMockService } from '@core/services/mocks/vcw/vcw-mock.service';
 import { faArrowLeft, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { Observable, Subject } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { take } from 'rxjs/operators';
+import { KeycloakService } from 'keycloak-angular';
 
 @Component({
   selector: 'app-vcw-page',
@@ -26,12 +27,15 @@ export class VcwPageComponent implements OnInit {
 
   useMocks: boolean;
   confirmDialogOpen: boolean = false;
+  canDeleteVCW: boolean = false;
 
   constructor(private router: Router,
               private activatedRoute: ActivatedRoute,
               private vcwService: VcwService,
               private vcwMockService: VcwMockService,
-              private snackbar: SnackbarService) {}
+              private snackbar: SnackbarService,
+              private projectsService: ProjectsService,
+              private keycloak: KeycloakService) {}
 
   ngOnInit(): void {
     this.useMocks = environment.activateMocks;
@@ -45,6 +49,20 @@ export class VcwPageComponent implements OnInit {
     } else {
       this.vcw$ = this.vcwService.getVcw(this.projectId, this.vcwId);
     }
+
+    this.projectsService.getProjectRoles(this.projectId).pipe(take(1))
+    .subscribe({
+      next: (data) => {
+        this.keycloak.isLoggedIn().then((authenticated) => {
+          if (authenticated) {
+            const userHash = this.keycloak.getKeycloakInstance().userInfo['sub'];
+            const coordinatorHash = data.find(userEnum => userEnum.role.name === 'Coordinator')?.userInum;
+
+            this.canDeleteVCW = userHash === coordinatorHash;
+          }
+        });
+      }
+    });
   }
 
   onClick(id: string) {

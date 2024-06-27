@@ -10,6 +10,7 @@
             [leftIcon]="faTrashCan"
             (click)="deleteVcw()"
             [isDangerous]="true"
+            [isDisabled]="!canDeleteVCW"
         ></app-button>
     </div>
 </div>
