@@ -568,6 +568,30 @@ public class VcwController {
     return ResponseEntity.status(HttpStatus.OK).body(this.vcwService.update(vcwEntityOptional.get())); 
   }
 
+  @DeleteMapping("/{id}")
+  @Operation(summary = "Deletes VCW with given id if the user has access to it.")
+  public ResponseEntity<Object> deleteVCWById(
+          @PathVariable(value = "project_id") Long projectId,
+          @AuthenticationPrincipal Jwt principal,
+          @PathVariable(value = "id") Long id) {
+
+    Optional<ProjectEntity> project =
+            this.vcwService.findProjectByIdAndUser(projectId, principal.getSubject());
+    if (project.isEmpty())
+      throw new NotFoundException("Project not found.");
+
+    Optional<VcwEntity> vcwEntityOptional =
+            this.vcwService.findById(id);
+
+    if(vcwEntityOptional.isEmpty()) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Vcw not found");
+    }
+
+    this.vcwService.delete(vcwEntityOptional.get());
+
+    return ResponseEntity.noContent().build();
+  }
+
 
 
 }
