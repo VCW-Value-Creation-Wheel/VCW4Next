@@ -100,22 +100,22 @@ public class ProjectController {
     return this.projectService.update(projectDTO, principal.getSubject(), id);
   }
 
-//  @DeleteMapping("/{id}")
-//  public ResponseEntity<Object> delete(
-//      @PathVariable Long id
-//  ) {
-//
-//    Pair<Optional<ProjectEntity>,String> results =
-//            this.projectService.findById(id);
-//    Optional<ProjectEntity> projectEntityOptional = results.getFirst();
-//
-//    if(projectEntityOptional.isEmpty()) {
-//      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Project not found");
-//    }
-//
-//    this.projectService.delete(projectEntityOptional.get());
-//
-//    return ResponseEntity.noContent().build();
-  //}
+
+  @DeleteMapping("/{id}")
+  @Operation(summary = "Deletes project with given id if the user has access to it.")
+  public ResponseEntity<Object> deleteByIdAndUser(
+          @PathVariable(value = "id") Long id,
+          @AuthenticationPrincipal Jwt principal) {
+
+    Optional<ProjectEntity> project2delete = this.projectService.findByIdAndUser(id, principal.getSubject());
+
+    if(project2delete.isEmpty()) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Project not found");
+    }
+
+    this.projectService.delete(project2delete.get());
+
+    return ResponseEntity.noContent().build();
+  }
 
 }
