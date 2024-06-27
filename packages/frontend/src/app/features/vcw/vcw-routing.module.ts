@@ -19,6 +19,7 @@ import { ConceptAndValuePropositionComponent } from './phases/4/concept-and-valu
 import { MsAndBusinessModelComponent } from './phases/5/ms-and-business-model/ms-and-business-model.component';
 import { ImplementationControlComponent } from './phases/5/implementation-control/implementation-control.component';
 import { FinalVcwReportComponent } from './final-vcw-report/final-vcw-report.component';
+import { McdaComponent } from './phases/4/mcda/mcda.component';
 
 const routes: Routes = [
     {
@@ -64,6 +65,10 @@ const routes: Routes = [
     {
         path: ':vcw_id/phases/4a',
         component: ValueCreationFunnelComponent
+    },
+    {
+        path: ':vcw_id/phases/4A',
+        component: McdaComponent
     },
     {
         path: ':vcw_id/phases/4b',
