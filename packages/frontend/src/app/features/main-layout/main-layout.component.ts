@@ -95,8 +95,12 @@ export class MainLayoutComponent implements OnInit, OnDestroy {
           .subscribe((vcwData) => {
             this.contextService.setVCWContext(vcwData);
           })
+        } else {
+          this.contextService.setVCWContext(undefined);
         }
-      })
+      });
+    } else {
+      this.contextService.setProjectContext(undefined);
     }
   }
 
