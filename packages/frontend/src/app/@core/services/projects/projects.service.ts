@@ -91,4 +91,9 @@ export class ProjectsService {
     return this.http.get<UserEnum[]>(url, this.httpOptions);
   }
 
+  deleteProject(projectId: number): Observable<any> {
+    const url = `${this.projectsBaseUrl}/${projectId}`;
+    return this.http.delete(url, this.httpOptions);
+  }
+
 }

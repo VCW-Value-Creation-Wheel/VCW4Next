@@ -5,7 +5,8 @@ import { EventOption, Options, ProjectsService, SnackbarService, UserInfo, UserR
 import { projectConfig } from '@core/configs/forms/project';
 import { userConfig } from '@core/configs/forms/user';
 import { Role } from '@core/models/role';
-import { faArrowLeft, faPenToSquare, faSearch, faXmark, faSave, faImage, faUserPlus } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faPenToSquare, faSearch, faXmark, faSave, faImage, faUserPlus, faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import { Subject } from 'rxjs';
 import { take } from 'rxjs/operators';
 
 
@@ -27,6 +28,7 @@ export class EditProjectComponent {
   faSave = faSave;
   faImage = faImage;
   faUser = faUserPlus;
+  faTrashCan = faTrashCan;
 
   langOptions: Options[] = [
     {
@@ -68,6 +70,9 @@ export class EditProjectComponent {
     ind: number;
     inputFiles: FileList;
     projectId:number;
+
+    actionConfirm$: Subject<boolean> = new Subject();
+    confirmDialogOpen: boolean = false;
 
   constructor(
       private router: Router,
@@ -281,6 +286,37 @@ export class EditProjectComponent {
     })
    
     
+  }
+
+  deleteProject() {
+    this.confirmDialogOpen = true;
+    this.actionConfirm$.subscribe((userConfirm) => {
+      this.confirmDialogOpen = false;
+      if (userConfirm) {
+        this.projectService.deleteProject(this.projectId).pipe(take(1))
+        .subscribe({
+          next: () => {
+            this.snackbar.success('Project deleted!', 'Your project was successfully deleted.')
+            .during(4000).show();
+            this.router.navigate(['../../'], { relativeTo: this.route });
+          },
+          error: () => {
+            this.snackbar.danger('Error!', 'Could not delete project.')
+            .during(4000).show();
+          }
+        })
+      } else {
+
+      }
+    })
+  }
+
+  onActionCancel() {
+    this.actionConfirm$.next(false);
+  }
+
+  onActionConfirm() {
+    this.actionConfirm$.next(true);
   }
 
 }

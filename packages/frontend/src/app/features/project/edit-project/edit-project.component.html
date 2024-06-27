@@ -1,8 +1,14 @@
-<div class="m-4 p-4 px-64">
+<div class="m-4 p-4 px-64 flex flex-row gap-4">
     <app-button  
-    [label]="'Back'"
-    [leftIcon]="faArrowLeft"
-    (click)="onBack()"
+        [label]="'Back'"
+        [leftIcon]="faArrowLeft"
+        (click)="onBack()"
+    ></app-button>
+    <app-button  
+        [label]="'Delete Project'"
+        [leftIcon]="faTrashCan"
+        (click)="deleteProject()"
+        [isDangerous]="true"
     ></app-button>
 </div>
 <div [formGroup]="form" (ngSubmit)="onSubmit($event)">
@@ -204,3 +210,12 @@
         </div>
     </div>
 </div>
+
+<app-dialog
+    *ngIf="confirmDialogOpen"
+    [title]="'Delete Project?'"
+    [confirmText]="'Yes'"
+    [cancelText]="'No'"
+    (cancel)="onActionCancel()"
+    (confirm)="onActionConfirm()"
+>This will delete this Project and all of its content. This action is irreversible. Do you want to proceed?</app-dialog>
