@@ -2,7 +2,7 @@ import { Component, ElementRef, EventEmitter, HostBinding, HostListener, OnInit,
 import { FormBuilder, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { implementationAndControlConfig, PhaseNavigationService, SnackbarService, VcwPhasesService } from '@core';
-import { faFileUpload, faFloppyDisk, faMinus } from '@fortawesome/free-solid-svg-icons';
+import { faDownload, faFileUpload, faFloppyDisk, faMinus } from '@fortawesome/free-solid-svg-icons';
 import { take } from 'rxjs/operators';
 import { environment } from '../../../../../../environments/environment';
 import { Thumbnail, VCWAttachment, VCWImplementationAndControl } from '@core/models';
@@ -17,6 +17,7 @@ export class ImplementationControlComponent implements OnInit{
   faFloppyDisk = faFloppyDisk;
   faFileUpload = faFileUpload;
   faMinus = faMinus;
+  faDownload = faDownload;
 
   dataForm: UntypedFormGroup;
 
@@ -81,6 +82,7 @@ export class ImplementationControlComponent implements OnInit{
           if(data){
             this.current_file = data;
             this.isEditing = true;
+  
           }
         });
     }
@@ -104,18 +106,7 @@ export class ImplementationControlComponent implements OnInit{
         });
 
        
-        for(let i =0; i < this.valid_files.length; i++){
-          const data = new FormData();
-          data.append('attachment', this.valid_files[i]);
-          this.vcwPhasesService.createAttachment(this.vcwId, this.projectId, data)
-            .pipe(take(1))
-            .subscribe((data) =>{
-              this.ngOnInit();
-            }, error => {
-              this.snackbarService.danger('Error', 'Unable to save your changes. Please try again later.')
-              .during(2000).show();
-            });
-        }
+        
         
         
       } else {
@@ -133,6 +124,22 @@ export class ImplementationControlComponent implements OnInit{
         
       }
     }
+  }
+
+  onSaveFiles(){
+    for(let i =0; i < this.valid_files.length; i++){
+      const data = new FormData();
+      data.append('attachment', this.valid_files[i]);
+      this.vcwPhasesService.createAttachment(this.vcwId, this.projectId, data)
+        .pipe(take(1))
+        .subscribe((data) =>{
+          this.ngOnInit();
+        }, error => {
+          this.snackbarService.danger('Error', 'Unable to save your changes. Please try again later.')
+          .during(2000).show();
+        });
+    }
+    this.valid_files = [];
   }
 
   isFormValid(control: string) {
@@ -186,6 +193,10 @@ export class ImplementationControlComponent implements OnInit{
         this.snackbarService.danger('Error', 'Unable to save your changes. Please try again later.')
         .during(2000).show();
       });
+  }
+  
+  downloadFile(filePath: string){
+    window.open(filePath);
   }
 
   

@@ -16,20 +16,40 @@
             formControlName="executiveSummary"
         ></app-cke-editor>
     </div>
+    
+    <div class="flex flex-row justify-between mb-4 mt-8">
     <h1 class="text-2xl font-bold text-primary pb-4">Attach Documents</h1>
+    <div>
+        <app-button
+            [label]="'Save'"
+            [leftIcon]="faFloppyDisk"
+            (buttonClick)="onSaveFiles()"
+        ></app-button>
+    </div>
+    </div>
     <div *ngFor="let file of current_file let idx = index" class="pb-4">
-        <div *ngIf="current_file" class="grid grid-cols-4 p-1 ">
+        <div *ngIf="current_file" class="grid grid-cols-4">
             <p class="p-2 text-center">Current File:</p>
             <p class="py-2 text-center text-primary-500 ">{{file.name}}</p>
             <p class="p-2 text-center text-primary-500 ">{{file.fileType}}</p>
-            <app-button 
-                label="Remove"
-                isDangerous="true" 
-                class="self-center w-full"
-  
-                (buttonClick)="removeFile(idx)"
-                >
-            </app-button>
+            <div class="flex flex-row">
+                <app-button
+                    [noLabel]="true"
+               
+                    [leftIcon]="faDownload"
+                    (buttonClick)="downloadFile(file.path)"
+                ></app-button>
+
+                <app-button 
+                    label="Remove"
+                    isDangerous="true" 
+                    class="ml-4"
+      
+                    (buttonClick)="removeFile(idx)"
+                    >
+                </app-button>
+            </div>
+           
         </div>
     </div>
     <div 
