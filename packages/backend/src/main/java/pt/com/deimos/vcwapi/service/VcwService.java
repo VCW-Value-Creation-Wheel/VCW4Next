@@ -66,4 +66,9 @@ public class VcwService {
     return this.vcwRepository.save(editedVcw);
   }
 
+  public void delete(VcwEntity vcwEntity) {
+
+    this.vcwRepository.deleteById(vcwEntity.getId());
+  }
+
 }

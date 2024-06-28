@@ -19,6 +19,7 @@ import pt.com.deimos.vcwapi.exceptions.InternalErrorException;
 import pt.com.deimos.vcwapi.exceptions.NotFoundException;
 import pt.com.deimos.vcwapi.repository.ProjectRepository;
 import pt.com.deimos.vcwapi.repository.RoleRepository;
+import pt.com.deimos.vcwapi.repository.VcwRepository;
 
 import java.io.InputStream;
 import java.time.LocalDateTime;
@@ -32,10 +33,12 @@ import java.util.Optional;
 public class ProjectService {
 
     private final ProjectRepository projectRepository;
+    private final VcwRepository vcwRepository;
 
-    public ProjectService(ProjectRepository projectRepository) {
+    public ProjectService(ProjectRepository projectRepository, VcwRepository vcwRepository) {
 
         this.projectRepository = projectRepository;
+        this.vcwRepository = vcwRepository;
     }
 
     public Iterable<ProjectEntity> findAll() throws MinioException {
@@ -94,6 +97,9 @@ public class ProjectService {
     }
 
     public void delete(ProjectEntity projectEntity) {
+
+        this.vcwRepository.deleteAll(projectEntity.getVcws());
+
         this.projectRepository.delete(projectEntity);
     }
 
