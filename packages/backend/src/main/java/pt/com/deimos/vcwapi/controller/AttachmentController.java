@@ -7,14 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -45,14 +38,23 @@ public class AttachmentController {
     @Operation(summary = "Show vcw attachment.")
     public ResponseEntity<Object> getAttachment(
             @PathVariable(value = "vcw_id") Long vcwId,
+            @RequestParam("downloadable") Optional<Boolean> downloadable,
             @AuthenticationPrincipal Jwt principal) {
+
+
+        Boolean downloadableValue = downloadable.orElse(false);
 
         Optional<VcwEntity> vcw =
                 this.vcwRepository.findById(vcwId) ;
         if (vcw.isEmpty())
             throw new NotFoundException("Vcw not found.");
 
-        return ResponseEntity.ok(this.attachmentService.getByVcwId(vcwId));
+        if (downloadableValue) {
+            return ResponseEntity.ok(this.attachmentService.attachmentFilesWithUrlByVcw(vcwId));
+        } else {
+            return ResponseEntity.ok(this.attachmentService.getByVcwId(vcwId));
+        }
+
     }
     
     @PostMapping("/{vcw_id}")
