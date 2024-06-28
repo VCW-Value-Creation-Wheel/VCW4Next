@@ -287,7 +287,7 @@ export class VcwPhasesService {
   }
 
    getAttachment(vcwId: number, projectId: number): Observable<Thumbnail>{
-    const url = `${this.baseUrl}/${projectId}/attachments/${vcwId}`;
+    const url = `${this.baseUrl}/${projectId}/attachments/${vcwId}?downloadable=true`;
     return this.http.get<Thumbnail>(url);
   }
 
