@@ -3,11 +3,14 @@ package pt.com.deimos.vcwapi.service;
 import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import io.minio.errors.MinioException;
@@ -15,6 +18,7 @@ import pt.com.deimos.vcwapi.entity.FileEntity;
 import pt.com.deimos.vcwapi.entity.VcwEntity;
 import pt.com.deimos.vcwapi.exceptions.BadRequestException;
 import pt.com.deimos.vcwapi.exceptions.InternalErrorException;
+import pt.com.deimos.vcwapi.exceptions.NotFoundException;
 import pt.com.deimos.vcwapi.repository.ThumbnailRepository;
 
 @Service
@@ -149,6 +153,38 @@ public class AttachmentService {
         }
 
         this.thumbnailRepository.delete(attachment);
+    }
+
+    private FileEntity getDownloadAttachment(FileEntity attachment) {
+
+        //generate image with download url
+        FileEntity tempAttachment = new FileEntity();
+        try {
+            BeanUtils.copyProperties(attachment, tempAttachment);
+            String url = this.minioService.getDownloadUrl(tempAttachment.getPath());
+            tempAttachment.setPath(url);
+        }
+        catch(Exception e){
+            throw new InternalErrorException("Failed to generate attachment url: "+e);
+        }
+
+        return tempAttachment;
+    }
+
+    @Transactional(readOnly = true)
+    public List<FileEntity> attachmentFilesWithUrlByVcw(Long vcwId) {
+
+        List<FileEntity> attachmentFiles = (List<FileEntity>) getByVcwId(vcwId);
+
+        if (attachmentFiles.isEmpty())
+            throw new NotFoundException("There's no files for vcw with ID: " + vcwId);
+
+        List<FileEntity> attachmentFilesWithUrl = attachmentFiles
+                .stream()
+                .map(attachmentFile -> getDownloadAttachment(attachmentFile))
+                .toList();
+
+        return attachmentFilesWithUrl;
     }
     
 }
