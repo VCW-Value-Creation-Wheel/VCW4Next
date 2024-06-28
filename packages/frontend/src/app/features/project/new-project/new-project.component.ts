@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { EventOption, Options, ProjectsService, SnackbarService, UserRole } from '@core';
+import { Option, Options, ProjectsService, SnackbarService, UserInfo, UserRole } from '@core';
 import { projectConfig } from '@core/configs/forms/project';
 import { userConfig } from '@core/configs/forms/user';
 import { faArrowLeft, faPenToSquare, faXmark, faSearch, faSave, faUserPlus } from '@fortawesome/free-solid-svg-icons';
@@ -45,12 +45,14 @@ export class NewProjectComponent implements OnInit {
     showResults: boolean = false;
 
     options: string[] = [];
-    users: string[] = [];
-    usersId: string[] = [];
-    userWithRole: string|number|boolean[] = [];
-    isAdded: boolean[] = [];
-    roleOptions: Options[] = [];
+
+    users: UserInfo[] = [];
+    
+    roleOptions: Option[] = [];
+
+    selectedRole: Option[] = [];
     userRole: UserRole[] = [];
+
     inputFiles: FileList;
     
 
@@ -65,6 +67,19 @@ export class NewProjectComponent implements OnInit {
   ngOnInit(): void {
     this.form = this.formBuilder.group(projectConfig);
     this.formUser = this.formBuilder.group(userConfig);
+
+    this.projectService.getRoles().pipe(take(1))
+    .subscribe({
+      next: (roles) => {
+        roles.forEach((role) => {
+          this.roleOptions.push({
+            label: role.name,
+            value: role.id
+          });
+        });
+      },
+      error: () => {}
+    });
   }
 
   onSubmit(e: Event): void{
@@ -129,73 +144,50 @@ export class NewProjectComponent implements OnInit {
   }
 
   findUser(){
+    this.selectedRole = [];
     let user = this.formUser.get('user').value;
     if(user === ''){
       user = null
     }
-    this.users = [];
-    this.projectService.getUser(user).subscribe(res =>{
-
-      const lenght = Object.keys(res).length;
-
-      if(lenght === 0){
-        this.showResults = false;
-      }else{
-        this.showResults = true;
-      }
-
-      for(let i=0; i< lenght; i++){
-        this.isAdded[i] = this.isAdded[i] ?? false;
-        this.users[i] = res[i].username;
-        this.usersId[i] = res[i].id;
-      }
+    // this.users = [];
+    this.projectService.getUser(user).pipe(take(1))
+    .subscribe({
+      next: (result) => {
+        this.users = result;
+      },
+      error: () => {}
     });
+  }
 
-    if(this.roleOptions.length === 0){
-      this.projectService.getRoles().subscribe(role =>{
+  addRole(index: number, user: UserInfo) {
+    this.userRole.push({
+      role: this.selectedRole[index].value.toString(),
+      user: user.id,
+      userName: user.username,
+      roleName: this.selectedRole[index].label.toString()
+    });
+  }
 
-        const lenght = Object.keys(role).length;
-  
-        for(let i=0; i< lenght; i++){
-           this.roleOptions.push({
-            label: role[i].name,
-            value: role[i].id
-           });
-        }
-  
-      }
-      );
+  saveRole(event: any, index: number) {
+    this.selectedRole[index] = {
+      label: this.getRoleLabel(event.value),
+      value: event.value
     }
   }
 
-  addRole(index: number){
-
-    this.isAdded[index] = true;
-    this.userRole.push({
-      user: this.usersId[index],
-      role: this.userWithRole[index],
-      userName: this.users[index],
-      roleName: this.roleOptions[index].label as string
-    });
-
-    console.log(this.userRole)
-    console.log(this.users)
-    console.log(this.usersId)
-    console.log(this.isAdded)
-    console.log(this.userWithRole)
+  getRoleLabel(roleID: string) {
+    const id = parseInt(roleID);
+    return this.roleOptions[id-1].label;
   }
 
-  
-
-  cancelRole(index: number){
-    this.isAdded[index] = false;
+  cancelRole(index: number) {
     this.userRole.splice(index,1); 
   }
 
-  saveRole(e: EventOption, index:number){
-    this.isAdded[index] = false;
-    this.userRole.splice(index,1);
-    this.userWithRole[index] = e.value;
+  isUserRoleNew(index: number, user: UserInfo) {
+    const target = this.userRole.find(ur => ur.user === user.id 
+      && ur.role === this.selectedRole[index].value.toString());
+    return target === undefined;
   }
 
 }

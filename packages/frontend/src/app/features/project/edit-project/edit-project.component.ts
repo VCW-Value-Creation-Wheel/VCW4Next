@@ -1,12 +1,12 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { EventOption, Options, ProjectsService, SnackbarService, UserInfo, UserRole } from '@core';
+import { EventOption, Options, ProjectsService, SnackbarService, UserEnum, UserInfo, UserRole } from '@core';
 import { projectConfig } from '@core/configs/forms/project';
 import { userConfig } from '@core/configs/forms/user';
 import { Role } from '@core/models/role';
 import { faArrowLeft, faPenToSquare, faSearch, faXmark, faSave, faImage, faUserPlus, faTrashCan } from '@fortawesome/free-solid-svg-icons';
-import { Subject } from 'rxjs';
+import { Observable, Subject, forkJoin } from 'rxjs';
 import { take } from 'rxjs/operators';
 
 
@@ -56,14 +56,17 @@ export class EditProjectComponent {
     fileId: number;
     isAdded: boolean[] = [];
     showResults: boolean = false;
-    users: string[] = [];
-    usersId: string[] = [];
-    userWithRole: string|number|boolean[] = [];
-    userInfo: UserInfo[] = [];
-    allUsersRole: Role[] = [];
-    userRoleId: number[] = [];
+
+
+    users: UserInfo[] = [];
+    projectUserEnums: UserEnum[];
+    projectUserInfo: UserInfo[] = [];
+    projectUserRoles: Role[];
+
+    userRolesToRemove: UserEnum[] = [];
 
     roleOptions: Options[] = [];
+    selectedRole: Options[] = [];
 
     userRole: UserRole[] = [];
 
@@ -94,25 +97,44 @@ export class EditProjectComponent {
         lang: itens.lang,
       
       });
-      this.fileName = itens.fileThumbnail.name;
-      this.fileType = itens.fileThumbnail.fileType;
-      this.fileId = itens.fileThumbnail.id;
+      this.fileName = itens.fileThumbnail?.name;
+      this.fileType = itens.fileThumbnail?.fileType;
+      this.fileId = itens.fileThumbnail?.id;
 
-      this.projectService.getAllByProject(this.projectId).subscribe(allUsers =>{
-        for(let i=0; i < Object.keys(allUsers).length; i++){ 
-          this.userRoleId[i] = allUsers[i].id;
-          this.allUsersRole[i] = allUsers[i].role.name;
+      this.projectService.getRoles().pipe(take(1))
+      .subscribe({
+        next: (roles) => {
+          roles.forEach((role) => {
+            this.roleOptions.push({
+              label: role.name,
+              value: role.id
+            });
+          });
 
-          const allUsersInum = allUsers[i].userInum;
-         
+          this.projectService.getAllByProject(this.projectId).pipe(take(1))
+          .subscribe({
+            next: (users) => {
+              this.projectUserEnums = users;
 
-          this.projectService.getUserByUuid(allUsersInum).subscribe(infoUsers =>{
-           
-            this.userInfo[i] = infoUsers[0].username;
-            
+              const requests: {[x: number]: Observable<UserInfo[]>} = {};
+              this.projectUserEnums.map((userEnum, index) => {
+                requests[index] = this.projectService.getUserByUuid(userEnum.userInum);
+              });
+
+              forkJoin(requests).pipe(take(1)).subscribe({
+                next: (result) => {
+                  const keys = Object.keys(result)
+                  keys.forEach(key => {
+                    this.projectUserInfo.push(result[key][0]);
+                  });
+
+                }
+              });
+            },
+            error: () => {}
           })
-          
-        } 
+        },
+        error: () => {}
       });
     });
 
@@ -124,82 +146,70 @@ export class EditProjectComponent {
       this.projectService.editProject(this.projectId,this.form.value)
         .pipe(take(1)).subscribe(response => {
 
-          if(this.inputFiles !== undefined){
+          if (this.inputFiles !== undefined) {
             const data = new FormData();
-          data.append('thumbnail', this.inputFiles[0]);
-          this.projectService.editProjectThumbnail(response.id ,data,this.fileId).subscribe(res => {
+            data.append('thumbnail', this.inputFiles[0]);
+            this.projectService.editProjectThumbnail(response.id ,data,this.fileId).subscribe(res => {
 
-            this.snackbar.success('Success!', ' Project Edited!').during(3000).show();
-            this.router.navigate(['../'], {relativeTo: this.route});
+              this.snackbar.success('Success!', ' Project Edited!').during(3000).show();
+              this.router.navigate(['../'], {relativeTo: this.route});
             
-          });
-          }this.userRole.forEach(item =>{
-            this.projectService.addUserRoleToProject(item.user,item.role,response.id).pipe(take(1)).subscribe({
-              next: (res) => {
-                this.snackbar.success('Success!', 'User added!').during(3000).show();
-              },
-              error: (error) => {
-                this.snackbar.danger('Error!', 'User adition failed.').during(3000).show();
+            });
+
+          }
+
+          if (this.userRolesToRemove.length === 0) {
+            this.userRole.forEach(item =>{
+              this.projectService.addUserRoleToProject(item.user,item.role,response.id).pipe(take(1)).subscribe({
+                next: (res) => {
+                  this.snackbar.success('Success!', 'User added!').during(3000).show();
+                },
+                error: (error) => {
+                  this.snackbar.danger('Error!', 'User adition failed.').during(3000).show();
+                }
+              });
+              
+            });
+          } else {
+            const requests: {[x: number]: Observable<Object>} = {};
+            this.userRolesToRemove.map((userEnum, index) => {
+              requests[index] = this.projectService.deleteProjectUser(this.projectId, userEnum.id);
+            });
+  
+            forkJoin(requests).pipe(take(1)).subscribe({
+              next: () => {
+                this.userRole.forEach(item =>{
+                  this.projectService.addUserRoleToProject(item.user,item.role,response.id).pipe(take(1)).subscribe({
+                    next: (res) => {
+                      this.snackbar.success('Success!', 'User added!').during(3000).show();
+                    },
+                    error: (error) => {
+                      this.snackbar.danger('Error!', 'User adition failed.').during(3000).show();
+                    }
+                  });
+                  
+                });
               }
             });
-             
-          });
+          }
+
+
           if(this.inputFiles === undefined){
             this.snackbar.success('Success!', ' Project Edited!').during(3000).show();
             this.router.navigate(['../'], {relativeTo: this.route});
           }
-         
-
+        
           
-        }, (error) => {
+       }, (error) => {
         this.snackbar.danger('Error!', 'Failed on Edit Project.').during(3000).show();
-      });
+        });
     } else {
       console.log(this.form)
     }
   }
 
-  addUser(): void{
-    (this.form.get('userArray') as FormArray).push(this.formBuilder.group({
-      user: new FormControl(),
-      role: new FormControl()
-    }));
-    this.isAddUserActive = true;
-  }
-
-  confirmUser(): void{
-    this.userRole = this.form.get('userArray').value;
-    this.isAddUserActive = false;
-  }
-
-  confirmEditUser(){
-    this.userRole = this.form.get('userArray').value;
-    this.isEditing = false;
-  }
-
-  cancelUserSelection(): void{
-    if (this.isAddUserActive){
-      (this.form.get('userArray') as FormArray).controls.pop();
-    }
-    this.isAddUserActive = false;
-    this.isEditing = false;
-    (this.form.get('userArray') as FormArray).setValue(this.userRole);
-  }
-
   onBack(): void{
     this.router.navigate(['../'], {relativeTo: this.route});
-  }
-
-  editUser(ind: number): void{
-    this.ind = ind;
-    this.isEditing = true;
-    this.isAddUserActive = false;
-
-  }
-
-  removeUser(ind: number): void{
-   (this.form.controls.userArray as FormArray).removeAt(ind);
-   this.userRole = this.form.get('userArray').value;
   }
 
   getUserArrayIndex(isEditing: boolean): number {
@@ -221,71 +231,53 @@ export class EditProjectComponent {
     if(user === ''){
       user = null
     }
-    this.users = [];
-    this.projectService.getUser(user).subscribe(res =>{
 
-      const lenght = Object.keys(res).length;
-
-      if(lenght === 0){
-        this.showResults = false;
-      }else{
-        this.showResults = true;
-      }
-
-      for(let i=0; i< lenght; i++){
-        this.isAdded[i] = false;
-        this.users[i] = res[i].username;
-        this.usersId[i] = res[i].id;
-      }
+    this.projectService.getUser(user).pipe(take(1))
+    .subscribe({
+      next: (result) => {
+        this.users = result;
+      },
+      error: () => {}
     });
 
-    if(this.roleOptions.length === 0){
-      this.projectService.getRoles().subscribe(role =>{
+  }
 
-        const lenght = Object.keys(role).length;
-  
-        for(let i=0; i< lenght; i++){
-           this.roleOptions.push({
-            label: role[i].name,
-            value: role[i].id
-           });
-        }
-  
-      }
-      );
+  addRole(index: number, user: UserInfo) {
+    this.userRole.push({
+      role: this.selectedRole[index].value.toString(),
+      user: user.id,
+      userName: user.username,
+      roleName: this.selectedRole[index].label.toString()
+    });
+  }
+
+  saveRole(event: any, index: number) {
+    this.selectedRole[index] = {
+      label: this.getRoleLabel(event.value),
+      value: event.value
     }
   }
 
-  addRole(index: number){
-
-    this.isAdded[index] = true;
-    this.userRole.push({
-      user: this.usersId[index],
-      role: this.userWithRole[index]
-    });
+  getRoleLabel(roleID: string) {
+    const id = parseInt(roleID);
+    return this.roleOptions[id-1].label;
   }
-
   
 
   cancelRole(index: number){
-    this.isAdded[index] = false;
     this.userRole.splice(index,1); 
   }
 
-  saveRole(e: EventOption, index:number){
-    this.isAdded[index] = false;
-    this.userRole.splice(index,1);
-    this.userWithRole[index] = e.value;
+  removeUserRole(index: number, userEnum: UserEnum) {
+    this.projectUserEnums.splice(index, 1);
+    this.projectUserInfo.splice(index, 1);
+    this.userRolesToRemove.push(userEnum);
   }
 
-  removeUserProject(index:number){
- 
-    this.projectService.deleteProjectUser(this.projectId,this.userRoleId[index]).subscribe(item =>{
-      this.allUsersRole.splice(index,1);
-      this.userInfo.splice(index,1);
-    })
-   
-    
+  isUserRoleNew(index: number, user: UserInfo) {
+    const target = this.userRole.find(ur => ur.user === user.id 
+      && ur.role === this.selectedRole[index].value.toString());
+    return target === undefined;
   }
 
   deleteProject() {
@@ -298,7 +290,7 @@ export class EditProjectComponent {
           next: () => {
             this.snackbar.success('Project deleted!', 'Your project was successfully deleted.')
             .during(4000).show();
-            this.router.navigate(['../../'], { relativeTo: this.route });
+            this.router.navigate(['../../../'], { relativeTo: this.route });
           },
           error: () => {
             this.snackbar.danger('Error!', 'Could not delete project.')
@@ -306,7 +298,7 @@ export class EditProjectComponent {
           }
         })
       } else {
-
+        this.confirmDialogOpen = false;
       }
     })
   }

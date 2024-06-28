@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Project, Thumbnail, UserEnum, UserInfo } from '@core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
+import { Role } from '@core/models/role';
 
 @Injectable({
   providedIn: 'root'
@@ -33,9 +34,9 @@ export class ProjectsService {
     return this.http.get<Project>(url, this.httpOptions);
   }
 
-  getAllByProject(projectId: number): Observable<UserEnum>{
+  getAllByProject(projectId: number): Observable<UserEnum[]>{
     const url = `${this.projectsBaseUrl}/${projectId}/users`
-    return this.http.get<UserEnum>(url, this.httpOptions);
+    return this.http.get<UserEnum[]>(url, this.httpOptions);
   }
 
 
@@ -61,9 +62,9 @@ export class ProjectsService {
 
   }
   
-  getUser(user:any) {
+  getUser(user: string): Observable<UserInfo[]> {
     const url = `${environment.api}/users?search=${user}`;
-    return this.http.get(url, this.httpOptions);
+    return this.http.get<UserInfo[]>(url, this.httpOptions);
   }
 
   deleteProjectUser(projectId:number, userId: number){
@@ -71,14 +72,14 @@ export class ProjectsService {
     return this.http.delete(url, this.httpOptions);
   }
 
-  getUserByUuid(userUuid:string): Observable<UserInfo>{
+  getUserByUuid(userUuid:string): Observable<UserInfo[]>{
     const url =`${environment.api}/users/id/${userUuid}`;
-    return this.http.get<UserInfo>(url, this.httpOptions);
+    return this.http.get<UserInfo[]>(url, this.httpOptions);
   }
 
-  getRoles(){
+  getRoles(): Observable<Role[]> {
     const url = `${environment.api}/roles`;
-    return this.http.get(url, this.httpOptions);
+    return this.http.get<Role[]>(url, this.httpOptions);
   }
 
   addUserRoleToProject(userId: string, roleId: string, projectId:number){
