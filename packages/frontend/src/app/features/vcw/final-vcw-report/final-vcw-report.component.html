@@ -10,7 +10,7 @@
 </div>
 <div id="finalReport">
     <h1 class="text-2xl text-gray-700 py-4 text-center">Final VCW Report </h1>
-<div [formGroup]="dataForm" class="mx-4 md:mx-64 lg:mx-80 px-4 ">
+<div [formGroup]="dataForm" class="mx-4 md:mx-64 lg:mx-80 px-4 " *ngIf="setVisibility('challenge',true)">
     <h1 class="text-2xl font-bold text-primary py-4">Challenge</h1>
     <div>
         <app-cke-editor
@@ -20,10 +20,9 @@
             isDisabled="true"
         ></app-cke-editor>
     </div>
-
 </div>
 
-<div [formGroup]="dataFormKpis" class="mx-4 md:mx-64 lg:mx-80 px-4 ">
+<div [formGroup]="dataFormKpis" class="mx-4 md:mx-64 lg:mx-80 px-4 "  *ngIf="setVisibility('kpis',true)">
     <h1 class="text-2xl font-bold text-primary py-4">Test & KPIs Evaluation </h1>
     <div>
         <app-cke-editor
@@ -33,10 +32,33 @@
             formControlName="testAndKpisEvaluation"
         ></app-cke-editor>
     </div>
-
 </div>
 
-<div [formGroup] = "dataFormThreeMs" class="mx-4 md:mx-64 lg:mx-80 px-4 ">
+<div [formGroup]="dataFormConcept" class="mx-4 md:mx-64 lg:mx-80 px-4 "  *ngIf="setVisibility('concept',true)">
+    <h1 class="text-2xl font-bold text-primary py-4">Concept</h1>
+    <div>
+        <app-cke-editor
+            id="concept"
+            [label]="''"
+            formControlName="concept"
+            isDisabled="true"
+        ></app-cke-editor>
+    </div>
+</div>
+
+<div [formGroup]="dataFormPrototype" class="mx-4 md:mx-64 lg:mx-80 px-4 "  *ngIf="setVisibility('prototype',true)">
+    <h1 class="text-2xl font-bold text-primary py-4">Prototype</h1>
+    <div>
+        <app-cke-editor
+            id="prototype"
+            [label]="''"
+            formControlName="prototype"
+            isDisabled="true"
+        ></app-cke-editor>
+    </div>
+</div>
+
+<div [formGroup] = "dataFormThreeMs" class="mx-4 md:mx-64 lg:mx-80 px-4 "  *ngIf="setVisibility('3ms',true)">
     <h1 class="text-2xl font-bold text-primary py-4">3 Ms: Manpower, Minute, Money</h1>
     <div>
         <app-cke-editor
@@ -46,7 +68,7 @@
         ></app-cke-editor>
     </div>
 </div>
-<div [formGroup]="dataFormExecutiveSummary" class="mx-4 md:mx-64 lg:mx-80 px-4 ">
+<div [formGroup]="dataFormExecutiveSummary" class="mx-4 md:mx-64 lg:mx-80 px-4 "  *ngIf="setVisibility('executiveSummay',true)">
     <h1 class="text-2xl font-bold text-primary py-4">Executive Summary</h1>
     <div>
         <app-cke-editor
@@ -57,7 +79,7 @@
         ></app-cke-editor>
     </div>
 </div>
-<div [formGroup]="dataFormExecutiveSummary" class="mx-4 md:mx-64 lg:mx-80 px-4 ">
+<div [formGroup]="dataFormExecutiveSummary" class="mx-4 md:mx-64 lg:mx-80 px-4 "  *ngIf="setVisibility('attach',true)">
     <h1 class="text-2xl font-bold text-primary py-4">Attach Documents</h1>
     <div *ngFor="let file of current_file let idx = index" class="pb-4">
         <div *ngIf="current_file" class="grid grid-cols-4">
