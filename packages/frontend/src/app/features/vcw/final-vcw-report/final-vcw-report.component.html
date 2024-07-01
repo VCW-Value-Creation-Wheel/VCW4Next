@@ -22,17 +22,19 @@
     </div>
 </div>
 
-<div [formGroup]="dataFormKpis" class="mx-4 md:mx-64 lg:mx-80 px-4 "  *ngIf="setVisibility('kpis',true)">
-    <h1 class="text-2xl font-bold text-primary py-4">Test & KPIs Evaluation </h1>
+<div [formGroup]="dataFormTestKpis" class="mx-4 md:mx-64 lg:mx-80 px-4 " *ngIf="setVisibility('expectedKpis',true)">
+    <h1 class="text-2xl font-bold text-primary py-4">Expected KPIs</h1>
     <div>
         <app-cke-editor
-            id="testAndKpisEvaluation"
+            id="kpis"
             [label]="''"
+            formControlName="kpis"
             isDisabled="true"
-            formControlName="testAndKpisEvaluation"
         ></app-cke-editor>
     </div>
 </div>
+
+
 
 <div [formGroup]="dataFormConcept" class="mx-4 md:mx-64 lg:mx-80 px-4 "  *ngIf="setVisibility('concept',true)">
     <h1 class="text-2xl font-bold text-primary py-4">Concept</h1>
@@ -68,6 +70,20 @@
         ></app-cke-editor>
     </div>
 </div>
+
+<div [formGroup]="dataFormKpis" class="mx-4 md:mx-64 lg:mx-80 px-4 "  *ngIf="setVisibility('testKpis',true)">
+    <h1 class="text-2xl font-bold text-primary py-4">Test & KPIs Evaluation </h1>
+    <div>
+        <app-cke-editor
+            id="testAndKpisEvaluation"
+            [label]="''"
+            isDisabled="true"
+            formControlName="testAndKpisEvaluation"
+        ></app-cke-editor>
+    </div>
+</div>
+
+
 <div [formGroup]="dataFormExecutiveSummary" class="mx-4 md:mx-64 lg:mx-80 px-4 "  *ngIf="setVisibility('executiveSummay',true)">
     <h1 class="text-2xl font-bold text-primary py-4">Executive Summary</h1>
     <div>
@@ -80,7 +96,7 @@
     </div>
 </div>
 <div [formGroup]="dataFormExecutiveSummary" class="mx-4 md:mx-64 lg:mx-80 px-4 "  *ngIf="setVisibility('attach',true)">
-    <h1 class="text-2xl font-bold text-primary py-4">Attach Documents</h1>
+    <h1 class="text-xl font-bold text-primary py-4">Documents</h1>
     <div *ngFor="let file of current_file let idx = index" class="pb-4">
         <div *ngIf="current_file" class="grid grid-cols-4">
             <p class="p-2 text-center">Current File:</p>
