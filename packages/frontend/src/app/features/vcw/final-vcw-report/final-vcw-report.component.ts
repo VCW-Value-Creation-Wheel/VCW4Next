@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { challengeConfig, PhaseNavigationService, SnackbarService, testAndKpisEvaluationConfig, threeMsConfig, VcwPhasesService } from '@core';
+import { challengeConfig, implementationAndControlConfig, PhaseNavigationService, SnackbarService, testAndKpisEvaluationConfig, threeMsConfig, VcwPhasesService } from '@core';
 import { faDownload } from '@fortawesome/free-solid-svg-icons';
 import { take } from 'rxjs/operators';
-import { VCWChallenge, VCWTestAndKpisEvaluation, VCWThreeMs } from '@core/models';
+import { Thumbnail, VCWChallenge, VCWImplementationAndControl, VCWTestAndKpisEvaluation, VCWThreeMs } from '@core/models';
 import { environment } from '../../../../environments/environment';
 import domtoimage from 'dom-to-image';
 import jsPDF from 'jspdf';
@@ -23,6 +23,7 @@ export class FinalVcwReportComponent {
   dataForm: UntypedFormGroup;
   dataFormKpis: UntypedFormGroup;
   dataFormThreeMs: UntypedFormGroup;
+  dataFormExecutiveSummary: UntypedFormGroup;
 
   projectId: number;
   vcwId: number;
@@ -33,6 +34,8 @@ export class FinalVcwReportComponent {
   vcwChallenge: VCWChallenge;
   vcwTestAndKpisEvaluation: VCWTestAndKpisEvaluation;
   vcwThreeMs: VCWThreeMs;
+  vcwImplementation: VCWImplementationAndControl;
+  current_file: Thumbnail;
 
   constructor(
     private phaseNavService: PhaseNavigationService,
@@ -45,6 +48,7 @@ export class FinalVcwReportComponent {
     this.dataForm = this.formBuilder.group(challengeConfig);
     this.dataFormKpis = this.formBuilder.group(testAndKpisEvaluationConfig);
     this.dataFormThreeMs = this.formBuilder.group(threeMsConfig);
+    this.dataFormExecutiveSummary = this.formBuilder.group(implementationAndControlConfig);
   }
   ngOnInit(): void {
 
@@ -101,6 +105,30 @@ export class FinalVcwReportComponent {
         this.snackbarService.danger('Data Fetching Error', 'Unable to check and retrieve data from the server. Try again later.')
           .during(2000).show();
       });
+
+      this.vcwPhasesService.getImplementationAndControl(this.vcwId, this.projectId)
+      .pipe(take(1))
+      .subscribe(data => {
+        if (data) {
+          
+          this.vcwImplementation = data;
+          this.isEditing = true;
+          this.dataFormExecutiveSummary.controls.executiveSummary.patchValue(this.vcwImplementation.executiveSummary);
+        }
+      }, error => {
+        this.snackbarService.danger('Data Fetching Error', 'Unable to check and retrieve data from the server. Try again later.')
+          .during(2000).show();
+      });
+
+      this.vcwPhasesService.getAttachment(this.vcwId, this.projectId)
+      .pipe(take(1))
+      .subscribe( data =>{
+        if(data){
+          this.current_file = data;
+          this.isEditing = true;
+
+        }
+      });
     }
   }
 
@@ -122,10 +150,10 @@ export class FinalVcwReportComponent {
         doc.save(`FinalVCWReport.pdf`)
       });
     }, 1000);
-    console.log('DOWNLOAD')
   }
 
-
-
+  downloadFile(filePath: string){
+    window.open(filePath);
+  }
 
 }

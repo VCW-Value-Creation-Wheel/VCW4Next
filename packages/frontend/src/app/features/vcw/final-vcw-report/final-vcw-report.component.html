@@ -46,4 +46,31 @@
         ></app-cke-editor>
     </div>
 </div>
+<div [formGroup]="dataFormExecutiveSummary" class="mx-4 md:mx-64 lg:mx-80 px-4 ">
+    <h1 class="text-2xl font-bold text-primary py-4">Executive Summary</h1>
+    <div>
+        <app-cke-editor
+            id="executiveSummary"
+            [label]="''"
+            isDisabled="true"
+            formControlName="executiveSummary"
+        ></app-cke-editor>
+    </div>
+</div>
+<div [formGroup]="dataFormExecutiveSummary" class="mx-4 md:mx-64 lg:mx-80 px-4 ">
+    <h1 class="text-2xl font-bold text-primary py-4">Attach Documents</h1>
+    <div *ngFor="let file of current_file let idx = index" class="pb-4">
+        <div *ngIf="current_file" class="grid grid-cols-4">
+            <p class="p-2 text-center">Current File:</p>
+            <p class="py-2 text-center text-primary-500 ">{{file.name}}</p>
+            <p class="p-2 text-center text-primary-500 ">{{file.fileType}}</p>
+            <div class="flex flex-row">
+                <app-button
+                    [noLabel]="true"
+               
+                    [leftIcon]="faDownload"
+                    (buttonClick)="downloadFile(file.path)"
+                ></app-button>
+        </div>
+    </div>
 </div>
