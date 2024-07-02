@@ -85,12 +85,12 @@ export class MainLayoutComponent implements OnInit, OnDestroy {
     const projectPath = this.currentRoute.split('/projects/');
     const vcwPath = this.currentRoute.split('/vcw/');
     if (projectPath.length > 1) {
-      const projecID = projectPath[1][0];
+      const projecID = projectPath[1].split('/')[0];
       this.projectService.getProjectById(parseFloat(projecID)).pipe(take(1))
       .subscribe((projectData) => {
         this.contextService.setProjectContext(projectData);
         if (vcwPath.length > 1) {
-          const vcwID = vcwPath[1][0];
+          const vcwID = vcwPath[1].split('/')[0];
           this.vcwService.getVcw(parseFloat(projecID), parseFloat(vcwID)).pipe(take(1))
           .subscribe((vcwData) => {
             this.contextService.setVCWContext(vcwData);
@@ -102,6 +102,10 @@ export class MainLayoutComponent implements OnInit, OnDestroy {
     } else {
       this.contextService.setProjectContext(undefined);
     }
+  }
+
+  returnToWheel() {
+    this.route.navigateByUrl(this.currentRoute.split('/phases')[0]);
   }
 
 }
