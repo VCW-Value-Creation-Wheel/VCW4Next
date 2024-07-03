@@ -27,8 +27,8 @@
         ></app-button>
     </div>
     </div>
-    <div *ngFor="let file of current_file let idx = index" class="pb-4">
-        <div *ngIf="current_file" class="grid grid-cols-4">
+    <div *ngFor="let file of current_file let idx = index" class="pb-4" >
+        <div *ngIf="hasFiles" class="grid grid-cols-4">
             <p class="p-2 text-center">Current File:</p>
             <p class="py-2 text-center text-primary-500 ">{{file.name}}</p>
             <p class="p-2 text-center text-primary-500 ">{{file.fileType}}</p>
