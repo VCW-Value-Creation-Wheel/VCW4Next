@@ -149,12 +149,28 @@ export class EditProjectComponent {
           if (this.inputFiles !== undefined) {
             const data = new FormData();
             data.append('thumbnail', this.inputFiles[0]);
-            this.projectService.editProjectThumbnail(response.id ,data,this.fileId).subscribe(res => {
 
-              this.snackbar.success('Success!', ' Project Edited!').during(3000).show();
-              this.router.navigate(['../'], {relativeTo: this.route});
-            
-            });
+            if (this.fileName && this.fileId && this.fileType) {
+              this.projectService.editProjectThumbnail(response.id ,data,this.fileId).subscribe(res => {
+
+                this.snackbar.success('Success!', ' Project Edited!').during(3000).show();
+                this.router.navigate(['../'], {relativeTo: this.route});
+              
+              });
+            } else {
+              this.projectService.createProjectThumbnail(this.projectId, data).pipe(take(1))
+              .subscribe({
+                next: () => {
+                  this.snackbar.success('Success!', ' Project Edited!').during(3000).show();
+                  this.router.navigate(['../'], {relativeTo: this.route});
+                },
+                error: () => {
+                  this.snackbar.danger('Error!', 'Could not save your changes.').during(3000).show();
+                }
+              });
+            }
+
+
 
           }
 
