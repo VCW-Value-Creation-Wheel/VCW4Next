@@ -1,8 +1,8 @@
-import { Component, ElementRef, EventEmitter, HostBinding, HostListener, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostBinding, HostListener, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormBuilder, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { implementationAndControlConfig, PhaseNavigationService, SnackbarService, VcwPhasesService } from '@core';
-import { faFileUpload, faFloppyDisk, faMinus } from '@fortawesome/free-solid-svg-icons';
+import { faDownload, faFileUpload, faFloppyDisk, faMinus } from '@fortawesome/free-solid-svg-icons';
 import { take } from 'rxjs/operators';
 import { environment } from '../../../../../../environments/environment';
 import { Thumbnail, VCWAttachment, VCWImplementationAndControl } from '@core/models';
@@ -12,19 +12,22 @@ import { Thumbnail, VCWAttachment, VCWImplementationAndControl } from '@core/mod
   templateUrl: './implementation-control.component.html',
   styleUrls: ['./implementation-control.component.scss']
 })
-export class ImplementationControlComponent implements OnInit{
+export class ImplementationControlComponent implements OnInit, OnChanges{
 
   faFloppyDisk = faFloppyDisk;
   faFileUpload = faFileUpload;
   faMinus = faMinus;
+  faDownload = faDownload;
 
   dataForm: UntypedFormGroup;
 
   projectId: number;
   vcwId: number;
   isEditing = false;
+  hasFiles: boolean = false;
 
   useMocks: boolean;
+
   current_file: Thumbnail;
   valid_files : Array<File>;
 
@@ -49,6 +52,20 @@ export class ImplementationControlComponent implements OnInit{
     this.dataForm = this.formBuilder.group(implementationAndControlConfig);
   }
 
+  ngOnChanges(): void {
+    this.vcwPhasesService.getAttachment(this.vcwId, this.projectId)
+        .pipe(take(1))
+        .subscribe( data =>{
+          if(data){
+            this.current_file = data;
+            this.isEditing = true;
+            this.hasFiles = true;
+  
+          } }, error => {
+            this.hasFiles = false;
+        });
+  }
+
   ngOnInit(): void {
 
     this.useMocks = environment.activateMocks;
@@ -69,6 +86,7 @@ export class ImplementationControlComponent implements OnInit{
           this.vcwImplementation = data;
           this.isEditing = true;
           this.dataForm.controls.executiveSummary.patchValue(this.vcwImplementation.executiveSummary);
+     
         }
       }, error => {
         this.snackbarService.danger('Data Fetching Error', 'Unable to check and retrieve data from the server. Try again later.')
@@ -78,10 +96,13 @@ export class ImplementationControlComponent implements OnInit{
       this.vcwPhasesService.getAttachment(this.vcwId, this.projectId)
         .pipe(take(1))
         .subscribe( data =>{
+
           if(data){
             this.current_file = data;
             this.isEditing = true;
+            this.hasFiles = true;
           }
+       
         });
     }
     
@@ -104,18 +125,7 @@ export class ImplementationControlComponent implements OnInit{
         });
 
        
-        for(let i =0; i < this.valid_files.length; i++){
-          const data = new FormData();
-          data.append('attachment', this.valid_files[i]);
-          this.vcwPhasesService.createAttachment(this.vcwId, this.projectId, data)
-            .pipe(take(1))
-            .subscribe((data) =>{
-              this.ngOnInit();
-            }, error => {
-              this.snackbarService.danger('Error', 'Unable to save your changes. Please try again later.')
-              .during(2000).show();
-            });
-        }
+        
         
         
       } else {
@@ -133,6 +143,23 @@ export class ImplementationControlComponent implements OnInit{
         
       }
     }
+  }
+
+  onSaveFiles(){
+    for(let i =0; i < this.valid_files.length; i++){
+      const data = new FormData();
+      data.append('attachment', this.valid_files[i]);
+      this.vcwPhasesService.createAttachment(this.vcwId, this.projectId, data)
+        .pipe(take(1))
+        .subscribe((data) =>{
+          this.ngOnInit();
+          this.snackbarService.success('Success!', 'Your changes were saved.').during(2000).show();
+        }, error => {
+          this.snackbarService.danger('Error', 'Unable to save your changes. Please try again later.')
+          .during(2000).show();
+        });
+    }
+    this.valid_files = [];
   }
 
   isFormValid(control: string) {
@@ -180,18 +207,28 @@ export class ImplementationControlComponent implements OnInit{
     this.vcwPhasesService.deleteAttachment(this.vcwId,this.projectId, this.current_file[idx].id)
       .pipe(take(1))
       .subscribe((data)=>{
-        this.ngOnInit();
+        this.ngOnChanges();
         this.snackbarService.success('Success!', 'File removed.').during(2000).show();
-      }, error => {
+      }, error => { 
+        this.ngOnInit();
         this.snackbarService.danger('Error', 'Unable to save your changes. Please try again later.')
         .during(2000).show();
       });
+      
+      
+      
+  }
+
+
+  
+  downloadFile(filePath: string){
+    window.open(filePath);
   }
 
   
-
+ 
   
 
- 
+  
 }
 
