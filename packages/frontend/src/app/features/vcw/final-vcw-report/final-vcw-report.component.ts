@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { challengeConfig, PhaseNavigationService, SnackbarService, testAndKpisEvaluationConfig, threeMsConfig, VcwPhasesService } from '@core';
+import { challengeConfig, conceptConfig, expectedKPIsConfig, implementationAndControlConfig, PhaseNavigationService, prototypeConfig, SnackbarService, testAndKpisEvaluationConfig, threeMsConfig, VcwPhasesService } from '@core';
 import { faDownload } from '@fortawesome/free-solid-svg-icons';
 import { take } from 'rxjs/operators';
-import { VCWChallenge, VCWTestAndKpisEvaluation, VCWThreeMs } from '@core/models';
+import { ExpectedKPIs, Thumbnail, VCWChallenge, VCWConcept, VCWImplementationAndControl, VCWPrototype, VCWTestAndKpisEvaluation, VCWThreeMs } from '@core/models';
 import { environment } from '../../../../environments/environment';
 import domtoimage from 'dom-to-image';
 import jsPDF from 'jspdf';
@@ -22,17 +22,29 @@ export class FinalVcwReportComponent {
 
   dataForm: UntypedFormGroup;
   dataFormKpis: UntypedFormGroup;
+  dataFormConcept: UntypedFormGroup;
+  dataFormPrototype: UntypedFormGroup;
   dataFormThreeMs: UntypedFormGroup;
+  dataFormExecutiveSummary: UntypedFormGroup;
+  dataFormTestKpis: UntypedFormGroup;
+
 
   projectId: number;
   vcwId: number;
   isEditing = false;
+  visibilty: boolean[] = [];
+  isDownloading: boolean = false;
 
   useMocks: boolean;
 
   vcwChallenge: VCWChallenge;
-  vcwTestAndKpisEvaluation: VCWTestAndKpisEvaluation;
+  expectedKPIs: ExpectedKPIs;
+  vcwConcept: VCWConcept;
+  vcwPrototype: VCWPrototype;
   vcwThreeMs: VCWThreeMs;
+  vcwImplementation: VCWImplementationAndControl;
+  vcwTestAndKpisEvaluation: VCWTestAndKpisEvaluation;
+  current_file: Thumbnail;
 
   constructor(
     private phaseNavService: PhaseNavigationService,
@@ -45,6 +57,10 @@ export class FinalVcwReportComponent {
     this.dataForm = this.formBuilder.group(challengeConfig);
     this.dataFormKpis = this.formBuilder.group(testAndKpisEvaluationConfig);
     this.dataFormThreeMs = this.formBuilder.group(threeMsConfig);
+    this.dataFormExecutiveSummary = this.formBuilder.group(implementationAndControlConfig);
+    this.dataFormConcept = this.formBuilder.group(conceptConfig);
+    this.dataFormPrototype = this.formBuilder.group(prototypeConfig);
+    this.dataFormTestKpis = this.formBuilder.group(expectedKPIsConfig);
   }
   ngOnInit(): void {
 
@@ -87,6 +103,35 @@ export class FinalVcwReportComponent {
           .during(2000).show();
       });
 
+      this.vcwPhasesService.getConcept(this.vcwId, this.projectId)
+      .pipe(take(1))
+      .subscribe(data => {
+        if (data) {
+
+          this.vcwConcept = data;
+          this.isEditing = true;
+          this.dataFormConcept.controls.concept.patchValue(this.vcwConcept.concept);
+
+        }
+      }, error => {
+        this.snackbarService.danger('Data Fetching Error', 'Unable to check and retrieve data from the server. Try again later.')
+          .during(2000).show();
+      });
+
+      this.vcwPhasesService.getPrototype(this.vcwId, this.projectId)
+      .pipe(take(1))
+      .subscribe(data => {
+        if (data) {
+
+          this.vcwPrototype = data;
+          this.isEditing = true;
+          this.dataFormPrototype.controls.prototype.patchValue(this.vcwPrototype.prototype);
+        }
+      }, error => {
+        this.snackbarService.danger('Data Fetching Error', 'Unable to check and retrieve data from the server. Try again later.')
+          .during(2000).show();
+      });
+
       this.vcwPhasesService.getThreeMs(this.vcwId, this.projectId)
       .pipe(take(1))
       .subscribe(data => {
@@ -101,10 +146,48 @@ export class FinalVcwReportComponent {
         this.snackbarService.danger('Data Fetching Error', 'Unable to check and retrieve data from the server. Try again later.')
           .during(2000).show();
       });
+
+      this.vcwPhasesService.getImplementationAndControl(this.vcwId, this.projectId)
+      .pipe(take(1))
+      .subscribe(data => {
+        if (data) {
+          
+          this.vcwImplementation = data;
+          this.isEditing = true;
+          this.dataFormExecutiveSummary.controls.executiveSummary.patchValue(this.vcwImplementation.executiveSummary);
+        }
+      }, error => {
+        this.snackbarService.danger('Data Fetching Error', 'Unable to check and retrieve data from the server. Try again later.')
+          .during(2000).show();
+      });
+
+      this.vcwPhasesService.getAttachment(this.vcwId, this.projectId)
+      .pipe(take(1))
+      .subscribe( data =>{
+        if(data){
+          this.current_file = data;
+          this.isEditing = true;
+
+        }
+      });
+
+      this.vcwPhasesService.getExpectedKPIs(this.vcwId, this.projectId)
+      .pipe(take(1))
+      .subscribe(data => {
+        if (data) {
+          this.expectedKPIs = data;
+          this.isEditing = true;
+          this.dataFormTestKpis.controls.kpis.patchValue(this.expectedKPIs.kpis);
+        }
+      }, error => {
+        this.snackbarService.danger('Data Fetching Error', 'Unable to check and retrieve data from the server. Try again later.')
+          .during(2000).show();
+      });
     }
   }
 
   saveAsPDF() {
+    this.isDownloading = true;
     document.getElementById('finalReport').style.display = 'visible';
     const div = document.getElementById('finalReport');
     setTimeout(() => {
@@ -121,11 +204,17 @@ export class FinalVcwReportComponent {
         doc.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
         doc.save(`FinalVCWReport.pdf`)
       });
+      this.isDownloading = false;
     }, 1000);
-    console.log('DOWNLOAD')
+    
   }
 
+  downloadFile(filePath: string){
+    window.open(filePath);
+  }
 
-
+  setVisibility(formGroup: string, visible: boolean){
+    return this.visibilty[formGroup]= visible;
+  }
 
 }
