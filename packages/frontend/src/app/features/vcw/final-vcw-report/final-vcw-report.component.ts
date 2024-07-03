@@ -33,6 +33,7 @@ export class FinalVcwReportComponent {
   vcwId: number;
   isEditing = false;
   visibilty: boolean[] = [];
+  isDownloading: boolean = false;
 
   useMocks: boolean;
 
@@ -186,6 +187,7 @@ export class FinalVcwReportComponent {
   }
 
   saveAsPDF() {
+    this.isDownloading = true;
     document.getElementById('finalReport').style.display = 'visible';
     const div = document.getElementById('finalReport');
     setTimeout(() => {
@@ -202,7 +204,9 @@ export class FinalVcwReportComponent {
         doc.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
         doc.save(`FinalVCWReport.pdf`)
       });
+      this.isDownloading = false;
     }, 1000);
+    
   }
 
   downloadFile(filePath: string){
