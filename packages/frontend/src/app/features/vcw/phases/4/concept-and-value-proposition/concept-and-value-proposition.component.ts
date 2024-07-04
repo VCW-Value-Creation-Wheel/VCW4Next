@@ -30,7 +30,7 @@ export class ConceptAndValuePropositionComponent implements OnInit{
   vcwValueProposition: VCWValueProposition;
   hasData = false;
   tableValues: any;
-  isShowingSave:boolean = false;
+  isShowingSave: boolean = false;
 
   valueProposition = {
     "Sally":{
@@ -179,6 +179,7 @@ export class ConceptAndValuePropositionComponent implements OnInit{
       
       })
       this.userValues.set(name,userValues)
+      this.isShowingSave = true;
     });
    
 
@@ -187,11 +188,8 @@ export class ConceptAndValuePropositionComponent implements OnInit{
 
   }
 
-  disableSave(chart:any){
-   if(chart === false){
-    this.isShowingSave = true;
-   }
-    
+  disableSave(chart: any){
+   this.isShowingSave = chart !== false;
   }
   
 }
