@@ -11,6 +11,7 @@ export class PhaseNavigationComponent implements OnInit {
   @Input() title: string;
   @Output() leftButtonClick = new EventEmitter();
   @Output() rightButtonClick = new EventEmitter();
+  @Output() textClick = new EventEmitter();
 
   faChevronLeft = faChevronLeft;
   faChevronRight = faChevronRight;
@@ -27,6 +28,10 @@ export class PhaseNavigationComponent implements OnInit {
 
   onRightButtonClick() {
     this.rightButtonClick.emit();
+  }
+
+  onTitleClick() {
+    this.textClick.emit();
   }
 
 }

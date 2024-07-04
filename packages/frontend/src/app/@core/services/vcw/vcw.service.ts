@@ -34,4 +34,9 @@ export class VcwService {
     const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}`;
     return this.http.get<VCW>(url, this.httpOptions);
   }
+
+  deleteVcw(projectId: number, vcwId: number): Observable<any> {
+    const url = `${this.baseUrl}/${projectId}/vcws/${vcwId}`;
+    return this.http.delete(url, this.httpOptions);
+  }
 }

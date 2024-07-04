@@ -71,7 +71,7 @@ const vcwPhasesNavigation: VCWPhase = {
     '4b': {
         id: '4b',
         name: 'Concept & Value Proposition',
-        previousPhaseId: '4A',
+        previousPhaseId: '4a',
         nextPhaseId: '4c'
     },
     '4c': {

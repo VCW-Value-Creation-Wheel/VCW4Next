@@ -59,6 +59,7 @@ export type IdeaCriteriaPair = {
     criteria: Criteria;
     value: number | string;
     id?: number;
+    vcfResult?: boolean;
     mcdaResult?: number;
 };
 

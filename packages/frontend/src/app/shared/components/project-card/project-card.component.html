@@ -7,11 +7,12 @@
     h-80
     rounded-md
     bg-white
-    shadow-lg
+    shadow-xl
     duration-300
-    hover:shadow-xl hover:cursor-pointer
+    hover:shadow-2xl hover:cursor-pointer
     motion-safe:hover:scale-105 motion-safe:active:scale-100
-    active:shadow-lg
+    active:shadow-xl
+    border border-gray
   "
   (click)="onClickEvent()"
 >
@@ -38,12 +39,12 @@
         <app-keyword-tag [keyword]="keyword"></app-keyword-tag>
       </ng-container> -->
     </div>
-    <div class="py-8 px-4 bg-white rounded-b-md">
-      <h1 class="text-black text-xl font-bold">
+    <div class="py-8 px-8 bg-white rounded-b-md">
+      <h1 class="text-black text-xl font-bold pb-2">
         {{ project.name }}
       </h1>
-      <p>
-        {{ project.description }}
+      <p class="text-justify pt-2">
+        {{ project.description.length > 200 ? project.description.substring(0, 200) + '...' : project.description }}
       </p>
     </div>
   </div>

@@ -189,4 +189,17 @@ export class CreateItemDialogComponent implements OnInit {
     }
   }
 
+  keyPressHandler(event: KeyboardEvent, fieldName: string) {
+    if (this.getInputType(fieldName) === 'number') {
+      if (this.getMaxValue(fieldName) !== undefined && 
+        this.formGroup.get(fieldName).value > this.getMaxValue(fieldName)) {
+          this.formGroup.get(fieldName).patchValue(this.getMaxValue(fieldName));
+      }
+      if (this.getMinValue(fieldName) !== undefined && 
+          this.formGroup.get(fieldName).value < this.getMinValue(fieldName)) {
+            this.formGroup.get(fieldName).patchValue(this.getMinValue(fieldName));
+      }
+    }
+  }
+
 }

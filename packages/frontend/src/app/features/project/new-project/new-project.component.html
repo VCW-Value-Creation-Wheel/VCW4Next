@@ -1,4 +1,4 @@
-<div class="m-4 p-4">
+<div class="m-4 p-4 px-64">
     <app-button  
     [label]="'Back'"
     [leftIcon]="faArrowLeft"
@@ -6,9 +6,9 @@
     ></app-button>
 </div>
 <div [formGroup]="form" (ngSubmit)="onSubmit($event)">
-    <div class="grid grid-cols-4 gap-4 m-4 p-4 rounded-lg">
+    <div class="grid grid-cols-4 gap-4 m-4 p-4 px-64 rounded-lg">
         <div class="col-span-4 text-2xl font-bold text-primary">Create New Project</div>
-        <div class="col-span-3 md:col-span-2 m-2 p-2">
+        <div class="col-span-3 md:col-span-2 my-2 py-2">
             <app-input
                 id="project-title"
                 [label]="'Project Title'"
@@ -17,7 +17,7 @@
             >
             </app-input>
         </div>
-        <div class="col-span-4 m-2 p-2">
+        <div class="col-span-4 my-2 py-2 pr-96">
             <app-text-area
                 id="project-description"   
                 [label]="'Project Description'"
@@ -26,7 +26,7 @@
             >
             </app-text-area>
         </div>
-        <div class="col-span-3 md:col-span-1 m-2 p-2">
+        <div class="col-span-3 md:col-span-1 my-2 py-2">
             <app-input-file
                 [label]="'Thumbnail'"
                 id="project-thumbnail"
@@ -36,7 +36,7 @@
             >
             </app-input-file>
         </div>
-        <div class="col-span-3 md:col-span-1 m-2 p-2">
+        <div class="col-span-3 md:col-span-1 my-2 py-2">
             <app-select-input
                 [label] = "'Language'"
                 [options]="langOptions"
@@ -46,12 +46,12 @@
             </app-select-input>
         </div>
         <div class="col-span-4 text-xl font-bold ">Users and Roles</div>
-        <div class="grid grid-cols-4 col-span-4 px-2 ">
-            <div *ngIf="isAddUserActive" [formGroup]="formUser" class="col-span-4 md:m-2 md:p-2 ">
+        <div class="grid grid-cols-4 col-span-4">
+            <div *ngIf="isAddUserActive" [formGroup]="formUser" class="col-span-4 md:my-2 md:py-2">
                 <p class="text-gray-700 pb-2">
                     Find User
                 </p>
-                <div class="flex align-top">
+                <div class="flex align-top pr-48">
                     <input
                     class="
                         focus:outline-none
@@ -84,16 +84,16 @@
                 </div>
 
                 <div *ngIf="showResults">
-                    <p class="font-bold text-primary p-2">Results</p>
+                    <p class="font-bold text-primary pt-4">Results</p>
                 </div>
 
                 <div *ngIf="!showResults">
-                    <p class="font-bold text-primary p-2">No results found</p>
+                    <p class="font-bold text-primary pt-4">No results found</p>
                 </div>
           
                 
               
-                <div *ngFor="let user of this.users; index as id" class="flex md:px-20 md:p-2 w-full items-center md:items-end">
+                <div *ngFor="let user of this.users; index as id" class="flex md:py-2 w-full items-center md:items-end">
                     <div class="w-full md:w-1/5 items-end">
                         <p class="mt-2 mb:4 md:mb-2">User</p>
                         <p
@@ -110,33 +110,24 @@
                         px-2
                         {{error?'bg-red-200':'bg-gray-100'}}
                         ">
-                            {{user}}
+                            {{ user.username }}
                         </p>
                     </div>
                     <app-select-input
                         [label]="'Role'"
                         [options]="roleOptions"
-                        formControlName="role"
                         id="role"
                         class="md:w-1/4 pl-3"
-                        (emitInputChange)="saveRole($event,id)"
+                        (emitInputChange)="saveRole($event, id)"
                         
                         >
                     </app-select-input>
 
-                    <div *ngIf="isAdded[id] === false" class="md:px-4 mt-5 md:mt-8 self-center px-2 ">
+                    <div *ngIf="selectedRole[id] && isUserRoleNew(id, user)" class="md:px-4 mt-5 md:mt-8 self-center px-2 ">
                         <app-button
                         [label]="'Add'"
-                        (buttonClick)="addRole(id)"
+                        (buttonClick)="addRole(id, user)"
                         >
-                        </app-button>
-                    </div>
-
-                    <div *ngIf="isAdded[id] === true" class="md:px-4 mt-5 md:mt-8 self-center px-2 ">
-                        <app-button
-                        [label]="'Cancel'"  
-                        (buttonClick)="cancelRole(id)"        
-                        > 
                         </app-button>
                     </div>
                 </div>
@@ -146,15 +137,37 @@
                 <app-button
                 [label]="'Add User'"
                 (click)="isAddUserActive = true"
+                [leftIcon]="faUserPlus"
                 >
                 </app-button>
             </div>
+            <div class="col-span-4 border-t border-primary border-dashed py-4" *ngIf="userRole.length > 0">
+                <span class="text-lg font-bold pb-2">Selected</span>
+                <div class="flex flex-row gap-4 py-2 grid grid-cols-4 w-8/12" *ngFor="let userR of userRole; index as idx">
+                    <div class="flex flex-col gap-2 col-span-1">
+                        <p *ngIf="idx === 0" class="font-bold">User</p>
+                        <span>{{ userR.userName }}</span>
+                    </div>
+                    <div class="flex flex-col gap-2 col-span-2 my-auto">
+                        <p *ngIf="idx === 0" class="font-bold">Role</p>
+                        <span>{{ userR.roleName }}</span>
+                    </div>
+                    <div class="col-span-1 my-auto">
+                        <app-button
+                            [label]="'Cancel'"  
+                            (buttonClick)="cancelRole(idx)"
+                            [isWhite]="true"        
+                        > </app-button>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="m-2 flex">
+        <div class="my-2 pt-8 flex">
             <app-button
             [label]="'Submit'"
             (click)="onSubmit($event)"
             [isDisabled]="!form.valid"
+            [leftIcon]="faSave"
             >
             </app-button>
         </div>

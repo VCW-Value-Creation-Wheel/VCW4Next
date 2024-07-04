@@ -2,9 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MockProjectService, Project, VcwService, VCW, ProjectsService } from '@core';
 import { VcwMockService } from '@core/services/mocks/vcw/vcw-mock.service';
-import { faPlus, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faPenToSquare, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
+import { KeycloakService } from 'keycloak-angular';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-project-page',
@@ -17,12 +19,14 @@ export class ProjectPageComponent implements OnInit {
 
   faPlus = faPlus;
   faPenToSquare = faPenToSquare;
+  faArrowLeft = faArrowLeft;
 
   // vcws: VCW[] = [];
   vcws$: Observable<VCW[]>;
   project$: Observable<Project>;
 
   useMocks: boolean;
+  canEditProject: boolean;
 
   constructor(
     private vcwMockService: VcwMockService,
@@ -30,7 +34,8 @@ export class ProjectPageComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private vcwService: VcwService,
-    private projectsService: ProjectsService
+    private projectsService: ProjectsService,
+    private keycloak: KeycloakService
     ) { }
 
   ngOnInit(): void {
@@ -46,6 +51,21 @@ export class ProjectPageComponent implements OnInit {
       this.project$ = this.projectsService.getProjectById(this.projectId);
       this.vcws$ = this.vcwService.getProjectVcws(this.projectId);
     }
+
+
+    this.projectsService.getProjectRoles(this.projectId).pipe(take(1))
+    .subscribe({
+      next: (data) => {
+        this.keycloak.isLoggedIn().then((authenticated) => {
+          if (authenticated) {
+            const userHash = this.keycloak.getKeycloakInstance().userInfo['sub'];
+            const coordinatorHash = data.find(userEnum => userEnum.role.name === 'Coordinator')?.userInum;
+
+            this.canEditProject = userHash === coordinatorHash;
+          }
+        });
+      }
+    });
     
   }
 
@@ -59,6 +79,10 @@ export class ProjectPageComponent implements OnInit {
 
   editProject(){
     this.router.navigate(['edit-project'], { relativeTo: this.route });
+  }
+
+  onBack() {
+    this.router.navigate(['/'], { relativeTo: this.route });
   }
 
 }

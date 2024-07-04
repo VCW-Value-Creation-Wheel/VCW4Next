@@ -6,7 +6,10 @@
         (btnClick)="onLeftButtonClick()"
     ></app-icon-button>
     <div class="bg-primary-500 rounded w-1/2 md:w-1/4 text-center">
-        <p class="text-white font-bold h-full leading-8">{{ title }}</p>
+        <p 
+            (click)="onTitleClick()" 
+            class="text-white font-bold h-full leading-8 hover:cursor-pointer"
+        >{{ title }}</p>
     </div>
     <app-icon-button 
         background="bg-primary-500 rounded"

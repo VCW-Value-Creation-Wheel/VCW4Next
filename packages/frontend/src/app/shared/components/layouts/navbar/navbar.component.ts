@@ -10,7 +10,9 @@ import {
 import { environment } from '../../../../../environments/environment';
 import * as pkg from '../../../../../../package.json';
 import { Subject } from 'rxjs';
-import { KeycloakService } from 'keycloak-angular';
+import { ContextService, ProjectsService, VcwService } from '@core';
+import { NavigationEnd, Router } from '@angular/router';
+import { take, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-navbar',
@@ -35,7 +37,13 @@ export class NavbarComponent implements OnInit, OnDestroy {
   @Output() login = new EventEmitter();
   @Output() logout = new EventEmitter();
 
-  constructor() { }
+  currentRoute: string;
+  isLongProject: boolean = false;
+  isLongVcw : boolean = false;
+
+  constructor( private contextService: ContextService,
+    private projectService: ProjectsService,
+    private vcwService: VcwService,private route: Router) { }
 
   isShowingProfileCard = false;
   faUser = faUser;
@@ -49,7 +57,13 @@ export class NavbarComponent implements OnInit, OnDestroy {
   componentDestroyed$ = new Subject<boolean>();
 
   ngOnInit(): void {
-
+    this.route.events.pipe(takeUntil(this.componentDestroyed$)).subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        this.currentRoute = event.urlAfterRedirects;
+        this.getCurrentProjectAndVCW();
+      }
+    });
+    
   }
 
   ngOnDestroy(): void {
@@ -82,4 +96,54 @@ export class NavbarComponent implements OnInit, OnDestroy {
     return this.userProfile;
   }
 
+  get selectedProject() {
+    return this.contextService.getProjectContext()?.name ?? '';
+  }
+
+  get selectedVCW() {
+    return this.contextService.getVCWContext()?.name ?? '';
+  }
+
+  getCurrentProjectAndVCW() {
+    const projectPath = this.currentRoute.split('/projects/');
+    const vcwPath = this.currentRoute.split('/vcw/');
+    if (projectPath.length > 1) {
+      const projecID = projectPath[1].split('/')[0];
+      this.projectService.getProjectById(parseFloat(projecID)).pipe(take(1))
+      .subscribe((projectData) => {
+        this.contextService.setProjectContext(projectData);
+        if (vcwPath.length > 1) {
+          const vcwID = vcwPath[1].split('/')[0];
+          this.vcwService.getVcw(parseFloat(projecID), parseFloat(vcwID)).pipe(take(1))
+          .subscribe((vcwData) => {
+            this.contextService.setVCWContext(vcwData);
+          })
+        } else {
+          this.contextService.setVCWContext(undefined);
+        }
+      });
+    } else {
+      this.contextService.setProjectContext(undefined);
+    }
+  }
+
+  reducedProject(title: string){
+    if(title.length < 40){
+      this.isLongProject = false;
+      return title;
+    }else{
+      this.isLongProject = true;
+      return title.substring(0,40) + '...';
+    }
+  }
+
+  reducedVcw(title: string){
+    if(title.length < 40){
+      this.isLongVcw = false;
+      return title;
+    }else{
+      this.isLongVcw = true;
+      return title.substring(0,40) + '...';
+    }
+  }
 }

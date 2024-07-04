@@ -1,14 +1,20 @@
-<div class="m-4 p-4">
+<div class="m-4 p-4 px-64 flex flex-row gap-4">
     <app-button  
-    [label]="'Back'"
-    [leftIcon]="faArrowLeft"
-    (click)="onBack()"
+        [label]="'Back'"
+        [leftIcon]="faArrowLeft"
+        (click)="onBack()"
+    ></app-button>
+    <app-button  
+        [label]="'Delete Project'"
+        [leftIcon]="faTrashCan"
+        (click)="deleteProject()"
+        [isDangerous]="true"
     ></app-button>
 </div>
 <div [formGroup]="form" (ngSubmit)="onSubmit($event)">
-    <div class="grid grid-cols-4 gap-4 m-4 p-4 rounded-lg">
+    <div class="grid grid-cols-4 gap-4 m-4 p-4 px-64 rounded-lg">
         <div class="col-span-4 text-2xl font-bold text-primary">Edit Project</div>
-        <div class="col-span-3 md:col-span-2 m-2 p-2">
+        <div class="col-span-3 md:col-span-2 my-2 py-2">
             <app-input
                 id="project-title"
                 [label]="'Project Title'"
@@ -17,7 +23,7 @@
             >
             </app-input>
         </div>
-        <div class="col-span-4 m-2 p-2">
+        <div class="col-span-4 my-2 py-2 pr-96">
             <app-text-area
                 id="project-description"   
                 [label]="'Project Description'"
@@ -26,7 +32,7 @@
             >
             </app-text-area>
         </div>
-        <div class="col-span-3 md:col-span-1 m-2 p-2">
+        <div class="col-span-3 md:col-span-1 my-2 py-2">
             <div class="flex flex-cols-2 ">
                 <p class="pr-3 text-primary-500">File Name: </p>
                 <p>{{fileName}}</p>
@@ -36,6 +42,7 @@
                 <p>{{fileType}}</p>
             </div>
             <app-button
+                [leftIcon]="faImage"
                 [label]="'Add New Thumbnail'"
                 (click)="showInput = true"
                 class="p-2">
@@ -50,7 +57,7 @@
             >
             </app-input-file>
         </div>
-        <div class="col-span-3 md:col-span-1 m-2 p-2">
+        <div class="col-span-3 md:col-span-1 my-2 py-2">
             <app-select-input
                 [label] = "'Language'"
                 [options]="langOptions"
@@ -61,38 +68,38 @@
         </div>
         <div class="col-span-4 text-xl font-bold ">Users and Roles</div>
 
-        <div class="flex flex-row col-span-1 rounded-md ">
+        <div class="flex flex-row col-span-4 rounded-md ">
             
-            <div class="flex flex-col ">
-                <div *ngFor="let userInfo of this.userInfo; index as id" class="w-full pb-2" >
+            <div class="flex flex-col gap-4 justify-between w-1/12">
+                <div *ngFor="let userInfo of this.projectUserInfo; index as id" class="w-full pb-2" >
                     <p class="pb-2 text-primary-500 font-bold">User</p>
-                    <p class="rounded-md border-2 border-primary-500 p-2 w-full ">{{userInfo}}</p>
+                    <p class="rounded-md border-2 border-primary-500 p-2 w-full ">{{userInfo.username}}</p>
                 </div>
             </div>
-            <div class="flex flex-col  pl-4 place-items-stretch ">
-            <div *ngFor="let userRole of this.allUsersRole; index as id" class="pb-2">
-                <p class="pb-2 text-primary-500 font-bold">Role</p>
-                <div class="flex flex-row  items-center ">   
-                                  
-                        <p class="rounded-md border-2 border-primary-500 p-2 w-full">{{userRole}}</p>
-               
-                        <app-button
-                            label="Remove"
-                            isDangerous="true"
-                            class="pl-4 w-full"
-                            (buttonClick)="removeUserProject(id)">
-                        </app-button>
-                </div>
-            </div> 
-        </div>
+            <div class="flex flex-col gap-4 justify-between w-4/12 pl-4 place-items-stretch ">
+                <div *ngFor="let userEnum of this.projectUserEnums; index as id" class="pb-2">
+                    <p class="pb-2 text-primary-500 font-bold">Role</p>
+                    <div class="flex flex-row  items-center ">   
+                                    
+                            <p class="rounded-md border-2 border-primary-500 p-2 w-full">{{ userEnum.role.name }}</p>
+                
+                            <app-button
+                                label="Remove"
+                                isDangerous="true"
+                                class="pl-4 w-full"
+                                (buttonClick)="removeUserRole(id, userEnum)">
+                            </app-button>
+                    </div>
+                </div> 
+            </div>
         </div>
 
-        <div class="grid grid-cols-4 col-span-4 px-2 ">
-            <div *ngIf="isAddUserActive" [formGroup]="formUser" class="col-span-4 md:m-2 md:p-2 ">
+        <div class="grid grid-cols-4 col-span-4">
+            <div *ngIf="isAddUserActive" [formGroup]="formUser" class="col-span-4 md:my-2 md:py-2 ">
                 <p class="text-gray-700 pb-2">
                     Find User
                 </p>
-                <div class="flex align-top">
+                <div class="flex align-top pr-48">
                     <input
                     class="
                         focus:outline-none
@@ -103,7 +110,7 @@
                         border border-transparent
                         max-h-[40px]
                         focus:ring-primary-500 focus:bg-white focus:ring-1
-                        py-2
+                        py-2pl-4 place-items-stretch 
                         px-3
                         {{error?'bg-red-200':'bg-gray-100'}}
                     "
@@ -125,16 +132,16 @@
                 </div>
 
                 <div *ngIf="showResults">
-                    <p class="font-bold text-primary p-2">Results</p>
+                    <p class="font-bold text-primary pt-4">Results</p>
                 </div>
 
                 <div *ngIf="!showResults">
-                    <p class="font-bold text-primary p-2">No results found</p>
+                    <p class="font-bold text-primary pt-4">No results found</p>
                 </div>
           
                 
               
-                <div *ngFor="let user of this.users; index as id" class="flex md:px-20 md:p-2 w-full items-center md:items-end">
+                <div *ngFor="let user of this.users; index as id" class="flex md:py-2 w-full items-center md:items-end">
                     <div class="w-full md:w-1/5 items-end">
                         <p class="mt-2 mb:4 md:mb-2">User</p>
                         <p
@@ -151,7 +158,7 @@
                         px-2
                         {{error?'bg-red-200':'bg-gray-100'}}
                         ">
-                            {{user}}
+                            {{ user.username }}
                         </p>
                     </div>
                     <app-select-input
@@ -160,44 +167,67 @@
                         formControlName="role"
                         id="role"
                         class="md:w-1/4 pl-3"
-                        (emitInputChange)="saveRole($event,id)"
+                        (emitInputChange)="saveRole($event, id)"
                         
                         >
                     </app-select-input>
 
-                    <div *ngIf="isAdded[id] === false" class="md:px-4 mt-5 md:mt-8 self-center px-2 ">
+                    <div *ngIf="selectedRole[id] && isUserRoleNew(id, user)" class="md:px-4 mt-5 md:mt-8 self-center px-2 ">
                         <app-button
                         [label]="'Add'"
-                        (buttonClick)="addRole(id)"
+                        (buttonClick)="addRole(id, user)"
                         >
-                        </app-button>
-                    </div>
-
-                    <div *ngIf="isAdded[id] === true" class="md:px-4 mt-5 md:mt-8 self-center px-2 ">
-                        <app-button
-                        [label]="'Cancel'"  
-                        (buttonClick)="cancelRole(id)"        
-                        > 
                         </app-button>
                     </div>
                 </div>
                  
             </div>
-            <div class="col-span-4 my-2" *ngIf="!isAddUserActive ">
+            <div class="col-span-4" *ngIf="!isAddUserActive ">
                 <app-button
                 [label]="'Add User'"
                 (click)="isAddUserActive = true"
+                [leftIcon]="faUser"
                 >
                 </app-button>
             </div>
+            <div class="col-span-4 border-t border-primary border-dashed py-4" *ngIf="userRole.length > 0">
+                <span class="text-lg font-bold pb-2">Selected</span>
+                <div class="flex flex-row gap-4 py-2 grid grid-cols-4 w-8/12" *ngFor="let user of userRole; index as idx">
+                    <div class="flex flex-col gap-2 col-span-1">
+                        <p *ngIf="idx === 0" class="font-bold">User</p>
+                        <span>{{ user.userName }}</span>
+                    </div>
+                    <div class="flex flex-col gap-2 col-span-2">
+                        <p *ngIf="idx === 0" class="font-bold">Role</p>
+                        <span>{{ user.roleName }}</span>
+                    </div>
+                    <div class="col-span-1 my-auto">
+                        <app-button
+                            [label]="'Cancel'"  
+                            (buttonClick)="cancelRole(idx)"
+                            [isWhite]="true"        
+                        > </app-button>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="m-2 flex">
+        <div class="my-2 pt-8 flex">
             <app-button
             [label]="'Submit'"
             (click)="onSubmit($event)"
             [isDisabled]="!form.valid"
+            [leftIcon]="faSave"
             >
             </app-button>
         </div>
     </div>
 </div>
+
+<app-dialog
+    *ngIf="confirmDialogOpen"
+    [title]="'Delete Project?'"
+    [confirmText]="'Yes'"
+    [cancelText]="'No'"
+    (cancel)="onActionCancel()"
+    (confirm)="onActionConfirm()"
+>This will delete this Project and all of its content. This action is irreversible. Do you want to proceed?</app-dialog>

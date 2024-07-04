@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, FormGroup, UntypedFormGroup, Validators } fro
 import { ActivatedRoute, Router } from '@angular/router';
 import { SnackbarService, vcwConfig, VcwService } from '@core';
 import { take } from 'rxjs/operators';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-new-vcw',
@@ -22,10 +23,13 @@ export class NewVcwComponent implements OnInit {
 
   projectId: number;
 
+  faArrowLeft = faArrowLeft;
+
   constructor(private formBuilder: FormBuilder,
               private vcwService: VcwService,
               private activatedRoute: ActivatedRoute,
               private router: Router,
+              private route: ActivatedRoute,
               private snackbar: SnackbarService) { }
 
   ngOnInit(): void {
@@ -51,6 +55,10 @@ export class NewVcwComponent implements OnInit {
     } else {
       this.snackbar.danger('Not Valid', 'Please check your form.').during(3000).show();
     }
+  }
+
+  onBack() {
+    this.router.navigate(['../'], { relativeTo: this.route });
   }
 
 }

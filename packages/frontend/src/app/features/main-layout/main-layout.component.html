@@ -9,12 +9,13 @@
           [title]="vcwPhaseFullName"
           (leftButtonClick)="onNavigateLeft()"
           (rightButtonClick)="onNavigateRight()"
+          (textClick)="returnToWheel()"
         ></app-phase-navigation>
       </div>
-    
-    <div class="grow max-h-full overflow-y-auto overflow-x-hidden pl-0.5 md:px-8">
+     
+      <div class="grow max-h-full overflow-y-auto overflow-x-hidden pl-0.5 md:px-8">
         <router-outlet></router-outlet>
-    </div>
+      </div>
 
     <app-footer></app-footer>
     <app-snackbar></app-snackbar>

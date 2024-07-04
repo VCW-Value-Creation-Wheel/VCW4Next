@@ -6,12 +6,46 @@
     text-center
     py-4
     px-6
-    bg-gray-50
+    bg-gray-100
   "
 >
   <a href="/">
     <svg-icon src="assets/img/vcw4next.svg" svgClass="h-15 w-20"></svg-icon>
   </a>
+
+  <div 
+    class="flex flex-row mr-12 py-3  p-2 border-2 border-primary-300 rounded w-fit break-words bg-asset-200 justify-around "
+    *ngIf="selectedProject || selectedVCW"
+  >
+
+  <div class="group">
+    <p class="text-black-500 text-lg"><b>Project: </b>{{  reducedProject(selectedProject) }}</p>
+    <span 
+      class='group-hover:opacity-100 transition-opacity bg-gray-800 p-1.5 text-sm text-gray-100 rounded-md ml-4 2xl:ml-20
+            absolute opacity-0 z-50 whitespace-nowrap grid grid-rows-2 top-14'
+      *ngIf="isLongProject"
+    >
+      <p>
+        {{selectedProject}}
+      </p>
+    </span>
+  </div>
+
+  <div class="group">
+    <p *ngIf="selectedVCW" class="text-black-500 text-lg pl-2"><b>VCW: </b>{{ reducedVcw(selectedVCW) }}</p> 
+    <span 
+      class='group-hover:opacity-100 transition-opacity bg-gray-800 p-1.5 text-sm text-gray-100 rounded-md ml-4 2xl:ml-20
+          absolute opacity-0 z-50 whitespace-nowrap grid grid-rows-2 top-14'
+      *ngIf="isLongVcw"
+    >
+      <p>
+        {{selectedVCW}}
+      </p>
+    </span>
+  </div>
+
+ </div>
+  
   <div class="flex gap-4 justify-end">
       <div *ngIf="this.isAuthenticated; else signInButton">
           <button
@@ -35,6 +69,7 @@
             </h5>
           </button>
       </div>
+     
       <ng-template #signInButton>
           <app-button
             (click)="onLogin()"

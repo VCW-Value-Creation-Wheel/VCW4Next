@@ -4,7 +4,7 @@
     justify-center
     items-center
     w-full
-    h-80
+    h-fit
     rounded-md
     bg-white
     shadow-lg
@@ -12,6 +12,7 @@
     hover:shadow-xl hover:cursor-pointer
     motion-safe:hover:scale-105 motion-safe:active:scale-100
     active:shadow-lg
+    border border-gray
   "
   (click)="onClickEvent()"
 >
@@ -38,8 +39,8 @@
         <app-keyword-tag [keyword]="keyword"></app-keyword-tag>
       </ng-container> -->
     </div>
-    <div class="py-8 px-4 bg-white rounded-b-md">
-      <h1 class="text-black text-xl font-bold">
+    <div class="py-8 px-8 bg-white rounded-b-md">
+      <h1 class="text-black text-xl font-bold pb-2 mb-4">
         {{ vcw.name }}
       </h1>
       <span [innerHTML]="vcw.challenge"></span>
