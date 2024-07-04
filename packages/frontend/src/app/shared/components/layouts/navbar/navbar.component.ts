@@ -38,6 +38,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
   @Output() logout = new EventEmitter();
 
   currentRoute: string;
+  isLongProject: boolean = false;
+  isLongVcw : boolean = false;
 
   constructor( private contextService: ContextService,
     private projectService: ProjectsService,
@@ -125,4 +127,23 @@ export class NavbarComponent implements OnInit, OnDestroy {
     }
   }
 
+  reducedProject(title: string){
+    if(title.length < 40){
+      this.isLongProject = false;
+      return title;
+    }else{
+      this.isLongProject = true;
+      return title.substring(0,40) + '...';
+    }
+  }
+
+  reducedVcw(title: string){
+    if(title.length < 40){
+      this.isLongVcw = false;
+      return title;
+    }else{
+      this.isLongVcw = true;
+      return title.substring(0,40) + '...';
+    }
+  }
 }
