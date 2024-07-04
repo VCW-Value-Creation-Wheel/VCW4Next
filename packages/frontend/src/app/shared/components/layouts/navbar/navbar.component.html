@@ -12,6 +12,15 @@
   <a href="/">
     <svg-icon src="assets/img/vcw4next.svg" svgClass="h-15 w-20"></svg-icon>
   </a>
+
+  <div 
+    class="flex flex-row mr-12 py-3  p-2 border-2 border-primary-300 rounded w-fit break-words bg-asset-200 justify-around"
+    *ngIf="selectedProject || selectedVCW"
+  >
+    <span class="text-black-500 text-lg"><b>Project: </b>{{ selectedProject }}</span>
+    <span *ngIf="selectedVCW" class="text-black-500 text-lg pl-2"><b>VCW: </b>{{ selectedVCW }}</span> 
+  </div>
+  
   <div class="flex gap-4 justify-end">
       <div *ngIf="this.isAuthenticated; else signInButton">
           <button
@@ -35,6 +44,7 @@
             </h5>
           </button>
       </div>
+     
       <ng-template #signInButton>
           <app-button
             (click)="onLogin()"

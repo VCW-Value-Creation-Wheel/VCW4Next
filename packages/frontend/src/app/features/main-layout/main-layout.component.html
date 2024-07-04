@@ -12,16 +12,10 @@
           (textClick)="returnToWheel()"
         ></app-phase-navigation>
       </div>
-    <div 
-      class="flex flex-col gap-2 mx-2 px-2 py-2 border-2 border-primary-300 rounded w-[14%] break-words bg-asset-200"
-      *ngIf="selectedProject || selectedVCW">
-      <span class="text-primary-500 font-bold text-xl pb-2">Currently working on:</span>
-      <span class="text-black-500 text-lg"><b>Project: </b>{{ selectedProject }}</span>
-      <span *ngIf="selectedVCW" class="text-black-500 text-lg"><b>VCW: </b>{{ selectedVCW }}</span>
-    </div>
-    <div class="grow max-h-full overflow-y-auto overflow-x-hidden pl-0.5 md:px-8">
+     
+      <div class="grow max-h-full overflow-y-auto overflow-x-hidden pl-0.5 md:px-8">
         <router-outlet></router-outlet>
-    </div>
+      </div>
 
     <app-footer></app-footer>
     <app-snackbar></app-snackbar>
