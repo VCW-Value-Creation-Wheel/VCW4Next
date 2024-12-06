@@ -1,30 +1,84 @@
-### VCWNext
----
+# VCW4Next
 
-### Frontend (Angular)
+## Project structure
 
-### Backend (Spring Boot)
+This projects contains five components:
+* Database
+  * PostgreSQL 14
+* Backend
+  * Spring Boot 3.0.0 (Java 17)
+* Frontend
+  * Angular
+* Object Store
+  * MinIO RELEASE.2023-01-02
+* Identity and Access Management (IAM)
+  * Keycloak 20
 
-#### Swagger API Docs
 
-Swagger api docs are available. How to view:
-1. Download vcwSwagger.yml  file from the [repository](/packages/backend/docs/vcwSwagger.yml).
-2. Go to https://editor-next.swagger.io/
-3. Go to File -> Import File
-4. Import vcwSwagger.yml
+## Running and deployment Instructions
 
-#### Minio File Storage
-🚧 Under construction
+### Development (local machine)
+To run the entire system on a local machine it's necessary to install:
+* Docker
+* Docker compose
+* JDK 17
+* Maven
+* Node ...
 
-- Used for storing and downloading project thumbnails (images) and vcw attachments (any file)
-- Based on the implementation used in [request4EO](https://stash.elecnor-deimos.com/projects/GSC4EO/repos/request4eo/browse/backend/src/main/java/pt/com/deimos/requestapi/). 
-- For more info see the [Minio API docs](https://min.io/docs/minio/linux/developers/java/API.html)
-##### How are we storing files?
+First create and run the Database, Object Store and IAM Docker containers by executing:
+```bash
+$ docker compose up --build -d
+```
 
-  [![](https://mermaid.ink/img/pako:eNpdkcFqwzAMhl_F-NRCy-45DEbSWwfdAush6UGxlcRtbGe2sjFK3312HEaYDpb4_h8hyXcurESe8Xaw36IHR-z4XhsW4qU6Y-MVIWut0xeW6Gg9bU7hYQ4_J_S0TVw21Yw7h758O7I64AIIGvC4vSSPVkbZavMaE2vVgLOrJOug-zP5qekcjD3zo1Omq1JiDYgbGrmYYuTV3EJYQ2hoJRRJGIH6FT1UJ2evKOjpIz8z28RykUPfZWW23z_HDWNeBkhKEQibPEZhXiPhPGIPX__5Yc3DbVZNVpTvuEanQcnwAffoqTn1qLHmWSgluFvNa_MIPpjIlj9G8IzchDs-jRIICwXhVppnLQweH79jLZAM?type=png)](https://mermaid-js.github.io/mermaid-live-editor/edit#pako:eNpdkcFqwzAMhl_F-NRCy-45DEbSWwfdAush6UGxlcRtbGe2sjFK3312HEaYDpb4_h8hyXcurESe8Xaw36IHR-z4XhsW4qU6Y-MVIWut0xeW6Gg9bU7hYQ4_J_S0TVw21Yw7h758O7I64AIIGvC4vSSPVkbZavMaE2vVgLOrJOug-zP5qekcjD3zo1Omq1JiDYgbGrmYYuTV3EJYQ2hoJRRJGIH6FT1UJ2evKOjpIz8z28RykUPfZWW23z_HDWNeBkhKEQibPEZhXiPhPGIPX__5Yc3DbVZNVpTvuEanQcnwAffoqTn1qLHmWSgluFvNa_MIPpjIlj9G8IzchDs-jRIICwXhVppnLQweH79jLZAM)
+NOTE: If it's the first time the system is being built execute the steps in section "Keycloak and MinIO configurations" then continue to the next step.
 
-##### How are we reading files?
+With all the above containers up and running go inside the backend folder:
+```bash
+$ cd packages/backend
+```
+And execute:
+```bash
+$ mvn clean spring-boot:run
+```
+Then go inside the frontend folder:
+```bash
+$ cd packages/frontend
+```
+and execute:
+```bash
+$ yarn install && yarn start
+```
+From this moment the entire system is up and running.
 
-[![](https://mermaid.ink/img/pako:eNplUk1vwjAM_StRTiCBdu8Bia1oF5DYkMah5ZA2bpvRJl3iCE3Af5-TMIa0HPLh9-znPPnMayOBZ7zUTW9OdScssvV7qRmtZbGHyimEA0uBFnDyCsgsfHlwOL3R2Hy-CFg4Kq96meLOV60VY8fcaJVui3SwStRH0PKQSGHlRaN6YKPA7iG6KrbWfEKNTx8ve2aqcH2Ao9D5OezUjxuNdnD9g1t_9qMUCAQ2YEHXwEqC0bAoVhuNoPGWQf2ki6yKydY4bKnk7m0dU3KBohIOpjf1QWlliskmHKlYYO3QWNHeSbE9MoYFv_5_JFomq1_R-FwlH33IIjeTTnQlAnki5_FxIYYGG_4nzUn3RkjmbX9JSQ99hmIE_JUmnQQnuXujiwtzZMPdS5JY8hkfwA5CSZqQc0grOXYwQMkzukphjyVNzpV4wqPZfeuaZ2g9zHgyP1eCRmDgWSN6R1GQimzapJGLk3f9AW2Myv0?type=png)](https://mermaid-js.github.io/mermaid-live-editor/edit#pako:eNplUk1vwjAM_StRTiCBdu8Bia1oF5DYkMah5ZA2bpvRJl3iCE3Af5-TMIa0HPLh9-znPPnMayOBZ7zUTW9OdScssvV7qRmtZbGHyimEA0uBFnDyCsgsfHlwOL3R2Hy-CFg4Kq96meLOV60VY8fcaJVui3SwStRH0PKQSGHlRaN6YKPA7iG6KrbWfEKNTx8ve2aqcH2Ao9D5OezUjxuNdnD9g1t_9qMUCAQ2YEHXwEqC0bAoVhuNoPGWQf2ki6yKydY4bKnk7m0dU3KBohIOpjf1QWlliskmHKlYYO3QWNHeSbE9MoYFv_5_JFomq1_R-FwlH33IIjeTTnQlAnki5_FxIYYGG_4nzUn3RkjmbX9JSQ99hmIE_JUmnQQnuXujiwtzZMPdS5JY8hkfwA5CSZqQc0grOXYwQMkzukphjyVNzpV4wqPZfeuaZ2g9zHgyP1eCRmDgWSN6R1GQimzapJGLk3f9AW2Myv0)
+Access http://localhost:4200 in a web browser, register a new user, and create your first VCW.
 
-### Identity (keycloak)
+#### Keycloak and MinIO configurations (first installation)
+* In a web browser go to http://localhost:8080/admin/master/console and login using the credentials located in the .env file. Expand the drop-down menu and click on "Create Realm". Then import the realm file (packages/identity/realms/vcw-realm.json) and click "Create".
+* In a web browser go to http://localhost:8080/admin/master/console and login using the credentials located in the .env file. Expand the drop-down menu and select the vcw realm. Create a new user (vcw_admin), define a password (#vcw_admin54321#), and in the "Role mapping" section assign the role: view-users.
+* In a web browser go to http://localhost:9002/login and login using the credentials located in the .env file. Create a new bucket (vcw4next.file.storage.bucket) and new access key (XJP8oLyTzis0yJ3B) and secret (yH1rOrI2SSN01Idmwtyn7UENWbcJTWcn).
+
+NOTE: The user vcw_admin, the bucket, access key, and secret are used by the backend. When changing the values above don't forget to also change the backend application.properties file.
+
+### Kubernetes cluster (Under construction)
+To have the system running in a Kubernetes cluster it's necessary to perform the following steps:
+* Build the Docker images.
+* Push them to a Docker registry.
+* Deploy them in a Kubernetes cluster using Helm.
+
+For example, for the backend component, go inside the folder infra:
+```bash
+$ cd packages/backend/infra
+```
+Build the docker image:
+```bash
+docker build -t vcw-backend:1.0.0 .
+```
+Push the image to the Docker registry (the command has to be adapted depending on the registry being used):
+```bash
+docker push vcw-backend:1.0.0 .
+```
+Deploy it on the cluster:
+```bash
+helm upgrade --install --create-namespace -n vcw vcw-backend ./helm
+```
+This is a simplification of the process. One cannot deploy the system just running these three commands. There are other steps not metioned here that have to be taken in account (e.g. edit the ./helm/values.yaml). They were not metioned here because they depend on the specific cluster in which the system is being deployed.
