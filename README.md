@@ -18,7 +18,7 @@ This projects contains five components:
 ## Running and deployment Instructions
 
 ### Development (local machine)
-To run the entire system on a local machine it's necessary to install:
+To run the entire system on a local machine it is necessary to install:
 * Docker
 * Docker compose
 * JDK 17
@@ -31,9 +31,9 @@ First create and run the Database, Object Store and IAM Docker containers by exe
 $ docker compose up --build -d
 ```
 
-NOTE: If it's the first time the system is being built execute the steps in section "Keycloak and MinIO configurations" then continue to the next step.
+NOTE: If it's the first time the system is being built, execute the steps in section "Keycloak and MinIO configurations" then continue to the next step.
 
-With all the above containers up and running go inside the backend folder:
+With all the above containers up and running, navigate inside the backend folder:
 ```bash
 $ cd packages/backend
 ```
@@ -41,7 +41,7 @@ And execute:
 ```bash
 $ mvn clean spring-boot:run
 ```
-Then go inside the frontend folder:
+Then navigate inside the frontend folder:
 ```bash
 $ cd packages/frontend
 ```
@@ -54,11 +54,11 @@ From this moment the entire system is up and running.
 Access http://localhost:4200 in a web browser, register a new user, and create your first VCW.
 
 #### Keycloak and MinIO configurations (first installation)
-* In a web browser go to http://localhost:8080/admin/master/console and login using the credentials located in the .env file. Expand the drop-down menu and click on "Create Realm". Then import the realm file (packages/identity/realms/vcw-realm.json) and click "Create".
-* In a web browser go to http://localhost:8080/admin/master/console and login using the credentials located in the .env file. Expand the drop-down menu and select the vcw realm. Create a new user (vcw_admin), define a password (#vcw_admin54321#), and in the "Role mapping" section assign the role: view-users.
-* In a web browser go to http://localhost:9002/login and login using the credentials located in the .env file. Create a new bucket (vcw4next.file.storage.bucket) and new access key (XJP8oLyTzis0yJ3B) and secret (yH1rOrI2SSN01Idmwtyn7UENWbcJTWcn).
+* In a web browser go to http://localhost:8080/admin/master/console and log in using the credentials located in the .env file. Expand the drop-down menu and click on "Create Realm". Then import the realm file (packages/identity/realms/vcw-realm.json) and click "Create".
+* In a web browser go to http://localhost:8080/admin/master/console and log in using the credentials located in the .env file. Expand the drop-down menu and select the vcw realm. Create a new user (vcw_admin), define a password (#vcw_admin54321#) and in the "Role mapping" section assign the role: "view-users".
+* In a web browser go to http://localhost:9002/login and log in using the credentials located in the .env file. Create a new bucket (vcw4next.file.storage.bucket) and a new access key (XJP8oLyTzis0yJ3B) and secret (yH1rOrI2SSN01Idmwtyn7UENWbcJTWcn).
 
-NOTE: The user vcw_admin, the bucket, access key, and secret are used by the backend. When changing the values above don't forget to also change the backend application.properties file.
+NOTE: The user vcw_admin, the bucket, access key, and secret are used by the backend. If you change the values above, don't forget to also change them in the backend application.properties file.
 
 ### Kubernetes cluster (Under construction)
 To have the system running in a Kubernetes cluster it's necessary to perform the following steps:
@@ -66,7 +66,7 @@ To have the system running in a Kubernetes cluster it's necessary to perform the
 * Push them to a Docker registry.
 * Deploy them in a Kubernetes cluster using Helm.
 
-For example, for the backend component, go inside the folder infra:
+For example, for the backend component, navigate inside the folder "infra":
 ```bash
 $ cd packages/backend/infra
 ```
@@ -82,4 +82,4 @@ Deploy it on the cluster:
 ```bash
 helm upgrade --install --create-namespace -n vcw vcw-backend ./helm
 ```
-This is a simplification of the process. One cannot deploy the system just running these three commands. There are other steps not metioned here that have to be taken in account (e.g. edit the ./helm/values.yaml). They were not metioned here because they depend on the specific cluster in which the system is being deployed.
+This is a simplification of the process. One cannot deploy the system by just running these three commands. There are other steps not metioned here that have to be taken in account (e.g. edit the ./helm/values.yaml). They were not metioned here because they depend on the specific cluster in which the system is being deployed.
