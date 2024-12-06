@@ -8,7 +8,7 @@ This projects contains five components:
 * Backend
   * Spring Boot 3.0.0 (Java 17)
 * Frontend
-  * Angular
+  * Angular 15
 * Object Store
   * MinIO RELEASE.2023-01-02
 * Identity and Access Management (IAM)
@@ -23,7 +23,8 @@ To run the entire system on a local machine it's necessary to install:
 * Docker compose
 * JDK 17
 * Maven
-* Node ...
+* Node.js (version 18.10)
+* Yarn (version 1.22.19)
 
 First create and run the Database, Object Store and IAM Docker containers by executing:
 ```bash
