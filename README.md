@@ -1,5 +1,12 @@
 # VCW4Next
 
+## Key Features
+
++ Interactive interface for VCW decision-making process
++ NextLand: Earth observation services for agriculture and forestry
++ NextOcean: Sustainable fisheries and aquaculture data insights
++ Guided solution development for key decision-makers
+
 ## Project structure
 
 This projects contains five components:
@@ -83,3 +90,6 @@ Deploy it on the cluster:
 helm upgrade --install --create-namespace -n vcw vcw-backend ./helm
 ```
 This is a simplification of the process. One cannot deploy the system by just running these three commands. There are other steps not metioned here that have to be taken in account (e.g. edit the ./helm/values.yaml). They were not metioned here because they depend on the specific cluster in which the system is being deployed.
+
+## License
+MIT License | © Deimos Engenharia SA
