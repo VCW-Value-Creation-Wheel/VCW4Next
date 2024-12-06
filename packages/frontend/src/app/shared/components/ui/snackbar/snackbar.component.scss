@@ -1,0 +1,33 @@
+.snackbar {
+  min-width: 250px;
+  padding: 16px;
+  position: fixed;
+  z-index: 51;
+  left: 50%;
+  bottom: 60px;
+  transform: translateX(-50%);
+  -webkit-animation: fadein 0.5s;
+  animation: fadein 0.5s;
+}
+
+@-webkit-keyframes fadein {
+  from {
+    bottom: 0;
+    opacity: 0;
+  }
+  to {
+    bottom: 60px;
+    opacity: 1;
+  }
+}
+
+@keyframes fadein {
+  from {
+    bottom: 0;
+    opacity: 0;
+  }
+  to {
+    bottom: 60px;
+    opacity: 1;
+  }
+}

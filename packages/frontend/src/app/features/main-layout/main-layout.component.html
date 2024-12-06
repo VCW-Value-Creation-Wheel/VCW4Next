@@ -1,0 +1,23 @@
+<div class="flex flex-col h-screen overflow-x-hidden overflow-y-hidden">
+    <app-navbar 
+      [isAuthenticated]="isAuthenticated"
+      [userProfile]="userProfile"
+      (logout)="onLogout()"
+    ></app-navbar>
+    <div class="flex flex-col justify-center w-full py-2" *ngIf="isVcwPhase">
+        <app-phase-navigation
+          [title]="vcwPhaseFullName"
+          (leftButtonClick)="onNavigateLeft()"
+          (rightButtonClick)="onNavigateRight()"
+          (textClick)="returnToWheel()"
+        ></app-phase-navigation>
+      </div>
+     
+      <div class="grow max-h-full overflow-y-auto overflow-x-hidden pl-0.5 md:px-8">
+        <router-outlet></router-outlet>
+      </div>
+
+    <app-footer></app-footer>
+    <app-snackbar></app-snackbar>
+</div>
+

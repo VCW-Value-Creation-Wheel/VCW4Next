@@ -1,0 +1,24 @@
+#finalReport ::ng-deep .ck.ck-editor__top,.ck-editor__editable_inline {
+    display: none;
+}
+
+#finalReport ::ng-deep .ck-editor__editable_inline {
+    min-height: 100px;
+}
+
+#finalReport ::ng-deep .ck.ck-editor__editable_inline {
+    border: 0;
+  
+}
+
+@media print {
+  .ck.ck-editor__editable_inline {
+        border: 0;
+      
+    }
+}
+
+
+
+
+

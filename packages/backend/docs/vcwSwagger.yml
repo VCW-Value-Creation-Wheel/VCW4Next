@@ -1,0 +1,2592 @@
+openapi: 3.0.3
+info:
+  title: Vcw4Next
+  description: |-
+    🚧🚧
+  version: "0.0"
+
+
+servers:
+  - url: "localhost:8081/v1/"
+  - url: "http://vcw-app.develop.s4eo.com/"
+
+tags:
+  - name: Project List Page
+    description:
+      " - Shows all projects that the logged in user has access to. \n\n 
+        - For each project there is a card with an image, title and description."
+    externalDocs:
+      url: http://vcw-app.develop.s4eo.com/
+  - name: Project Page
+    description: " - Shows all vcws for the selected project. \n\n 
+                   - For each vcw there is a card with an image, title and description."
+    externalDocs:
+      url: http://vcw-app.develop.s4eo.com/projects/1
+  - name: New Project Page
+    description: " - Creates a new vcw for the current project. \n\n 
+                   - There is a text field for title and vcw images for each type"
+    externalDocs:
+      url: http://vcw-app.develop.s4eo.com/projects/1/new-vcw
+paths:
+  /projects:
+    get:
+      tags:
+        - Project List Page
+      summary: Shows all projects that a user has access to 🟢
+      description:
+      operationId: getByUser
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/examples/project-return'
+      parameters:
+        - name: userId
+          in: header
+          description: Id from logged in user.
+          required: true
+          schema:
+            type: string
+    post:
+      tags:
+        - New Project Page
+      summary: Creates a new project 🟢
+      description: Page has fields for name, description, language, thumbnail and list of users.
+      operationId: save
+      responses:
+        '201':
+          description: Created project
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/examples/project-new'
+        '400':
+          description: Invalid arguments
+          content:
+            application/json:
+              example: {
+                "timestamp": "2023-01-31T12:03:11.417+00:00",
+                "status": 400,
+                "error": "Bad Request",
+                "trace": "...MethodArgumentNotValidException: Validation failed for..."}
+      parameters:
+        - name: name
+          in: formData
+          description: project name
+          required: true
+          schema:
+            type: string
+        - name: description
+          in: formData
+          description: project description
+          required: true
+          schema:
+            type: string
+        - name: lang
+          in: formData
+          description: project language
+          required: true
+          schema:
+            type: string
+  /projects/{id} :
+    get:
+      tags:
+        - Project Page
+      summary: Shows project with given id if the user has access to it. 🟢
+      description:
+      operationId: getByIdAndUser
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/examples/project-return'
+        '404':
+          description: Project not found
+          content:
+            'text/plain; charset=utf-8':
+              schema:
+                type: string
+                example: 'Project not found'
+        parameters:
+          - name: id
+            in: path
+            description: project id
+            required: true
+
+            schema:
+              type: Long
+          - name: userId
+            in: header
+            description: Id from logged in user.
+            required: true
+
+            schema:
+              type: string
+
+
+  /projects/{project_id}/thumbnails:
+    get:
+      tags:
+        - New Project Page
+      summary: Show project thumbnail 🟢
+      description: TODO
+      operationId: getProjectThumbnail
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/examples/thumbnail-new'
+        '404':
+          description: Thumbnail not found
+          content:
+            'text/plain; charset=utf-8':
+              schema:
+                type: string
+                example: 'Thumbnail not found'
+      parameters:
+        - name: project_id
+          in: path
+          description: "project_id"
+          required: true
+          schema:
+            type: integer
+    post:
+      tags:
+        - New Project Page
+      summary: Creates a project thumbnail 🟢
+      description: TODO
+      operationId: saveThumbnail
+      responses:
+        '201':
+          description: Created Thumbnail
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/examples/thumbnail-new'
+        '400':
+          description: Invalid arguments
+          content:
+            application/json:
+              example: {
+                "timestamp": "2023-01-31T12:03:11.417+00:00",
+                "status": 400,
+                "error": "Bad Request",
+                "trace": "...MethodArgumentNotValidException: Validation failed for..."}
+      parameters:
+        - name: project_id
+          in: path
+          description: "project_id"
+          required: true
+          schema:
+            type: integer
+        - name: thumbnail
+          in: formData
+          description: thumbnail image file
+          required: false
+          schema:
+            type: MultipartFile
+
+  /projects/{project_id}/thumbnails/{thumbnail_id}:
+    put:
+      tags:
+        - New Project Page
+      summary: Updates the project thumbnail 🟢
+      description: TODO
+      operationId: updateThumbnail
+      responses:
+        '200':
+          description: Updated thumbnail
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/examples/thumbnail-new'
+        '400':
+          description: Invalid arguments
+          content:
+            application/json:
+              example: {
+                "timestamp": "2023-01-31T12:03:11.417+00:00",
+                "status": 400,
+                "error": "Bad Request",
+                "trace": "...MethodArgumentNotValidException: Validation failed for..."}
+      parameters:
+        - name: project_id
+          in: path
+          description: "project_id"
+          required: true
+          schema:
+            type: integer
+        - name: thumbnail_id
+          in: path
+          description: "thumbnail_id"
+          required: true
+          schema:
+            type: integer
+        - name: thumbnail
+          in: formData
+          description: thumbnail image file
+          required: true
+          schema:
+            type: MultipartFile
+    delete:
+      tags:
+        - New Project Page
+      summary: Deletes the project thumbnail 🟢
+      description: TODO
+      operationId: deleteThumbnail
+      responses:
+        '400':
+          description: Invalid thumbnail id supplied
+        '404':
+          description: Thumbnail not found
+      parameters:
+        - name: project_id
+          in: path
+          description: "project_id"
+          required: true
+          schema:
+            type: integer
+        - name: thumbnail_id
+          in: path
+          description: "thumbnail_id"
+          required: true
+          schema:
+            type: integer
+
+  /projects/{project_id}/users:
+    get:
+      tags:
+        - New Project Page
+      summary: Shows all project users 🟢
+      description: TODO
+      operationId: getAllProjectUsers
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                example: [{"userInum": "b68986e1-81d8-4813-ada5-172442d8944d", "role": {"id": 1, "name":"Coordinator", "description":"test"}}]
+        '404':
+          description: Project user not found
+          content:
+            'text/plain; charset=utf-8':
+              schema:
+                type: string
+                example: 'Project user not found'
+      parameters:
+        - name: project_id
+          in: path
+          description: "project_id"
+          required: true
+          schema:
+            type: integer
+    post:
+      tags:
+        - New Project Page
+      summary: Adds a project user 🟢
+      description: TODO
+      operationId: saveThumbnail
+      responses:
+        '201':
+          description: Added user
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {"userInum": "b68986e1-81d8-4813-ada5-172442d8944d", "role": {"id": 1, "name":"Coordinator", "description":"test"}}
+        '400':
+          description: Invalid arguments
+          content:
+            application/json:
+              example: {
+                "timestamp": "2023-01-31T12:03:11.417+00:00",
+                "status": 400,
+                "error": "Bad Request",
+                "trace": "...MethodArgumentNotValidException: Validation failed for..."}
+      parameters:
+        - name: project_id
+          in: path
+          description: "project_id"
+          required: true
+          schema:
+            type: integer
+        - name: role id
+          in: formData
+          description: "role_id"
+          required: true
+          schema:
+            type: integer
+        - name: user id
+          in: formData
+          description: "user_id"
+          required: true
+          schema:
+            type: string
+
+  /projects/{project_id}/users/{user_id}:
+    get:
+      tags:
+        - New Project Page
+      summary: Shows project user with given id 🟢
+      description: TODO
+      operationId: getProjectUserById
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                example: [{"userInum": "b68986e1-81d8-4813-ada5-172442d8944d", "role": {"id": 1, "name":"Coordinator", "description":"test"}}]
+        '404':
+          description: Project user not found
+          content:
+            'text/plain; charset=utf-8':
+              schema:
+                type: string
+                example: 'Project user not found'
+      parameters:
+        - name: project_id
+          in: path
+          description: "project_id"
+          required: true
+          schema:
+            type: integer
+        - name: user id
+          in: path
+          description: "user_id"
+          required: false
+          schema:
+            type: string
+    put:
+      tags:
+        - New Project Page
+      summary: Updates a project user 🟢
+      description: TODO
+      operationId: updateProjectUser
+      responses:
+        '200':
+          description: Updated project user
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {"userInum": "b68986e1-81d8-4813-ada5-172442d8944d", "role": {"id": 2, "name":"Key decision maker", "description":"test"}}
+        '400':
+          description: Invalid arguments
+          content:
+            application/json:
+              example: {
+                "timestamp": "2023-01-31T12:03:11.417+00:00",
+                "status": 400,
+                "error": "Bad Request",
+                "trace": "...MethodArgumentNotValidException: Validation failed for..."}
+      parameters:
+        - name: project_id
+          in: path
+          description: "project_id"
+          required: true
+          schema:
+            type: integer
+        - name: user id
+          in: path
+          description: "user_id"
+          required: false
+          schema:
+            type: string
+        - name: role id
+          in: formData
+          description: "role_id"
+          required: false
+          schema:
+            type: integer
+    delete:
+      tags:
+        - New Project Page
+      summary: Removes a project user 🟢
+      description: TODO
+      operationId: deleteProjectUser
+      responses:
+        '400':
+          description: Invalid user id supplied
+        '404':
+          description: User not found
+      parameters:
+        - name: project_id
+          in: path
+          description: "project_id"
+          required: true
+          schema:
+            type: integer
+        - name: user id
+          in: path
+          description: "user_id"
+          required: false
+          schema:
+            type: string
+
+  /projects/{project_id}/vcws/:
+    post:
+      tags:
+        - New Vcw Page
+      summary: Creates a new vcw 🟢
+      description: TODO
+      operationId: save
+      responses:
+        '201':
+          description: Created vcw
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/examples/vcw-new-null'
+        '400':
+          description: Invalid arguments
+          content:
+            application/json:
+              example: {
+                "timestamp": "2023-01-31T12:03:11.417+00:00",
+                "status": 400,
+                "error": "Bad Request",
+                "trace": "...MethodArgumentNotValidException: Validation failed for..."}
+      parameters:
+        - name: name
+          in: formData
+          description: vcw name
+          required: true
+          schema:
+            type: string
+        - name: type
+          in: formData
+          description: 'vcw type: sprint or method'
+          required: true
+          schema:
+            type: string
+  /projects/{project_id}/vcws/{vcw_id} :
+    get:
+      tags:
+        - Vcw Page
+      summary: Shows VCW with given id if the user has access to it. 🟢
+      description: TODO
+      operationId: getByIdAndUser
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/examples/vcw-new'
+        '404':
+          description: Vcw not found
+          content:
+            'text/plain; charset=utf-8':
+              schema:
+                type: string
+                example: 'Vcw not found'
+      parameters:
+        - name: vcw_id
+          in: path
+          description: vcw id
+          required: true
+          schema:
+            type: Long
+        - name: userId
+          in: header
+          description: Id from logged in user.
+          required: true
+          schema:
+            type: string
+
+  /projects/{project_id}/vcws/{vcw_id}/diagnostics:
+    get:
+      tags:
+        - 1a - Diagnostic page (swot fields)
+      summary: Shows all diagnostics of the given vcw. 🟢
+      description: TODO
+      operationId: getByVcw
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/examples/diagnostic-new'
+        '404':
+          description: Diagnostic not found
+          content:
+            'text/plain; charset=utf-8':
+              schema:
+                type: string
+                example: 'Diagnostic not found'
+      parameters:
+        - name: vcw_id
+          in: path
+          description: "vcw id"
+          required: true
+          schema:
+            type: integer
+        - name: diagnostic_id
+          in: path
+          description: "diagnostic id"
+          required: true
+          schema:
+            type: integer
+    post:
+      tags:
+        - 1a - Diagnostic page (swot fields)
+      summary: Creates a single diagnostic. 🟢
+      description: TODO
+      operationId: save
+      responses:
+        '201':
+          description: Created diagnostics
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/examples/diagnostics-new'
+        '400':
+          description: Invalid arguments
+          content:
+            application/json:
+              example: {
+                "timestamp": "2023-01-31T12:03:11.417+00:00",
+                "status": 400,
+                "error": "Bad Request",
+                "trace": "...MethodArgumentNotValidException: Validation failed for..."}
+      parameters:
+        - name: vcw_id
+          in: path
+          description: "vcw id"
+          required: true
+          schema:
+            type: integer
+        - name: swotField
+          in: formData
+          description: "swot field: strength, weakness, opportunities, threat"
+          required: true
+          schema:
+            type: string
+        - name: name
+          in: formData
+          description: 'name'
+          required: true
+          schema:
+            type: string
+        - name: description
+          in: formData
+          description: "description"
+          required: true
+          schema:
+            type: string
+
+  /projects/{project_id}/vcws/{vcw_id}/diagnostics/{diagnostic_id}:
+    put:
+      tags:
+        - 1a - Diagnostic page (swot fields)
+      summary: Edits the given diagnostic. 🟢
+      description: TODO
+      operationId: update
+      responses:
+        '201':
+          description: Edited diagnostic
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/examples/diagnostics-new'
+        '400':
+          description: Invalid arguments
+          content:
+            application/json:
+              example: {
+                "timestamp": "2023-01-31T12:03:11.417+00:00",
+                "status": 400,
+                "error": "Bad Request",
+                "trace": "...MethodArgumentNotValidException: Validation failed for..."}
+      parameters:
+        - name: vcw_id
+          in: path
+          description: "vcw id"
+          required: true
+          schema:
+            type: integer
+        - name: diagnostic_id
+          in: path
+          description: "diagnostic id"
+          required: true
+          schema:
+            type: integer
+        - name: swotField
+          in: formData
+          description: "swot field: strength, weakness, opportunities, threat"
+          required: false
+          schema:
+            type: string
+        - name: name
+          in: formData
+          description: 'name'
+          required: false
+          schema:
+            type: string
+        - name: description
+          in: formData
+          description: "description"
+          required: false
+          schema:
+            type: string
+
+    delete:
+      tags:
+        - 1a - Diagnostic page (swot fields)
+      summary: Deletes the given diagnostic. 🟢
+      description: TODO
+      operationId: delete
+      responses:
+        '400':
+          description: Invalid diagnostic id supplied
+        '404':
+          description: Diagnostic not found
+      parameters:
+        - name: vcw_id
+          in: path
+          description: "vcw id"
+          required: true
+        - name: diagnostic_id
+          in: path
+          description: Diagnostic id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+
+  /projects/{project_id}/vcws/{vcw_id}/challenges:
+    get:
+      tags:
+        - 1b - Challenge page
+      summary: Shows the vcw challenge. 🟢
+      description: TODO
+      operationId: getChallenges
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {"challenge":"The FitnessGram™ Pacer Test is a multistage aerobic capacity test that progressively gets more difficult as it continues. The 20 meter pacer test will begin in 30 seconds. Line up at the start. The running speed starts slowly, but gets faster each minute after you hear this signal. [beep] A single lap should be completed each time you hear this sound. [ding] Remember to run in a straight line, and run as long as possible. The second time you fail to complete a lap before the sound, your test is over. The test will begin on the word start. On your mark, get ready, start."
+                }
+        '404':
+          description: Challenge not found
+          content:
+            'text/plain; charset=utf-8':
+              schema:
+                type: string
+                example: 'Challenge not found'
+    put:
+      tags:
+        - 1b - Challenge page
+      summary: Edits the vcw challenge. 🟢
+      description: TODO
+      operationId: saveChallenges
+      responses:
+        '201':
+          description: Edited challenge
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "The FitnessGram™ Pacer Test is a multistage aerobic capacity test that progressively gets more difficult as it continues. The 20 meter pacer test will begin in 30 seconds. Line up at the start. The running speed starts slowly, but gets faster each minute after you hear this signal. [beep] A single lap should be completed each time you hear this sound. [ding] Remember to run in a straight line, and run as long as possible. The second time you fail to complete a lap before the sound, your test is over. The test will begin on the word start. On your mark, get ready, start."
+        '400':
+          description: Invalid arguments
+          content:
+            application/json:
+              example: {
+                "timestamp": "2023-01-31T12:03:11.417+00:00",
+                "status": 400,
+                "error": "Bad Request",
+                "trace": "...MethodArgumentNotValidException: Validation failed for..."}
+      parameters:
+        - name: vcw_id
+          in: path
+          description: "vcw id"
+          required: true
+          schema:
+            type: integer
+        - name: challenge
+          in: formData
+          description: "block of text describing the challenge"
+          required: true
+          schema:
+            type: string
+
+  /projects/{project_id}/vcws/{vcw_id}/kpis:
+    get:
+      tags:
+        - 1c - Expected KPIs page
+      summary: Shows the vcw kpis. 🟢
+      description: TODO
+      operationId: getKpis
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                example: { "kpis": "Manpower: low, Money: lower" }
+        '404':
+          description: Kpis not found
+          content:
+            'text/plain; charset=utf-8':
+              schema:
+                type: string
+                example: 'Kpis not found'
+    put:
+      tags:
+        - 1c - Expected KPIs page
+      summary: Edits the vcw kpis. 🟢
+      description: TODO
+      operationId: saveKpis
+      responses:
+        '201':
+          description: Edited kpis
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "The FitnessGram™ Pacer Test is a multistage aerobic capacity test that progressively gets more difficult as it continues. The 20 meter pacer test will begin in 30 seconds. Line up at the start. The running speed starts slowly, but gets faster each minute after you hear this signal. [beep] A single lap should be completed each time you hear this sound. [ding] Remember to run in a straight line, and run as long as possible. The second time you fail to complete a lap before the sound, your test is over. The test will begin on the word start. On your mark, get ready, start."
+        '400':
+          description: Invalid arguments
+          content:
+            application/json:
+              example: {
+                "timestamp": "2023-01-31T12:03:11.417+00:00",
+                "status": 400,
+                "error": "Bad Request",
+                "trace": "...MethodArgumentNotValidException: Validation failed for..." }
+      parameters:
+        - name: vcw_id
+          in: path
+          description: "vcw id"
+          required: true
+          schema:
+            type: integer
+        - name: kpis
+          in: formData
+          description: "block of text describing the kpis"
+          required: true
+          schema:
+            type: string
+
+  /projects/{project_id}/vcws/{vcw_id}/ideas/:
+    get:
+      tags:
+        - 2a - Ideas page
+      summary: Gets all ideas of the vcw. 🟢
+      description: TODO
+      operationId: getIdeas
+      responses:
+        '201':
+          description: Created ideas
+          content:
+            application/json:
+              schema:
+                type: array
+                item:
+                $ref: '#/components/examples/ideas-new'
+        '400':
+          description: Invalid arguments
+          content:
+            application/json:
+              example: {
+                "timestamp": "2023-01-31T12:03:11.417+00:00",
+                "status": 400,
+                "error": "Bad Request",
+                "trace": "...MethodArgumentNotValidException: Validation failed for..."}
+      parameters:
+        - name: vcw_id
+          in: path
+          description: "vcw id"
+          required: true
+          schema:
+            type: integer
+    post:
+      tags:
+        - 2a - Ideas page
+      summary: Adds new idea 🟢
+      description: TODO
+      operationId: save
+      responses:
+        '201':
+          description: Created idea
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/examples/ideas-new'
+        '400':
+          description: Invalid arguments
+          content:
+            application/json:
+              example: {
+                "timestamp": "2023-01-31T12:03:11.417+00:00",
+                "status": 400,
+                "error": "Bad Request",
+                "trace": "...MethodArgumentNotValidException: Validation failed for..." }
+      parameters:
+        - name: vcw_id
+          in: path
+          description: "vcw id"
+          required: true
+          schema:
+            type: integer
+        - name: entryTypeId
+          in: formData
+          description: "Type of entry: user (1), vcw_project (2) or third_party (3)."
+          required: true
+          schema:
+            type: Long
+            example: 3
+        - name: source
+          in: formData
+          description: idea source
+          required: true
+          schema:
+            type: object
+            example:
+              source:
+                zomato: string
+                url: string
+
+  /projects/{project_id}/vcws/{vcw_id}/ideas/{idea_id}:
+    put:
+      tags:
+        - 2a - Ideas page
+      summary: Edits given idea 🟢
+      description: TODO
+      operationId: update
+      responses:
+        '201':
+          description: Updated idea
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/examples/ideas-new'
+        '400':
+          description: Invalid arguments
+          content:
+            application/json:
+              example: {
+                "timestamp": "2023-01-31T12:03:11.417+00:00",
+                "status": 400,
+                "error": "Bad Request",
+                "trace": "...MethodArgumentNotValidException: Validation failed for..." }
+      parameters:
+        - name: vcw_id
+          in: path
+          description: "vcw id"
+          required: true
+          schema:
+            type: integer
+        - name: idea_id
+          in: path
+          description: "idea id"
+          required: true
+          schema:
+            type: integer
+        - name: entryTypeId
+          in: formData
+          description: "Type of entry: user (1), vcw_project (2) or third_party (3)."
+          required: true
+          schema:
+            type: Long
+            example: 3
+        - name: source
+          in: formData
+          description: idea source
+          required: true
+          schema:
+            type: object
+            example:
+              source:
+                zomato: string
+                url: string
+    delete:
+      tags:
+        - 2a - Ideas page
+      summary: Deletes given idea 🟢
+      description: TODO
+      operationId: delete
+      responses:
+        '400':
+          description: Invalid idea id supplied
+        '404':
+          description: Idea not found
+      parameters:
+        - name: vcw_id
+          in: path
+          description: "vcw id"
+          required: true
+        - name: idea_id
+          in: path
+          description: Idea id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+  /projects/{project_id}/vcws/{vcw_id}/criterias/:
+    get:
+      tags:
+        - 2b - Criterias page
+      summary: Gets all criterias of the vcw. 🟢
+      description: TODO
+      operationId: getCriterias
+      responses:
+        '201':
+          description: Created criterias
+          content:
+            application/json:
+              schema:
+                type: array
+                $ref: '#/components/examples/criteria-new'
+        '400':
+          description: Invalid arguments
+          content:
+            application/json:
+              example: {
+                "timestamp": "2023-01-31T12:03:11.417+00:00",
+                "status": 400,
+                "error": "Bad Request",
+                "trace": "...MethodArgumentNotValidException: Validation failed for..." }
+      parameters:
+        - name: vcw_id
+          in: path
+          description: "vcw id"
+          required: true
+          schema:
+            type: integer
+    post:
+      tags:
+        - 2b - Criterias page
+      summary: Adds new criteria 🟢
+      description: TODO
+      operationId: save
+      responses:
+        '201':
+          description: Created criteria
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/examples/criteria-new'
+        '400':
+          description: Invalid arguments
+          content:
+            application/json:
+              example: {
+                "timestamp": "2023-01-31T12:03:11.417+00:00",
+                "status": 400,
+                "error": "Bad Request",
+                "trace": "...MethodArgumentNotValidException: Validation failed for..." }
+      parameters:
+        - name: vcw_id
+          in: path
+          description: "vcw id"
+          required: true
+          schema:
+            type: integer
+        - name: entryTypeId
+          in: formData
+          description: "Type of entry: user (1), vcw_project (2) or third_party (3)."
+          required: true
+          schema:
+            type: Long
+            example: 3
+        - name: valueType
+          in: formData
+          description: "Type of value, it can be 'number' or 'yes_or_no'"
+          required: true
+          schema:
+            type: string
+            example: number
+        - name: source
+          in: formData
+          description: criteria source
+          required: true
+          schema:
+            type: object
+            example:
+              source:
+                zomato: string
+                url: string
+
+  /projects/{project_id}/vcws/{vcw_id}/criterias/{criteria_id}:
+    put:
+      tags:
+        - 2b - Criterias page
+      summary: Updates given criteria 🟢
+      description: TODO
+      operationId: update
+      responses:
+        '201':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/examples/criteria-new'
+        '400':
+          description: Invalid arguments
+          content:
+            application/json:
+              example: {
+                "timestamp": "2023-01-31T12:03:11.417+00:00",
+                "status": 400,
+                "error": "Bad Request",
+                "trace": "...MethodArgumentNotValidException: Validation failed for..." }
+      parameters:
+        - name: vcw_id
+          in: path
+          description: "vcw id"
+          required: true
+          schema:
+            type: integer
+        - name: criteria_id
+          in: path
+          description: "criteria id"
+          required: true
+          schema:
+            type: integer
+        - name: entryTypeId
+          in: formData
+          description: "Type of entry: user (1), vcw_project (2) or third_party (3)."
+          required: true
+          schema:
+            type: Long
+            example: 3
+        - name: valueType
+          in: formData
+          description: "Type of value, it can be 'number' or 'yes_or_no'"
+          required: true
+          schema:
+            type: string
+            example: number
+        - name: source
+          in: formData
+          description: criteria source
+          required: true
+          schema:
+            type: object
+            example:
+              source:
+                zomato: string
+                url: string
+    delete:
+      tags:
+        - 2b - Criterias page
+      summary: Deletes given criteria 🟢
+      description: TODO
+      operationId: delete
+      responses:
+        '400':
+          description: Invalid criteria id supplied
+        '404':
+          description: Criteria not found
+      parameters:
+        - name: vcw_id
+          in: path
+          description: "vcw id"
+          required: true
+        - name: criteria_id
+          in: path
+          description: Criteria id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+
+  /projects/{project_id}/vcws/{vcw_id}/ideasAndCriterias:
+    get:
+      tags:
+        - 2c - Purification and population page
+      summary: Gets all ideaAndCriteria pairs available for the current vcw 🟢
+      description: TODO
+      operationId: getByVcw
+      responses:
+        '201':
+          description: Created criterias
+          content:
+            application/json:
+              schema:
+                type: array
+                $ref: '#/components/examples/ideas-and-criterias-new'
+        '400':
+          description: Invalid arguments
+          content:
+            application/json:
+              example: {
+                "timestamp": "2023-01-31T12:03:11.417+00:00",
+                "status": 400,
+                "error": "Bad Request",
+                "trace": "...MethodArgumentNotValidException: Validation failed for..." }
+      parameters:
+        - name: project_id
+          in: path
+          description: "project id"
+          required: true
+          schema:
+            type: integer
+        - name: vcw_id
+          in: path
+          description: "vcw id"
+          required: true
+          schema:
+            type: integer
+    post:
+      tags:
+        - 2c - Purification and population page
+      summary: Adds new ideaAndCriteria pair to vcw 🟢
+      description: TODO
+      operationId: save
+      responses:
+        '201':
+          description: Created ideaAndCriteria pair-
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/examples/ideas-and-criterias-new'
+        '400':
+          description: Invalid arguments
+          content:
+            application/json:
+              example: {
+                "timestamp": "2023-01-31T12:03:11.417+00:00",
+                "status": 400,
+                "error": "Bad Request",
+                "trace": "...MethodArgumentNotValidException: Validation failed for..." }
+      parameters:
+        - name: project_id
+          in: path
+          description: "project id"
+          required: true
+          schema:
+            type: integer
+        - name: vcw_id
+          in: path
+          description: "vcw id"
+          required: true
+          schema:
+            type: integer
+        - name: ideaId
+          in: formData
+          description: "Selected idea id"
+          required: true
+          schema:
+            type: Long
+            example: 3
+        - name: criteriaId
+          in: formData
+          description: "Selected criteria id"
+          required: true
+          schema:
+            type: Long
+            example: 3
+        - name: value
+          in: formData
+          description: "Associated value"
+          required: true
+          schema:
+            type: Float
+            example: 3
+        - name: source
+          in: formData
+          description: Idea and criteria source
+          required: false
+          schema:
+            type: object
+            example:
+              source:
+                zomato: string
+                url: string
+
+  /projects/{project_id}/vcws/{vcw_id}/ideasAndCriterias/{ideaAndCriteria_id}:
+    put:
+      tags:
+        - 2c - Purification and population page
+      summary: Updates given idea and criteria pair 🟢
+      description: TODO
+      operationId: update
+      responses:
+        '201':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/examples/ideas-and-criterias-new'
+        '400':
+          description: Invalid arguments
+          content:
+            application/json:
+              example: {
+                "timestamp": "2023-01-31T12:03:11.417+00:00",
+                "status": 400,
+                "error": "Bad Request",
+                "trace": "...MethodArgumentNotValidException: Validation failed for..." }
+      parameters:
+        - name: project_id
+          in: path
+          description: "project id"
+          required: true
+          schema:
+            type: integer
+        - name: ideaAndCriteria_id
+          in: path
+          description: "ideaAndCriteria id"
+          required: true
+          schema:
+            type: integer
+        - name: ideaId
+          in: formData
+          description: "Selected idea id"
+          required: true
+          schema:
+            type: Long
+            example: 3
+        - name: criteriaId
+          in: formData
+          description: "Selected criteria id"
+          required: true
+          schema:
+            type: Long
+            example: 3
+        - name: value
+          in: formData
+          description: "Associated value"
+          required: true
+          schema:
+            type: Float
+            example: 3
+        - name: source
+          in: formData
+          description: Idea and criteria source
+          required: false
+          schema:
+            type: object
+            example:
+              source:
+                zomato: string
+                url: string
+    delete:
+      tags:
+        - 2c - Purification and population page
+      summary: Deletes given idea and criteria pair 🟢
+      description: TODO
+      operationId: delete
+      responses:
+        '400':
+          description: Invalid ideaAndCriteria id supplied
+        '404':
+          description: ideaAndCriteria not found
+      parameters:
+        - name: project_id
+          in: path
+          description: "project id"
+          required: true
+        - name: ideaAndCriteria_id
+          in: path
+          description: "ideaAndCriteria id"
+          required: true
+          schema:
+            type: integer
+  /projects/{project_id}/vcws/{vcw_id}/selectedIdeas:
+    get:
+      tags:
+        - 3a - Select ideas page
+      summary: Shows vcw ideas 🟢
+      description: TODO
+      operationId: getAll
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                example: [
+                  {
+                    "id": 3,
+                    "vcwId": 1,
+                    "selected": false
+                  },
+                  {
+                    "id": 1,
+                    "vcwId": 1,
+                    "selected": true
+                  }
+                ]
+        '404':
+          description: VcwHasIdea not found
+          content:
+            'text/plain; charset=utf-8':
+              schema:
+                type: string
+                example: 'VcwHasIdea not found'
+  /projects/{project_id}/vcws/{vcw_id}/selectedIdeas/{vcw_idea_id}:
+    put:
+      tags:
+        - 3a - Select ideas page
+      summary: Changes the selected status of the idea to true or false. 🟢
+      description: TODO
+      operationId: update
+      responses:
+        '201':
+          description: Edited VcwHasIdea
+          content:
+            application/json:
+              schema:
+                type: string
+                example: {
+                  "id": 1,
+                  "vcwId": 1,
+                  "selected": true
+                }
+        '400':
+          description: Invalid arguments
+          content:
+            application/json:
+              example: {
+                "timestamp": "2023-01-31T12:03:11.417+00:00",
+                "status": 400,
+                "error": "Bad Request",
+                "trace": "...MethodArgumentNotValidException: Validation failed for..."}
+      parameters:
+        - name: project_id
+          in: path
+          description: "project id"
+          required: true
+          schema:
+            type: integer
+        - name: vcw_id
+          in: path
+          description: "vcw id"
+          required: true
+          schema:
+            type: integer
+        - name: vcw_idea_id
+          in: path
+          description: "vcw idea id"
+          required: true
+          schema:
+            type: integer
+        - name: selected
+          in: formData
+          description: True if idea is selected, false if not.
+          required: true
+          schema:
+            type: boolean
+  /projects/{project_id}/vcws/{vcw_id}/selectedCriterias:
+    get:
+      tags:
+        - 3b - Select criterias page
+      summary: Shows vcw criterias 🟢
+      description: TODO
+      operationId: getAll
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                example: [{
+                  "id": 1,
+                  "vcwId": 1,
+                  "selected": false,
+                  "type": null,
+                  "ranking": null,
+                  "weight": null,
+                  "intervalMin": null,
+                  "intervalMax": null
+                },
+                  {
+                    "id": 3,
+                    "vcwId": 1,
+                    "selected": false,
+                    "type": null,
+                    "ranking": null,
+                    "weight": null,
+                    "intervalMin": null,
+                    "intervalMax": null
+                  }]
+        '404':
+          description: VcwHasCriteria not found
+          content:
+            'text/plain; charset=utf-8':
+              schema:
+                type: string
+                example: 'VcwHasCriteria not found'
+  /projects/{project_id}/vcws/{vcw_id}/selectedCriterias/{vcw_criteria_id}:
+    put:
+      tags:
+        - 3b - Select criterias page
+      summary: Changes the selected status of the criteria to true or false. 🟢
+      description: TODO
+      operationId: updateSelected
+      responses:
+        '201':
+          description: Edited VcwHasCriteria
+          content:
+            application/json:
+              schema:
+                type: string
+                example: {
+                  "id": 1,
+                  "vcwId": 1,
+                  "selected": true,
+                  "type": null,
+                  "ranking": null,
+                  "weight": null,
+                  "intervalMin": null,
+                  "intervalMax": null
+                }
+        '400':
+          description: Invalid arguments
+          content:
+            application/json:
+              example: {
+                "timestamp": "2023-01-31T12:03:11.417+00:00",
+                "status": 400,
+                "error": "Bad Request",
+                "trace": "...MethodArgumentNotValidException: Validation failed for..."}
+      parameters:
+        - name: project_id
+          in: path
+          description: "project id"
+          required: true
+          schema:
+            type: integer
+        - name: vcw_id
+          in: path
+          description: "vcw id"
+          required: true
+          schema:
+            type: integer
+        - name: vcw_criteria_id
+          in: path
+          description: "vcw criteria id"
+          required: true
+          schema:
+            type: integer
+        - name: selected
+          in: formData
+          description: True if criteria is selected, false if not.
+          required: true
+          schema:
+            type: boolean
+
+
+  /projects/{project_id}/vcws/{vcw_id}/selectedCriterias/rank/{vcw_criteria_id}:
+    put:
+      tags:
+        - 3c - Rank & Weight Criteria page
+      summary: Sets the criteria as must have or not and also updates its ranking, weight and max/min thresh olds 🟢
+      description: TODO
+      operationId: updateRank
+      responses:
+        '201':
+          description: Edited VcwHasCriteria
+          content:
+            application/json:
+              schema:
+                type: string
+                example: {
+                  "id": 1,
+                  "vcwId": 1,
+                  "selected": false,
+                  "type": "must_have",
+                  "ranking": 1,
+                  "weight": 5.0,
+                  "intervalMax": 10.0,
+                  "intervalMin": 1.0
+                }
+        '400':
+          description: Invalid arguments
+          content:
+            application/json:
+              example: {
+                "timestamp": "2023-01-31T12:03:11.417+00:00",
+                "status": 400,
+                "error": "Bad Request",
+                "trace": "...MethodArgumentNotValidException: Validation failed for..."}
+      parameters:
+        - name: project_id
+          in: path
+          description: "project id"
+          required: true
+          schema:
+            type: integer
+        - name: vcw_id
+          in: path
+          description: "vcw id"
+          required: true
+          schema:
+            type: integer
+        - name: vcw_criteria_id
+          in: path
+          description: "vcw criteria id"
+          required: true
+          schema:
+            type: integer
+        - name: type
+          in: formData
+          description: must_have or nice_to_have
+          required: true
+          schema:
+            type: string
+        - name: ranking
+          in: formData
+          description:
+          required: true
+          schema:
+            type: integer
+        - name: weight
+          in: formData
+          description:
+          required: true
+          schema:
+            type: float
+        - name: interval_min
+          in: formData
+          description:
+          required: true
+          schema:
+            type: float
+        - name: interval_max
+          in: formData
+          description:
+          required: true
+          schema:
+            type: float
+components:
+  schemas:
+    Vcw:
+      type: object
+      properties:
+        id:
+          type: Long
+          format: serial NOT NULL
+        name:
+          type: string
+          format: varchar(128) NOT NULL
+          example: Vcw holidays
+        type:
+          type: string
+          format: enum
+          description:
+          enum:
+            - sprint
+            - method
+        challenge:
+          type: string
+          format: text NULL
+          example: TODO
+        concept:
+          type: string
+          format: text NULL
+          example: TODO
+        value_proposition:
+          type: string
+          format: JSONB NULL
+          example: TODO
+        prototype:
+          type: string
+          format: text NULL
+          example: TODO
+        three_ms:
+          type: string
+          format: text NULL
+          example: TODO
+        executive_summary:
+          type: string
+          format: text NULL
+          example: TODO
+        closed:
+          type: Boolean
+          format: bool NULL
+        closed_at:
+          type: LocalDateTime
+          format: timestamp NULL
+          example: '2023-01-19 12:19:18.516'
+        created_at:
+          type: LocalDateTime
+          format: timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+          example: '2023-01-19 12:19:18.516'
+        created_by:
+          type: string
+          format: varchar(36) NULL
+          example: encrypted user info
+        updated_at:
+          type: LocalDateTime
+          format: timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+          example: '2023-01-19 12:19:18.516'
+        updated_by:
+          type: String
+          format: varchar(36) NULL
+          example: encrypted user info
+      xml:
+        name: vcw
+    business_model_canvas:
+      type: object
+      properties:
+        id:
+          type: Long
+          format: serial NOT NULL
+        customer_segments:
+          type: string
+          format: text NULL
+          example: TODO
+        value_propositions:
+          type: string
+          format: text NULL
+          example: TODO
+        channels:
+          type: string
+          format: text NULL
+          example: TODO
+        customer_relationships:
+          type: string
+          format: text NULL
+          example: TODO
+        revenue_streams:
+          type: string
+          format: text NULL
+          example: TODO
+        key_resources:
+          type: string
+          format: text NULL
+          example: TODO
+        key_activities:
+          type: string
+          format: text NULL
+          example: TODO
+        key_partnerships:
+          type: string
+          format: text NULL
+          example: TODO
+        cost_structure:
+          type: string
+          format: text NULL
+          example: TODO
+        created_at:
+          type: LocalDateTime
+          format: timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+          example: '2023-01-19 12:19:18.516'
+        created_by:
+          type: string
+          format: varchar(36) NULL
+          example: encrypted user info
+        updated_at:
+          type: LocalDateTime
+          format: timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+          example: '2023-01-19 12:19:18.516'
+        updated_by:
+          type: String
+          format: varchar(36) NULL
+          example: encrypted user info
+      xml:
+        name: business_model_canvas
+    entry_type:
+      type: object
+      properties:
+        id:
+          type: Long
+          format: serial NOT NULL
+        name:
+          type: string
+          format: varchar(255) NOT NULL
+        created_at:
+          type: LocalDateTime
+          format: timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+          example: '2023-01-19 12:19:18.516'
+        created_by:
+          type: string
+          format: varchar(36) NULL
+          example: encrypted user info
+        updated_at:
+          type: LocalDateTime
+          format: timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+          example: '2023-01-19 12:19:18.516'
+        updated_by:
+          type: String
+          format: varchar(36) NULL
+          example: encrypted user info
+      xml:
+        name: entry_type
+    source:
+      type: object
+      properties:
+        id:
+          type: Long
+          format: serial NOT NULL
+        name:
+          type: string
+          format: varchar(255) NOT NULL
+        description:
+          type: string
+          format: varchar(255) NOT NULL
+        url:
+          type: string
+          format: varchar(255) NOT NULL
+        created_at:
+          type: LocalDateTime
+          format: timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+          example: '2023-01-19 12:19:18.516'
+        created_by:
+          type: string
+          format: varchar(36) NULL
+          example: encrypted user info
+        updated_at:
+          type: LocalDateTime
+          format: timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+          example: '2023-01-19 12:19:18.516'
+        updated_by:
+          type: String
+          format: varchar(36) NULL
+          example: encrypted user info
+      xml:
+        name: source
+    file:
+      type: object
+      properties:
+        id:
+          type: Long
+          format: serial NOT NULL
+        name:
+          type: string
+          format: varchar(1024) NOT NULL
+        path:
+          type: string
+          format: varchar(255) NOT NULL
+        file_type:
+          type: string
+          format: varchar(255) NOT NULL
+        created_at:
+          type: LocalDateTime
+          format: timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+          example: '2023-01-19 12:19:18.516'
+        created_by:
+          type: string
+          format: varchar(36) NULL
+          example: encrypted user info
+        updated_at:
+          type: LocalDateTime
+          format: timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+          example: '2023-01-19 12:19:18.516'
+        updated_by:
+          type: String
+          format: varchar(36) NULL
+          example: encrypted user info
+      xml:
+        name: file
+    keyword:
+      type: object
+      properties:
+        id:
+          type: Long
+          format: serial NOT NULL
+        word:
+          type: string
+          format: varchar(128) NOT NULL
+        lang:
+          type: string
+          format: varchar(128) NOT NULL
+        created_at:
+          type: LocalDateTime
+          format: timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+          example: '2023-01-19 12:19:18.516'
+        created_by:
+          type: string
+          format: varchar(36) NULL
+          example: encrypted user info
+        updated_at:
+          type: LocalDateTime
+          format: timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+          example: '2023-01-19 12:19:18.516'
+        updated_by:
+          type: String
+          format: varchar(36) NULL
+          example: encrypted user info
+      xml:
+        name: keyword
+    phase:
+      type: object
+      properties:
+        id:
+          type: Long
+          format: serial NOT NULL
+        order:
+          type: integer
+          format: int4 NOT NULL
+        code:
+          type: string
+          format: varchar(2) NOT NULL
+        name:
+          type: string
+          format: varchar(128) NOT NULL
+        description:
+          type: string
+          format: varchar(2048) NOT NULL
+        part_of_sprint:
+          type: boolean
+          format: bool NOT NULL
+      xml:
+        name: phase
+    role:
+      type: object
+      properties:
+        id:
+          type: Long
+          format: serial NOT NULL
+        name:
+          type: string
+          format: varchar(128) NOT NULL
+        description:
+          type: string
+          format: varchar(2048) NOT NULL
+      xml:
+        name: role
+    criteria:
+      type: object
+      properties:
+        id:
+          type: Long
+          format: serial NOT NULL
+        name:
+          type: string
+          format: varchar(128) NOT NULL
+        source_id:
+          type: Long
+          format: int8 NULL
+        entry_type_id:
+          type: Long
+          format: int8 NOT NULL
+        value_type:
+          type: string
+          format: enum NOT NULL
+        created_at:
+          type: LocalDateTime
+          format: timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+          example: '2023-01-19 12:19:18.516'
+        created_by:
+          type: string
+          format: varchar(36) NULL
+          example: encrypted user info
+        updated_at:
+          type: LocalDateTime
+          format: timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+          example: '2023-01-19 12:19:18.516'
+        updated_by:
+          type: String
+          format: varchar(36) NULL
+          example: encrypted user info
+      xml:
+        name: 'criteria'
+    criteria_has_keyword:
+      type: object
+      properties:
+        id:
+          type: Long
+          format: serial NOT NULL
+        criteria_id:
+          type: Long
+          format: int8 NOT NULL
+        keyword_id:
+          type: Long
+          format: int8 NOT NULL
+      xml:
+        name: 'criteria_has_keyword'
+    idea:
+      type: object
+      properties:
+        id:
+          type: Long
+          format: serial NOT NULL
+        name:
+          type: string
+          format: varchar(128) NOT NULL
+        source_id:
+          type: Long
+          format: int8 NULL
+        entry_type_id:
+          type: Long
+          format: int8 NOT NULL
+        created_at:
+          type: LocalDateTime
+          format: timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+          example: '2023-01-19 12:19:18.516'
+        created_by:
+          type: string
+          format: varchar(36) NULL
+          example: encrypted user info
+        updated_at:
+          type: LocalDateTime
+          format: timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+          example: '2023-01-19 12:19:18.516'
+        updated_by:
+          type: String
+          format: varchar(36) NULL
+          example: encrypted user info
+      xml:
+        name: 'idea'
+    idea_and_criteria:
+      type: object
+      properties:
+        id:
+          type: Long
+          format: serial NOT NULL
+        idea_id:
+          type: Long
+          format: int8 NOT NULL
+        criteria_id:
+          type: Long
+          format: int8 NOT NULL
+        source_id:
+          type: Long
+          format: int8 NULL
+        value_updated_at:
+          type: LocalDateTime
+          format: timestamp NULL
+          example: '2023-01-19 12:19:18.516'
+        vcf_result:
+          type: boolean
+          format: bool NULL
+        mcda_result:
+          type: float
+          format: float8 NULL
+        created_at:
+          type: LocalDateTime
+          format: timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+          example: '2023-01-19 12:19:18.516'
+        created_by:
+          type: string
+          format: varchar(36) NULL
+          example: encrypted user info
+        updated_at:
+          type: LocalDateTime
+          format: timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+          example: '2023-01-19 12:19:18.516'
+        updated_by:
+          type: String
+          format: varchar(36) NULL
+          example: encrypted user info
+      xml:
+        name: 'idea_and_criteria'
+    idea_has_keyword:
+      type: object
+      properties:
+        id:
+          type: Long
+          format: serial NOT NULL
+        idea_id:
+          type: Long
+          format: int8 NOT NULL
+        keyword_id:
+          type: Long
+          format: int8 NOT NULL
+      xml:
+        name: 'idea_has_keyword'
+    kpi:
+      type: object
+      properties:
+        id:
+          type: Long
+          format: serial NOT NULL
+        vcw_id:
+          type: Long
+          format: int8 NOT NULL
+        name:
+          type: string
+          format: varchar(255) NOT NULL
+        description:
+          type: string
+          format: text NULL
+        evaluation:
+          type: string
+          format: text NULL
+        created_at:
+          type: LocalDateTime
+          format: timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+          example: '2023-01-19 12:19:18.516'
+        created_by:
+          type: string
+          format: varchar(36) NULL
+          example: encrypted user info
+        updated_at:
+          type: LocalDateTime
+          format: timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+          example: '2023-01-19 12:19:18.516'
+        updated_by:
+          type: String
+          format: varchar(36) NULL
+          example: encrypted user info
+      xml:
+        name: 'kpi'
+    project:
+      type: object
+      properties:
+        id:
+          type: Long
+          format: serial NOT NULL
+        thumbnail:
+          type: Long
+          format: int8 NULL
+        name:
+          type: string
+          format: varchar(128) NOT NULL
+        description:
+          type: string
+          format: varchar(2048) NOT NULL
+        lang:
+          type: string
+          format: varchar(128) NOT NULL
+        created_at:
+          type: LocalDateTime
+          format: timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+          example: '2023-01-19 12:19:18.516'
+        created_by:
+          type: string
+          format: varchar(36) NULL
+          example: encrypted user info
+        updated_at:
+          type: LocalDateTime
+          format: timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+          example: '2023-01-19 12:19:18.516'
+        updated_by:
+          type: String
+          format: varchar(36) NULL
+          example: encrypted user info
+      xml:
+        name: 'project'
+    project_has_keyword:
+      type: object
+      properties:
+        id:
+          type: Long
+          format: serial NOT NULL
+        project_id:
+          type: Long
+          format: int8 NOT NULL
+        keyword_id:
+          type: Long
+          format: int8 NOT NULL
+      xml:
+        name: 'project_has_keyword'
+    project_has_user_role:
+      type: object
+      properties:
+        id:
+          type: Long
+          format: serial NOT NULL
+        project_id:
+          type: Long
+          format: int8 NOT NULL
+        role_id:
+          type: Long
+          format: int8 NOT NULL
+        user_inum:
+          type: string
+          format: varchar(36) NOT NULL
+        created_at:
+          type: LocalDateTime
+          format: timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+          example: '2023-01-19 12:19:18.516'
+        created_by:
+          type: string
+          format: varchar(36) NULL
+          example: encrypted user info
+        updated_at:
+          type: LocalDateTime
+          format: timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+          example: '2023-01-19 12:19:18.516'
+        updated_by:
+          type: String
+          format: varchar(36) NULL
+          example: encrypted user info
+      xml:
+        name: 'project_has_user_role'
+    project_has_vcw:
+      type: object
+      properties:
+        id:
+          type: Long
+          format: serial NOT NULL
+        project_id:
+          type: Long
+          format: int8 NOT NULL
+        vcw_id:
+          type: Long
+          format: int8 NOT NULL
+      xml:
+        name: 'project_has_vcw'
+    attachment:
+      type: object
+      properties:
+        id:
+          type: Long
+          format: serial NOT NULL
+        vcw_id:
+          type: Long
+          format: int8 NOT NULL
+        file_id:
+          type: Long
+          format: int8 NOT NULL
+      xml:
+        name: 'attachment'
+    diagnostic:
+      type: object
+      properties:
+        id:
+          type: Long
+          format: serial NOT NULL
+        vcw_id:
+          type: Long
+          format: int8 NOT NULL
+        swot_field:
+          type: string
+          format: enum NOT NULL
+        name:
+          type: string
+          format: varchar(255) NOT NULL
+        description:
+          type: string
+          format: varchar(1024) NULL
+        created_at:
+          type: LocalDateTime
+          format: timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+          example: '2023-01-19 12:19:18.516'
+        created_by:
+          type: string
+          format: varchar(36) NULL
+          example: encrypted user info
+        updated_at:
+          type: LocalDateTime
+          format: timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+          example: '2023-01-19 12:19:18.516'
+        updated_by:
+          type: String
+          format: varchar(36) NULL
+          example: encrypted user info
+      xml:
+        name: 'diagnostic'
+    vcw_has_criteria:
+      type: object
+      properties:
+        id:
+          type: Long
+          format: serial NOT NULL
+        vcw_id:
+          type: Long
+          format: int8 NOT NULL
+        criteria_id:
+          type: Long
+          format: int8 NOT NULL
+        selected:
+          type: boolean
+          format: bool NULL
+        type:
+          type: string
+          format: varchar(255) NULL
+        ranking:
+          type: integer
+          format: int4 NULL
+        weight:
+          type: float
+          format: float8 NULL
+        interval_min:
+          type: float
+          format: float8 NULL
+        interval_max:
+          type: float
+          format: float8 NULL
+        created_at:
+          type: LocalDateTime
+          format: timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+          example: '2023-01-19 12:19:18.516'
+        created_by:
+          type: string
+          format: varchar(36) NULL
+          example: encrypted user info
+        updated_at:
+          type: LocalDateTime
+          format: timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+          example: '2023-01-19 12:19:18.516'
+        updated_by:
+          type: String
+          format: varchar(36) NULL
+          example: encrypted user info
+      xml:
+        name: 'vcw_has_criteria'
+    vcw_has_idea:
+      type: object
+      properties:
+        id:
+          type: Long
+          format: serial NOT NULL
+        vcw_id:
+          type: Long
+          format: int8 NOT NULL
+        idea_id:
+          type: Long
+          format: int8 NOT NULL
+        selected:
+          type: boolean
+          format: bool NULL
+      xml:
+        name: 'vcw_has_idea'
+    vcw_has_phase:
+      type: object
+      properties:
+        id:
+          type: Long
+          format: serial NOT NULL
+        vcw_id:
+          type: Long
+          format: int8 NOT NULL
+        phase_id:
+          type: Long
+          format: int8 NOT NULL
+        started:
+          type: boolean
+          format: bool NULL
+        locked:
+          type: boolean
+          format: bool NULL
+      xml:
+        name: 'vcw_has_phase'
+
+  examples:
+    business-new:
+      properties:
+        id:
+          type: int
+          example: 1
+        created_at:
+          type: string
+          example: '31-01-2023 11:00:26'
+        updated_at:
+          type: string
+          example: '31-01-2023 11:00:26'
+        created_by:
+          type: string
+          example: b68986e1-81d8-4813-ada5-172442d8944d
+        updated_by:
+          type: String
+          example: b68986e1-81d8-4813-ada5-172442d8944d
+        customerSegments:
+          type: string
+          example: test
+        valuePropositions:
+          type: string
+          example: test
+        channels:
+          type: string
+          example: test
+        customerRelationships:
+          type: string
+          example: test
+        revenueStreams:
+          type: string
+          example: test
+        keyResources:
+          type: string
+          example: test
+        keyActivities:
+          type: string
+          example: test
+        keyPartnerships:
+          type: string
+          example: test
+        costStructure:
+          type: string
+          example: test
+    thumbnail-new:
+      properties:
+        id:
+          type: int
+          example: 1
+        created_at:
+          type: string
+          example: '31-01-2023 11:00:26'
+        updated_at:
+          type: string
+          example: '31-01-2023 11:00:26'
+        created_by:
+          type: string
+          example: b68986e1-81d8-4813-ada5-172442d8944d
+        updated_by:
+          type: String
+          example: b68986e1-81d8-4813-ada5-172442d8944d
+        name:
+          type: string
+          example: "picture1"
+        path:
+          type: string
+          example: "/files/picture1.jpg"
+        fileType:
+          type: string
+          example: "jpg"
+    project-return:
+      properties:
+        id:
+          type: int
+          example: 1
+        created_at:
+          type: string
+          example: '31-01-2023 11:00:26'
+        updated_at:
+          type: string
+          example: '31-01-2023 11:00:26'
+        created_by:
+          type: string
+          example: b68986e1-81d8-4813-ada5-172442d8944d
+        updated_by:
+          type: String
+          example: b68986e1-81d8-4813-ada5-172442d8944d
+        name:
+          type: string
+          example: "test project 1"
+        description:
+          type: string
+          example: "test description"
+        lang:
+          type: string
+          example: english
+        fileThumbnail:
+          type: object
+          $ref: '#/components/examples/thumbnail-new'
+        vcws:
+          type: array
+      xml:
+        name: 'project-return'
+    project-new:
+      properties:
+        id:
+          type: int
+          example: 1
+        created_at:
+          type: string
+          example: '31-01-2023 11:00:26'
+        updated_at:
+          type: string
+          example: '31-01-2023 11:00:26'
+        created_by:
+          type: string
+          example: b68986e1-81d8-4813-ada5-172442d8944d
+        updated_by:
+          type: String
+          example: b68986e1-81d8-4813-ada5-172442d8944d
+        name:
+          type: string
+          example: "test project 1"
+        description:
+          type: string
+          example: "test description"
+        lang:
+          type: string
+          example: english
+        fileThumbnail:
+          type: object
+          example: null
+        vcws:
+          type: array
+      xml:
+        name: 'project-new'
+    vcw-new:
+      properties:
+        id:
+          type: int
+          example: 1
+        created_at:
+          type: string
+          example: '31-01-2023 11:00:26'
+        updated_at:
+          type: string
+          example: '31-01-2023 11:00:26'
+        created_by:
+          type: string
+          example: b68986e1-81d8-4813-ada5-172442d8944d
+        updated_by:
+          type: String
+          example: b68986e1-81d8-4813-ada5-172442d8944d
+        name:
+          type: string
+          example: "vcw test"
+        type:
+          type: string
+          example: "sprint"
+        challenge:
+          type: string
+          example: test
+        concept:
+          type: string
+          example: test
+        valueProposition:
+          type: Json
+          example: "{\"name\": \"test\", \"type\":\"test\"}"
+        prototype:
+          type: string
+          example: test
+        threeMs:
+          type: string
+          example: test
+        executiveSummary:
+          type: string
+          example: test
+        closed:
+          type: boolean
+          example: true
+        closedAt:
+          type: string
+          example: '31-01-2023 11:00:26'
+        businessModelCanvas:
+          type: object
+          $ref: '#/components/examples/business-new'
+        attachments:
+          type: array
+      xml:
+        name: 'vcw-new'
+    vcw-new-null:
+      properties:
+        id:
+          type: int
+          example: 1
+        created_at:
+          type: string
+          example: '31-01-2023 11:00:26'
+        updated_at:
+          type: string
+          example: '31-01-2023 11:00:26'
+        created_by:
+          type: string
+          example: b68986e1-81d8-4813-ada5-172442d8944d
+        updated_by:
+          type: String
+          example: b68986e1-81d8-4813-ada5-172442d8944d
+        name:
+          type: string
+          example: "vcw test"
+        type:
+          type: string
+          example: "sprint"
+        challenge:
+          type: string
+          example: null
+        concept:
+          type: string
+          example: null
+        valueProposition:
+          type: Json
+          example: null
+        prototype:
+          type: string
+          example: null
+        threeMs:
+          type: string
+          example: null
+        executiveSummary:
+          type: string
+          example: null
+        closed:
+          type: boolean
+          example: false
+        closedAt:
+          type: string
+          example: null
+        businessModelCanvas:
+          type: object
+          example: null
+        attachments:
+          type: array
+      xml:
+        name: 'vcw-new-null'
+    ideas-new:
+      properties:
+        name:
+          type: string
+          example: 'Italian food is tasty'
+        entryTypeId:
+          type: Long
+          example: 3
+        source:
+          type: object
+          $ref: '#/components/examples/source-new'
+      xml:
+        name: 'ideas-new'
+    criteria-new:
+      properties:
+        name:
+          type: string
+          example: Price
+        entryTypeId:
+          type: Long
+          example: 3
+        valueType:
+          type: string
+          example: number
+        source:
+          type: object
+          $ref: '#/components/examples/source-new'
+      xml:
+        name: 'criteria-new'
+    source-new:
+      properties:
+        name:
+          type: string
+          example: zomato
+        description:
+          type: string
+          example: null
+        url:
+          type: string
+          example: www.zomato.com
+      xml:
+        name: 'source-new'
+    diagnostics-new:
+      properties:
+        swotField:
+          type: string
+          example: threats
+        name:
+          type: string
+          example: 'crabs'
+        description:
+          type: string
+          example: 'They are chasing me right now, help!'
+      xml:
+        name: 'diagnostics-new'

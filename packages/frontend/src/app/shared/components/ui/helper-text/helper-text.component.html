@@ -1,0 +1,11 @@
+<p
+  class="antialiased text-xs text-red-400 font-thin mt-2"
+  *ngIf="error; else helperText"
+>
+  {{ text }}
+</p>
+<ng-template #helperText>
+  <p class="antialiased text-xs text-gray-400 font-thin mt-2">
+    {{ text }}
+  </p>
+</ng-template>

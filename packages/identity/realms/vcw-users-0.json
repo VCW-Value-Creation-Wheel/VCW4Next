@@ -1,0 +1,61 @@
+{
+  "realm" : "vcw",
+  "users" : [ {
+    "id" : "d8cf1017-3fca-4f93-8f26-8d6945629fae",
+    "createdTimestamp" : 1671751966285,
+    "username" : "service-account-vcw-api",
+    "enabled" : true,
+    "totp" : false,
+    "emailVerified" : false,
+    "serviceAccountClientId" : "vcw-api",
+    "credentials" : [ ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ ],
+    "realmRoles" : [ "default-roles-vcw" ],
+    "notBefore" : 0,
+    "groups" : [ ]
+  }, {
+    "id" : "ffb86703-8a23-432c-bdb9-2e225a93766d",
+    "createdTimestamp" : 1671753054783,
+    "username" : "vcw_admin",
+    "enabled" : true,
+    "totp" : false,
+    "emailVerified" : true,
+    "firstName" : "VCW",
+    "lastName" : "ADMIN",
+    "attributes" : {
+      "company" : [ "deimos" ]
+    },
+    "credentials" : [ {
+      "id" : "7390f019-004e-4777-8428-235e2e9e5013",
+      "type" : "password",
+      "userLabel" : "My password",
+      "createdDate" : 1671753072334,
+      "secretData" : "{\"value\":\"zpZZ7Wk6QCdk8k8i6O8pvnnrQJThsi08OSxczsmg0obXiYpxJvA++f7dkcqT6wqRX5ZRjkThS4FGWIO9ndYCYA==\",\"salt\":\"BbXcAaG7yblrmTbrmBgt9A==\",\"additionalParameters\":{}}",
+      "credentialData" : "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
+    } ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ ],
+    "realmRoles" : [ "offline_access", "default-roles-vcw", "uma_authorization", "ADMIN" ],
+    "clientRoles" : {
+      "account" : [ "view-applications", "view-profile", "view-groups", "view-consent", "manage-account" ]
+    },
+    "notBefore" : 1671798889,
+    "groups" : [ "/admins" ]
+  }, {
+    "id" : "86382589-1eb0-4f71-9aa1-d9644be8ba9a",
+    "createdTimestamp" : 1672760220537,
+    "username" : "vcw_user",
+    "enabled" : true,
+    "totp" : false,
+    "emailVerified" : false,
+    "firstName" : "VCW",
+    "lastName" : "USER",
+    "credentials" : [ ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ ],
+    "realmRoles" : [ "vcw-user", "default-roles-vcw" ],
+    "notBefore" : 0,
+    "groups" : [ ]
+  } ]
+}

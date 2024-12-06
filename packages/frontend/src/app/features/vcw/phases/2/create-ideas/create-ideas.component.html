@@ -1,0 +1,55 @@
+<div class="px-4 py-4 flex flex-row justify-between mx-4 md:mx-64 lg:mx-80">
+    <h1 class="text-2xl font-bold text-primary ">Ideas</h1>
+</div>
+<div class="flex flex-col gap-4 mx-4 pt-8 md:mx-64 lg:mx-80">
+    <ng-container *ngIf="dataFormArray.controls.length === 0 && !simpleInputOpen">
+        <div class="py-2 px-2">
+            <span class="italic">Start adding ideas!</span>
+        </div>
+    </ng-container>
+    <ng-container *ngFor="let idea of dataFormArray.controls; index as idx">
+        <app-list-item
+            [isEditable]="true"
+            [isSelectable]="false"
+            [value]="idea.controls.name?.value"
+            (editClick)="editIdea(idx)"
+            (deleteClick)="deleteIdea(idx, idea.controls.name, idea.controls.id)"
+            [icon]="getIcon(idea.controls.entryTypeId.value)"
+        ></app-list-item>
+    </ng-container>
+    <app-simple-item-input
+        *ngIf="simpleInputOpen"
+        [dataForm]="dataForm"
+        [placeholderText]="'Type an idea...'"
+        (addClicked)="onDirectAdd()"
+        (cancelClicked)="onCancel()"
+        (openDialogClicked)="onOpenDialog()"
+        (keyPressed)="onKeyPress($event)"
+    ></app-simple-item-input>
+    <app-button
+        (buttonClick)="onAddIdea()"
+        [label]="'New Idea'"
+        [leftIcon]="faPlus"
+        [isDisabled]="isLoading"
+        *ngIf="!simpleInputOpen"
+    ></app-button>
+</div>
+<app-create-item-dialog
+    *ngIf="itemDialogOpen"
+    [isEditing]="editIdeaMode"
+    [formGroup]="dataForm"
+    [title]="editIdeaMode ? 'Edit Idea': 'New Idea'"
+    [tabFormControlsToExclude]="{'0': ['file', 'id', 'entryTypeId'], '1': ['name', 'id', 'entryTypeId']}"
+    [fileFormFieldName]="'file'"
+    [isAwaitingAction]="isLoading"
+    (cancel)="onCancel()"
+    (confirm)="onConfirm()"
+></app-create-item-dialog>
+<app-dialog
+    *ngIf="confirmDialogOpen"
+    [title]="actionConfirmTitle"
+    [confirmText]="'Yes'"
+    [cancelText]="'No'"
+    (cancel)="onActionCancel()"
+    (confirm)="onActionConfirm()"
+>{{ actionConfirmText }}</app-dialog>
