@@ -1,0 +1,175 @@
+<div class="m-4 p-4 px-64">
+    <app-button  
+    [label]="'Back'"
+    [leftIcon]="faArrowLeft"
+    (click)="onBack()"
+    ></app-button>
+</div>
+<div [formGroup]="form" (ngSubmit)="onSubmit($event)">
+    <div class="grid grid-cols-4 gap-4 m-4 p-4 px-64 rounded-lg">
+        <div class="col-span-4 text-2xl font-bold text-primary">Create New Project</div>
+        <div class="col-span-3 md:col-span-2 my-2 py-2">
+            <app-input
+                id="project-title"
+                [label]="'Project Title'"
+                [placeholder]="''"
+                formControlName="name"
+            >
+            </app-input>
+        </div>
+        <div class="col-span-4 my-2 py-2 pr-96">
+            <app-text-area
+                id="project-description"   
+                [label]="'Project Description'"
+                [placeholder]="''"
+                formControlName="description"
+            >
+            </app-text-area>
+        </div>
+        <div class="col-span-3 md:col-span-1 my-2 py-2">
+            <app-input-file
+                [label]="'Thumbnail'"
+                id="project-thumbnail"
+                ngDefaultControl
+                (change)="onFileSelected($event)"
+                accepts=".png,.jpg,jpeg"
+            >
+            </app-input-file>
+        </div>
+        <div class="col-span-3 md:col-span-1 my-2 py-2">
+            <app-select-input
+                [label] = "'Language'"
+                [options]="langOptions"
+                formControlName="lang"
+                id="project-language"
+            >
+            </app-select-input>
+        </div>
+        <div class="col-span-4 text-xl font-bold ">Users and Roles</div>
+        <div class="grid grid-cols-4 col-span-4">
+            <div *ngIf="isAddUserActive" [formGroup]="formUser" class="col-span-4 md:my-2 md:py-2">
+                <p class="text-gray-700 pb-2">
+                    Find User
+                </p>
+                <div class="flex align-top pr-48">
+                    <input
+                    class="
+                        focus:outline-none
+                        caret-primary-500
+                        block
+                        w-1/2
+                        rounded-md
+                        border border-transparent
+                        max-h-[40px]
+                        focus:ring-primary-500 focus:bg-white focus:ring-1
+                        py-2
+                        px-3
+                        {{error?'bg-red-200':'bg-gray-100'}}
+                    "
+                    type="text"
+                    formControlName="user"
+                    (keydown.enter)="findUser()"
+                    placeholder="Search"
+                    />
+                   
+                
+                    <div class="flex justify-end md:justify-start col-span-4 md:col-span-1 items-end px-4 self-center">
+                        <app-button
+                        [label]="'Find'"
+                        (click)="findUser()"
+                        [leftIcon]="faSearch"
+                        >
+                        </app-button>
+                    </div>
+                </div>
+
+                <div *ngIf="showResults">
+                    <p class="font-bold text-primary pt-4">Results</p>
+                </div>
+
+                <div *ngIf="!showResults">
+                    <p class="font-bold text-primary pt-4">No results found</p>
+                </div>
+          
+                
+              
+                <div *ngFor="let user of this.users; index as id" class="flex md:py-2 w-full items-center md:items-end">
+                    <div class="w-full md:w-1/5 items-end">
+                        <p class="mt-2 mb:4 md:mb-2">User</p>
+                        <p
+                        class="
+                        focus:outline-none
+                        caret-primary-500
+                        block
+                        w-full
+                        rounded-md
+                        border border-transparent
+                        max-h-[40px]
+                        focus:ring-primary-500 focus:bg-white focus:ring-1
+                        py-2
+                        px-2
+                        {{error?'bg-red-200':'bg-gray-100'}}
+                        ">
+                            {{ user.username }}
+                        </p>
+                    </div>
+                    <app-select-input
+                        [label]="'Role'"
+                        [options]="roleOptions"
+                        id="role"
+                        class="md:w-1/4 pl-3"
+                        (emitInputChange)="saveRole($event, id)"
+                        
+                        >
+                    </app-select-input>
+
+                    <div *ngIf="selectedRole[id] && isUserRoleNew(id, user)" class="md:px-4 mt-5 md:mt-8 self-center px-2 ">
+                        <app-button
+                        [label]="'Add'"
+                        (buttonClick)="addRole(id, user)"
+                        >
+                        </app-button>
+                    </div>
+                </div>
+                 
+            </div>
+            <div class="col-span-4 my-2" *ngIf="!isAddUserActive ">
+                <app-button
+                [label]="'Add User'"
+                (click)="isAddUserActive = true"
+                [leftIcon]="faUserPlus"
+                >
+                </app-button>
+            </div>
+            <div class="col-span-4 border-t border-primary border-dashed py-4" *ngIf="userRole.length > 0">
+                <span class="text-lg font-bold pb-2">Selected</span>
+                <div class="flex flex-row gap-4 py-2 grid grid-cols-4 w-8/12" *ngFor="let userR of userRole; index as idx">
+                    <div class="flex flex-col gap-2 col-span-1">
+                        <p *ngIf="idx === 0" class="font-bold">User</p>
+                        <span>{{ userR.userName }}</span>
+                    </div>
+                    <div class="flex flex-col gap-2 col-span-2 my-auto">
+                        <p *ngIf="idx === 0" class="font-bold">Role</p>
+                        <span>{{ userR.roleName }}</span>
+                    </div>
+                    <div class="col-span-1 my-auto">
+                        <app-button
+                            [label]="'Cancel'"  
+                            (buttonClick)="cancelRole(idx)"
+                            [isWhite]="true"        
+                        > </app-button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="my-2 pt-8 flex">
+            <app-button
+            [label]="'Submit'"
+            (click)="onSubmit($event)"
+            [isDisabled]="!form.valid"
+            [leftIcon]="faSave"
+            >
+            </app-button>
+        </div>
+    </div>
+</div>

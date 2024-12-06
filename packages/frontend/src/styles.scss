@@ -1,0 +1,19 @@
+/* You can add global styles to this file, and also import other style files */
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+@mixin mediaMd {
+  @media screen and (max-width: 768px){
+      @content;
+  }
+} 
+
+
+html, body, input, textarea, button {
+    font-size: 14px;
+    font: 400 1rem "Inter", sans-serif;
+    @include mediaMd {
+      font: 400 0.9rem "Inter", sans-serif;
+    }
+  }

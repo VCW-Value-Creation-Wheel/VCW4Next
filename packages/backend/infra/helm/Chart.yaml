@@ -1,0 +1,17 @@
+apiVersion: v2
+name: vcw-backend
+description: A Helm chart for vcw-backend
+type: application
+version: 1.0.0
+appVersion: "1.0.0"
+keywords:
+  - VCW
+  - Spring Boot 3.0 / Native Image
+  - Backend
+maintainers:
+  - name: ScrumTroopers Team
+  - name: Deimos Engenharia - Data Systems Team
+dependencies:
+  - name: minio
+    version: 12.1.5
+    repository: https://charts.bitnami.com/bitnami
