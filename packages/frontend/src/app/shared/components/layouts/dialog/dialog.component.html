@@ -1,0 +1,99 @@
+<div
+  class="dialog fixed inset-0 overflow-y-auto"
+  aria-labelledby="modal-title"
+  role="dialog"
+  aria-modal="true"
+>
+  <div
+    class="
+      flex
+      items-end
+      justify-center
+      min-h-screen
+      pt-4
+      px-4
+      pb-20
+      text-center
+      sm:block sm:p-0
+    "
+  >
+    <div
+      class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+      aria-hidden="true"
+    ></div>
+
+    <span
+      class="hidden sm:inline-block sm:align-middle sm:h-screen"
+      aria-hidden="true"
+      >&#8203;</span
+    >
+    <div
+      class="
+        inline-block
+        align-bottom
+        bg-white
+        rounded-lg
+        text-left
+        overflow-hidden
+        shadow-xl
+        transform
+        transition-all
+        sm:my-8 sm:align-middle {{ dialogSize }} {{ classes }}
+      "
+    >
+      <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+        <div class="flex justify-end">
+          <fa-icon
+            class="
+              cursor-pointer
+              hover:text-red-500 hover:bg-gray-100
+              rounded-full
+              py-1
+              px-2
+            "
+            [icon]="faTimes"
+            (click)="onCancel()"
+          ></fa-icon>
+        </div>
+
+        <div
+          *ngIf="title"
+          class="mb-4 mx-auto items-center justify-center text-center font-bold {{ titleSize }}"
+        >
+          {{ title }}
+        </div>
+        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+          <div class="mt-2">
+            <p class="text-sm text-gray-500">
+              <ng-content></ng-content>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div
+        class="bg-gray-50 justify-center sm:justify-start px-7 py-3 sm:px-6 flex flex-row-reverse gap-4"
+      >
+        <app-button
+          *ngIf="!noCancelButton"
+          [leftIcon]="faTimes"
+          [label]="cancelText ?? 'Cancel'"
+          (buttonClick)="onCancel()"
+          [isDangerous]="true"
+          [isDisabled]="awaitingAction"
+        ></app-button>
+        <app-button
+          *ngIf="!noConfirmButton"
+          [isDisabled]="confirmDisabled || awaitingAction"
+          [leftIcon]="faCheck"
+          [label]="confirmText ?? 'Confirm'"
+          (buttonClick)="onConfirm()"
+        >
+        </app-button>
+        <div class="flex flex-row" *ngIf="awaitingAction">
+          <fa-icon [icon]="faCircleNotch" size="2x" class="animate-spin opacity-50"></fa-icon>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</div>

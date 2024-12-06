@@ -1,0 +1,45 @@
+[
+    {
+        "id": 1,
+        "name": "Beach",
+        "sourceName": "Wikipedia",
+        "sourceUrl": "https://wikipedia.org",
+        "valueType": "Yes/No"
+    },
+    {
+        "id": 2,
+        "name": "Sun",
+        "sourceName": "Wikipedia",
+        "sourceUrl": "https://wikipedia.org"
+    },
+    {
+        "id": 3,
+        "name": "Wine",
+        "sourceName": "Wikipedia",
+        "sourceUrl": "https://wikipedia.org"
+    },
+    {
+        "id": 4,
+        "name": "Food",
+        "sourceName": "",
+        "sourceUrl": ""
+    },
+    {
+        "id": 5,
+        "name": "FAO Member",
+        "sourceName": "",
+        "sourceUrl": ""
+    },
+    {
+        "id": 6,
+        "name": "Coastline",
+        "sourceName": "",
+        "sourceUrl": ""
+    },
+    {
+        "id": 7,
+        "name": "Population",
+        "sourceName": "",
+        "sourceUrl": ""
+    }
+]

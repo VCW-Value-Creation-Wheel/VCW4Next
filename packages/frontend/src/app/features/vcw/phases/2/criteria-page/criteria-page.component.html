@@ -1,0 +1,58 @@
+<div class="py-4 flex flex-row justify-between mx-4 md:mx-64 lg:mx-80">
+    <h1 class="text-2xl font-bold text-primary">Criteria</h1>
+</div>
+<div class="flex flex-col gap-4 mx-4 md:mx-64 lg:mx-80">
+    <ng-container *ngIf="dataFormArray.controls.length === 0 && !simpleInputOpen">
+        <div class="py-2 px-2">
+            <span class="italic">Start adding criteria!</span>
+        </div>
+    </ng-container>
+    <ng-container *ngFor="let Criteria of dataFormArray.controls; index as idx">
+        <app-list-item
+            [isEditable]="true"
+            [isSelectable]="false"
+            [value]="Criteria.controls.name?.value"
+            (editClick)="editCriteria(idx)"
+            (deleteClick)="deleteCriteria(idx, Criteria.controls.name, Criteria.controls.id)"
+            [icon]="getIcon(Criteria.controls.entryTypeId.value)"
+        ></app-list-item>
+    </ng-container>
+    <app-simple-item-input
+        *ngIf="simpleInputOpen"
+        [dataForm]="dataForm"
+        [placeholderText]="'Type a criteria...'"
+        (addClicked)="onDirectAdd()"
+        (cancelClicked)="onCancel()"
+        (openDialogClicked)="onOpenDialog()"
+        (keyPressed)="onKeyPress($event)"
+    ></app-simple-item-input>
+    <app-button
+        (buttonClick)="onAddCriteria()"
+        [label]="'New Criteria'"
+        [leftIcon]="faPlus"
+        [isDisabled]="isLoading"
+        *ngIf="!simpleInputOpen"
+    ></app-button>
+</div>
+<app-create-item-dialog
+    *ngIf="itemDialogOpen"
+    [isEditing]="editCriteriaMode"
+    [formGroup]="dataForm"
+    [title]="editCriteriaMode ? 'Edit Criteria': 'New Criteria'"
+    [tabFormControlsToExclude]="{'0': ['file', 'id', 'entryTypeId'], '1': ['name', 'id', 'entryTypeId']}"
+    [fileFormFieldName]="'file'"
+    [isAwaitingAction]="isLoading"
+    [checkboxes]="valueType"
+    [checkboxFormControl]="'valueType'"
+    [checkboxCategoryLabel]="'Type'"
+    (cancel)="onCancel()"
+    (confirm)="onConfirm()"
+></app-create-item-dialog>
+<app-dialog
+    *ngIf="confirmDialogOpen"
+    [title]="actionConfirmTitle"
+    [confirmText]="'Yes'"
+    [cancelText]="'No'"
+    (cancel)="onActionCancel()"
+    (confirm)="onActionConfirm()"
+>{{ actionConfirmText }}</app-dialog>

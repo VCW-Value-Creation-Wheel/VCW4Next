@@ -1,0 +1,15 @@
+<div class="flex items-center mb-2 p-1 rounded-md hover:shadow-sm hover:cursor-pointer duration-300 hover:bg-secondary-100">
+  <input
+    [id]="identifier"
+    [name]="value"
+    [value]="value"
+    type="checkbox"
+    [checked]="isChecked"
+    (change)="onClick()"
+    class="w-4 h-4 text-primary-500 bg-gray-100 border-gray-300 rounded focus:ring-primary-600 dark:focus:ring-primary-600 focus:ring-2"
+  />
+  <label [for]="identifier" class="ml-2 text-sm font-medium text-gray-900">{{
+    label
+  }}</label>
+  <span *ngIf="required" class="text-red-500">*</span>
+</div>

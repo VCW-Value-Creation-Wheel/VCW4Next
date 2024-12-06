@@ -1,0 +1,65 @@
+<div class="px-4 py-4 flex flex-row justify-between mx-4 md:mx-64 lg:mx-80">
+    <h1 class="text-2xl font-bold text-primary ">SWOT Analysis</h1>
+</div>
+<div class="flex flex-row gap-1 md:gap-8 text-center text-sm md:text-base md:justify-between md:py-2 md:mx-80">
+    <ng-container *ngFor="let tab of swotTabs; let idx = index">
+        <app-tab
+        [isActive]="idx === activeTab"
+        [label]="tab"
+        (clicked)="changeTab(idx)"
+        class="w-1/2"
+        ></app-tab>
+    </ng-container>
+    
+</div>
+<div class="flex flex-col gap-4 mx-4 md:mx-64 lg:mx-80">
+    <ng-container *ngIf="getSwotFieldRowsNumber(activeTab) === 0 && !simpleInputOpen">
+        <div class="py-2 px-2">
+            <span class="italic">Swot Field empty</span>
+        </div>
+    </ng-container>
+    <ng-container *ngFor="let row of dataFormArray.controls; index as idx">
+        <ng-container *ngIf="row.controls.swotField?.value === activeTab">
+            <app-list-item
+                [isEditable]="true"
+                [isSelectable]="false"
+                [value]="row.controls.name?.value"
+                (editClick)="editRow(idx)"
+                (deleteClick)="deleteRow(idx, row.controls.name, row.controls.id)"
+            ></app-list-item>
+        </ng-container>
+    </ng-container>
+    <app-simple-item-input
+        *ngIf="simpleInputOpen"
+        [dataForm]="dataForm"
+        [placeholderText]="'Type something here...'"
+        (addClicked)="onDirectAdd()"
+        (cancelClicked)="onCancel()"
+        (openDialogClicked)="onOpenDialog()"
+        (keyPressed)="onKeyPress($event)"
+    ></app-simple-item-input>
+    <app-button
+        (buttonClick)="onAddRow()"
+        [label]="'New Row'"
+        [leftIcon]="faPlus"
+        *ngIf="!simpleInputOpen"
+    ></app-button>
+</div>
+<app-create-item-dialog
+    *ngIf="itemDialogOpen"
+    [isEditing]="editRowMode"
+    [formGroup]="dataForm"
+    [title]="editRowMode ? 'Edit Row': 'New Row'"
+    [tabFormControlsToExclude]="{'0': ['id', 'swotField']}"
+    [fileFormFieldName]="'file'"
+    (cancel)="onCancel()"
+    (confirm)="onConfirm()"
+></app-create-item-dialog>
+<app-dialog
+    *ngIf="confirmDialogOpen"
+    [title]="actionConfirmTitle"
+    [confirmText]="'Yes'"
+    [cancelText]="'No'"
+    (cancel)="onActionCancel()"
+    (confirm)="onActionConfirm()"
+>{{ actionConfirmText }}</app-dialog>

@@ -1,0 +1,59 @@
+<div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 md:place-content-stretch md:place-items-stretch gap-5 px-2"
+     *ngIf="!isAdvancedSearch else advancedSearch">
+    <form [formGroup]="freeTextForm" class="flex gap-5 items-end col-span-1 md:col-span-2 lg:col-span-3">
+        <app-input
+                id="search-input"
+                class="flex-1"
+                [placeholder]="'Search Projects'"
+                [label]="'Search'"
+                (emitInputChange)="onInputChange($event)"
+                [focusRig]="true"
+        ></app-input>
+        <app-button [leftIcon]="faSearch" [label]="'Search'" type="submit"></app-button>
+    </form>
+    <div class="flex col-span-1 items-center md:justify-center md:items-end ">
+        <app-icon-button
+                [icon]="faSliders"
+                hover="hover:bg-gray-100 rounded"
+                [label]="'Advanced Search'"
+                textColor="text-secondary-500 hover:text-primary-500"
+                (btnClick)="handleSearchType()"
+        ></app-icon-button>
+    </div>
+</div>
+<ng-template #advancedSearch>
+    <form (ngSubmit)="onSubmit()" [formGroup]="form"
+          class="grid grid-cols-10 gap-4 col-span-10 place-content-end px-2">
+        <!-- <app-input
+                formControlName="aoi"
+                class="col-span-12 md:col-span-8 lg:col-span-4"
+                [placeholder]="'placeholders.insert-wkt'"
+                [label]="'input-labels.wkt'"></app-input> -->
+        <app-input
+                id="beginDate"
+                class="col-span-4 md:col-span-3"
+                formControlName="beginDate"
+                inputType="date"
+                [label]="'Start Date'"
+        ></app-input>
+        <app-input
+                id="endDate"
+                class="col-span-4 md:col-span-3"
+                formControlName="endDate"
+                inputType="date"
+                [label]="'End Date'"
+        ></app-input>
+        <div class="flex md:justify-center md:items-end col-span-4 md:col-span-2">
+                <app-button [leftIcon]="faSearch" [label]="'Search'" type="submit"></app-button>
+        </div>
+        <div class="flex items-end col-span-6 md:col-span-2 lg:col-span-2 gap-4">
+            <app-icon-button
+                    [icon]="faICursor"
+                    hover="hover:bg-gray-100 rounded"
+                    [label]="'Text Search'"
+                    textColor="text-secondary-500 hover:text-primary-500"
+                    (btnClick)="handleSearchType()"
+            ></app-icon-button>
+        </div>
+    </form>
+</ng-template>

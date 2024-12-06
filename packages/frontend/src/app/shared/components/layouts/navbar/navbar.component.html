@@ -1,0 +1,149 @@
+<nav
+  class="
+    flex
+    justify-between
+    font-sans
+    text-center
+    py-4
+    px-6
+    bg-gray-100
+  "
+>
+  <a href="/">
+    <svg-icon src="assets/img/vcw4next.svg" svgClass="h-15 w-20"></svg-icon>
+  </a>
+
+  <div 
+    class="flex flex-row mr-12 py-3  p-2 border-2 border-primary-300 rounded w-fit break-words bg-asset-200 justify-around "
+    *ngIf="selectedProject || selectedVCW"
+  >
+
+  <div class="group">
+    <p class="text-black-500 text-lg"><b>Project: </b>{{  reducedProject(selectedProject) }}</p>
+    <span 
+      class='group-hover:opacity-100 transition-opacity bg-gray-800 p-1.5 text-sm text-gray-100 rounded-md ml-4 2xl:ml-20
+            absolute opacity-0 z-50 whitespace-nowrap grid grid-rows-2 top-14'
+      *ngIf="isLongProject"
+    >
+      <p>
+        {{selectedProject}}
+      </p>
+    </span>
+  </div>
+
+  <div class="group">
+    <p *ngIf="selectedVCW" class="text-black-500 text-lg pl-2"><b>VCW: </b>{{ reducedVcw(selectedVCW) }}</p> 
+    <span 
+      class='group-hover:opacity-100 transition-opacity bg-gray-800 p-1.5 text-sm text-gray-100 rounded-md ml-4 2xl:ml-20
+          absolute opacity-0 z-50 whitespace-nowrap grid grid-rows-2 top-14'
+      *ngIf="isLongVcw"
+    >
+      <p>
+        {{selectedVCW}}
+      </p>
+    </span>
+  </div>
+
+ </div>
+  
+  <div class="flex gap-4 justify-end">
+      <div *ngIf="this.isAuthenticated; else signInButton">
+          <button
+            class="
+              bg-gradient-to-r
+              from-primary
+              to-primary-600
+              rounded-full
+              h-9
+              w-9
+              transform
+              duration-300
+              ease-in-out
+              motion-safe:hover:scale-105 motion-safe:active:scale-100
+            "
+            *ngIf="getUserData() as user"
+            (click)="isShowingProfileCard = !isShowingProfileCard"
+          >
+            <h5 class="m-0 text-gray-50 font-bold text-1xl">
+              {{ getInitials(user.preferred_username) }}
+            </h5>
+          </button>
+      </div>
+     
+      <ng-template #signInButton>
+          <app-button
+            (click)="onLogin()"
+            [label]="'Sign In'"
+            [leftIcon]="signIn"
+          ></app-button>
+        </ng-template>
+  </div>
+</nav>
+
+
+<div
+  [@slideInOut]
+  *ngIf="isShowingProfileCard"
+  (outsideClick)="isShowingProfileCard = !isShowingProfileCard"
+>
+  <div
+    *ngIf="getUserData() as user"
+    class="
+      z-50
+      flex flex-shrink-0
+      absolute
+      my-2 mx-4
+      right-0
+      bg-white
+      rounded
+      shadow-md
+      w-auto
+    "
+  >
+    <div
+      class="
+        flex
+        justify-center
+        bg-gradient-to-r
+        from-primary
+        to-primary-600
+        mr-4
+        px-4
+        w-20
+        rounded-l
+        items-center
+      "
+    >
+      <h1 class="m-0 text-gray-50 text-3xl font-bold">
+        {{ getInitials(user.preferred_username) }}
+      </h1>
+    </div>
+    <div class="flex flex-1 justify-between items-start">
+      <div class="m-2">
+        <div class="text-container">
+          <h5>{{ user.name }}</h5>
+          <span>{{ user.email }}</span>
+        </div>
+      </div>
+      <div class="flex flex-col px-2 py-2 h-full items-end gap-6">
+        <fa-icon
+          class="
+            cursor-pointer
+            hover:text-red-500 hover:bg-gray-100
+            rounded-full
+            py-1
+            px-2
+          "
+          [icon]="close"
+          (click)="isShowingProfileCard = !isShowingProfileCard"
+        ></fa-icon>
+        <app-button
+          [isTransparent]="true"
+          (click)="onLogout()"
+          [leftIcon]="signOutIcon"
+          [label]="'Sign Out'"
+        ></app-button>
+      </div>
+    </div>
+  </div>
+</div>

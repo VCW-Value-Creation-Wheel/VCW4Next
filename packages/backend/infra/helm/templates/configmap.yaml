@@ -1,0 +1,10 @@
+{{- if .Values.configmap.enabled -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "app.name" . }}-configmap
+data:
+  application.properties: |-
+    ###
+
+{{- end }}

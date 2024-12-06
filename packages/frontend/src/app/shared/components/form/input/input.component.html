@@ -1,0 +1,41 @@
+<div class="flex {{label ? 'flex-col' : 'flex-row'}} align-top" [ngClass]="wrapperClass()">
+  <label [for]="id" class="{{isDisabled?'text-gray-400':'text-gray-700'}}" *ngIf="label">
+    {{ label }}
+    <span *ngIf="required" class="text-red-500">*</span>
+    <fa-icon
+      *ngIf="helperText"
+      [icon]="faInfoCircle"
+      [title]="helperText"
+      class="text-xs text-secondary-300"
+    ></fa-icon>
+  </label>
+  <input
+    [autocomplete]="autocomplete"
+    class="
+      focus:outline-none
+      caret-primary-500
+      block
+      w-full
+      rounded-md
+      border border-transparent
+      max-h-[40px]
+      focus:ring-primary-500 focus:bg-white focus:ring-1
+      py-2
+      px-3
+      {{error?'bg-red-200':'bg-gray-100'}}
+    "
+    [ngClass]="inputClass"
+    [id]="id"
+    [placeholder]="placeholder"
+    [type]="inputType"
+    [step]="inputStep"
+    [disabled]="isDisabled"
+    [(ngModel)]="value"
+    [maxLength]="maxLength"
+    [min]="numberMin"
+    [max]="numberMax"
+    [pattern]="pattern?pattern:''"
+    (ngModelChange)="handleInputChange($event)"
+    (keyup)="handleKeyPress($event)"
+  /><span *ngIf="!label && required" class="text-red-500">*</span>
+</div>

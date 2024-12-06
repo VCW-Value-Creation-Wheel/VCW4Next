@@ -1,0 +1,99 @@
+<div class="p-4 space-y-4">
+<div class="flex flex-row gap-4 justify-start">
+
+  <div class='group flex relative'>
+    <span *ngIf=" this.maxColumns " class='group-hover:opacity-100 transition-opacity bg-gray-800 p-1.5 text-sm text-gray-100 rounded-md absolute left-1/2 
+    -translate-x-1/2 -translate-y-10 opacity-0 z-50 whitespace-nowrap'>Max Names 5</span>
+    <app-button 
+    [isDisabled]="this.maxColumns || isAddingUser || isAddingLabel"
+    (click)="addUser()"
+    label="Add Name"> 
+  </app-button> 
+  </div>
+  
+  <div class='group flex relative'>
+    <span *ngIf=" this.maxRows " class='group-hover:opacity-100 transition-opacity bg-gray-800 p-1.5 text-sm text-gray-100 rounded-md absolute left-1/2 
+    -translate-x-1/2 -translate-y-10 opacity-0 z-50 whitespace-nowrap'>Max Propositions 5</span>
+    <app-button 
+      [isDisabled]=" this.maxRows || isAddingLabel || isAddingUser"
+      *ngIf="userColumns.length > 0" 
+      (click)="addLabel()" 
+      label="Add Proposition">
+    </app-button>  
+  </div>
+
+
+  <div class='group flex relative md:h-8 md:w-2 w-full ' *ngIf="this.userColumns.length >= 1">
+    <span  *ngIf="userColumns.length && labelRows.length < 3" class='group-hover:opacity-100 transition-opacity bg-gray-800 p-1.5 text-sm text-gray-100 rounded-md absolute  
+     -translate-x-3.5 -translate-y-10 opacity-0 z-50 whitespace-nowrap'>Min 3 Names/Propositions</span>
+    <app-button 
+      [isDisabled]="userColumns.length <3  || labelRows.length < 3"
+      class=" whitespace-nowrap"
+      (click)="showData()" 
+      label="Show Data">
+    </app-button> 
+  </div>
+</div>
+<div *ngIf="isAddingLabel || isAddingUser">
+  <app-simple-item-input
+    [hasDialog]="false"
+    [dataForm]="inputForm"
+    [formControlFieldName]="'inputValue'"
+    (addClicked)="isAddingLabel ? addLabelRow() : (isAddingUser ? addUserColumn() : '')"
+    (cancelClicked)="cancelInput() "
+    [placeholderText]="isAddingUser ? 'Type new Name':'Type new Proposition'"
+    class="text-center"
+  ></app-simple-item-input>
+</div>
+
+<form [formGroup]="mainForm" class="grid grid-cols-4 w-full pt-4" (change)="tableChange()">
+  <div class="grid grid-rows-2  col-span-3 ">
+    <table class="border-2 border-primary-500">
+      <tr>
+        <th *ngIf="userColumns.length > 0" class="bg-primary-500 w-24"></th>
+        <th  *ngFor="let user of userColumns" class="border-2 border-primary-500">{{user}}</th>
+      </tr>
+      <tr *ngFor="let label of labelRows" class="border-2 border-primary-500">
+        <td class="text-center">{{label}}</td>
+        <td *ngFor="let user of userColumns" [formGroupName]="user" class="border-2 border-primary-500">
+          <input
+            type="number"
+            [formControlName]="label"
+            class="text-center w-full"
+            min="0"
+            max="5"
+          />
+        </td>
+      </tr> 
+    </table>
+
+    <div *ngIf="labelRows.length > 0"  class='group flex relative h-8 w-2 '>
+      <span class='group-hover:opacity-100 transition-opacity bg-gray-800 p-1.5 text-sm text-gray-100 rounded-md absolute left-1/2 
+        -translate-x-1/3 -translate-y-6 opacity-0 z-50 whitespace-nowrap'>Remove Last Proposition</span>
+      <app-button 
+        class="mt-4 md:ml-4 ml-8"  
+        isDangerous="true" 
+        noLabel="true" 
+        [leftIcon]="faMinus" 
+        isRounded="true"
+        (buttonClick)="removeLabel()">
+      </app-button>
+    </div>
+
+  </div>
+
+  <div *ngIf="userColumns.length > 0" class='group grid relative md:h-8 md:w-2 w-full '>
+    <span class='group-hover:opacity-100 transition-opacity bg-gray-800 p-1.5 text-sm text-gray-100 rounded-md absolute left-1/2 
+      -translate-x-1/3 -translate-y-10 opacity-0 z-50 whitespace-nowrap'>Remove Last Name</span>
+    <app-button 
+      class="md:ml-4 	items-center"
+      isDangerous="true" 
+      noLabel="true" 
+      [leftIcon]="faMinus" 
+      isRounded="true"
+      (buttonClick)="removeUser()">
+    </app-button>
+  </div>
+</form>
+</div>
+

@@ -1,0 +1,78 @@
+<app-dialog
+    [confirmText]="'OK'"
+    [cancelText]="'Cancel'"
+    [title]="title"
+    [confirmDisabled]="!formGroup.valid"
+    [awaitingAction]="isAwaitingAction"
+    (cancel)="onCancel()"
+    (confirm)="onConfirm()"
+>   
+    <div  class="flex flex-row gap-1 text-center text-sm w-full justify-between py-4" *ngIf="!isEditing">
+        <ng-container *ngFor="let tab of tabs; index as idx">
+            <app-tab [label]="tab"
+            class="w-1/2"
+            [isActive]="isTabActive(idx)"
+            (clicked)="changeActiveTab(idx)"></app-tab>
+        </ng-container>
+    </div>
+    <div [formGroup]="formGroup" class="gap-4 flex flex-col">
+        <div class="flex flex-col gap-2" *ngIf="checkboxes.length > 0">
+            <label class="text-gray-700">{{ checkboxCategoryLabel }}</label>
+            <div class="flex flex-row gap-4">
+                <ng-container *ngFor="let checkbox of checkboxes; index as idx">
+                    <app-checkbox-input
+                        [identifier]="'item-checkbox-'+idx"
+                        [label]="checkbox.label"
+                        [value]="checkbox.value"
+                        (propagate)="onCheckboxCheck($event, idx)"
+                        [isChecked]="isBoxChecked(idx)"
+                    ></app-checkbox-input>
+                </ng-container>
+            </div>
+        </div>
+        <ng-container *ngFor="let field of formFields">
+            <ng-container *ngIf="field === fileFormFieldName; else normalInput">
+                <app-input-file
+                    [label]="formatFieldLabel(field) | titlecase"
+                    [formControlName]="field"
+                    ngDefaultControl
+                ></app-input-file>
+            </ng-container>
+            <ng-template #normalInput>
+                <ng-container *ngIf="!hasNestedForm(field); else nestedInput">
+                    <app-input
+                        [label]="formatFieldLabel(field) | titlecase"
+                        [formControlName]="field"
+                        [placeholder]="formatFieldLabel(field) | titlecase"
+                        *ngIf="!tabFormControlsToExclude[activeTab].includes(field)"
+                        [inputType]="getInputType(field)"
+                        [numberMin]="getMinValue(field)"
+                        [numberMax]="getMaxValue(field)"
+                        [isDisabled]="isFieldEditDisabled(field)"
+                        (emitKeyPress)="keyPressHandler($event, field)"
+                    ></app-input>
+                </ng-container>
+                <ng-template #nestedInput>
+                    <div [formGroupName]="field">
+                        <ng-container *ngFor="let nestedField of getNestedFields(field)">
+                            <div class="pb-4">
+                                <app-input
+                                    [label]="formatFieldLabel(field + ' ' + nestedField) | titlecase"
+                                    [formControlName]="nestedField"
+                                    [placeholder]="formatFieldLabel(field + ' ' + nestedField) | titlecase"
+                                    *ngIf="!tabFormControlsToExclude[activeTab].includes(nestedField)"
+                                    [inputType]="getInputType(nestedField)"
+                                    [numberMin]="getMinValue(nestedField)"
+                                    [numberMax]="getMaxValue(nestedField)"
+                                    [isDisabled]="isFieldEditDisabled(nestedField)"
+                                ></app-input>
+                            </div>
+                        </ng-container>
+                    </div>
+                </ng-template>
+            </ng-template>
+            
+        </ng-container>
+        
+    </div>
+</app-dialog>
